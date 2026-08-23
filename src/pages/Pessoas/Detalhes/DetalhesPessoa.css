@@ -1,0 +1,162 @@
+/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+.detalhes-pessoa-page {
+  width: 100%;
+}
+
+.detalhes-card {
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* 2. CABEÇALHO & BOTÃO VOLTAR */
+.detalhes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.detalhes-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.detalhes-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.detalhes-voltar {
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.detalhes-voltar:hover {
+  background: #f9fafb;
+}
+
+/* 3. SEÇÃO DE FOTO */
+.detalhes-foto-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.detalhes-foto {
+  width: 220px;
+  height: 220px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* 4. GRID DE DADOS E CAMPOS */
+.detalhes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.detalhes-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detalhes-field span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.detalhes-field strong {
+  color: #1f2937;
+  font-size: 15px;
+}
+
+/* 5. BOTÕES DE AÇÃO */
+.detalhes-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.button-secondary,
+.button-primary {
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button-secondary {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.button-secondary:hover {
+  background: #f9fafb;
+}
+
+.button-primary {
+  background: #2563eb;
+  border: none;
+  color: white;
+}
+
+.button-primary:hover {
+  background: #1d4ed8;
+}
+
+/* 6. ESTADOS DA PÁGINA (CARREGANDO & ERRO) */
+.detalhes-loading {
+  padding: 40px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.detalhes-error {
+  padding: 14px;
+  background: #fee2e2;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+/* 7. RESPONSIVIDADE */
+@media (max-width: 700px) {
+  .detalhes-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .detalhes-card {
+    padding: 20px;
+  }
+
+  .detalhes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detalhes-actions {
+    flex-direction: column-reverse;
+  }
+
+  .button-secondary,
+  .button-primary {
+    width: 100%;
+  }
+}

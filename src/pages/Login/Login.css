@@ -1,0 +1,150 @@
+/* 1. LAYOUT PRINCIPAL & CONTAINER */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* 2. CABEÇALHO & ABA DE NAVEGAÇÃO (TABS) */
+.login-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.login-header h1 {
+  margin-bottom: 8px;
+  color: #1f2937;
+  font-size: 24px;
+}
+
+.login-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.login-options {
+  display: flex;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.login-option {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-option.active {
+  border-bottom-color: #2563eb;
+  color: #2563eb;
+}
+
+/* 3. CAMPOS DO FORMULÁRIO (INPUTS) */
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.login-form-group label {
+  margin-bottom: 7px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-form-group input {
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-form-group input:focus {
+  border-color: #2563eb;
+}
+
+/* 4. RECONHECIMENTO FACIAL (CÂMERA & CANVAS) */
+.login-facial-login {
+  text-align: center;
+}
+
+.login-facial-description {
+  margin-bottom: 25px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.login-camera-container {
+  width: 100%;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: #111827;
+  border-radius: 12px;
+}
+
+.login-camera-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.login-camera-canvas {
+  display: none;
+}
+
+/* 5. BOTÕES, ESTADOS & ERROS  */
+.login-submit {
+  width: 100%;
+  padding: 13px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-submit:hover {
+  background: #1d4ed8;
+}
+
+.login-submit:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  background: #fee2e2;
+  border-radius: 6px;
+  color: #b91c1c;
+  font-size: 14px;
+}

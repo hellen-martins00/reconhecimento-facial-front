@@ -1,0 +1,99 @@
+/* 1. ESTRUTURA PRINCIPAL (LAYOUT) */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.dashboard-layout-content {
+  flex: 1;
+  min-width: 0;
+  padding: 35px;
+}
+
+/* 2. SIDEBAR & CABEÇALHO LATERAL */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: 24px 16px;
+  background: #111827;
+  color: #ffffff;
+}
+
+.sidebar-header {
+  padding: 0 10px 30px;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sidebar-header span {
+  color: #93c5fd;
+  font-size: 14px;
+}
+
+/* 3. MENU DE NAVEGAÇÃO & ITENS */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #d1d5db;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+/* 4. RODAPÉ DA SIDEBAR & INFORMAÇÕES DO USUÁRIO */
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.sidebar-user {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  margin-bottom: 8px;
+}
+
+.sidebar-user strong {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.sidebar-user span {
+  margin-top: 3px;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.logout {
+  margin-top: 5px;
+}
+
+/* 5. RESPONSIVIDADE */
+@media (max-width: 700px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .dashboard-layout-content {
+    padding: 20px;
+  }
+}
