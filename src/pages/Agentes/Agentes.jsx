@@ -51,23 +51,40 @@ function Agentes() {
                     try {
                         const respostaFoto = await api.get(
                             `/agentes/${agente.id}/foto`,
-                            { responseType: "blob" }
+                            {
+                                responseType: "blob",
+                                validateStatus: (status) =>
+                                    status === 200 || status === 204,
+                            }
                         );
 
-                        const fotoUrl = URL.createObjectURL(respostaFoto.data);
+                        // AGENTE NÃO POSSUI FOTO
+                        if (respostaFoto.status === 204) {
+                            return {
+                                ...agente,
+                                foto_url: null,
+                            };
+                        }
+
+                        // FOTO ENCONTRADA
+                        const fotoUrl = URL.createObjectURL(
+                            respostaFoto.data
+                        );
+
                         novasUrls.push(fotoUrl);
 
                         return {
                             ...agente,
                             foto_url: fotoUrl,
                         };
+
                     } catch (error) {
-                        if (error.response?.status !== 404) {
-                            console.error(
-                                `Erro ao carregar foto do agente ${agente.id}:`,
-                                error
-                            );
-                        }
+
+                        console.error(
+                            `Erro ao carregar foto do agente ${agente.id}:`,
+                            error
+                        );
+
                         return {
                             ...agente,
                             foto_url: null,
