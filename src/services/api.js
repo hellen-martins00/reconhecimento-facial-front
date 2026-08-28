@@ -1,17 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://reconhecimento-facial-api-production.up.railway.app",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
-
-// ==========================================================
 // ENVIAR TOKEN
-// ==========================================================
-
 api.interceptors.request.use(
   (config) => {
-
     const token = localStorage.getItem("access_token");
 
     if (token) {
@@ -19,34 +14,20 @@ api.interceptors.request.use(
     }
 
     return config;
-
   },
   (error) => {
     return Promise.reject(error);
   }
 );
 
-
-// ==========================================================
 // TRATAR RESPOSTA
-// ==========================================================
-
 api.interceptors.response.use(
-
-  (response) => {
-    return response;
-  },
-
+  (response) => response,
   (error) => {
-
     const status = error.response?.status;
     const url = error.config?.url || "";
 
-    if (
-      status === 401 &&
-      !url.includes("/login")
-    ) {
-
+    if (status === 401 && !url.includes("/login")) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("usuario");
 
