@@ -5,26 +5,40 @@ import "./DashboardLayout.css";
 function DashboardLayout({ children }) {
   const navigate = useNavigate();
 
+  // USUÁRIO LOGADO
   const usuarioSalvo = localStorage.getItem("usuario");
-  const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
 
+  let usuario = null;
+
+  try {
+    usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+  } catch (error) {
+    console.error("Erro ao recuperar usuário:", error);
+    localStorage.removeItem("usuario");
+  }
+
+  // LOGOUT
   function handleLogout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("usuario");
 
-    navigate("/login");
+    navigate("/login", { replace: true });
   }
 
+  // TELA
   return (
     <div className="dashboard-layout">
       {/* MENU LATERAL */}
       <aside className="sidebar">
+        {/* CABEÇALHO */}
         <div className="sidebar-header">
           <h2>Reconhecimento</h2>
           <span>Facial</span>
         </div>
 
+        {/* MENU */}
         <nav className="sidebar-menu">
+          {/* DASHBOARD */}
           <button
             type="button"
             className="menu-item"
@@ -33,6 +47,7 @@ function DashboardLayout({ children }) {
             Dashboard
           </button>
 
+          {/* PESSOAS */}
           <button
             type="button"
             className="menu-item"
@@ -41,29 +56,62 @@ function DashboardLayout({ children }) {
             Pessoas
           </button>
 
-          <button type="button" className="menu-item">
+          {/* AGENTES */}
+          <button
+            type="button"
+            className="menu-item"
+            onClick={() => navigate("/agentes")}
+          >
             Agentes
           </button>
 
-          <button type="button" className="menu-item">
+          {/* TELEFONES */}
+          <button
+            type="button"
+            className="menu-item"
+            onClick={() => navigate("/telefones")}
+          >
             Telefones
           </button>
 
-          <button type="button" className="menu-item">
+          {/* ENDEREÇOS */}
+          <button
+            type="button"
+            className="menu-item"
+            onClick={() => navigate("/enderecos")}
+          >
             Endereços
           </button>
 
-          <button type="button" className="menu-item">
+          {/* PASSAGENS CRIMINAIS */}
+          <button
+            type="button"
+            className="menu-item"
+            onClick={() => navigate("/passagens-criminais")}
+          >
             Passagens criminais
+          </button>
+
+          {/* RECONHECIMENTO */}
+          <button
+            type="button"
+            className="menu-item"
+            onClick={() => navigate("/reconhecimento")}
+          >
+            Reconhecimento facial
           </button>
         </nav>
 
+        {/* RODAPÉ */}
         <div className="sidebar-footer">
+          {/* USUÁRIO */}
           <div className="sidebar-user">
             <strong>{usuario?.nome || "Usuário"}</strong>
             <span>{usuario?.usuario || ""}</span>
+            {usuario?.perfil && <small>{usuario.perfil}</small>}
           </div>
 
+          {/* LOGOUT */}
           <button
             type="button"
             className="menu-item logout"
@@ -74,7 +122,7 @@ function DashboardLayout({ children }) {
         </div>
       </aside>
 
-      {/* CONTEÚDO DA PÁGINA */}
+      {/* CONTEÚDO */}
       <main className="dashboard-layout-content">{children}</main>
     </div>
   );

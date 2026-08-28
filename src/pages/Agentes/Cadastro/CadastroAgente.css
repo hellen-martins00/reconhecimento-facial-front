@@ -1,0 +1,197 @@
+/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+.cadastro-agente-page {
+  width: 100%;
+}
+
+.cadastro-agente-card {
+  max-width: 800px;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* 2. CABEÇALHO & BOTÃO VOLTAR */
+.cadastro-agente-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.cadastro-agente-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.cadastro-agente-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.cadastro-agente-voltar {
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cadastro-agente-voltar:hover {
+  background: #f9fafb;
+}
+
+.cadastro-agente-voltar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 3. CAMPOS DO FORMULÁRIO */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 7px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #1f2937;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.form-help {
+  margin-top: 5px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* 4. ESTADOS DA PÁGINA (ERRO) */
+.cadastro-agente-error {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  background: #fee2e2;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+/* 5. PRÉ-VISUALIZAÇÃO DE FOTO */
+.cadastro-agente-foto-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cadastro-agente-foto-preview img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2563eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 6. BOTÕES DE AÇÃO */
+.cadastro-agente-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-secondary,
+.button-primary {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button-secondary {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.button-secondary:hover {
+  background: #f9fafb;
+}
+
+.button-primary {
+  background: #2563eb;
+  border: none;
+  color: white;
+}
+
+.button-primary:hover {
+  background: #1d4ed8;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 7. RESPONSIVIDADE */
+@media (max-width: 700px) {
+  .cadastro-agente-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .cadastro-agente-card {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .cadastro-agente-actions {
+    flex-direction: column-reverse;
+  }
+
+  .button-secondary,
+  .button-primary {
+    width: 100%;
+  }
+}

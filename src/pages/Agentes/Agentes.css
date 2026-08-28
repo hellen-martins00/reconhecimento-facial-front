@@ -1,0 +1,152 @@
+/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+.agentes-page {
+  width: 100%;
+}
+
+.agentes-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* 2. CABEÇALHO & BOTÃO DE CRIAÇÃO */
+.agentes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.agentes-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.agentes-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.agentes-new-button {
+  padding: 12px 18px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.agentes-new-button:hover {
+  background: #1d4ed8;
+}
+
+/* 3. ESTADOS DA PÁGINA (CARREGANDO, VAZIO & ERRO) */
+.agentes-loading,
+.agentes-empty {
+  padding: 50px;
+  text-align: center;
+}
+
+.agentes-empty h2 {
+  margin-bottom: 8px;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.agentes-empty p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.agentes-error {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  background: #fee2e2;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+/* 4. TABELA DE DADOS */
+.agentes-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.agentes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.agentes-table th {
+  padding: 15px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 13px;
+  text-align: left;
+}
+
+.agentes-table td {
+  padding: 15px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.agentes-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* 5. ELEMENTOS DAS LINHAS (AVATAR & AÇÕES) */
+.agente-nome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agente-foto {
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.agente-sem-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: #f1f1f1;
+  border-radius: 6px;
+  color: #777;
+  font-size: 9px;
+  text-align: center;
+}
+
+.agentes-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.agentes-actions button {
+  padding: 7px 10px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.agentes-actions button:hover {
+  background: #f3f4f6;
+}

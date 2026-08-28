@@ -1,0 +1,238 @@
+/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+.editar-agente-page {
+  width: 100%;
+}
+
+.editar-agente-card {
+  max-width: 800px;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* 2. CABEÇALHO & ESTADOS DA PÁGINA */
+.editar-agente-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.editar-agente-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.editar-agente-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.editar-agente-voltar {
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.editar-agente-voltar:hover {
+  background: #f9fafb;
+}
+
+.editar-agente-loading {
+  padding: 40px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.editar-agente-error {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  background: #fee2e2;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+/* 3. SEÇÃO DE FOTO */
+.editar-agente-foto-section {
+  margin-bottom: 24px;
+}
+
+.editar-agente-foto-section h2 {
+  font-size: 18px;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.editar-agente-foto-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.editar-agente-foto {
+  width: 220px;
+  height: 220px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.editar-agente-sem-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #777;
+}
+
+.editar-agente-foto-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.editar-agente-foto-button:hover {
+  background: #e7e7e7;
+}
+
+/* 4. FORMULÁRIO & INPUTS */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 7px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #1f2937;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.form-help {
+  margin-top: 5px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* 5. AÇÕES & BOTÕES DO FORMULÁRIO */
+.editar-agente-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-primary,
+.button-secondary {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button-primary {
+  background: #2563eb;
+  border: none;
+  color: white;
+}
+
+.button-primary:hover {
+  background: #1d4ed8;
+}
+
+.button-secondary {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.button-secondary:hover {
+  background: #f9fafb;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 6. RESPONSIVIDADE (MEDIA QUERIES) */
+@media (max-width: 700px) {
+  .editar-agente-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .editar-agente-card {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .editar-agente-actions {
+    flex-direction: column-reverse;
+  }
+
+  .button-primary,
+  .button-secondary {
+    width: 100%;
+  }
+}
