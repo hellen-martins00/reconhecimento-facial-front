@@ -13,9 +13,9 @@ function CadastroAgente() {
   let usuarioLogado = null;
 
   try {
-    usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+    usuarioLogado - usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
   } catch (error) {
-    console.error("Erro ao recuperar usuário:", error);
+    console.error("Erro ao recuperar usuário: ", error)
   }
 
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
