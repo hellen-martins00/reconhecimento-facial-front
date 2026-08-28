@@ -1,6 +1,10 @@
-/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+/* ================================
+   ESTRUTURA PRINCIPAL
+================================ */
+
 .agentes-page {
   width: 100%;
+  min-width: 0;
 }
 
 .agentes-card {
@@ -10,11 +14,16 @@
   overflow: hidden;
 }
 
-/* 2. CABEÇALHO & BOTÃO DE CRIAÇÃO */
+
+/* ================================
+   CABEÇALHO
+================================ */
+
 .agentes-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   margin-bottom: 25px;
 }
 
@@ -39,16 +48,21 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .agentes-new-button:hover {
   background: #1d4ed8;
 }
 
-/* 3. ESTADOS DA PÁGINA (CARREGANDO, VAZIO & ERRO) */
+
+/* ================================
+   ESTADOS
+================================ */
+
 .agentes-loading,
 .agentes-empty {
-  padding: 50px;
+  padding: 50px 20px;
   text-align: center;
 }
 
@@ -73,14 +87,20 @@
   font-size: 14px;
 }
 
-/* 4. TABELA DE DADOS */
+
+/* ================================
+   TABELA
+================================ */
+
 .agentes-table-container {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .agentes-table {
   width: 100%;
+  min-width: 750px;
   border-collapse: collapse;
 }
 
@@ -91,6 +111,7 @@
   color: #374151;
   font-size: 13px;
   text-align: left;
+  white-space: nowrap;
 }
 
 .agentes-table td {
@@ -104,17 +125,23 @@
   background: #f9fafb;
 }
 
-/* 5. ELEMENTOS DAS LINHAS (AVATAR & AÇÕES) */
+
+/* ================================
+   AGENTE
+================================ */
+
 .agente-nome {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 180px;
 }
 
 .agente-foto {
   display: block;
   width: 42px;
   height: 42px;
+  min-width: 42px;
   border-radius: 6px;
   object-fit: cover;
 }
@@ -125,6 +152,7 @@
   justify-content: center;
   width: 42px;
   height: 42px;
+  min-width: 42px;
   background: #f1f1f1;
   border-radius: 6px;
   color: #777;
@@ -132,9 +160,15 @@
   text-align: center;
 }
 
+
+/* ================================
+   AÇÕES
+================================ */
+
 .agentes-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .agentes-actions button {
@@ -145,8 +179,199 @@
   color: #374151;
   font-size: 12px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .agentes-actions button:hover {
   background: #f3f4f6;
+}
+
+.agentes-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 768px) {
+
+  .agentes-header {
+    align-items: flex-start;
+  }
+
+  .agentes-header h1 {
+    font-size: 24px;
+  }
+
+  .agentes-card {
+    border-radius: 10px;
+  }
+
+  .agentes-table {
+    min-width: 680px;
+  }
+
+}
+
+
+/* =====================================
+   CELULAR
+===================================== */
+
+@media (max-width: 576px) {
+
+  .agentes-page {
+    width: 100%;
+  }
+
+  /* Cabeçalho fica vertical */
+
+  .agentes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .agentes-header h1 {
+    font-size: 23px;
+  }
+
+  .agentes-header p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Botão ocupa largura total */
+
+  .agentes-new-button {
+    width: 100%;
+    padding: 13px;
+  }
+
+  /* Card */
+
+  .agentes-card {
+    border-radius: 10px;
+  }
+
+  /* Remove scroll lateral e transforma tabela */
+
+  .agentes-table-container {
+    overflow: visible;
+  }
+
+  .agentes-table,
+  .agentes-table tbody,
+  .agentes-table tr,
+  .agentes-table td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Esconde cabeçalho da tabela */
+
+  .agentes-table thead {
+    display: none;
+  }
+
+  /* Cada agente vira um card */
+
+  .agentes-table tr {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .agentes-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .agentes-table td {
+    padding: 8px 0;
+    border: none;
+  }
+
+  /* Nome */
+
+  .agentes-table td:first-child {
+    margin-bottom: 10px;
+  }
+
+  .agente-nome {
+    min-width: 0;
+    gap: 12px;
+  }
+
+  .agente-nome span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    word-break: break-word;
+  }
+
+  .agente-foto,
+  .agente-sem-foto {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  /* Outros campos */
+
+  .agentes-table td:nth-child(2),
+  .agentes-table td:nth-child(3),
+  .agentes-table td:nth-child(4) {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f4f6;
+    padding: 10px 0;
+  }
+
+  /* Labels criados pelo CSS */
+
+  .agentes-table td:nth-child(2)::before {
+    content: "Usuário";
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  .agentes-table td:nth-child(3)::before {
+    content: "Perfil";
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  .agentes-table td:nth-child(4)::before {
+    content: "Cadastro";
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  /* Botões */
+
+  .agentes-table td.agentes-actions {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .agentes-actions button {
+    width: 100%;
+    padding: 11px;
+    font-size: 13px;
+  }
+
+  /* Estados */
+
+  .agentes-loading,
+  .agentes-empty {
+    padding: 35px 20px;
+  }
+
 }
