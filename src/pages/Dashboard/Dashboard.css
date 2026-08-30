@@ -8,6 +8,7 @@
 .dashboard-content {
   flex: 1;
   padding: 35px;
+  min-width: 0; /* Impede estouro de elementos filhos */
 }
 
 /* 2. SIDEBAR */
@@ -18,6 +19,7 @@
   padding: 24px 16px;
   background: #111827;
   color: white;
+  flex-shrink: 0;
 }
 
 .sidebar-header {
@@ -108,7 +110,7 @@
 /* 5. CARDS DE ESTATÍSTICAS */
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 25px;
 }
@@ -164,31 +166,55 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .recognition-card button:hover {
   background: #1d4ed8;
 }
 
-/* 7. RESPONSIVIDADE */
-@media (max-width: 900px) {
-  .dashboard-cards {
-    grid-template-columns: 1fr;
+/* 7. RESPONSIVIDADE (MOBILE & TABLET) */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
   }
-}
 
-@media (max-width: 700px) {
   .sidebar {
-    width: 200px;
+    width: 100%;
+    padding: 16px;
+  }
+
+  .sidebar-header {
+    padding: 0 0 15px 0;
+  }
+
+  .sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .menu-item {
+    white-space: nowrap;
+    width: auto;
+  }
+
+  .logout {
+    margin-top: 0;
   }
 
   .dashboard-content {
-    padding: 20px;
+    padding: 20px 15px;
   }
 
   .dashboard-header {
+    flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
+    gap: 10px;
+  }
+
+  .user-info {
+    align-items: flex-start;
   }
 
   .recognition-card {
