@@ -38,7 +38,7 @@ function Reconhecimento() {
         video: {
           facingMode: "user",
           width: { ideal: 1280 },
-          height: { ideal: 720 }
+          height: { ideal: 960 }
         },
         audio: false
       });
