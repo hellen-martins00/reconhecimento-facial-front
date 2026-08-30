@@ -3,27 +3,65 @@
   display: flex;
   min-height: 100vh;
   background: #f4f6f8;
+  position: relative;
 }
 
 .dashboard-content {
   flex: 1;
   padding: 35px;
-  min-width: 0; /* Impede estouro de elementos filhos */
+  min-width: 0;
+  transition: margin-left 0.3s ease;
 }
 
-/* 2. SIDEBAR */
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  width: 240px;
-  padding: 24px 16px;
+/* 2. BOTÃO DE 3 PONTINHOS */
+.menu-toggle-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
   background: #111827;
   color: white;
-  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  width: 42px;
+  height: 42px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s;
+}
+
+.menu-toggle-btn:hover {
+  background: #2563eb;
+}
+
+/* 3. SIDEBAR (COMEÇA FECHADA/COLLAPSED POR PADRÃO) */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px; /* Escondido fora da tela */
+  width: 250px;
+  height: 100vh;
+  background: #111827;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 70px 16px 24px 16px; /* Espaço no topo para não sobrepor o botão */
+  z-index: 1050;
+  transition: left 0.3s ease;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+}
+
+/* SIDEBAR ABERTA */
+.sidebar.open {
+  left: 0;
 }
 
 .sidebar-header {
-  padding: 0 10px 30px;
+  padding: 0 10px 25px;
 }
 
 .sidebar-header h2 {
@@ -36,11 +74,12 @@
   font-size: 14px;
 }
 
-/* 3. MENU DA SIDEBAR */
+/* 4. MENU DA SIDEBAR */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  height: 100%;
 }
 
 .menu-item {
@@ -53,7 +92,7 @@
   font-size: 14px;
   text-align: left;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .menu-item:hover {
@@ -68,14 +107,32 @@
 
 .logout {
   margin-top: auto;
+  color: #ef4444;
 }
 
-/* 4. CABEÇALHO DO DASHBOARD */
+.logout:hover {
+  background: #7f1d1d;
+  color: white;
+}
+
+/* OVERLAY PARA TELAS PEQUENAS QUANDO O MENU ESTIVER ABERTO */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* 5. CABEÇALHO DO DASHBOARD */
 .dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+  margin-top: 10px;
 }
 
 .dashboard-header h1 {
@@ -107,7 +164,7 @@
   font-size: 13px;
 }
 
-/* 5. CARDS DE ESTATÍSTICAS */
+/* 6. CARDS DE ESTATÍSTICAS */
 .dashboard-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -134,7 +191,7 @@
   font-size: 30px;
 }
 
-/* 6. CARD DE RECONHECIMENTO FACIAL */
+/* 7. CARD DE RECONHECIMENTO FACIAL */
 .recognition-card {
   display: flex;
   align-items: center;
@@ -173,38 +230,10 @@
   background: #1d4ed8;
 }
 
-/* 7. RESPONSIVIDADE (MOBILE & TABLET) */
+/* 8. RESPONSIVIDADE PARA CELULARES */
 @media (max-width: 768px) {
-  .dashboard {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    padding: 16px;
-  }
-
-  .sidebar-header {
-    padding: 0 0 15px 0;
-  }
-
-  .sidebar-menu {
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 8px;
-  }
-
-  .menu-item {
-    white-space: nowrap;
-    width: auto;
-  }
-
-  .logout {
-    margin-top: 0;
-  }
-
   .dashboard-content {
-    padding: 20px 15px;
+    padding: 70px 15px 20px 15px; /* Espaço para o botão flutuante */
   }
 
   .dashboard-header {

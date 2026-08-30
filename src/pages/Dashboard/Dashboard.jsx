@@ -1,64 +1,104 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import DashboardLayout from "../../components/Layout/DashboardLayout";
-
-import "./Dashboard.css";
-
-function Dashboard() {
+function DashboardLayout({ children }) {
+  const [menuAberto, setMenuAberto] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const usuarioSalvo = localStorage.getItem("usuario");
   const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
 
+  const handleNavigate = (path) => {
+    navigate(path);
+    setMenuAberto(false); // Fecha o menu ao clicar em uma rota no mobile
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("usuario");
+    navigate("/login");
+  };
+
   return (
-    <DashboardLayout>
-      {/* CABEÇALHO */}
-      <header className="dashboard-header">
-        <div>
-          <h1>Dashboard</h1>
-          <p>Visão geral do sistema</p>
+    <div className="dashboard">
+      {/* OVERLAY PARA FECHAR O MENU EM TELAS PEQUENAS AO CLICAR FORA */}
+      {menuAberto && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMenuAberto(false)}
+        />
+      )}
+
+      {/* BOTÃO DE 3 PONTINHOS / TOGGLE DO MENU */}
+      <button
+        className="menu-toggle-btn"
+        onClick={() => setMenuAberto(!menuAberto)}
+        title="Abrir Menu"
+      >
+        &#8942; {/* Ícone de 3 pontinhos verticais */}
+      </button>
+
+      {/* SIDEBAR RETRÁTIL */}
+      <aside className={`sidebar ${menuAberto ? "open" : "collapsed"}`}>
+        <div className="sidebar-header">
+          <h2>Reconhecimento</h2>
+          <span>Facial</span>
         </div>
 
-        <div className="user-info">
-          <strong>{usuario?.nome || "Usuário"}</strong>
-          <span>{usuario?.usuario || ""}</span>
-        </div>
-      </header>
+        <nav className="sidebar-menu">
+          <button
+            className={`menu-item ${location.pathname === "/dashboard" ? "active" : ""}`}
+            onClick={() => handleNavigate("/dashboard")}
+          >
+            Painel
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/pessoas" ? "active" : ""}`}
+            onClick={() => handleNavigate("/pessoas")}
+          >
+            Pessoas
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/agentes" ? "active" : ""}`}
+            onClick={() => handleNavigate("/agentes")}
+          >
+            Agentes
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/telefones" ? "active" : ""}`}
+            onClick={() => handleNavigate("/telefones")}
+          >
+            Telefones
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/enderecos" ? "active" : ""}`}
+            onClick={() => handleNavigate("/enderecos")}
+          >
+            Endereços
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/passagens" ? "active" : ""}`}
+            onClick={() => handleNavigate("/passagens")}
+          >
+            Passageiros criminosos
+          </button>
+          <button
+            className={`menu-item ${location.pathname === "/reconhecimento" ? "active" : ""}`}
+            onClick={() => handleNavigate("/reconhecimento")}
+          >
+            Reconhecimento facial
+          </button>
 
-      {/* CARDS DE MÉTRICAS */}
-      <section className="dashboard-cards">
-        <div className="dashboard-card">
-          <span>Pessoas</span>
-          <strong>0</strong>
-        </div>
+          <button className="menu-item logout" onClick={handleLogout}>
+            Sair
+          </button>
+        </nav>
+      </aside>
 
-        <div className="dashboard-card">
-          <span>Agentes</span>
-          <strong>1</strong>
-        </div>
-
-        <div className="dashboard-card">
-          <span>Reconhecimentos</span>
-          <strong>0</strong>
-        </div>
-      </section>
-
-      {/* CARD DE AÇÃO DE RECONHECIMENTO */}
-      <section className="recognition-card">
-        <div>
-          <h2>Reconhecimento facial</h2>
-          <p>
-            Realize o reconhecimento facial de uma pessoa cadastrada no
-            sistema.
-          </p>
-        </div>
-
-        <button type="button" onClick={() => navigate("/login")}>
-          Iniciar reconhecimento
-        </button>
-      </section>
-    </DashboardLayout>
+      {/* CONTEÚDO DA PÁGINA */}
+      <main className="dashboard-content">{children}</main>
+    </div>
   );
 }
 
-export default Dashboard;
+export default DashboardLayout;
