@@ -1,141 +1,61 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function DashboardLayout({ children }) {
-  const [menuAberto, setMenuAberto] = useState(false);
+import "./Dashboard.css";
 
+function Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const usuarioSalvo = localStorage.getItem("usuario");
-  const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
-
-  const handleNavigate = (path) => {
-    navigate(path);
-
-    // Fecha o menu após navegar
-    setMenuAberto(false);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("access_token");
-
-    navigate("/login");
-  };
 
   return (
-    <div className={`dashboard ${menuAberto ? "menu-open" : ""}`}>
+    <div className="dashboard-page">
+      <header className="dashboard-header">
+        <div>
+          <h1>Painel</h1>
 
-      {/* OVERLAY */}
-      {menuAberto && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setMenuAberto(false)}
-        />
-      )}
+          <p>
+            Visão geral do sistema de reconhecimento facial.
+          </p>
+        </div>
+      </header>
 
-      {/* BOTÃO MENU */}
-      <button
-        type="button"
-        className="menu-toggle-btn"
-        onClick={() => setMenuAberto(!menuAberto)}
-        aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
-      >
-        {menuAberto ? "✕" : "☰"}
-      </button>
+      {/* CARDS */}
+      <section className="dashboard-cards">
 
-      {/* SIDEBAR */}
-      <aside className={`sidebar ${menuAberto ? "open" : ""}`}>
-
-        <div className="sidebar-header">
-          <h2>Reconhecimento</h2>
-          <span>Facial</span>
+        <div className="dashboard-card">
+          <span>Pessoas cadastradas</span>
+          <strong>0</strong>
         </div>
 
-        <nav className="sidebar-menu">
+        <div className="dashboard-card">
+          <span>Agentes cadastrados</span>
+          <strong>0</strong>
+        </div>
 
-          <button
-            className={`menu-item ${
-              location.pathname === "/dashboard" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/dashboard")}
-          >
-            Painel
-          </button>
+        <div className="dashboard-card">
+          <span>Reconhecimentos realizados</span>
+          <strong>0</strong>
+        </div>
 
-          <button
-            className={`menu-item ${
-              location.pathname === "/pessoas" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/pessoas")}
-          >
-            Pessoas
-          </button>
+      </section>
 
-          <button
-            className={`menu-item ${
-              location.pathname === "/agentes" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/agentes")}
-          >
-            Agentes
-          </button>
+      {/* RECONHECIMENTO */}
+      <section className="recognition-card">
+        <div>
+          <h2>Reconhecimento Facial</h2>
 
-          <button
-            className={`menu-item ${
-              location.pathname === "/telefones" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/telefones")}
-          >
-            Telefones
-          </button>
+          <p>
+            Realize uma nova identificação facial utilizando a câmera.
+          </p>
+        </div>
 
-          <button
-            className={`menu-item ${
-              location.pathname === "/enderecos" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/enderecos")}
-          >
-            Endereços
-          </button>
-
-          <button
-            className={`menu-item ${
-              location.pathname === "/passagens" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/passagens")}
-          >
-            Passagens criminais
-          </button>
-
-          <button
-            className={`menu-item ${
-              location.pathname === "/reconhecimento" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/reconhecimento")}
-          >
-            Reconhecimento facial
-          </button>
-
-          <button
-            className="menu-item logout"
-            onClick={handleLogout}
-          >
-            Sair
-          </button>
-
-        </nav>
-
-      </aside>
-
-      {/* CONTEÚDO */}
-      <main className="dashboard-content">
-        {children}
-      </main>
-
+        <button
+          type="button"
+          onClick={() => navigate("/reconhecimento")}
+        >
+          Iniciar reconhecimento
+        </button>
+      </section>
     </div>
   );
 }
 
-export default DashboardLayout;
+export default Dashboard;

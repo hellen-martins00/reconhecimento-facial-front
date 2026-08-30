@@ -1,4 +1,7 @@
-/* ESTRUTURA PRINCIPAL */
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
+
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
@@ -6,33 +9,42 @@
   background: #f4f6f8;
 }
 
-/* CONTEÚDO */
 .dashboard-layout-content {
   flex: 1;
   min-width: 0;
-  min-height: 100vh;
+  width: 100%;
   padding: 35px;
-  transition: margin-left 0.3s ease;
 }
 
-/* BOTÃO DO MENU */
+
+/* =========================
+   BOTÃO MENU
+========================= */
+
 .menu-toggle-btn {
   position: fixed;
   top: 15px;
   left: 15px;
+  z-index: 1200;
+
   width: 42px;
   height: 42px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border: none;
   border-radius: 8px;
+
   background: #111827;
-  color: #ffffff;
+  color: white;
+
   font-size: 22px;
   cursor: pointer;
-  z-index: 1200;
+
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
   transition: background 0.2s ease;
 }
 
@@ -40,37 +52,55 @@
   background: #2563eb;
 }
 
-/* SIDEBAR */
+
+/* =========================
+   SIDEBAR
+========================= */
+
 .sidebar {
   position: fixed;
+
   top: 0;
-  left: -260px;
-  width: 240px;
+  left: -270px;
+
+  width: 250px;
   height: 100vh;
+
+  background: #111827;
+  color: white;
+
   display: flex;
   flex-direction: column;
+
   padding: 75px 16px 24px;
-  background: #111827;
-  color: #ffffff;
+
+  box-sizing: border-box;
+
   z-index: 1100;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+
   transition: left 0.3s ease;
+
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
 }
 
-/* SIDEBAR ABERTA */
 .sidebar.open {
   left: 0;
 }
 
-/* CABEÇALHO SIDEBAR */
+
+/* =========================
+   HEADER SIDEBAR
+========================= */
+
 .sidebar-header {
-  padding: 0 10px 30px;
+  padding: 0 10px 25px;
 }
 
 .sidebar-header h2 {
   margin: 0;
-  color: #ffffff;
   font-size: 18px;
+  font-weight: 600;
+  color: white;
 }
 
 .sidebar-header span {
@@ -78,23 +108,35 @@
   font-size: 14px;
 }
 
-/* MENU */
+
+/* =========================
+   MENU
+========================= */
+
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 6px;
+
+  flex: 1;
 }
 
 .menu-item {
   width: 100%;
+
   padding: 12px 14px;
+
   background: transparent;
   border: none;
   border-radius: 8px;
+
   color: #d1d5db;
+
   font-size: 14px;
   text-align: left;
+
   cursor: pointer;
+
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -102,80 +144,97 @@
 
 .menu-item:hover {
   background: #1f2937;
-  color: #ffffff;
+  color: white;
 }
 
 .menu-item.active {
   background: #2563eb;
-  color: #ffffff;
+  color: white;
 }
 
-/* RODAPÉ */
+
+/* =========================
+   RODAPÉ / LOGOUT
+========================= */
+
 .sidebar-footer {
   margin-top: auto;
 }
 
-
 .sidebar-user {
   display: flex;
   flex-direction: column;
+
   padding: 12px 10px;
   margin-bottom: 8px;
 }
 
 .sidebar-user strong {
-  color: #ffffff;
+  color: white;
   font-size: 14px;
 }
 
 .sidebar-user span {
   margin-top: 3px;
+
   color: #9ca3af;
   font-size: 12px;
 }
 
 .sidebar-user small {
   margin-top: 5px;
+
   color: #93c5fd;
   font-size: 11px;
 }
 
-/* LOGOUT */
 .logout {
   color: #f87171;
 }
 
 .logout:hover {
   background: #7f1d1d;
-  color: #ffffff;
+  color: white;
 }
 
-/* OVERLAY */
+
+/* =========================
+   OVERLAY
+========================= */
+
 .sidebar-overlay {
   position: fixed;
   inset: 0;
+
   background: rgba(0, 0, 0, 0.45);
+
   z-index: 1050;
 }
 
 
-/* TABLET E MOBILE */
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
 @media (max-width: 768px) {
 
   .dashboard-layout-content {
-    width: 100%;
-
     padding: 75px 16px 25px;
   }
 
 }
 
-/* CELULAR PEQUENO */
+
 @media (max-width: 480px) {
 
+  .dashboard-layout-content {
+    padding: 70px 12px 20px;
+  }
+
   .sidebar {
-    width: 280px;
-    max-width: 85vw;
+    width: 85%;
+    max-width: 280px;
+
     left: -100%;
   }
 
@@ -183,7 +242,4 @@
     left: 0;
   }
 
-  .dashboard-layout-content {
-    padding: 70px 12px 20px;
-  }
 }
