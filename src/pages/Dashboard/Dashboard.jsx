@@ -98,7 +98,7 @@ function Dashboard() {
         <div className="dashboard-card">
           <div className="dashboard-card-header">
             <span className="dashboard-card-icon">
-              🛡️
+              👮
             </span>
 
             <span className="dashboard-card-title">
