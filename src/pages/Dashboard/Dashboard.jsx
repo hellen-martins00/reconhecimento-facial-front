@@ -10,6 +10,7 @@ function Dashboard() {
 
   const [totalPessoas, setTotalPessoas] = useState(0);
   const [totalAgentes, setTotalAgentes] = useState(0);
+  const [totalFaces, setTotalFaces] = useState(0);
   const [totalReconhecimentos, setTotalReconhecimentos] = useState(0);
 
   const [carregando, setCarregando] = useState(true);
@@ -22,10 +23,16 @@ function Dashboard() {
     try {
       setCarregando(true);
 
-      // BUSCA PESSOAS E AGENTES AO MESMO TEMPO
-      const [pessoasResponse, agentesResponse] = await Promise.all([
+      const [
+        pessoasResponse,
+        agentesResponse,
+        fotosResponse,
+        reconhecimentosResponse,
+      ] = await Promise.all([
         api.get("/pessoas"),
         api.get("/agentes"),
+        api.get("/fotos"),
+        api.get("/reconhecimento/total"),
       ]);
 
       // QUANTIDADE DE PESSOAS
@@ -34,15 +41,13 @@ function Dashboard() {
       // QUANTIDADE DE AGENTES
       setTotalAgentes(agentesResponse.data.length);
 
-      /*
-        RECONHECIMENTOS
+      // QUANTIDADE DE FACES/FOTOS CADASTRADAS
+      setTotalFaces(fotosResponse.data.length);
 
-        Por enquanto permanece 0 porque precisamos
-        verificar qual endpoint/tabela registra
-        os reconhecimentos realizados.
-      */
-
-      setTotalReconhecimentos(0);
+      // QUANTIDADE DE RECONHECIMENTOS
+      setTotalReconhecimentos(
+        reconhecimentosResponse.data.total
+      );
 
     } catch (error) {
       console.error(
@@ -57,6 +62,7 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
 
+      {/* CABEÇALHO */}
       <header className="dashboard-header">
         <div>
           <h1>Painel</h1>
@@ -70,24 +76,71 @@ function Dashboard() {
       {/* CARDS */}
       <section className="dashboard-cards">
 
+        {/* PESSOAS */}
         <div className="dashboard-card">
-          <span>Pessoas cadastradas</span>
+          <div className="dashboard-card-header">
+            <span className="dashboard-card-icon">
+              👤
+            </span>
+
+            <span className="dashboard-card-title">
+              Pessoas cadastradas
+            </span>
+          </div>
 
           <strong>
             {carregando ? "..." : totalPessoas}
           </strong>
         </div>
 
+
+        {/* AGENTES */}
         <div className="dashboard-card">
-          <span>Agentes cadastrados</span>
+          <div className="dashboard-card-header">
+            <span className="dashboard-card-icon">
+              🛡️
+            </span>
+
+            <span className="dashboard-card-title">
+              Agentes cadastrados
+            </span>
+          </div>
 
           <strong>
             {carregando ? "..." : totalAgentes}
           </strong>
         </div>
 
+
+        {/* FACES */}
         <div className="dashboard-card">
-          <span>Reconhecimentos realizados</span>
+          <div className="dashboard-card-header">
+            <span className="dashboard-card-icon">
+              📸
+            </span>
+
+            <span className="dashboard-card-title">
+              Faces cadastradas
+            </span>
+          </div>
+
+          <strong>
+            {carregando ? "..." : totalFaces}
+          </strong>
+        </div>
+
+
+        {/* RECONHECIMENTOS */}
+        <div className="dashboard-card">
+          <div className="dashboard-card-header">
+            <span className="dashboard-card-icon">
+              🔍
+            </span>
+
+            <span className="dashboard-card-title">
+              Reconhecimentos realizados
+            </span>
+          </div>
 
           <strong>
             {carregando ? "..." : totalReconhecimentos}
@@ -96,8 +149,10 @@ function Dashboard() {
 
       </section>
 
-      {/* RECONHECIMENTO */}
+
+      {/* ÁREA DE RECONHECIMENTO */}
       <section className="recognition-card">
+
         <div>
           <h2>Reconhecimento Facial</h2>
 
@@ -112,7 +167,9 @@ function Dashboard() {
         >
           Iniciar reconhecimento
         </button>
+
       </section>
+
     </div>
   );
 }
