@@ -1,9 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "./DashboardLayout.css";
 
 function DashboardLayout({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // CONTROLA ABERTURA/FECHAMENTO DO MENU
+  const [menuAberto, setMenuAberto] = useState(false);
 
   // USUÁRIO LOGADO
   const usuarioSalvo = localStorage.getItem("usuario");
@@ -17,19 +22,49 @@ function DashboardLayout({ children }) {
     localStorage.removeItem("usuario");
   }
 
+  // NAVEGAÇÃO
+  function handleNavigate(path) {
+    navigate(path);
+
+    // Fecha o menu após clicar em uma opção
+    // Isso é especialmente importante no celular
+    setMenuAberto(false);
+  }
+
   // LOGOUT
   function handleLogout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("usuario");
 
+    setMenuAberto(false);
+
     navigate("/login", { replace: true });
   }
 
-  // TELA
   return (
     <div className="dashboard-layout">
+
+      {/* OVERLAY - aparece quando o menu está aberto */}
+      {menuAberto && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMenuAberto(false)}
+        />
+      )}
+
+      {/* BOTÃO PARA ABRIR/FECHAR MENU */}
+      <button
+        type="button"
+        className="menu-toggle-btn"
+        onClick={() => setMenuAberto(!menuAberto)}
+        aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+      >
+        {menuAberto ? "✕" : "☰"}
+      </button>
+
       {/* MENU LATERAL */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${menuAberto ? "open" : ""}`}>
+
         {/* CABEÇALHO */}
         <div className="sidebar-header">
           <h2>Reconhecimento</h2>
@@ -38,80 +73,94 @@ function DashboardLayout({ children }) {
 
         {/* MENU */}
         <nav className="sidebar-menu">
-          {/* DASHBOARD */}
+
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/dashboard")}
+            className={`menu-item ${
+              location.pathname === "/dashboard" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/dashboard")}
           >
             Dashboard
           </button>
 
-          {/* PESSOAS */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/pessoas")}
+            className={`menu-item ${
+              location.pathname.startsWith("/pessoas") ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/pessoas")}
           >
             Pessoas
           </button>
 
-          {/* AGENTES */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/agentes")}
+            className={`menu-item ${
+              location.pathname.startsWith("/agentes") ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/agentes")}
           >
             Agentes
           </button>
 
-          {/* TELEFONES */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/telefones")}
+            className={`menu-item ${
+              location.pathname === "/telefones" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/telefones")}
           >
             Telefones
           </button>
 
-          {/* ENDEREÇOS */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/enderecos")}
+            className={`menu-item ${
+              location.pathname === "/enderecos" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/enderecos")}
           >
             Endereços
           </button>
 
-          {/* PASSAGENS CRIMINAIS */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/passagens-criminais")}
+            className={`menu-item ${
+              location.pathname === "/passagens-criminais"
+                ? "active"
+                : ""
+            }`}
+            onClick={() => handleNavigate("/passagens-criminais")}
           >
             Passagens criminais
           </button>
 
-          {/* RECONHECIMENTO */}
           <button
             type="button"
-            className="menu-item"
-            onClick={() => navigate("/reconhecimento")}
+            className={`menu-item ${
+              location.pathname === "/reconhecimento" ? "active" : ""
+            }`}
+            onClick={() => handleNavigate("/reconhecimento")}
           >
             Reconhecimento facial
           </button>
+
         </nav>
 
         {/* RODAPÉ */}
         <div className="sidebar-footer">
-          {/* USUÁRIO */}
+
           <div className="sidebar-user">
             <strong>{usuario?.nome || "Usuário"}</strong>
+
             <span>{usuario?.usuario || ""}</span>
-            {usuario?.perfil && <small>{usuario.perfil}</small>}
+
+            {usuario?.perfil && (
+              <small>{usuario.perfil}</small>
+            )}
           </div>
 
-          {/* LOGOUT */}
           <button
             type="button"
             className="menu-item logout"
@@ -119,11 +168,16 @@ function DashboardLayout({ children }) {
           >
             Sair
           </button>
+
         </div>
+
       </aside>
 
       {/* CONTEÚDO */}
-      <main className="dashboard-layout-content">{children}</main>
+      <main className="dashboard-layout-content">
+        {children}
+      </main>
+
     </div>
   );
 }

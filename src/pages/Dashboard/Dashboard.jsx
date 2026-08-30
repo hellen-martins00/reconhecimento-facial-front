@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 function DashboardLayout({ children }) {
   const [menuAberto, setMenuAberto] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -11,17 +12,22 @@ function DashboardLayout({ children }) {
 
   const handleNavigate = (path) => {
     navigate(path);
-    setMenuAberto(false); // Fecha o menu ao clicar em uma rota no mobile
+
+    // Fecha o menu após navegar
+    setMenuAberto(false);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("usuario");
+    localStorage.removeItem("access_token");
+
     navigate("/login");
   };
 
   return (
-    <div className="dashboard">
-      {/* OVERLAY PARA FECHAR O MENU EM TELAS PEQUENAS AO CLICAR FORA */}
+    <div className={`dashboard ${menuAberto ? "menu-open" : ""}`}>
+
+      {/* OVERLAY */}
       {menuAberto && (
         <div
           className="sidebar-overlay"
@@ -29,74 +35,105 @@ function DashboardLayout({ children }) {
         />
       )}
 
-      {/* BOTÃO DE 3 PONTINHOS / TOGGLE DO MENU */}
+      {/* BOTÃO MENU */}
       <button
+        type="button"
         className="menu-toggle-btn"
         onClick={() => setMenuAberto(!menuAberto)}
-        title="Abrir Menu"
+        aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
       >
-        &#8942; {/* Ícone de 3 pontinhos verticais */}
+        {menuAberto ? "✕" : "☰"}
       </button>
 
-      {/* SIDEBAR RETRÁTIL */}
-      <aside className={`sidebar ${menuAberto ? "open" : "collapsed"}`}>
+      {/* SIDEBAR */}
+      <aside className={`sidebar ${menuAberto ? "open" : ""}`}>
+
         <div className="sidebar-header">
           <h2>Reconhecimento</h2>
           <span>Facial</span>
         </div>
 
         <nav className="sidebar-menu">
+
           <button
-            className={`menu-item ${location.pathname === "/dashboard" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/dashboard" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/dashboard")}
           >
             Painel
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/pessoas" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/pessoas" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/pessoas")}
           >
             Pessoas
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/agentes" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/agentes" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/agentes")}
           >
             Agentes
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/telefones" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/telefones" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/telefones")}
           >
             Telefones
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/enderecos" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/enderecos" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/enderecos")}
           >
             Endereços
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/passagens" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/passagens" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/passagens")}
           >
-            Passageiros criminosos
+            Passagens criminais
           </button>
+
           <button
-            className={`menu-item ${location.pathname === "/reconhecimento" ? "active" : ""}`}
+            className={`menu-item ${
+              location.pathname === "/reconhecimento" ? "active" : ""
+            }`}
             onClick={() => handleNavigate("/reconhecimento")}
           >
             Reconhecimento facial
           </button>
 
-          <button className="menu-item logout" onClick={handleLogout}>
+          <button
+            className="menu-item logout"
+            onClick={handleLogout}
+          >
             Sair
           </button>
+
         </nav>
+
       </aside>
 
-      {/* CONTEÚDO DA PÁGINA */}
-      <main className="dashboard-content">{children}</main>
+      {/* CONTEÚDO */}
+      <main className="dashboard-content">
+        {children}
+      </main>
+
     </div>
   );
 }
