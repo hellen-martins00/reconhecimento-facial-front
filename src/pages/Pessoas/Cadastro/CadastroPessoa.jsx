@@ -56,7 +56,8 @@ function CadastroPessoa() {
     setCarregando(true);
 
     try {
-      await api.post("/pessoas", {
+      // 1. Criar a pessoa
+      const respostaPessoa = await api.post("/pessoas", {
         nome,
         cpf,
         data_nascimento: dataNascimento,
@@ -65,10 +66,15 @@ function CadastroPessoa() {
         nome_pai: nomePai,
       });
 
+      // Pessoa retornada pela API
       const pessoaCriada = respostaPessoa.data;
 
-      const telefonesValidos = telefones.filter((telefone) => telefone.numero.trim() !== "");
+      // 2. Filtrar apenas telefones preenchidos
+      const telefonesValidos = telefones.filter(
+        (telefone) => telefone.numero.trim() !== ""
+      );
 
+      // 3. Criar os telefones vinculados à pessoa
       await Promise.all(
         telefonesValidos.map((telefone) =>
           api.post("/telefones", {
@@ -79,10 +85,12 @@ function CadastroPessoa() {
         )
       );
 
+      // 4. Voltar para a lista
       navigate("/pessoas");
 
     } catch (error) {
       console.error(error);
+
       setErro(
         error.response?.data?.detail ||
         "Não foi possível cadastrar a pessoa."
