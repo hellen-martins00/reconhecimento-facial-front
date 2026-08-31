@@ -18,6 +18,37 @@ function CadastroPessoa() {
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
 
+  const [telefones, setTelefones] = useState([
+    {
+      numero: "",
+      tipo: "PESSOAL",
+    },
+  ]);
+
+  function adicionarTelefone() {
+    setTelefones([
+      ...telefones,
+      {
+        numero: "",
+        tipo: "PESSOAL",
+      },
+    ]);
+  }
+
+  function removerTelefone(index) {
+    setTelefones(
+      telefones.filter((_, telefoneIndex) => telefoneIndex !== index)
+    );
+  }
+
+  function alterarTelefone(index, campo, valor) {
+    const novosTelefones = [...telefones];
+
+    novosTelefones[index][campo] = valor;
+
+    setTelefones(novosTelefones);
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -34,12 +65,27 @@ function CadastroPessoa() {
         nome_pai: nomePai,
       });
 
+      const pessoaCriada = respostaPessoa.data;
+
+      const telefonesValidos = telefones.filter((telefone) => telefone.numero.trim() !== "");
+
+      await Promise.all(
+        telefonesValidos.map((telefone) =>
+          api.post("/telefones", {
+            pessoa_id: pessoaCriada.id,
+            numero: telefone.numero,
+            tipo: telefone.tipo,
+          })
+        )
+      );
+
       navigate("/pessoas");
+
     } catch (error) {
       console.error(error);
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível cadastrar a pessoa."
+        "Não foi possível cadastrar a pessoa."
       );
     } finally {
       setCarregando(false);
@@ -99,6 +145,78 @@ function CadastroPessoa() {
             <span className="form-help">
               Informe apenas os 11 números do CPF.
             </span>
+          </div>
+
+          {/* TELEFONES */}
+          <div className="telefones-section">
+            <div className="telefones-header">
+              <div>
+                <h3>Telefones</h3>
+                <p>Adicione os telefones vinculados à pessoa.</p>
+              </div>
+
+              <button
+                type="button"
+                className="adicionar-telefone-button"
+                onClick={adicionarTelefone}
+              >
+                + Adicionar telefone
+              </button>
+            </div>
+
+            {telefones.map((telefone, index) => (
+              <div className="telefone-item" key={index}>
+                <div className="form-group">
+                  <label>Número</label>
+
+                  <input
+                    type="text"
+                    value={telefone.numero}
+                    onChange={(event) =>
+                      alterarTelefone(
+                        index,
+                        "numero",
+                        event.target.value
+                      )
+                    }
+                    placeholder="Digite o número"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Tipo</label>
+
+                  <select
+                    value={telefone.tipo}
+                    onChange={(event) =>
+                      alterarTelefone(
+                        index,
+                        "tipo",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value="PESSOAL">
+                      Pessoal
+                    </option>
+
+                    <option value="RESIDENCIAL">
+                      Residencial
+                    </option>
+                  </select>
+                </div>
+
+                {telefones.length > 1 && (
+                  <button
+                    type="button"
+                    className="remover-telefone-button"
+                    onClick={() => removerTelefone(index)}
+                  >
+                    Remover
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
 
           {/* DATA DE NASCIMENTO E SEXO */}

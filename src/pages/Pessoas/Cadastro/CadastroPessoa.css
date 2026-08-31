@@ -162,6 +162,78 @@
   cursor: not-allowed;
 }
 
+/* TELEFONES */
+.telefones-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.telefones-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.telefones-header h3 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.telefones-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.adicionar-telefone-button {
+  padding: 9px 14px;
+  background: white;
+  border: 1px solid #2563eb;
+  border-radius: 7px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.adicionar-telefone-button:hover {
+  background: #eff6ff;
+}
+
+.telefone-item {
+  display: grid;
+  grid-template-columns: 1fr 180px auto;
+  gap: 15px;
+  align-items: end;
+  margin-bottom: 15px;
+}
+
+.telefone-item .form-group {
+  margin-bottom: 0;
+}
+
+.remover-telefone-button {
+  height: 42px;
+  padding: 0 14px;
+  background: white;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  color: #dc2626;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.remover-telefone-button:hover {
+  background: #fef2f2;
+}
+
 /* 6. RESPONSIVIDADE */
 
 @media (max-width: 700px) {
