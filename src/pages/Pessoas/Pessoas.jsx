@@ -61,7 +61,7 @@ function Pessoas() {
       console.error(error);
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar as pessoas."
+        "Não foi possível carregar as pessoas."
       );
     } finally {
       setCarregando(false);
@@ -101,59 +101,158 @@ function Pessoas() {
             <p>Ainda não existem pessoas cadastradas no sistema.</p>
           </div>
         ) : (
-          <div className="pessoas-table-container">
-            <table className="pessoas-table">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>CPF</th>
-                  <th>Data de nascimento</th>
-                  <th>Sexo</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pessoas.map((pessoa) => (
-                  <tr key={pessoa.id}>
-                    <td>
-                      <div className="pessoa-nome">
-                        {pessoa.foto_url ? (
-                          <img
-                            src={pessoa.foto_url}
-                            alt={`Foto de ${pessoa.nome}`}
-                            className="pessoa-foto"
-                          />
-                        ) : (
-                          <div className="pessoa-sem-foto">Sem foto</div>
-                        )}
-                        <span>{pessoa.nome}</span>
-                      </div>
-                    </td>
+          <>
+            {/* =========================
+      TABELA - DESKTOP
+  ========================= */}
 
-                    <td>{pessoa.cpf}</td>
-                    <td>{pessoa.data_nascimento}</td>
-                    <td>{pessoa.sexo}</td>
-
-                    <td className="pessoas-actions">
-                      <button
-                        onClick={() => navigate(`/pessoas/${pessoa.id}`)}
-                      >
-                        Visualizar
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          navigate(`/pessoas/${pessoa.id}/editar`)
-                        }
-                      >
-                        Editar
-                      </button>
-                    </td>
+            <div className="pessoas-table-container">
+              <table className="pessoas-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Data de nascimento</th>
+                    <th>Sexo</th>
+                    <th>Ações</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {pessoas.map((pessoa) => (
+                    <tr key={pessoa.id}>
+                      <td>
+                        <div className="pessoa-nome">
+                          {pessoa.foto_url ? (
+                            <img
+                              src={pessoa.foto_url}
+                              alt={`Foto de ${pessoa.nome}`}
+                              className="pessoa-foto"
+                            />
+                          ) : (
+                            <div className="pessoa-sem-foto">
+                              Sem foto
+                            </div>
+                          )}
+
+                          <span>{pessoa.nome}</span>
+                        </div>
+                      </td>
+
+                      <td>{pessoa.cpf}</td>
+
+                      <td>{pessoa.data_nascimento}</td>
+
+                      <td>{pessoa.sexo}</td>
+
+                      <td className="pessoas-actions">
+                        <button
+                          onClick={() =>
+                            navigate(`/pessoas/${pessoa.id}`)
+                          }
+                        >
+                          Visualizar
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            navigate(`/pessoas/${pessoa.id}/editar`)
+                          }
+                        >
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* CARDS - MOBILE */}
+            <div className="pessoas-mobile-list">
+
+              {pessoas.map((pessoa) => (
+                <div
+                  className="pessoa-mobile-card"
+                  key={pessoa.id}
+                >
+
+                  {/* TOPO */}
+                  <div className="pessoa-mobile-header">
+
+                    {pessoa.foto_url ? (
+                      <img
+                        src={pessoa.foto_url}
+                        alt={`Foto de ${pessoa.nome}`}
+                        className="pessoa-mobile-foto"
+                      />
+                    ) : (
+                      <div className="pessoa-mobile-sem-foto">
+                        Sem foto
+                      </div>
+                    )}
+
+                    <div className="pessoa-mobile-nome">
+                      <h3>{pessoa.nome}</h3>
+
+                      <span>
+                        {pessoa.sexo}
+                      </span>
+                    </div>
+
+                  </div>
+                  
+
+                  {/* INFORMAÇÕES */}
+                  <div className="pessoa-mobile-info">
+
+                    <div>
+                      <span>CPF</span>
+
+                      <strong>
+                        {pessoa.cpf}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Data de nascimento</span>
+
+                      <strong>
+                        {pessoa.data_nascimento}
+                      </strong>
+                    </div>
+
+                  </div>
+
+
+                  {/* AÇÕES */}
+                  <div className="pessoa-mobile-actions">
+
+                    <button
+                      className="pessoa-visualizar"
+                      onClick={() =>
+                        navigate(`/pessoas/${pessoa.id}`)
+                      }
+                    >
+                      Visualizar
+                    </button>
+
+                    <button
+                      className="pessoa-editar"
+                      onClick={() =>
+                        navigate(`/pessoas/${pessoa.id}/editar`)
+                      }
+                    >
+                      Editar
+                    </button>
+
+                  </div>
+
+                </div>
+              ))}
+
+            </div>
+          </>
         )}
       </div>
     </div>
