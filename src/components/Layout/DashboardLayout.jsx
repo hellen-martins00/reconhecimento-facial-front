@@ -107,38 +107,6 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${
-              location.pathname === "/telefones" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/telefones")}
-          >
-            Telefones
-          </button>
-
-          <button
-            type="button"
-            className={`menu-item ${
-              location.pathname === "/enderecos" ? "active" : ""
-            }`}
-            onClick={() => handleNavigate("/enderecos")}
-          >
-            Endereços
-          </button>
-
-          <button
-            type="button"
-            className={`menu-item ${
-              location.pathname === "/passagens-criminais"
-                ? "active"
-                : ""
-            }`}
-            onClick={() => handleNavigate("/passagens-criminais")}
-          >
-            Passagens criminais
-          </button>
-
-          <button
-            type="button"
-            className={`menu-item ${
               location.pathname === "/reconhecimento" ? "active" : ""
             }`}
             onClick={() => handleNavigate("/reconhecimento")}
