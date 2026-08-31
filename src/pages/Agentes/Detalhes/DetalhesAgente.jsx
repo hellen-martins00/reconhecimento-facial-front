@@ -141,14 +141,6 @@ function DetalhesAgente() {
                     <h1>{agente.nome}</h1>
                     <p>Dados cadastrais do agente</p>
                 </div>
-
-                <button
-                    type="button"
-                    className="detalhes-agente-voltar"
-                    onClick={() => navigate("/agentes")}
-                >
-                    Voltar
-                </button>
             </div>
 
             <div className="detalhes-agente-card">
