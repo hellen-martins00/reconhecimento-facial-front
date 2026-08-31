@@ -51,7 +51,7 @@ function CadastroPessoa() {
       {/* CABEÇALHO */}
       <div className="cadastro-pessoa-header">
         <div>
-          <h1>Nova pessoa</h1>
+          <h1>Adicionar Pessoa</h1>
           <p>Cadastre os dados da pessoa no sistema.</p>
         </div>
 
