@@ -1,7 +1,4 @@
-/* ================================
-   ESTRUTURA PRINCIPAL
-================================ */
-
+/* ESTRUTURA PRINCIPAL */
 .agentes-page {
   width: 100%;
   min-width: 0;
@@ -14,11 +11,7 @@
   overflow: hidden;
 }
 
-
-/* ================================
-   CABEÇALHO
-================================ */
-
+/* CABEÇALHO */
 .agentes-header {
   display: flex;
   align-items: center;
@@ -40,12 +33,12 @@
 }
 
 .agentes-new-button {
-  padding: 12px 18px;
+  padding: 10px 16px;
   background: #2563eb;
   border: none;
   border-radius: 8px;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -55,11 +48,7 @@
   background: #1d4ed8;
 }
 
-
-/* ================================
-   ESTADOS
-================================ */
-
+/* ESTADOS */
 .agentes-loading,
 .agentes-empty {
   padding: 50px 20px;
@@ -87,20 +76,14 @@
   font-size: 14px;
 }
 
-
-/* ================================
-   TABELA
-================================ */
-
+/* TABELA DESKTOP */
 .agentes-table-container {
   width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .agentes-table {
   width: 100%;
-  min-width: 750px;
   border-collapse: collapse;
 }
 
@@ -125,16 +108,11 @@
   background: #f9fafb;
 }
 
-
-/* ================================
-   AGENTE
-================================ */
-
+/* AGENTE */
 .agente-nome {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 180px;
 }
 
 .agente-foto {
@@ -142,7 +120,7 @@
   width: 42px;
   height: 42px;
   min-width: 42px;
-  border-radius: 6px;
+  border-radius: 8px;
   object-fit: cover;
 }
 
@@ -153,18 +131,14 @@
   width: 42px;
   height: 42px;
   min-width: 42px;
-  background: #f1f1f1;
-  border-radius: 6px;
-  color: #777;
+  background: #f1f5f9;
+  border-radius: 8px;
+  color: #64748b;
   font-size: 9px;
   text-align: center;
 }
 
-
-/* ================================
-   AÇÕES
-================================ */
-
+/* AÇÕES DESKTOP */
 .agentes-actions {
   display: flex;
   gap: 8px;
@@ -191,44 +165,33 @@
   cursor: not-allowed;
 }
 
+.agentes-actions .agente-excluir {
+  color: #dc2626;
+  border-color: #fecaca;
+}
 
-/* =====================================
-   TABLET
-===================================== */
+.agentes-actions .agente-excluir:hover {
+  background: #fef2f2;
+}
 
+/* MOBILE - ESCONDIDO NO DESKTOP */
+.agentes-mobile-list {
+  display: none;
+}
+
+/* TABLET */
 @media (max-width: 768px) {
-
-  .agentes-header {
-    align-items: flex-start;
-  }
 
   .agentes-header h1 {
     font-size: 24px;
   }
 
-  .agentes-card {
-    border-radius: 10px;
-  }
-
-  .agentes-table {
-    min-width: 680px;
-  }
-
 }
 
-
-/* =====================================
-   CELULAR
-===================================== */
-
+/* CELULAR */
 @media (max-width: 576px) {
 
-  .agentes-page {
-    width: 100%;
-  }
-
-  /* Cabeçalho fica vertical */
-
+  /* CABEÇALHO */
   .agentes-header {
     flex-direction: column;
     align-items: stretch;
@@ -245,133 +208,175 @@
     line-height: 1.5;
   }
 
-  /* Botão ocupa largura total */
-
   .agentes-new-button {
     width: 100%;
-    padding: 13px;
+    padding: 12px;
   }
 
-  /* Card */
-
+  /* CARD PRINCIPAL */
   .agentes-card {
-    border-radius: 10px;
-  }
-
-  /* Remove scroll lateral e transforma tabela */
-
-  .agentes-table-container {
+    background: transparent;
+    box-shadow: none;
     overflow: visible;
   }
 
-  .agentes-table,
-  .agentes-table tbody,
-  .agentes-table tr,
-  .agentes-table td {
-    display: block;
-    width: 100%;
-  }
-
-  /* Esconde cabeçalho da tabela */
-
-  .agentes-table thead {
+  /* ESCONDE TABELA */
+  .agentes-table-container {
     display: none;
   }
 
-  /* Cada agente vira um card */
-
-  .agentes-table tr {
-    padding: 16px;
-    border-bottom: 1px solid #e5e7eb;
+  /* MOSTRA LISTA MOBILE */
+  .agentes-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
-  .agentes-table tr:last-child {
-    border-bottom: none;
+  /* CARD DO AGENTE */
+  .agente-mobile-card {
+    padding: 18px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
   }
 
-  .agentes-table td {
-    padding: 8px 0;
-    border: none;
-  }
-
-  /* Nome */
-
-  .agentes-table td:first-child {
-    margin-bottom: 10px;
-  }
-
-  .agente-nome {
-    min-width: 0;
+  /* TOPO */
+  .agente-mobile-header {
+    display: flex;
+    align-items: center;
     gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f5f9;
   }
 
-  .agente-nome span {
-    font-size: 16px;
-    font-weight: 600;
+  .agente-mobile-foto {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .agente-mobile-sem-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .agente-mobile-nome {
+    min-width: 0;
+  }
+
+  .agente-mobile-nome h3 {
+    margin: 0 0 5px;
     color: #1f2937;
+    font-size: 16px;
     word-break: break-word;
   }
 
-  .agente-foto,
-  .agente-sem-foto {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
+  .agente-mobile-nome span {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 600;
   }
 
-  /* Outros campos */
+  /* INFORMAÇÕES */
+  .agente-mobile-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-  .agentes-table td:nth-child(2),
-  .agentes-table td:nth-child(3),
-  .agentes-table td:nth-child(4) {
+  .agente-mobile-info div {
     display: flex;
     justify-content: space-between;
     gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .agente-mobile-info span {
+    color: #6b7280;
+    font-size: 12px;
+  }
+
+  .agente-mobile-info strong {
+    color: #374151;
     font-size: 13px;
-    border-bottom: 1px solid #f3f4f6;
-    padding: 10px 0;
+    text-align: right;
+    word-break: break-word;
   }
 
-  /* Labels criados pelo CSS */
-
-  .agentes-table td:nth-child(2)::before {
-    content: "Usuário";
-    font-weight: 600;
-    color: #6b7280;
-  }
-
-  .agentes-table td:nth-child(3)::before {
-    content: "Perfil";
-    font-weight: 600;
-    color: #6b7280;
-  }
-
-  .agentes-table td:nth-child(4)::before {
-    content: "Cadastro";
-    font-weight: 600;
-    color: #6b7280;
-  }
-
-  /* Botões */
-
-  .agentes-table td.agentes-actions {
-    padding-top: 15px;
+  /* AÇÕES */
+  .agente-mobile-actions {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding-top: 16px;
   }
 
-  .agentes-actions button {
+  .agente-mobile-actions button {
     width: 100%;
     padding: 11px;
+    border-radius: 7px;
     font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
   }
 
-  /* Estados */
+  .agente-visualizar {
+    background: white;
+    border: 1px solid #d1d5db;
+    color: #374151;
+  }
 
+  .agente-visualizar:hover {
+    background: #f9fafb;
+  }
+
+  .agente-editar {
+    background: #2563eb;
+    border: none;
+    color: white;
+  }
+
+  .agente-editar:hover {
+    background: #1d4ed8;
+  }
+
+  .agente-mobile-actions .agente-excluir {
+    background: #fff;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+  }
+
+  .agente-mobile-actions .agente-excluir:hover {
+    background: #fef2f2;
+  }
+
+  .agente-mobile-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* ESTADOS */
   .agentes-loading,
   .agentes-empty {
     padding: 35px 20px;
+    background: white;
+    border-radius: 12px;
   }
 
 }
