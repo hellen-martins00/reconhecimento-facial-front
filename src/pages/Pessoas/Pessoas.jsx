@@ -141,7 +141,11 @@ function Pessoas() {
 
                       <td>{pessoa.cpf}</td>
 
-                      <td>{pessoa.data_nascimento}</td>
+                      <td>
+                        {pessoa.data_nascimento
+                          ? pessoa.data_nascimento.split("-").reverse().join("/")
+                          : ""}
+                      </td>
 
                       <td>{pessoa.sexo}</td>
 
@@ -201,7 +205,7 @@ function Pessoas() {
                     </div>
 
                   </div>
-                  
+
 
                   {/* INFORMAÇÕES */}
                   <div className="pessoa-mobile-info">
@@ -218,7 +222,9 @@ function Pessoas() {
                       <span>Data de nascimento</span>
 
                       <strong>
-                        {pessoa.data_nascimento}
+                        {pessoa.data_nascimento
+                          ? pessoa.data_nascimento.split("-").reverse().join("/")
+                          : ""}
                       </strong>
                     </div>
 
