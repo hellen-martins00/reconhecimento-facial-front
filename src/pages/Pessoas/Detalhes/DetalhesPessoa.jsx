@@ -108,13 +108,6 @@ function DetalhesPessoa() {
           <h1>{pessoa.nome}</h1>
           <p>Dados cadastrais da pessoa</p>
         </div>
-
-        <button
-          className="detalhes-voltar"
-          onClick={() => navigate("/pessoas")}
-        >
-          Voltar
-        </button>
       </div>
 
       {/* FOTO */}
