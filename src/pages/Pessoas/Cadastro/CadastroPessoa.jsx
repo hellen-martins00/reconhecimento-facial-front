@@ -26,7 +26,7 @@ function CadastroPessoa() {
   ]);
 
   const [passagens, setPassagens] = useState([]);
-  
+
   function adicionarTelefone() {
     setTelefones([
       ...telefones,
@@ -132,15 +132,24 @@ function CadastroPessoa() {
       navigate("/pessoas");
 
     } catch (error) {
-      console.error(error);
+      console.error("ERRO COMPLETO:", error);
+      console.error("RESPOSTA DA API:", error.response?.data);
 
       const detalhe = error.response?.data?.detail;
 
-      setErro(
-        typeof detalhe === "string"
-          ? detalhe
-          : "Não foi possível cadastrar a pessoa."
-      );
+      if (Array.isArray(detalhe)) {
+        setErro(
+          detalhe
+            .map((erro) => `${erro.loc?.join(" → ")}: ${erro.msg}`)
+            .join(" | ")
+        );
+      } else if (typeof detalhe === "string") {
+        setErro(detalhe);
+      } else {
+        setErro("Não foi possível cadastrar a pessoa.");
+      }
+
+
     } finally {
       setCarregando(false);
     }
