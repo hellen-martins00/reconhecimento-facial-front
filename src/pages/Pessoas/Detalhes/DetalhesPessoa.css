@@ -1,20 +1,31 @@
-/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+/* =========================================
+   1. ESTRUTURA PRINCIPAL & CONTAINER
+========================================= */
+
 .detalhes-pessoa-page {
   width: 100%;
+  min-width: 0;
 }
 
 .detalhes-card {
   padding: 30px;
+  margin-bottom: 20px;
   background: white;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
-/* 2. CABEÇALHO & BOTÃO VOLTAR */
+
+/* =========================================
+   2. CABEÇALHO
+========================================= */
+
 .detalhes-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   margin-bottom: 25px;
 }
 
@@ -22,6 +33,7 @@
   margin: 0 0 6px;
   color: #1f2937;
   font-size: 28px;
+  font-weight: 700;
 }
 
 .detalhes-header p {
@@ -30,6 +42,11 @@
   font-size: 14px;
 }
 
+
+/* =========================================
+   3. BOTÃO VOLTAR
+========================================= */
+
 .detalhes-voltar {
   padding: 10px 16px;
   background: white;
@@ -37,14 +54,22 @@
   border-radius: 8px;
   color: #374151;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .detalhes-voltar:hover {
   background: #f9fafb;
+  transform: translateY(-1px);
 }
 
-/* 3. SEÇÃO DE FOTO */
+
+/* =========================================
+   4. FOTO
+========================================= */
+
 .detalhes-foto-container {
   display: flex;
   justify-content: center;
@@ -54,12 +79,39 @@
 .detalhes-foto {
   width: 220px;
   height: 220px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
   object-fit: cover;
 }
 
-/* 4. GRID DE DADOS E CAMPOS */
+
+/* =========================================
+   5. CABEÇALHO DAS SEÇÕES
+========================================= */
+
+.detalhes-section-header {
+  margin-bottom: 22px;
+}
+
+.detalhes-section-header h2 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.detalhes-section-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   6. GRID DE DADOS CADASTRAIS
+========================================= */
+
 .detalhes-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -82,23 +134,109 @@
   font-size: 15px;
 }
 
-/* 5. BOTÕES DE AÇÃO */
+
+/* =========================================
+   7. TELEFONES E PASSAGENS
+========================================= */
+
+.detalhes-lista-section {
+  background: #f8fafc;
+}
+
+
+/* Lista */
+
+.detalhes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* Item individual */
+
+.detalhes-lista-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+
+  padding: 18px;
+
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.detalhes-lista-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+/* Label */
+
+.detalhes-item-label {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+/* Valor */
+
+.detalhes-lista-item strong {
+  color: #1f2937;
+  font-size: 15px;
+}
+
+
+/* =========================================
+   8. ESTADO VAZIO
+========================================= */
+
+.detalhes-vazio {
+  padding: 20px;
+
+  background: white;
+
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* =========================================
+   9. BOTÕES DE AÇÃO
+========================================= */
+
 .detalhes-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+
   margin-top: 35px;
   padding-top: 25px;
+
   border-top: 1px solid #e5e7eb;
 }
 
 .button-secondary,
 .button-primary {
   padding: 11px 18px;
+
   border-radius: 8px;
+
   font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .button-secondary {
@@ -115,13 +253,20 @@
   background: #2563eb;
   border: none;
   color: white;
+
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
 }
 
 .button-primary:hover {
   background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
-/* 6. ESTADOS DA PÁGINA (CARREGANDO & ERRO) */
+
+/* =========================================
+   10. ESTADOS DA PÁGINA
+========================================= */
+
 .detalhes-loading {
   padding: 40px;
   color: #6b7280;
@@ -130,17 +275,48 @@
 
 .detalhes-error {
   padding: 14px;
+
   background: #fee2e2;
+  border: 1px solid #fecaca;
+
   border-radius: 8px;
+
   color: #b91c1c;
   font-size: 14px;
 }
 
-/* 7. RESPONSIVIDADE */
+
+/* =========================================
+   11. TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+  .detalhes-card {
+    padding: 24px;
+  }
+
+  .detalhes-lista-item {
+    gap: 18px;
+  }
+
+}
+
+
+/* =========================================
+   12. CELULAR
+========================================= */
+
 @media (max-width: 700px) {
+
   .detalhes-header {
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     gap: 15px;
+  }
+
+  .detalhes-voltar {
+    width: 100%;
   }
 
   .detalhes-card {
@@ -149,6 +325,14 @@
 
   .detalhes-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .detalhes-lista-item {
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    padding: 16px;
   }
 
   .detalhes-actions {
@@ -159,4 +343,27 @@
   .button-primary {
     width: 100%;
   }
+
+}
+
+
+/* =========================================
+   13. CELULARES PEQUENOS
+========================================= */
+
+@media (max-width: 380px) {
+
+  .detalhes-card {
+    padding: 16px;
+  }
+
+  .detalhes-header h1 {
+    font-size: 24px;
+  }
+
+  .detalhes-foto {
+    width: 180px;
+    height: 180px;
+  }
+
 }
