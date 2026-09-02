@@ -1,142 +1,413 @@
-/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+/* =========================================
+   ESTRUTURA PRINCIPAL
+========================================= */
 
 .cadastro-pessoa-page {
   width: 100%;
+  min-width: 0;
 }
 
 .cadastro-pessoa-card {
+  width: 100%;
   max-width: 800px;
+  box-sizing: border-box;
+
   padding: 30px;
+
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
+
   box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
 }
 
-/* 2. CABEÇALHO & BOTÃO VOLTAR */
+
+/* =========================================
+   CABEÇALHO
+========================================= */
 
 .cadastro-pessoa-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 20px;
+
   margin-bottom: 25px;
 }
 
 .cadastro-pessoa-header h1 {
   margin: 0 0 6px;
+
   color: #1f2937;
+
   font-size: 28px;
   font-weight: 700;
 }
 
 .cadastro-pessoa-header p {
   margin: 0;
+
   color: #6b7280;
+
   font-size: 14px;
 }
 
+
+/* =========================================
+   BOTÃO VOLTAR
+========================================= */
+
 .cadastro-voltar {
-  padding: 9px 14px;
+  padding: 10px 16px;
+
   background: white;
+
   border: 1px solid #d1d5db;
   border-radius: 8px;
+
   color: #374151;
-  font-size: 13px;
+
+  font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
+
   white-space: nowrap;
-  transition: background 0.2s ease, transform 0.2s ease;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .cadastro-voltar:hover {
   background: #f3f4f6;
+
   transform: translateY(-1px);
 }
 
-/* 3. CAMPOS DO FORMULÁRIO */
+
+/* =========================================
+   CAMPOS DO FORMULÁRIO
+========================================= */
 
 .form-group {
   display: flex;
   flex-direction: column;
+
   margin-bottom: 20px;
+
+  min-width: 0;
 }
 
 .form-group label {
   margin-bottom: 7px;
+
   color: #374151;
+
   font-size: 14px;
   font-weight: 600;
 }
 
 .form-group input,
 .form-group select {
-  box-sizing: border-box;
   width: 100%;
+  box-sizing: border-box;
+
   padding: 12px 14px;
+
   background: white;
+
   border: 1px solid #d1d5db;
   border-radius: 8px;
+
   color: #1f2937;
+
   font-size: 14px;
+
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-help {
   margin-top: 5px;
+
   color: #6b7280;
+
   font-size: 12px;
 }
 
+
+/* =========================================
+   LINHA DE CAMPOS
+========================================= */
+
 .form-row {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 20px;
 }
 
-/* 4. ESTADOS DA PÁGINA (ERRO) */
+
+/* =========================================
+   ERRO
+========================================= */
 
 .cadastro-error {
   margin-bottom: 20px;
+
   padding: 12px 15px;
+
   background: #fee2e2;
+
   border: 1px solid #fecaca;
   border-radius: 8px;
+
   color: #b91c1c;
+
   font-size: 14px;
 }
 
-/* 5. BOTÕES DE AÇÃO */
+
+/* =========================================
+   TELEFONES - SEÇÃO PRINCIPAL
+========================================= */
+
+.telefones-section {
+  margin-bottom: 25px;
+
+  padding: 22px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+
+/* =========================================
+   CABEÇALHO TELEFONES
+========================================= */
+
+.telefones-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+.telefones-header h3 {
+  margin: 0 0 5px;
+
+  color: #1f2937;
+
+  font-size: 17px;
+}
+
+.telefones-header p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   BOTÃO ADICIONAR TELEFONE
+========================================= */
+
+.adicionar-telefone-button {
+  padding: 10px 16px;
+
+  background: white;
+
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+
+  color: #2563eb;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.adicionar-telefone-button:hover {
+  background: #eff6ff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   LISTA DE TELEFONES
+========================================= */
+
+.telefones-lista {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* =========================================
+   CARD DE CADA TELEFONE
+========================================= */
+
+.telefone-item {
+  padding: 18px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+
+/* =========================================
+   CABEÇALHO DO CARD
+========================================= */
+
+.telefone-item-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 16px;
+
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   CAMPOS DO TELEFONE
+========================================= */
+
+.telefone-fields {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    180px
+    auto;
+
+  align-items: end;
+
+  gap: 15px;
+}
+
+.telefone-fields .form-group {
+  margin-bottom: 0;
+}
+
+
+/* =========================================
+   BOTÃO REMOVER DESKTOP
+========================================= */
+
+.remover-telefone-button {
+  height: 44px;
+
+  padding: 0 16px;
+
+  background: white;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  color: #dc2626;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition: background 0.2s ease;
+}
+
+.remover-telefone-button:hover {
+  background: #fef2f2;
+}
+
+
+/* Botão mobile escondido no desktop */
+
+.remover-telefone-mobile {
+  display: none;
+}
+
+
+/* =========================================
+   BOTÕES FINAIS
+========================================= */
 
 .cadastro-actions {
   display: flex;
+
   justify-content: flex-end;
+
   gap: 10px;
+
   margin-top: 10px;
   padding-top: 20px;
+
   border-top: 1px solid #f1f5f9;
 }
 
 .button-secondary,
 .button-primary {
   padding: 11px 18px;
+
   border-radius: 8px;
+
   font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .button-secondary {
   background: white;
+
   border: 1px solid #d1d5db;
+
   color: #374151;
 }
 
@@ -146,138 +417,236 @@
 
 .button-primary {
   background: #2563eb;
+
   border: none;
+
   color: white;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+
+  box-shadow:
+    0 4px 10px rgba(37, 99, 235, 0.18);
 }
 
 .button-primary:hover {
   background: #1d4ed8;
+
   transform: translateY(-1px);
 }
 
 .button-primary:disabled,
 .button-secondary:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
 }
 
-/* TELEFONES */
-.telefones-section {
-  margin-bottom: 25px;
-  padding: 20px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-}
 
-.telefones-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 20px;
-}
+/* =========================================
+   TABLET
+========================================= */
 
-.telefones-header h3 {
-  margin: 0 0 5px;
-  color: #1f2937;
-  font-size: 16px;
-}
-
-.telefones-header p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 13px;
-}
-
-.adicionar-telefone-button {
-  padding: 9px 14px;
-  background: white;
-  border: 1px solid #2563eb;
-  border-radius: 7px;
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.adicionar-telefone-button:hover {
-  background: #eff6ff;
-}
-
-.telefone-item {
-  display: grid;
-  grid-template-columns: 1fr 180px auto;
-  gap: 15px;
-  align-items: end;
-  margin-bottom: 15px;
-}
-
-.telefone-item .form-group {
-  margin-bottom: 0;
-}
-
-.remover-telefone-button {
-  height: 42px;
-  padding: 0 14px;
-  background: white;
-  border: 1px solid #fecaca;
-  border-radius: 7px;
-  color: #dc2626;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.remover-telefone-button:hover {
-  background: #fef2f2;
-}
-
-/* 6. RESPONSIVIDADE */
-
-@media (max-width: 700px) {
-  .cadastro-pessoa-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
-
-  .cadastro-voltar {
-    align-self: flex-end;
-  }
+@media (max-width: 768px) {
 
   .cadastro-pessoa-card {
-    padding: 20px;
-    border-radius: 12px;
+    padding: 24px;
   }
 
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .telefone-fields {
+    grid-template-columns:
+      minmax(0, 1fr)
+      160px;
   }
 
-  .cadastro-actions {
-    flex-direction: column-reverse;
-  }
+  .remover-telefone-button {
+    grid-column: 1 / -1;
 
-  .button-secondary,
-  .button-primary {
     width: 100%;
   }
+
 }
 
-@media (max-width: 480px) {
-  .cadastro-pessoa-card {
-    padding: 16px;
+
+/* =========================================
+   CELULAR
+========================================= */
+
+@media (max-width: 600px) {
+
+  .cadastro-pessoa-page {
+    width: 100%;
+  }
+
+  .cadastro-pessoa-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
   }
 
   .cadastro-pessoa-header h1 {
     font-size: 24px;
   }
 
-  .form-group input,
-  .form-group select {
-    padding: 11px 12px;
+  .cadastro-pessoa-header p {
+    font-size: 13px;
+
+    line-height: 1.5;
   }
+
+  .cadastro-voltar {
+    width: 100%;
+
+    padding: 12px;
+  }
+
+
+  /* CARD */
+
+  .cadastro-pessoa-card {
+    padding: 16px;
+
+    border-radius: 12px;
+  }
+
+
+  /* LINHA DATA E SEXO */
+
+  .form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+
+  /* TELEFONES */
+
+  .telefones-section {
+    padding: 16px;
+
+    border-radius: 10px;
+  }
+
+  .telefones-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 14px;
+  }
+
+  .telefones-header h3 {
+    font-size: 18px;
+  }
+
+  .telefones-header p {
+    font-size: 13px;
+  }
+
+
+  /* BOTÃO ADICIONAR */
+
+  .adicionar-telefone-button {
+    width: 100%;
+
+    padding: 12px;
+  }
+
+
+  /* CARD TELEFONE */
+
+  .telefone-item {
+    padding: 16px;
+
+    border-radius: 10px;
+  }
+
+
+  /* CAMPOS VERTICAIS */
+
+  .telefone-fields {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 0;
+  }
+
+  .telefone-fields .form-group {
+    width: 100%;
+
+    margin-bottom: 16px;
+  }
+
+
+  /* REMOVER */
+
+  .remover-telefone-button {
+    display: none;
+  }
+
+  .remover-telefone-mobile {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 10px;
+
+    background: transparent;
+
+    border: none;
+
+    color: #dc2626;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+  }
+
+
+  /* BOTÕES */
+
+  .cadastro-actions {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .button-secondary,
+  .button-primary {
+    width: 100%;
+
+    padding: 13px;
+  }
+
+}
+
+
+/* =========================================
+   CELULARES MENORES
+========================================= */
+
+@media (max-width: 380px) {
+
+  .cadastro-pessoa-card {
+    padding: 14px;
+  }
+
+  .telefones-section {
+    padding: 14px;
+  }
+
+  .telefone-item {
+    padding: 14px;
+  }
+
+  .cadastro-pessoa-header h1 {
+    font-size: 22px;
+  }
+
 }
