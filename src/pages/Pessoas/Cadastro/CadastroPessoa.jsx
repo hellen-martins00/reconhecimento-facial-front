@@ -88,12 +88,23 @@ function CadastroPessoa() {
       navigate("/pessoas");
 
     } catch (error) {
-      console.error(error);
+      console.error("Erro completo:", error);
+      console.error("Resposta da API:", error.response?.data);
 
-      setErro(
-        error.response?.data?.detail ||
-        "Não foi possível cadastrar a pessoa."
-      );
+      const detalhe = error.response?.data?.detail;
+
+      let mensagemErro = "Não foi possível cadastrar a pessoa.";
+
+      if (typeof detalhe === "string") {
+        mensagemErro = detalhe;
+      } else if (Array.isArray(detalhe)) {
+        mensagemErro = detalhe
+          .map((item) => item.msg || "Erro de validação.")
+          .join(" ");
+      }
+
+      setErro(mensagemErro);
+
     } finally {
       setCarregando(false);
     }
