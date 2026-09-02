@@ -25,6 +25,8 @@ function CadastroPessoa() {
     },
   ]);
 
+  const [passagens, setPassagens] = useState([]);
+  
   function adicionarTelefone() {
     setTelefones([
       ...telefones,
@@ -47,6 +49,30 @@ function CadastroPessoa() {
     novosTelefones[index][campo] = valor;
 
     setTelefones(novosTelefones);
+  }
+
+  function adicionarPassagem() {
+    setPassagens([
+      ...passagens,
+      {
+        crime: "",
+        data_ocorrencia: "",
+      },
+    ]);
+  }
+
+  function removerPassagem(index) {
+    setPassagens(
+      passagens.filter((_, passagemIndex) => passagemIndex !== index)
+    );
+  }
+
+  function alterarPassagem(index, campo, valor) {
+    const novasPassagens = [...passagens];
+
+    novasPassagens[index][campo] = valor;
+
+    setPassagens(novasPassagens);
   }
 
   async function handleSubmit(event) {
@@ -84,27 +110,37 @@ function CadastroPessoa() {
         )
       );
 
+      // 4. Filtrar apenas passagens preenchidas
+      const passagensValidas = passagens.filter(
+        (passagem) =>
+          passagem.crime.trim() !== "" &&
+          passagem.data_ocorrencia !== ""
+      );
+
+      // 5. Criar passagens criminais
+      await Promise.all(
+        passagensValidas.map((passagem) =>
+          api.post("/passagens", {
+            pessoa_id: pessoaCriada.id,
+            crime: passagem.crime,
+            data_ocorrencia: passagem.data_ocorrencia,
+          })
+        )
+      );
+
       // 4. Voltar para pessoas
       navigate("/pessoas");
 
     } catch (error) {
-      console.error("Erro completo:", error);
-      console.error("Resposta da API:", error.response?.data);
+      console.error(error);
 
       const detalhe = error.response?.data?.detail;
 
-      let mensagemErro = "Não foi possível cadastrar a pessoa.";
-
-      if (typeof detalhe === "string") {
-        mensagemErro = detalhe;
-      } else if (Array.isArray(detalhe)) {
-        mensagemErro = detalhe
-          .map((item) => item.msg || "Erro de validação.")
-          .join(" ");
-      }
-
-      setErro(mensagemErro);
-
+      setErro(
+        typeof detalhe === "string"
+          ? detalhe
+          : "Não foi possível cadastrar a pessoa."
+      );
     } finally {
       setCarregando(false);
     }
@@ -270,6 +306,115 @@ function CadastroPessoa() {
                         type="button"
                         className="remover-telefone-button"
                         onClick={() => removerTelefone(index)}
+                      >
+                        Remover
+                      </button>
+                    )}
+
+                  </div>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </section>
+
+          {/* PASSAGENS CRIMINAIS */}
+          <section className="passagens-section">
+
+            <div className="passagens-header">
+
+              <div>
+                <h3>Passagens criminais</h3>
+
+                <p>
+                  Adicione passagens criminais vinculadas à pessoa, caso existam.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="adicionar-passagem-button"
+                onClick={adicionarPassagem}
+              >
+                + Adicionar passagem
+              </button>
+
+            </div>
+
+            <div className="passagens-lista">
+
+              {passagens.map((passagem, index) => (
+
+                <div
+                  className="passagem-item"
+                  key={index}
+                >
+
+                  <div className="passagem-item-header">
+
+                    <span>
+                      Passagem {index + 1}
+                    </span>
+
+                    {passagens.length > 1 && (
+                      <button
+                        type="button"
+                        className="remover-passagem-mobile"
+                        onClick={() => removerPassagem(index)}
+                      >
+                        Remover
+                      </button>
+                    )}
+
+                  </div>
+
+                  <div className="passagem-fields">
+
+                    <div className="form-group">
+
+                      <label>Crime</label>
+
+                      <input
+                        type="text"
+                        value={passagem.crime}
+                        onChange={(event) =>
+                          alterarPassagem(
+                            index,
+                            "crime",
+                            event.target.value
+                          )
+                        }
+                        placeholder="Ex.: Furto"
+                      />
+
+                    </div>
+
+                    <div className="form-group">
+
+                      <label>Data da ocorrência</label>
+
+                      <input
+                        type="date"
+                        value={passagem.data_ocorrencia}
+                        onChange={(event) =>
+                          alterarPassagem(
+                            index,
+                            "data_ocorrencia",
+                            event.target.value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    {passagens.length > 1 && (
+                      <button
+                        type="button"
+                        className="remover-passagem-button"
+                        onClick={() => removerPassagem(index)}
                       >
                         Remover
                       </button>
