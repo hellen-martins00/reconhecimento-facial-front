@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
 import "./Pessoas.css";
@@ -9,8 +8,10 @@ function Pessoas() {
   const [pessoas, setPessoas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   async function carregarPessoas() {
     setCarregando(true);
@@ -78,12 +79,22 @@ function Pessoas() {
     }
 
     try {
+      setErro("");
+      setSucesso("");
+
       await api.delete(`/pessoas/${id}`);
 
-      // Remove da lista sem precisar recarregar a página
       setPessoas((pessoasAtuais) =>
         pessoasAtuais.filter((pessoa) => pessoa.id !== id)
       );
+
+      setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
+
+      // Remove a mensagem depois de alguns segundos
+      setTimeout(() => {
+        setSucesso("");
+      }, 4000);
+
     } catch (error) {
       console.error(error);
 
@@ -93,6 +104,21 @@ function Pessoas() {
       );
     }
   }
+
+  useEffect(() => {
+    if (location.state?.sucesso) {
+      setSucesso(location.state.sucesso);
+
+      // Limpa o state para não mostrar novamente ao atualizar a página
+      window.history.replaceState({}, document.title);
+
+      const timer = setTimeout(() => {
+        setSucesso("");
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     carregarPessoas();
@@ -116,6 +142,13 @@ function Pessoas() {
       </div>
 
       {erro && <div className="pessoas-error">{erro}</div>}
+
+      {sucesso && (
+        <div className="pessoas-success">
+          <span className="pessoas-success-icon">✓</span>
+          <span>{sucesso}</span>
+        </div>
+      )}
 
       {/* CONTEÚDO PRINCIPAL */}
       <div className="pessoas-card">
