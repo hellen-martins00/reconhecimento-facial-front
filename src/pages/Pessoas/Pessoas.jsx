@@ -191,6 +191,15 @@ function Pessoas() {
                         >
                           Editar
                         </button>
+
+                        <button
+                          className="pessoa-excluir"
+                          onClick={() =>
+                            excluirPessoa(pessoa.id, pessoa.nome)
+                          }
+                        >
+                          Excluir
+                        </button>
                       </td>
                     </tr>
                   ))}
