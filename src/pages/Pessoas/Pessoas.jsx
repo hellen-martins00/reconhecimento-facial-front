@@ -68,6 +68,32 @@ function Pessoas() {
     }
   }
 
+  async function excluirPessoa(id, nome) {
+    const confirmar = window.confirm(
+      `Tem certeza que deseja excluir a pessoa "${nome}"?`
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    try {
+      await api.delete(`/pessoas/${id}`);
+
+      // Remove da lista sem precisar recarregar a página
+      setPessoas((pessoasAtuais) =>
+        pessoasAtuais.filter((pessoa) => pessoa.id !== id)
+      );
+    } catch (error) {
+      console.error(error);
+
+      setErro(
+        error.response?.data?.detail ||
+        "Não foi possível excluir a pessoa."
+      );
+    }
+  }
+
   useEffect(() => {
     carregarPessoas();
   }, []);
@@ -250,6 +276,15 @@ function Pessoas() {
                       }
                     >
                       Editar
+                    </button>
+
+                    <button
+                      className="pessoa-excluir"
+                      onClick={() =>
+                        excluirPessoa(pessoa.id, pessoa.nome)
+                      }
+                    >
+                      Excluir
                     </button>
 
                   </div>

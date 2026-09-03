@@ -156,6 +156,19 @@
   display: none;
 }
 
+.pessoa-excluir {
+  background: #fff;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pessoa-excluir:hover {
+  background: #fef2f2;
+}
 
 /* RESPONSIVIDADE */
 @media (max-width: 768px) {
