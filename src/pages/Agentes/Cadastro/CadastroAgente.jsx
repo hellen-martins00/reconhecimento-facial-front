@@ -13,7 +13,7 @@ function CadastroAgente() {
   let usuarioLogado = null;
 
   try {
-    usuarioLogado - usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+    usuarioLogado = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
   } catch (error) {
     console.error("Erro ao recuperar usuário: ", error)
   }
