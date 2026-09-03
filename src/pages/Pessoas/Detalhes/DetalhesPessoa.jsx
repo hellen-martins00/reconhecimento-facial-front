@@ -12,6 +12,7 @@ function DetalhesPessoa() {
   const [pessoa, setPessoa] = useState(null);
   const [telefones, setTelefones] = useState([]);
   const [passagens, setPassagens] = useState([]);
+  const [endereco, setEndereco] = useState(null);
 
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -37,6 +38,24 @@ function DetalhesPessoa() {
       } catch (error) {
         console.error("Erro ao carregar telefones:", error);
         setTelefones([]);
+      }
+
+      // Buscar endereço
+      try {
+        const respostaEndereco = await api.get(
+          `/enderecos/pessoa/${id}`
+        );
+
+        const enderecos = respostaEndereco.data;
+
+        if (Array.isArray(enderecos) && enderecos.length > 0) {
+          setEndereco(enderecos[0]);
+        } else {
+          setEndereco(null);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar endereço:", error);
+        setEndereco(null);
       }
 
       // Buscar passagens criminais
@@ -226,8 +245,8 @@ function DetalhesPessoa() {
               {pessoa.sexo === "M"
                 ? "Masculino"
                 : pessoa.sexo === "F"
-                ? "Feminino"
-                : pessoa.sexo}
+                  ? "Feminino"
+                  : pessoa.sexo}
             </strong>
           </div>
 
@@ -310,8 +329,8 @@ function DetalhesPessoa() {
                     {telefone.tipo === "PESSOAL"
                       ? "Pessoal"
                       : telefone.tipo === "RESIDENCIAL"
-                      ? "Residencial"
-                      : telefone.tipo}
+                        ? "Residencial"
+                        : telefone.tipo}
                   </strong>
 
                 </div>
@@ -319,6 +338,91 @@ function DetalhesPessoa() {
               </div>
 
             ))}
+
+          </div>
+
+        )}
+
+      </section>
+
+      {/* ENDEREÇO */}
+      <section className="detalhes-card detalhes-lista-section">
+
+        <div className="detalhes-section-header">
+
+          <div>
+            <h2>Endereço</h2>
+
+            <p>
+              Endereço residencial vinculado à pessoa.
+            </p>
+          </div>
+
+        </div>
+
+
+        {!endereco ? (
+
+          <div className="detalhes-vazio">
+            Nenhum endereço cadastrado.
+          </div>
+
+        ) : (
+
+          <div className="detalhes-grid">
+
+            <div className="detalhes-field">
+              <span>Logradouro</span>
+
+              <strong>
+                {endereco.logradouro}
+              </strong>
+            </div>
+
+
+            <div className="detalhes-field">
+              <span>Número</span>
+
+              <strong>
+                {endereco.numero}
+              </strong>
+            </div>
+
+
+            <div className="detalhes-field">
+              <span>Bairro</span>
+
+              <strong>
+                {endereco.bairro}
+              </strong>
+            </div>
+
+
+            <div className="detalhes-field">
+              <span>Cidade</span>
+
+              <strong>
+                {endereco.cidade}
+              </strong>
+            </div>
+
+
+            <div className="detalhes-field">
+              <span>Estado</span>
+
+              <strong>
+                {endereco.estado}
+              </strong>
+            </div>
+
+
+            <div className="detalhes-field">
+              <span>CEP</span>
+
+              <strong>
+                {endereco.cep}
+              </strong>
+            </div>
 
           </div>
 
