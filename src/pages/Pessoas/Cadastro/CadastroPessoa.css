@@ -498,6 +498,35 @@
   }
 }
 
+/* ================================
+   ENDEREÇO
+================================ */
+
+.endereco-section {
+  margin-bottom: 25px;
+  padding: 22px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.endereco-header {
+  margin-bottom: 20px;
+}
+
+.endereco-header h3 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 17px;
+}
+
+.endereco-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 /* =========================================
    CELULAR
 ========================================= */
@@ -690,6 +719,20 @@
     font-weight: 600;
     cursor: pointer;
   }
+
+  .endereco-section {
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.endereco-header h3 {
+  font-size: 18px;
+}
+
+.endereco-header p {
+  font-size: 13px;
+}
+
 }
 
 /* =========================================

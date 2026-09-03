@@ -27,6 +27,13 @@ function CadastroPessoa() {
 
   const [passagens, setPassagens] = useState([]);
 
+  const [logradouro, setLogradouro] = useState("");
+  const [numero, setNumero] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+  const [cep, setCep] = useState("");
+
   function adicionarTelefone() {
     setTelefones([
       ...telefones,
@@ -109,6 +116,17 @@ function CadastroPessoa() {
           })
         )
       );
+
+      // 3. Criar endereço
+      await api.post("/enderecos", {
+        pessoa_id: pessoaCriada.id,
+        logradouro,
+        numero,
+        bairro,
+        cidade,
+        estado,
+        cep,
+      });
 
       // 4. Filtrar apenas passagens preenchidas
       const passagensValidas = passagens.filter(
@@ -434,6 +452,180 @@ function CadastroPessoa() {
                 </div>
 
               ))}
+
+            </div>
+
+          </section>
+
+          {/* ENDEREÇO */}
+          <section className="endereco-section">
+
+            <div className="endereco-header">
+              <div>
+                <h3>Endereço</h3>
+
+                <p>
+                  Informe o endereço atual da pessoa.
+                </p>
+              </div>
+            </div>
+
+            {/* LOGRADOURO + NÚMERO */}
+            <div className="form-row">
+
+              <div className="form-group">
+                <label htmlFor="logradouro">
+                  Logradouro
+                </label>
+
+                <input
+                  id="logradouro"
+                  type="text"
+                  value={logradouro}
+                  onChange={(event) =>
+                    setLogradouro(event.target.value)
+                  }
+                  placeholder="Ex.: Rua das Flores"
+                  minLength={3}
+                  maxLength={200}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="numero">
+                  Número
+                </label>
+
+                <input
+                  id="numero"
+                  type="text"
+                  value={numero}
+                  onChange={(event) =>
+                    setNumero(event.target.value)
+                  }
+                  placeholder="Ex.: 123"
+                  maxLength={20}
+                  required
+                />
+              </div>
+
+            </div>
+
+            {/* BAIRRO + CEP */}
+            <div className="form-row">
+
+              <div className="form-group">
+                <label htmlFor="bairro">
+                  Bairro
+                </label>
+
+                <input
+                  id="bairro"
+                  type="text"
+                  value={bairro}
+                  onChange={(event) =>
+                    setBairro(event.target.value)
+                  }
+                  placeholder="Digite o bairro"
+                  minLength={2}
+                  maxLength={100}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="cep">
+                  CEP
+                </label>
+
+                <input
+                  id="cep"
+                  type="text"
+                  value={cep}
+                  onChange={(event) =>
+                    setCep(event.target.value.replace(/\D/g, ""))
+                  }
+                  placeholder="Ex.: 70000000"
+                  maxLength={8}
+                  required
+                />
+
+                <span className="form-help">
+                  Informe apenas os 8 números do CEP.
+                </span>
+              </div>
+
+            </div>
+
+            {/* CIDADE + ESTADO */}
+            <div className="form-row">
+
+              <div className="form-group">
+                <label htmlFor="cidade">
+                  Cidade
+                </label>
+
+                <input
+                  id="cidade"
+                  type="text"
+                  value={cidade}
+                  onChange={(event) =>
+                    setCidade(event.target.value)
+                  }
+                  placeholder="Digite a cidade"
+                  minLength={2}
+                  maxLength={100}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="estado">
+                  Estado
+                </label>
+
+                <select
+                  id="estado"
+                  value={estado}
+                  onChange={(event) =>
+                    setEstado(event.target.value)
+                  }
+                  required
+                >
+                  <option value="">
+                    Selecione
+                  </option>
+
+                  <option value="AC">Acre</option>
+                  <option value="AL">Alagoas</option>
+                  <option value="AP">Amapá</option>
+                  <option value="AM">Amazonas</option>
+                  <option value="BA">Bahia</option>
+                  <option value="CE">Ceará</option>
+                  <option value="DF">Distrito Federal</option>
+                  <option value="ES">Espírito Santo</option>
+                  <option value="GO">Goiás</option>
+                  <option value="MA">Maranhão</option>
+                  <option value="MT">Mato Grosso</option>
+                  <option value="MS">Mato Grosso do Sul</option>
+                  <option value="MG">Minas Gerais</option>
+                  <option value="PA">Pará</option>
+                  <option value="PB">Paraíba</option>
+                  <option value="PR">Paraná</option>
+                  <option value="PE">Pernambuco</option>
+                  <option value="PI">Piauí</option>
+                  <option value="RJ">Rio de Janeiro</option>
+                  <option value="RN">Rio Grande do Norte</option>
+                  <option value="RS">Rio Grande do Sul</option>
+                  <option value="RO">Rondônia</option>
+                  <option value="RR">Roraima</option>
+                  <option value="SC">Santa Catarina</option>
+                  <option value="SP">São Paulo</option>
+                  <option value="SE">Sergipe</option>
+                  <option value="TO">Tocantins</option>
+                </select>
+              </div>
 
             </div>
 
