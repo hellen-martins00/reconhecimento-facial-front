@@ -132,9 +132,11 @@
   text-align: center;
 }
 
+/* AÇÕES DESKTOP */
 .pessoas-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pessoas-actions button {
@@ -145,10 +147,20 @@
   color: #374151;
   font-size: 12px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .pessoas-actions button:hover {
   background: #f3f4f6;
+}
+
+.pessoas-actions .pessoa-excluir {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.pessoas-actions .pessoa-excluir:hover {
+  background: #fef2f2;
 }
 
 /* LISTA MOBILE */
