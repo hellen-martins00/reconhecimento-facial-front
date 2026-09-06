@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
-
+import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
 import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
 
 import "./EditarPessoa.css";

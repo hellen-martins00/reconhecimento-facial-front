@@ -360,7 +360,7 @@ function DetalhesPessoa() {
               <span>CEP</span>
 
               <strong>
-                {formatarCPF(endereco.cep)}
+                {formatarCEP(endereco.cep)}
               </strong>
             </div>
           </div>
