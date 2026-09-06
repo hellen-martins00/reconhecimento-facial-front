@@ -243,27 +243,6 @@ function DetalhesPessoa() {
   return (
     <div className="detalhes-pessoa-page">
 
-      {/* CABEÇALHO */}
-      <div className="detalhes-header">
-        <button
-          className="detalhes-voltar"
-          onClick={() => navigate("/pessoas")}
-        >
-          ← Voltar
-        </button>
-
-        <button
-          className="detalhes-editar-topo"
-          onClick={() =>
-            navigate(
-              `/pessoas/${pessoa.id}/editar`
-            )
-          }
-        >
-          Editar pessoa
-        </button>
-      </div>
-
       {/* IDENTIFICAÇÃO */}
       <section className="detalhes-identificacao">
 
