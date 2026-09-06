@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../../../services/api";
 
-import "./CadastroPessoa.css";
-
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
+
+import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
+
+import "./CadastroPessoa.css";
 
 function CadastroPessoa() {
   const navigate = useNavigate();
@@ -113,7 +115,7 @@ function CadastroPessoa() {
         telefonesValidos.map((telefone) =>
           api.post("/telefones", {
             pessoa_id: pessoaCriada.id,
-            numero: telefone.numero,
+            numero: limparTelefone(telefone.numero),
             tipo: telefone.tipo,
           })
         )
@@ -274,15 +276,17 @@ function CadastroPessoa() {
 
                       <input
                         type="text"
-                        value={telefone.numero}
+                        value={formatarTelefone(telefone.numero)}
                         onChange={(event) =>
                           alterarTelefone(
                             index,
                             "numero",
-                            event.target.value
+                            limparTelefone(event.target.value)
                           )
                         }
-                        placeholder="Digite o telefone"
+                        placeholder="(61) 99999-9999"
+                        inputMode="numeric"
+                        maxLength={15}
                       />
                     </div>
 

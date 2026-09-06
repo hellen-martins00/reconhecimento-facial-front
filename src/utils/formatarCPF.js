@@ -1,3 +1,7 @@
+export function limparCPF(valor) {
+  return valor.replace(/\D/g, "");
+}
+
 export function formatarCPF(valor) {
   // Mantém somente números
   const cpf = valor.replace(/\D/g, "").slice(0, 11);
@@ -24,8 +28,4 @@ export function formatarCPF(valor) {
     /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
     "$1.$2.$3-$4"
   );
-}
-
-export function limparCPF(valor) {
-  return valor.replace(/\D/g, "");
 }

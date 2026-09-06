@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../../services/api";
 
-import "./EditarPessoa.css";
-
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
+
+import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
+
+import "./EditarPessoa.css";
 
 function EditarPessoa() {
   const { id } = useParams();
@@ -362,7 +364,7 @@ function EditarPessoa() {
         novosTelefones.map((telefone) =>
           api.post("/telefones", {
             pessoa_id: id,
-            numero: telefone.numero,
+            numero: limparTelefone(telefone.numero),
             tipo: telefone.tipo,
           })
         )
@@ -378,7 +380,7 @@ function EditarPessoa() {
       await Promise.all(
         telefonesExistentes.map((telefone) =>
           api.put(`/telefones/${telefone.id}`, {
-            numero: telefone.numero,
+            numero: limparTelefone(telefone.numero),
             tipo: telefone.tipo,
           })
         )
@@ -637,7 +639,7 @@ function EditarPessoa() {
               type="text"
               value={formatarCPF(cpf)}
               onChange={(event) =>
-                setCpf(event.target.value)
+                setCpf(limparCPF(event.target.value))
               }
               maxLength={14}
               inputMode="numeric"
@@ -795,16 +797,17 @@ function EditarPessoa() {
 
                         <input
                           type="text"
-                          value={
-                            telefone.numero || ""
-                          }
+                          value={formatarTelefone(telefone.numero)}
                           onChange={(event) =>
                             alterarTelefone(
                               index,
                               "numero",
-                              event.target.value
+                              limparTelefone(event.target.value)
                             )
                           }
+                          placeholder="(61) 99999-9999"
+                          inputMode="numeric"
+                          maxLength={15}
                         />
                       </div>
 

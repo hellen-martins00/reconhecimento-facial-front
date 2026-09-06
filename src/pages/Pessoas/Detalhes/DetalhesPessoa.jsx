@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../../services/api";
 
+import { formatarCPF } from "../../../utils/formatarCPF";
+import { formatarTelefone } from "../../../utils/formatarTelefone";
+
 import "./DetalhesPessoa.css";
 
 function DetalhesPessoa() {
@@ -225,7 +228,7 @@ function DetalhesPessoa() {
 
           <div className="detalhes-field">
             <span>CPF</span>
-            <strong>{pessoa.cpf}</strong>
+            <strong>{formatarCPF(pessoa.cpf)}</strong>
           </div>
 
 
@@ -313,7 +316,7 @@ function DetalhesPessoa() {
                   </span>
 
                   <strong>
-                    {telefone.numero}
+                    {formatarTelefone(telefone.numero)}
                   </strong>
 
                 </div>
