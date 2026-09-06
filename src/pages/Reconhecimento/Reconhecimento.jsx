@@ -285,7 +285,7 @@ function Reconhecimento() {
             {cameraAtiva && (
               <button
                 type="button"
-                className="button-primary"
+                className="reconhecimento-button-primary"
                 onClick={capturarFoto}
               >
                 Capturar foto
@@ -306,7 +306,7 @@ function Reconhecimento() {
             <div className="reconhecimento-actions">
               <button
                 type="button"
-                className="button-secondary"
+                className="reconhecimento-button-secondary"
                 onClick={novaConsulta}
                 disabled={reconhecendo}
               >
