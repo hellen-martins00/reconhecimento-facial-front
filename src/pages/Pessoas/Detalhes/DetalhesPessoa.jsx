@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../../services/api";
@@ -19,9 +19,95 @@ function DetalhesPessoa() {
   const [passagens, setPassagens] = useState([]);
   const [endereco, setEndereco] = useState(null);
 
+  const [fotos, setFotos] = useState([]);
+  const [carregandoFotos, setCarregandoFotos] = useState(false);
+
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [fotoUrl, setFotoUrl] = useState(null);
+
+  const fotosUrlsRef = useRef([]);
+
+  // LIMPAR URLS DAS FOTOS
+  function limparUrlsFotos() {
+    fotosUrlsRef.current.forEach((url) => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    fotosUrlsRef.current = [];
+  }
+
+  // CARREGAR FOTOS
+  async function carregarFotos() {
+    setCarregandoFotos(true);
+
+    limparUrlsFotos();
+
+    try {
+      const respostaFotos = await api.get(
+        `/fotos/pessoa/${id}`
+      );
+
+      const fotosCadastradas = respostaFotos.data;
+
+      if (!Array.isArray(fotosCadastradas) || fotosCadastradas.length === 0) {
+        setFotos([]);
+        return;
+      }
+
+      // Ordenar da mais recente para a mais antiga
+      const fotosOrdenadas = [...fotosCadastradas].sort(
+        (a, b) =>
+          new Date(b.data_upload) -
+          new Date(a.data_upload)
+      );
+
+      const fotosComUrl = await Promise.all(
+        fotosOrdenadas.map(async (foto) => {
+          try {
+            const respostaArquivo = await api.get(
+              `/fotos/${foto.id}/arquivo`,
+              {
+                responseType: "blob",
+              }
+            );
+
+            const url = URL.createObjectURL(
+              respostaArquivo.data
+            );
+
+            fotosUrlsRef.current.push(url);
+
+            return {
+              ...foto,
+              url,
+            };
+          } catch (error) {
+            console.error(
+              `Erro ao carregar foto ${foto.id}:`,
+              error
+            );
+
+            return null;
+          }
+        })
+      );
+
+      setFotos(
+        fotosComUrl.filter(Boolean)
+      );
+    } catch (error) {
+      console.error(
+        "Erro ao carregar fotos:",
+        error
+      );
+
+      setFotos([]);
+    } finally {
+      setCarregandoFotos(false);
+    }
+  }
 
   async function carregarPessoa() {
     setCarregando(true);
@@ -29,7 +115,9 @@ function DetalhesPessoa() {
 
     try {
       // Buscar dados da pessoa
-      const respostaPessoa = await api.get(`/pessoas/${id}`);
+      const respostaPessoa = await api.get(
+        `/pessoas/${id}`
+      );
 
       setPessoa(respostaPessoa.data);
 
@@ -41,7 +129,11 @@ function DetalhesPessoa() {
 
         setTelefones(respostaTelefones.data);
       } catch (error) {
-        console.error("Erro ao carregar telefones:", error);
+        console.error(
+          "Erro ao carregar telefones:",
+          error
+        );
+
         setTelefones([]);
       }
 
@@ -53,13 +145,20 @@ function DetalhesPessoa() {
 
         const enderecos = respostaEndereco.data;
 
-        if (Array.isArray(enderecos) && enderecos.length > 0) {
+        if (
+          Array.isArray(enderecos) &&
+          enderecos.length > 0
+        ) {
           setEndereco(enderecos[0]);
         } else {
           setEndereco(null);
         }
       } catch (error) {
-        console.error("Erro ao carregar endereço:", error);
+        console.error(
+          "Erro ao carregar endereço:",
+          error
+        );
+
         setEndereco(null);
       }
 
@@ -71,52 +170,22 @@ function DetalhesPessoa() {
 
         setPassagens(respostaPassagens.data);
       } catch (error) {
-        console.error("Erro ao carregar passagens:", error);
+        console.error(
+          "Erro ao carregar passagens:",
+          error
+        );
+
         setPassagens([]);
       }
 
       // Buscar fotos
-      try {
-        const respostaFotos = await api.get(
-          `/fotos/pessoa/${id}`
-        );
-
-        const fotos = respostaFotos.data;
-
-        if (fotos.length > 0) {
-          const fotosOrdenadas = [...fotos].sort(
-            (a, b) =>
-              new Date(b.data_upload) -
-              new Date(a.data_upload)
-          );
-
-          const fotoMaisRecente = fotosOrdenadas[0];
-
-          const respostaFoto = await api.get(
-            `/fotos/${fotoMaisRecente.id}/arquivo`,
-            {
-              responseType: "blob",
-            }
-          );
-
-          const url = URL.createObjectURL(
-            respostaFoto.data
-          );
-
-          setFotoUrl(url);
-        } else {
-          setFotoUrl(null);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar foto:", error);
-        setFotoUrl(null);
-      }
+      await carregarFotos();
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível carregar os dados da pessoa."
+          "Não foi possível carregar os dados da pessoa."
       );
     } finally {
       setCarregando(false);
@@ -125,6 +194,10 @@ function DetalhesPessoa() {
 
   useEffect(() => {
     carregarPessoa();
+
+    return () => {
+      limparUrlsFotos();
+    };
   }, [id]);
 
   if (carregando) {
@@ -172,18 +245,52 @@ function DetalhesPessoa() {
             Dados completos do cadastro da pessoa
           </p>
         </div>
+
+        <button
+          className="detalhes-voltar"
+          onClick={() => navigate("/pessoas")}
+        >
+          Voltar
+        </button>
       </div>
 
-      {/* FOTO */}
-      {fotoUrl && (
-        <div className="detalhes-foto-container">
-          <img
-            src={fotoUrl}
-            alt={`Foto de ${pessoa.nome}`}
-            className="detalhes-foto"
-          />
+      {/* FOTOS */}
+      <section className="detalhes-card detalhes-fotos-section">
+        <div className="detalhes-section-header">
+          <div>
+            <h2>Fotos cadastradas</h2>
+
+            <p>
+              Fotos vinculadas à pessoa no sistema.
+            </p>
+          </div>
         </div>
-      )}
+
+        {carregandoFotos ? (
+          <div className="detalhes-vazio">
+            Carregando fotos...
+          </div>
+        ) : fotos.length === 0 ? (
+          <div className="detalhes-vazio">
+            Nenhuma foto cadastrada.
+          </div>
+        ) : (
+          <div className="detalhes-fotos-grid">
+            {fotos.map((foto) => (
+              <div
+                className="detalhes-foto-item"
+                key={foto.id}
+              >
+                <img
+                  src={foto.url}
+                  alt={`Foto de ${pessoa.nome}`}
+                  className="detalhes-foto"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* DADOS CADASTRAIS */}
       <section className="detalhes-card">
@@ -200,19 +307,27 @@ function DetalhesPessoa() {
         <div className="detalhes-grid">
           <div className="detalhes-field">
             <span>Nome</span>
-            <strong>{pessoa.nome}</strong>
+
+            <strong>
+              {pessoa.nome}
+            </strong>
           </div>
 
           <div className="detalhes-field">
             <span>CPF</span>
-            <strong>{formatarCPF(pessoa.cpf)}</strong>
+
+            <strong>
+              {formatarCPF(pessoa.cpf)}
+            </strong>
           </div>
 
           <div className="detalhes-field">
             <span>Data de nascimento</span>
 
             <strong>
-              {formatarData(pessoa.data_nascimento)}
+              {formatarData(
+                pessoa.data_nascimento
+              )}
             </strong>
           </div>
 
@@ -275,7 +390,9 @@ function DetalhesPessoa() {
                   </span>
 
                   <strong>
-                    {formatarTelefone(telefone.numero)}
+                    {formatarTelefone(
+                      telefone.numero
+                    )}
                   </strong>
                 </div>
 
@@ -406,7 +523,9 @@ function DetalhesPessoa() {
                   </span>
 
                   <strong>
-                    {formatarData(passagem.data_ocorrencia)}
+                    {formatarData(
+                      passagem.data_ocorrencia
+                    )}
                   </strong>
                 </div>
               </div>
@@ -427,7 +546,9 @@ function DetalhesPessoa() {
         <button
           className="button-primary"
           onClick={() =>
-            navigate(`/pessoas/${pessoa.id}/editar`)
+            navigate(
+              `/pessoas/${pessoa.id}/editar`
+            )
           }
         >
           Editar pessoa
