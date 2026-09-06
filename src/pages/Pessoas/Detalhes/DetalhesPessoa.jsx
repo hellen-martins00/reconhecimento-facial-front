@@ -5,6 +5,8 @@ import api from "../../../services/api";
 
 import { formatarCPF } from "../../../utils/formatarCPF";
 import { formatarTelefone } from "../../../utils/formatarTelefone";
+import { formatarData } from "../../../utils/formatarData";
+import { formatarCEP } from "../../../utils/formatarCEP";
 
 import "./DetalhesPessoa.css";
 
@@ -82,7 +84,6 @@ function DetalhesPessoa() {
         const fotos = respostaFotos.data;
 
         if (fotos.length > 0) {
-
           const fotosOrdenadas = [...fotos].sort(
             (a, b) =>
               new Date(b.data_upload) -
@@ -103,25 +104,20 @@ function DetalhesPessoa() {
           );
 
           setFotoUrl(url);
-
         } else {
           setFotoUrl(null);
         }
-
       } catch (error) {
         console.error("Erro ao carregar foto:", error);
         setFotoUrl(null);
       }
-
     } catch (error) {
-
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
         "Não foi possível carregar os dados da pessoa."
       );
-
     } finally {
       setCarregando(false);
     }
@@ -134,11 +130,9 @@ function DetalhesPessoa() {
   if (carregando) {
     return (
       <div className="detalhes-pessoa-page">
-
         <div className="detalhes-loading">
           Carregando dados da pessoa...
         </div>
-
       </div>
     );
   }
@@ -146,9 +140,7 @@ function DetalhesPessoa() {
   if (erro) {
     return (
       <div className="detalhes-pessoa-page">
-
         <div className="detalhes-header">
-
           <div>
             <h1>Pessoa</h1>
             <p>Detalhes do cadastro</p>
@@ -160,23 +152,19 @@ function DetalhesPessoa() {
           >
             Voltar
           </button>
-
         </div>
 
         <div className="detalhes-error">
           {erro}
         </div>
-
       </div>
     );
   }
 
   return (
     <div className="detalhes-pessoa-page">
-
       {/* CABEÇALHO */}
       <div className="detalhes-header">
-
         <div>
           <h1>{pessoa.nome}</h1>
 
@@ -184,29 +172,22 @@ function DetalhesPessoa() {
             Dados completos do cadastro da pessoa
           </p>
         </div>
-
       </div>
-
 
       {/* FOTO */}
       {fotoUrl && (
         <div className="detalhes-foto-container">
-
           <img
             src={fotoUrl}
             alt={`Foto de ${pessoa.nome}`}
             className="detalhes-foto"
           />
-
         </div>
       )}
 
-
       {/* DADOS CADASTRAIS */}
       <section className="detalhes-card">
-
         <div className="detalhes-section-header">
-
           <div>
             <h2>Dados cadastrais</h2>
 
@@ -214,32 +195,26 @@ function DetalhesPessoa() {
               Informações pessoais cadastradas.
             </p>
           </div>
-
         </div>
 
-
         <div className="detalhes-grid">
-
           <div className="detalhes-field">
             <span>Nome</span>
             <strong>{pessoa.nome}</strong>
           </div>
-
 
           <div className="detalhes-field">
             <span>CPF</span>
             <strong>{formatarCPF(pessoa.cpf)}</strong>
           </div>
 
-
           <div className="detalhes-field">
             <span>Data de nascimento</span>
 
             <strong>
-              {pessoa.data_nascimento}
+              {formatarData(pessoa.data_nascimento)}
             </strong>
           </div>
-
 
           <div className="detalhes-field">
             <span>Sexo</span>
@@ -253,7 +228,6 @@ function DetalhesPessoa() {
             </strong>
           </div>
 
-
           <div className="detalhes-field">
             <span>Nome da mãe</span>
 
@@ -262,7 +236,6 @@ function DetalhesPessoa() {
             </strong>
           </div>
 
-
           <div className="detalhes-field">
             <span>Nome do pai</span>
 
@@ -270,17 +243,12 @@ function DetalhesPessoa() {
               {pessoa.nome_pai}
             </strong>
           </div>
-
         </div>
-
       </section>
-
 
       {/* TELEFONES */}
       <section className="detalhes-card detalhes-lista-section">
-
         <div className="detalhes-section-header">
-
           <div>
             <h2>Telefones</h2>
 
@@ -288,29 +256,20 @@ function DetalhesPessoa() {
               Telefones vinculados à pessoa.
             </p>
           </div>
-
         </div>
 
-
         {telefones.length === 0 ? (
-
           <div className="detalhes-vazio">
             Nenhum telefone cadastrado.
           </div>
-
         ) : (
-
           <div className="detalhes-lista">
-
             {telefones.map((telefone) => (
-
               <div
                 className="detalhes-lista-item"
                 key={telefone.id}
               >
-
                 <div>
-
                   <span className="detalhes-item-label">
                     Número
                   </span>
@@ -318,12 +277,9 @@ function DetalhesPessoa() {
                   <strong>
                     {formatarTelefone(telefone.numero)}
                   </strong>
-
                 </div>
 
-
                 <div>
-
                   <span className="detalhes-item-label">
                     Tipo
                   </span>
@@ -335,24 +291,16 @@ function DetalhesPessoa() {
                         ? "Residencial"
                         : telefone.tipo}
                   </strong>
-
                 </div>
-
               </div>
-
             ))}
-
           </div>
-
         )}
-
       </section>
 
       {/* ENDEREÇO */}
       <section className="detalhes-card detalhes-lista-section">
-
         <div className="detalhes-section-header">
-
           <div>
             <h2>Endereço</h2>
 
@@ -360,20 +308,14 @@ function DetalhesPessoa() {
               Endereço residencial vinculado à pessoa.
             </p>
           </div>
-
         </div>
 
-
         {!endereco ? (
-
           <div className="detalhes-vazio">
             Nenhum endereço cadastrado.
           </div>
-
         ) : (
-
           <div className="detalhes-grid">
-
             <div className="detalhes-field">
               <span>Logradouro</span>
 
@@ -381,7 +323,6 @@ function DetalhesPessoa() {
                 {endereco.logradouro}
               </strong>
             </div>
-
 
             <div className="detalhes-field">
               <span>Número</span>
@@ -391,7 +332,6 @@ function DetalhesPessoa() {
               </strong>
             </div>
 
-
             <div className="detalhes-field">
               <span>Bairro</span>
 
@@ -399,7 +339,6 @@ function DetalhesPessoa() {
                 {endereco.bairro}
               </strong>
             </div>
-
 
             <div className="detalhes-field">
               <span>Cidade</span>
@@ -409,7 +348,6 @@ function DetalhesPessoa() {
               </strong>
             </div>
 
-
             <div className="detalhes-field">
               <span>Estado</span>
 
@@ -418,27 +356,20 @@ function DetalhesPessoa() {
               </strong>
             </div>
 
-
             <div className="detalhes-field">
               <span>CEP</span>
 
               <strong>
-                {endereco.cep}
+                {formatarCPF(endereco.cep)}
               </strong>
             </div>
-
           </div>
-
         )}
-
       </section>
-
 
       {/* PASSAGENS CRIMINAIS */}
       <section className="detalhes-card detalhes-lista-section">
-
         <div className="detalhes-section-header">
-
           <div>
             <h2>Passagens criminais</h2>
 
@@ -446,29 +377,20 @@ function DetalhesPessoa() {
               Registros vinculados à pessoa.
             </p>
           </div>
-
         </div>
 
-
         {passagens.length === 0 ? (
-
           <div className="detalhes-vazio">
             Nenhuma passagem criminal cadastrada.
           </div>
-
         ) : (
-
           <div className="detalhes-lista">
-
             {passagens.map((passagem) => (
-
               <div
                 className="detalhes-lista-item"
                 key={passagem.id}
               >
-
                 <div>
-
                   <span className="detalhes-item-label">
                     Crime
                   </span>
@@ -476,43 +398,31 @@ function DetalhesPessoa() {
                   <strong>
                     {passagem.crime}
                   </strong>
-
                 </div>
 
-
                 <div>
-
                   <span className="detalhes-item-label">
                     Data da ocorrência
                   </span>
 
                   <strong>
-                    {passagem.data_ocorrencia}
+                    {formatarData(passagem.data_ocorrencia)}
                   </strong>
-
                 </div>
-
               </div>
-
             ))}
-
           </div>
-
         )}
-
       </section>
-
 
       {/* AÇÕES */}
       <div className="detalhes-actions">
-
         <button
           className="button-secondary"
           onClick={() => navigate("/pessoas")}
         >
           Voltar
         </button>
-
 
         <button
           className="button-primary"
@@ -522,9 +432,7 @@ function DetalhesPessoa() {
         >
           Editar pessoa
         </button>
-
       </div>
-
     </div>
   );
 }
