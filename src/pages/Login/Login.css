@@ -1,48 +1,64 @@
-/* 1. LAYOUT PRINCIPAL & CONTAINER */
+/* LOGIN */
+
 .login-page {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  padding: 24px;
   background: #f4f6f8;
+  box-sizing: border-box;
 }
+
+
+/* CARD */
 
 .login-card {
   width: 100%;
-  max-width: 400px;
-  padding: 40px;
+  max-width: 440px;
+  padding: 32px;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+  box-sizing: border-box;
 }
 
-/* 2. CABEÇALHO & ABA DE NAVEGAÇÃO (TABS) */
+
+/* CABEÇALHO */
+
 .login-header {
-  margin-bottom: 30px;
+  margin-bottom: 28px;
   text-align: center;
 }
 
 .login-header h1 {
-  margin-bottom: 8px;
-  color: #1f2937;
-  font-size: 24px;
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 .login-header p {
   margin: 0;
   color: #6b7280;
   font-size: 14px;
+  line-height: 1.5;
 }
+
+
+/* ABAS DE LOGIN */
 
 .login-options {
   display: flex;
-  margin-bottom: 25px;
+  margin-bottom: 26px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .login-option {
   flex: 1;
-  padding: 10px;
+  padding: 12px 8px;
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
@@ -50,6 +66,13 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.login-option:hover {
+  color: #2563eb;
 }
 
 .login-option.active {
@@ -57,11 +80,13 @@
   color: #2563eb;
 }
 
-/* 3. CAMPOS DO FORMULÁRIO (INPUTS) */
+
+/* CAMPOS DO FORMULÁRIO */
+
 .login-form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .login-form-group label {
@@ -72,43 +97,61 @@
 }
 
 .login-form-group input {
+  width: 100%;
   padding: 12px 14px;
+  background: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 8px;
+  color: #111827;
   font-size: 15px;
   outline: none;
-  transition: border-color 0.2s;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-form-group input::placeholder {
+  color: #9ca3af;
 }
 
 .login-form-group input:focus {
   border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* 4. RECONHECIMENTO FACIAL (CÂMERA & CANVAS) */
+
+/* RECONHECIMENTO FACIAL */
+
 .login-facial-login {
   text-align: center;
 }
 
 .login-facial-description {
-  margin-bottom: 25px;
+  margin: 0 0 20px;
   color: #6b7280;
   font-size: 14px;
   line-height: 1.5;
 }
+
+
+/* CÂMERA */
 
 .login-camera-container {
   width: 100%;
   margin-bottom: 20px;
   overflow: hidden;
   background: #111827;
+  border: 1px solid #1f2937;
   border-radius: 12px;
+  aspect-ratio: 4 / 3;
 }
 
 .login-camera-video {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
   transform: scaleX(-1);
 }
@@ -117,22 +160,34 @@
   display: none;
 }
 
-/* 5. BOTÕES, ESTADOS & ERROS  */
+
+/* BOTÃO PRINCIPAL */
+
 .login-submit {
   width: 100%;
-  padding: 13px;
+  margin-top: 4px;
+  padding: 13px 16px;
   background: #2563eb;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: #ffffff;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .login-submit:hover {
   background: #1d4ed8;
+}
+
+.login-submit:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .login-submit:disabled {
@@ -140,11 +195,61 @@
   cursor: not-allowed;
 }
 
+
+/* MENSAGEM DE ERRO */
+
 .login-error {
   margin-bottom: 18px;
-  padding: 10px 12px;
-  background: #fee2e2;
-  border-radius: 6px;
+  padding: 11px 13px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
   color: #b91c1c;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 600px) {
+  .login-page {
+    padding: 16px;
+  }
+
+  .login-card {
+    max-width: 100%;
+
+    padding: 26px 20px;
+
+    border-radius: 12px;
+  }
+
+  .login-header {
+    margin-bottom: 24px;
+  }
+
+  .login-header h1 {
+    font-size: 22px;
+  }
+
+  .login-option {
+    padding: 11px 6px;
+
+    font-size: 13px;
+  }
+}
+
+
+/* CELULARES PEQUENOS */
+
+@media (max-width: 400px) {
+  .login-card {
+    padding: 22px 16px;
+  }
+
+  .login-option {
+    font-size: 12px;
+  }
 }

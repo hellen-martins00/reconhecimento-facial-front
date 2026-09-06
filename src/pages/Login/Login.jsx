@@ -20,6 +20,7 @@ function Login() {
   const streamRef = useRef(null);
 
   // SALVAR AUTENTICAÇÃO
+
   function salvarAutenticacao(dados) {
     const usuarioInfo = {
       id: dados.id,
@@ -35,6 +36,7 @@ function Login() {
   }
 
   // LOGIN COM USUÁRIO E SENHA
+
   async function handleLogin(event) {
     event.preventDefault();
 
@@ -48,6 +50,7 @@ function Login() {
       });
 
       console.log("RESPOSTA DO LOGIN:", resposta.data);
+
       salvarAutenticacao(resposta.data);
     } catch (error) {
       if (error.response?.status === 401) {
@@ -64,12 +67,15 @@ function Login() {
   }
 
   // INICIAR CÂMERA
+
   async function iniciarCamera() {
     try {
       setErro("");
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
+        video: {
+          facingMode: "user",
+        },
         audio: false,
       });
 
@@ -80,6 +86,7 @@ function Login() {
       }
     } catch (error) {
       console.error("Erro ao acessar câmera:", error);
+
       setErro(
         "Não foi possível acessar a câmera. Verifique as permissões do navegador."
       );
@@ -87,14 +94,20 @@ function Login() {
   }
 
   // PARAR CÂMERA
+
   function pararCamera() {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
   }
 
   // CAPTURAR FOTO E RECONHECER
+
   async function capturarRosto() {
     if (!videoRef.current || !canvasRef.current) return;
 
@@ -105,11 +118,26 @@ function Login() {
       const video = videoRef.current;
       const canvas = canvasRef.current;
 
+      if (video.readyState < 2) {
+        throw new Error("A câmera ainda não está pronta.");
+      }
+
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
       const contexto = canvas.getContext("2d");
-      contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      if (!contexto) {
+        throw new Error("Não foi possível acessar o canvas.");
+      }
+
+      contexto.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
 
       const blob = await new Promise((resolve) => {
         canvas.toBlob(resolve, "image/jpeg", 0.9);
@@ -119,29 +147,45 @@ function Login() {
         throw new Error("Não foi possível capturar a imagem.");
       }
 
-      const arquivo = new File([blob], "captura-facial.jpg", {
-        type: "image/jpeg",
-      });
+      const arquivo = new File(
+        [blob],
+        "captura-facial.jpg",
+        {
+          type: "image/jpeg",
+        }
+      );
 
       const formData = new FormData();
+
       formData.append("arquivo", arquivo);
 
-      const resposta = await api.post("/login/facial", formData);
+      const resposta = await api.post(
+        "/login/facial",
+        formData
+      );
+
       const dados = resposta.data;
 
       if (!dados.autenticado) {
         setErro(
           "Rosto não reconhecido. Posicione-se corretamente e tente novamente."
         );
+
         return;
       }
 
       pararCamera();
+
       salvarAutenticacao(dados);
     } catch (error) {
-      console.error("Erro no reconhecimento facial:", error);
+      console.error(
+        "Erro no reconhecimento facial:",
+        error
+      );
+
       setErro(
         error.response?.data?.detail ||
+          error.message ||
           "Não foi possível realizar o reconhecimento facial."
       );
     } finally {
@@ -150,6 +194,7 @@ function Login() {
   }
 
   // TROCA DE MODO
+
   function alterarModo(novoModo) {
     setErro("");
     setModo(novoModo);
@@ -160,6 +205,7 @@ function Login() {
   }
 
   // CICLO DE VIDA DA CÂMERA
+
   useEffect(() => {
     if (modo === "facial") {
       iniciarCamera();
@@ -170,19 +216,30 @@ function Login() {
     };
   }, [modo]);
 
+  // INTERFACE
+
   return (
     <div className="login-page">
       <div className="login-card">
+
+        {/* CABEÇALHO */}
         <div className="login-header">
           <h1>Reconhecimento Facial</h1>
-          <p>Entre para acessar o sistema</p>
+
+          <p>
+            Entre para acessar o sistema
+          </p>
         </div>
 
         {/* SELEÇÃO DO TIPO DE LOGIN */}
+
         <div className="login-options">
+
           <button
             type="button"
-            className={`login-option ${modo === "senha" ? "active" : ""}`}
+            className={`login-option ${
+              modo === "senha" ? "active" : ""
+            }`}
             onClick={() => alterarModo("senha")}
           >
             Usuário e senha
@@ -190,60 +247,88 @@ function Login() {
 
           <button
             type="button"
-            className={`login-option ${modo === "facial" ? "active" : ""}`}
+            className={`login-option ${
+              modo === "facial" ? "active" : ""
+            }`}
             onClick={() => alterarModo("facial")}
           >
             Reconhecimento facial
           </button>
+
         </div>
 
         {/* LOGIN POR USUÁRIO E SENHA */}
+
         {modo === "senha" && (
           <form onSubmit={handleLogin}>
+
             <div className="login-form-group">
-              <label htmlFor="usuario">Usuário</label>
+              <label htmlFor="usuario">
+                Usuário
+              </label>
+
               <input
                 id="usuario"
                 type="text"
                 placeholder="Digite seu usuário"
                 value={usuario}
-                onChange={(event) => setUsuario(event.target.value)}
+                onChange={(event) =>
+                  setUsuario(event.target.value)
+                }
                 required
+                autoComplete="username"
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="senha">Senha</label>
+            <div className="login-form-group">
+              <label htmlFor="senha">
+                Senha
+              </label>
+
               <input
                 id="senha"
                 type="password"
                 placeholder="Digite sua senha"
                 value={senha}
-                onChange={(event) => setSenha(event.target.value)}
+                onChange={(event) =>
+                  setSenha(event.target.value)
+                }
                 required
+                autoComplete="current-password"
               />
             </div>
 
-            {erro && <div className="login-error">{erro}</div>}
+            {erro && (
+              <div className="login-error">
+                {erro}
+              </div>
+            )}
 
             <button
               type="submit"
               className="login-submit"
               disabled={carregando}
             >
-              {carregando ? "Entrando..." : "Entrar"}
+              {carregando
+                ? "Entrando..."
+                : "Entrar"}
             </button>
+
           </form>
         )}
 
         {/* LOGIN FACIAL */}
+
         {modo === "facial" && (
           <div className="login-facial-login">
+
             <p className="login-facial-description">
-              Posicione seu rosto na câmera para realizar o reconhecimento.
+              Posicione seu rosto na câmera para
+              realizar o reconhecimento.
             </p>
 
             <div className="login-camera-container">
+
               <video
                 ref={videoRef}
                 autoPlay
@@ -251,11 +336,19 @@ function Login() {
                 muted
                 className="login-camera-video"
               />
+
             </div>
 
-            <canvas ref={canvasRef} className="login-camera-canvas" />
+            <canvas
+              ref={canvasRef}
+              className="login-camera-canvas"
+            />
 
-            {erro && <div className="login-error">{erro}</div>}
+            {erro && (
+              <div className="login-error">
+                {erro}
+              </div>
+            )}
 
             <button
               type="button"
@@ -263,10 +356,14 @@ function Login() {
               disabled={carregando}
               onClick={capturarRosto}
             >
-              {carregando ? "Reconhecendo..." : "Reconhecer rosto"}
+              {carregando
+                ? "Reconhecendo..."
+                : "Reconhecer rosto"}
             </button>
+
           </div>
         )}
+
       </div>
     </div>
   );
