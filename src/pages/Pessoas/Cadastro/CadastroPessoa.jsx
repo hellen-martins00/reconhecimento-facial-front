@@ -5,7 +5,10 @@ import api from "../../../services/api";
 
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
-import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
+import {
+  formatarTelefone,
+  limparTelefone,
+} from "../../../utils/formatarTelefone";
 
 import "./CadastroPessoa.css";
 
@@ -121,7 +124,7 @@ function CadastroPessoa() {
         )
       );
 
-      // 3. Criar endereço
+      // 4. Criar endereço
       await api.post("/enderecos", {
         pessoa_id: pessoaCriada.id,
         logradouro,
@@ -132,14 +135,14 @@ function CadastroPessoa() {
         cep,
       });
 
-      // 4. Filtrar apenas passagens preenchidas
+      // 5. Filtrar apenas passagens preenchidas
       const passagensValidas = passagens.filter(
         (passagem) =>
           passagem.crime.trim() !== "" &&
           passagem.data_ocorrencia !== ""
       );
 
-      // 5. Criar passagens criminais
+      // 6. Criar passagens criminais
       await Promise.all(
         passagensValidas.map((passagem) =>
           api.post("/passagens", {
@@ -150,8 +153,13 @@ function CadastroPessoa() {
         )
       );
 
-      // 4. Voltar para pessoas
-      navigate("/pessoas");
+      // 7. Voltar para a lista de pessoas
+      // Envia a mensagem de sucesso para a página Pessoas
+      navigate("/pessoas", {
+        state: {
+          sucesso: "Pessoa cadastrada com sucesso!",
+        },
+      });
     } catch (error) {
       console.error("ERRO COMPLETO:", error);
       console.error("RESPOSTA DA API:", error.response?.data);
@@ -161,7 +169,10 @@ function CadastroPessoa() {
       if (Array.isArray(detalhe)) {
         setErro(
           detalhe
-            .map((erro) => `${erro.loc?.join(" → ")}: ${erro.msg}`)
+            .map(
+              (erro) =>
+                `${erro.loc?.join(" → ")}: ${erro.msg}`
+            )
             .join(" | ")
         );
       } else if (typeof detalhe === "string") {
@@ -557,13 +568,17 @@ function CadastroPessoa() {
           {/* DATA E SEXO */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dataNascimento">Data de nascimento</label>
+              <label htmlFor="dataNascimento">
+                Data de nascimento
+              </label>
 
               <input
                 id="dataNascimento"
                 type="date"
                 value={dataNascimento}
-                onChange={(event) => setDataNascimento(event.target.value)}
+                onChange={(event) =>
+                  setDataNascimento(event.target.value)
+                }
                 required
               />
             </div>

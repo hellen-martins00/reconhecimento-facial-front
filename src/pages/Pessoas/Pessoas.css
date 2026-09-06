@@ -388,4 +388,12 @@
     padding: 35px 20px;
   }
 
+  .pessoas-success {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
 }

@@ -93,7 +93,6 @@ function Pessoas() {
 
       setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
 
-      // Remove a mensagem depois de alguns segundos
       setTimeout(() => {
         setSucesso("");
       }, 4000);
@@ -107,21 +106,29 @@ function Pessoas() {
     }
   }
 
+  // MENSAGEM DE SUCESSO VINDO DO CADASTRO
   useEffect(() => {
-    if (location.state?.sucesso) {
-      setSucesso(location.state.sucesso);
-
-      // Limpa o state para não mostrar novamente ao atualizar a página
-      window.history.replaceState({}, document.title);
-
-      const timer = setTimeout(() => {
-        setSucesso("");
-      }, 4000);
-
-      return () => clearTimeout(timer);
+    if (!location.state?.sucesso) {
+      return;
     }
-  }, [location.state]);
 
+    setSucesso(location.state.sucesso);
+
+    // Remove o state da URL/histórico
+    // para não exibir novamente ao atualizar a página
+    navigate(location.pathname, {
+      replace: true,
+      state: null,
+    });
+
+    const timer = setTimeout(() => {
+      setSucesso("");
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [location, navigate]);
+
+  // CARREGAR PESSOAS
   useEffect(() => {
     carregarPessoas();
   }, []);
@@ -132,7 +139,10 @@ function Pessoas() {
       <div className="pessoas-header">
         <div>
           <h1>Pessoas</h1>
-          <p>Gerencie as pessoas cadastradas no sistema.</p>
+
+          <p>
+            Gerencie as pessoas cadastradas no sistema.
+          </p>
         </div>
 
         <button
@@ -143,11 +153,20 @@ function Pessoas() {
         </button>
       </div>
 
-      {erro && <div className="pessoas-error">{erro}</div>}
+      {/* MENSAGEM DE ERRO */}
+      {erro && (
+        <div className="pessoas-error">
+          {erro}
+        </div>
+      )}
 
+      {/* MENSAGEM DE SUCESSO */}
       {sucesso && (
         <div className="pessoas-success">
-          <span className="pessoas-success-icon">✓</span>
+          <span className="pessoas-success-icon">
+            ✓
+          </span>
+
           <span>{sucesso}</span>
         </div>
       )}
@@ -155,15 +174,20 @@ function Pessoas() {
       {/* CONTEÚDO PRINCIPAL */}
       <div className="pessoas-card">
         {carregando ? (
-          <div className="pessoas-loading">Carregando pessoas...</div>
+          <div className="pessoas-loading">
+            Carregando pessoas...
+          </div>
         ) : pessoas.length === 0 ? (
           <div className="pessoas-empty">
             <h2>Nenhuma pessoa cadastrada</h2>
-            <p>Ainda não existem pessoas cadastradas no sistema.</p>
+
+            <p>
+              Ainda não existem pessoas cadastradas no sistema.
+            </p>
           </div>
         ) : (
           <>
-            {/* TABELA - DESKTOP  */}
+            {/* TABELA - DESKTOP */}
 
             <div className="pessoas-table-container">
               <table className="pessoas-table">
@@ -198,7 +222,9 @@ function Pessoas() {
                         </div>
                       </td>
 
-                      <td>{formatarCPF(pessoa.cpf)}</td>
+                      <td>
+                        {formatarCPF(pessoa.cpf)}
+                      </td>
 
                       <td>
                         {pessoa.data_nascimento
@@ -214,7 +240,9 @@ function Pessoas() {
                       <td className="pessoas-actions">
                         <button
                           onClick={() =>
-                            navigate(`/pessoas/${pessoa.id}`)
+                            navigate(
+                              `/pessoas/${pessoa.id}`
+                            )
                           }
                         >
                           Visualizar
@@ -222,7 +250,9 @@ function Pessoas() {
 
                         <button
                           onClick={() =>
-                            navigate(`/pessoas/${pessoa.id}/editar`)
+                            navigate(
+                              `/pessoas/${pessoa.id}/editar`
+                            )
                           }
                         >
                           Editar
@@ -231,7 +261,10 @@ function Pessoas() {
                         <button
                           className="pessoa-excluir"
                           onClick={() =>
-                            excluirPessoa(pessoa.id, pessoa.nome)
+                            excluirPessoa(
+                              pessoa.id,
+                              pessoa.nome
+                            )
                           }
                         >
                           Excluir
@@ -244,6 +277,7 @@ function Pessoas() {
             </div>
 
             {/* CARDS - MOBILE */}
+
             <div className="pessoas-mobile-list">
               {pessoas.map((pessoa) => (
                 <div
@@ -251,6 +285,7 @@ function Pessoas() {
                   key={pessoa.id}
                 >
                   {/* TOPO */}
+
                   <div className="pessoa-mobile-header">
                     {pessoa.foto_url ? (
                       <img
@@ -272,6 +307,7 @@ function Pessoas() {
                   </div>
 
                   {/* INFORMAÇÕES */}
+
                   <div className="pessoa-mobile-info">
                     <div>
                       <span>CPF</span>
@@ -296,11 +332,14 @@ function Pessoas() {
                   </div>
 
                   {/* AÇÕES */}
+
                   <div className="pessoa-mobile-actions">
                     <button
                       className="pessoa-visualizar"
                       onClick={() =>
-                        navigate(`/pessoas/${pessoa.id}`)
+                        navigate(
+                          `/pessoas/${pessoa.id}`
+                        )
                       }
                     >
                       Visualizar
@@ -309,7 +348,9 @@ function Pessoas() {
                     <button
                       className="pessoa-editar"
                       onClick={() =>
-                        navigate(`/pessoas/${pessoa.id}/editar`)
+                        navigate(
+                          `/pessoas/${pessoa.id}/editar`
+                        )
                       }
                     >
                       Editar
@@ -318,7 +359,10 @@ function Pessoas() {
                     <button
                       className="pessoa-excluir"
                       onClick={() =>
-                        excluirPessoa(pessoa.id, pessoa.nome)
+                        excluirPessoa(
+                          pessoa.id,
+                          pessoa.nome
+                        )
                       }
                     >
                       Excluir
