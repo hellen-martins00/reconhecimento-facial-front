@@ -5,10 +5,7 @@ import api from "../../../services/api";
 
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
-import {
-  formatarTelefone,
-  limparTelefone,
-} from "../../../utils/formatarTelefone";
+import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
 
 import "./CadastroPessoa.css";
 
@@ -23,7 +20,6 @@ function CadastroPessoa() {
   const [nomePai, setNomePai] = useState("");
 
   const [erro, setErro] = useState("");
-  const [errosCampos, setErrosCampos] = useState({});
   const [carregando, setCarregando] = useState(false);
 
   const [telefones, setTelefones] = useState([
@@ -90,112 +86,10 @@ function CadastroPessoa() {
     setPassagens(novasPassagens);
   }
 
-  // TRADUZIR ERROS DA API
-
-  function traduzirErro(campo, mensagem) {
-    if (!mensagem) {
-      return "Valor inválido.";
-    }
-
-    if (campo === "cep") {
-      if (mensagem.includes("at least 8 characters")) {
-        return "CEP deve ter 8 números.";
-      }
-
-      if (mensagem.includes("at most 8 characters")) {
-        return "CEP deve ter no máximo 8 números.";
-      }
-    }
-
-    if (campo === "cpf") {
-      if (mensagem.includes("at least 11 characters")) {
-        return "CPF deve ter 11 números.";
-      }
-
-      if (mensagem.includes("at most 11 characters")) {
-        return "CPF deve ter no máximo 11 números.";
-      }
-    }
-
-    if (campo === "nome") {
-      if (mensagem.includes("at least 3 characters")) {
-        return "O nome deve ter pelo menos 3 caracteres.";
-      }
-
-      if (mensagem.includes("at most 150 characters")) {
-        return "O nome deve ter no máximo 150 caracteres.";
-      }
-    }
-
-    if (campo === "logradouro") {
-      if (mensagem.includes("at least 3 characters")) {
-        return "O logradouro deve ter pelo menos 3 caracteres.";
-      }
-
-      if (mensagem.includes("at most 200 characters")) {
-        return "O logradouro deve ter no máximo 200 caracteres.";
-      }
-    }
-
-    if (campo === "bairro") {
-      if (mensagem.includes("at least 2 characters")) {
-        return "O bairro deve ter pelo menos 2 caracteres.";
-      }
-
-      if (mensagem.includes("at most 100 characters")) {
-        return "O bairro deve ter no máximo 100 caracteres.";
-      }
-    }
-
-    if (campo === "cidade") {
-      if (mensagem.includes("at least 2 characters")) {
-        return "A cidade deve ter pelo menos 2 caracteres.";
-      }
-
-      if (mensagem.includes("at most 100 characters")) {
-        return "A cidade deve ter no máximo 100 caracteres.";
-      }
-    }
-
-    if (mensagem === "Field required") {
-      return "Este campo é obrigatório.";
-    }
-
-    if (mensagem.includes("valid date")) {
-      return "Informe uma data válida.";
-    }
-
-    if (mensagem.includes("String should")) {
-      return "Valor inválido.";
-    }
-
-    return mensagem;
-  }
-
-  function tratarErrosValidacao(detalhe) {
-    const novosErros = {};
-
-    if (Array.isArray(detalhe)) {
-      detalhe.forEach((item) => {
-        const campo =
-          Array.isArray(item.loc) && item.loc.length > 0
-            ? item.loc[item.loc.length - 1]
-            : null;
-
-        if (campo) {
-          novosErros[campo] = traduzirErro(campo, item.msg);
-        }
-      });
-    }
-
-    return novosErros;
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
 
     setErro("");
-    setErrosCampos({});
     setCarregando(true);
 
     try {
@@ -265,13 +159,11 @@ function CadastroPessoa() {
       const detalhe = error.response?.data?.detail;
 
       if (Array.isArray(detalhe)) {
-        const novosErros = tratarErrosValidacao(detalhe);
-
-        setErrosCampos(novosErros);
-
-        if (Object.keys(novosErros).length === 0) {
-          setErro("Não foi possível cadastrar a pessoa.");
-        }
+        setErro(
+          detalhe
+            .map((erro) => `${erro.loc?.join(" → ")}: ${erro.msg}`)
+            .join(" | ")
+        );
       } else if (typeof detalhe === "string") {
         setErro(detalhe);
       } else {
@@ -313,26 +205,12 @@ function CadastroPessoa() {
               id="nome"
               type="text"
               value={nome}
-              onChange={(event) => {
-                setNome(event.target.value);
-
-                setErrosCampos((anteriores) => ({
-                  ...anteriores,
-                  nome: "",
-                }));
-              }}
+              onChange={(event) => setNome(event.target.value)}
               placeholder="Digite o nome completo"
               minLength={3}
               maxLength={150}
               required
-              className={errosCampos.nome ? "input-error" : ""}
             />
-
-            {errosCampos.nome && (
-              <span className="form-error">
-                {errosCampos.nome}
-              </span>
-            )}
           </div>
 
           {/* CPF */}
@@ -343,30 +221,16 @@ function CadastroPessoa() {
               id="cpf"
               type="text"
               value={formatarCPF(cpf)}
-              onChange={(event) => {
-                setCpf(event.target.value);
-
-                setErrosCampos((anteriores) => ({
-                  ...anteriores,
-                  cpf: "",
-                }));
-              }}
+              onChange={(event) => setCpf(event.target.value)}
               placeholder="Digite o CPF"
               inputMode="numeric"
               maxLength={14}
               required
-              className={errosCampos.cpf ? "input-error" : ""}
             />
 
             <span className="form-help">
               Informe apenas os 11 números do CPF.
             </span>
-
-            {errosCampos.cpf && (
-              <span className="form-error">
-                {errosCampos.cpf}
-              </span>
-            )}
           </div>
 
           {/* TELEFONES */}
@@ -568,26 +432,12 @@ function CadastroPessoa() {
                   id="logradouro"
                   type="text"
                   value={logradouro}
-                  onChange={(event) => {
-                    setLogradouro(event.target.value);
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      logradouro: "",
-                    }));
-                  }}
+                  onChange={(event) => setLogradouro(event.target.value)}
                   placeholder="Ex.: Rua das Flores"
                   minLength={3}
                   maxLength={200}
                   required
-                  className={errosCampos.logradouro ? "input-error" : ""}
                 />
-
-                {errosCampos.logradouro && (
-                  <span className="form-error">
-                    {errosCampos.logradouro}
-                  </span>
-                )}
               </div>
 
               <div className="form-group">
@@ -597,25 +447,11 @@ function CadastroPessoa() {
                   id="numero"
                   type="text"
                   value={numero}
-                  onChange={(event) => {
-                    setNumero(event.target.value);
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      numero: "",
-                    }));
-                  }}
+                  onChange={(event) => setNumero(event.target.value)}
                   placeholder="Ex.: 123"
                   maxLength={20}
                   required
-                  className={errosCampos.numero ? "input-error" : ""}
                 />
-
-                {errosCampos.numero && (
-                  <span className="form-error">
-                    {errosCampos.numero}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -628,26 +464,12 @@ function CadastroPessoa() {
                   id="bairro"
                   type="text"
                   value={bairro}
-                  onChange={(event) => {
-                    setBairro(event.target.value);
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      bairro: "",
-                    }));
-                  }}
+                  onChange={(event) => setBairro(event.target.value)}
                   placeholder="Digite o bairro"
                   minLength={2}
                   maxLength={100}
                   required
-                  className={errosCampos.bairro ? "input-error" : ""}
                 />
-
-                {errosCampos.bairro && (
-                  <span className="form-error">
-                    {errosCampos.bairro}
-                  </span>
-                )}
               </div>
 
               <div className="form-group">
@@ -657,30 +479,18 @@ function CadastroPessoa() {
                   id="cep"
                   type="text"
                   value={formatarCEP(cep)}
-                  onChange={(event) => {
-                    setCep(limparCEP(event.target.value));
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      cep: "",
-                    }));
-                  }}
+                  onChange={(event) =>
+                    setCep(limparCEP(event.target.value))
+                  }
                   placeholder="Ex.: 70000-000"
                   maxLength={9}
                   inputMode="numeric"
                   required
-                  className={errosCampos.cep ? "input-error" : ""}
                 />
 
                 <span className="form-help">
                   Informe o CEP no formato 00000-000.
                 </span>
-
-                {errosCampos.cep && (
-                  <span className="form-error">
-                    {errosCampos.cep}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -693,26 +503,12 @@ function CadastroPessoa() {
                   id="cidade"
                   type="text"
                   value={cidade}
-                  onChange={(event) => {
-                    setCidade(event.target.value);
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      cidade: "",
-                    }));
-                  }}
+                  onChange={(event) => setCidade(event.target.value)}
                   placeholder="Digite a cidade"
                   minLength={2}
                   maxLength={100}
                   required
-                  className={errosCampos.cidade ? "input-error" : ""}
                 />
-
-                {errosCampos.cidade && (
-                  <span className="form-error">
-                    {errosCampos.cidade}
-                  </span>
-                )}
               </div>
 
               <div className="form-group">
@@ -721,16 +517,8 @@ function CadastroPessoa() {
                 <select
                   id="estado"
                   value={estado}
-                  onChange={(event) => {
-                    setEstado(event.target.value);
-
-                    setErrosCampos((anteriores) => ({
-                      ...anteriores,
-                      estado: "",
-                    }));
-                  }}
+                  onChange={(event) => setEstado(event.target.value)}
                   required
-                  className={errosCampos.estado ? "input-error" : ""}
                 >
                   <option value="">Selecione</option>
 
@@ -762,12 +550,6 @@ function CadastroPessoa() {
                   <option value="SE">Sergipe</option>
                   <option value="TO">Tocantins</option>
                 </select>
-
-                {errosCampos.estado && (
-                  <span className="form-error">
-                    {errosCampos.estado}
-                  </span>
-                )}
               </div>
             </div>
           </section>
@@ -781,25 +563,9 @@ function CadastroPessoa() {
                 id="dataNascimento"
                 type="date"
                 value={dataNascimento}
-                onChange={(event) => {
-                  setDataNascimento(event.target.value);
-
-                  setErrosCampos((anteriores) => ({
-                    ...anteriores,
-                    data_nascimento: "",
-                  }));
-                }}
+                onChange={(event) => setDataNascimento(event.target.value)}
                 required
-                className={
-                  errosCampos.data_nascimento ? "input-error" : ""
-                }
               />
-
-              {errosCampos.data_nascimento && (
-                <span className="form-error">
-                  {errosCampos.data_nascimento}
-                </span>
-              )}
             </div>
 
             <div className="form-group">
@@ -808,16 +574,8 @@ function CadastroPessoa() {
               <select
                 id="sexo"
                 value={sexo}
-                onChange={(event) => {
-                  setSexo(event.target.value);
-
-                  setErrosCampos((anteriores) => ({
-                    ...anteriores,
-                    sexo: "",
-                  }));
-                }}
+                onChange={(event) => setSexo(event.target.value)}
                 required
-                className={errosCampos.sexo ? "input-error" : ""}
               >
                 <option value="">Selecione</option>
 
@@ -825,12 +583,6 @@ function CadastroPessoa() {
 
                 <option value="F">Feminino</option>
               </select>
-
-              {errosCampos.sexo && (
-                <span className="form-error">
-                  {errosCampos.sexo}
-                </span>
-              )}
             </div>
           </div>
 
@@ -842,24 +594,10 @@ function CadastroPessoa() {
               id="nomeMae"
               type="text"
               value={nomeMae}
-              onChange={(event) => {
-                setNomeMae(event.target.value);
-
-                setErrosCampos((anteriores) => ({
-                  ...anteriores,
-                  nome_mae: "",
-                }));
-              }}
+              onChange={(event) => setNomeMae(event.target.value)}
               placeholder="Digite o nome da mãe"
               required
-              className={errosCampos.nome_mae ? "input-error" : ""}
             />
-
-            {errosCampos.nome_mae && (
-              <span className="form-error">
-                {errosCampos.nome_mae}
-              </span>
-            )}
           </div>
 
           {/* PAI */}
@@ -870,24 +608,10 @@ function CadastroPessoa() {
               id="nomePai"
               type="text"
               value={nomePai}
-              onChange={(event) => {
-                setNomePai(event.target.value);
-
-                setErrosCampos((anteriores) => ({
-                  ...anteriores,
-                  nome_pai: "",
-                }));
-              }}
+              onChange={(event) => setNomePai(event.target.value)}
               placeholder="Digite o nome do pai"
               required
-              className={errosCampos.nome_pai ? "input-error" : ""}
             />
-
-            {errosCampos.nome_pai && (
-              <span className="form-error">
-                {errosCampos.nome_pai}
-              </span>
-            )}
           </div>
 
           {/* AÇÕES */}
