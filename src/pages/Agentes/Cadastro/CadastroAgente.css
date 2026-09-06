@@ -1,21 +1,15 @@
-/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+/* PÁGINA */
 .cadastro-agente-page {
   width: 100%;
 }
 
-.cadastro-agente-card {
-  max-width: 800px;
-  padding: 30px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
 
-/* 2. CABEÇALHO & BOTÃO VOLTAR */
+/* CABEÇALHO */
 .cadastro-agente-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   margin-bottom: 25px;
 }
 
@@ -23,6 +17,7 @@
   margin: 0 0 6px;
   color: #1f2937;
   font-size: 28px;
+  font-weight: 700;
 }
 
 .cadastro-agente-header p {
@@ -31,6 +26,8 @@
   font-size: 14px;
 }
 
+
+/* BOTÃO VOLTAR */
 .cadastro-agente-voltar {
   padding: 10px 16px;
   background: white;
@@ -38,7 +35,9 @@
   border-radius: 8px;
   color: #374151;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .cadastro-agente-voltar:hover {
@@ -50,24 +49,86 @@
   cursor: not-allowed;
 }
 
-/* 3. CAMPOS DO FORMULÁRIO */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+
+/* CARD PRINCIPAL */
+.cadastro-agente-card {
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  padding: 28px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.form-group label {
+
+/* SEÇÕES */
+.cadastro-agente-section {
+  padding-bottom: 28px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cadastro-agente-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.cadastro-agente-section-header {
+  margin-bottom: 22px;
+}
+
+.cadastro-agente-section-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.cadastro-agente-section-header h2 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cadastro-agente-section-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* FORMULÁRIO */
+.cadastro-agente-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.cadastro-agente-full {
+  grid-column: 1 / -1;
+}
+
+.cadastro-agente-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-agente-form-group label,
+.cadastro-agente-foto-input label {
   margin-bottom: 7px;
   color: #374151;
   font-size: 14px;
   font-weight: 600;
 }
 
-.form-group input,
-.form-group select {
-  box-sizing: border-box;
+.cadastro-agente-form-group input,
+.cadastro-agente-foto-input input {
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 14px;
   background: white;
   border: 1px solid #d1d5db;
@@ -75,123 +136,177 @@
   color: #1f2937;
   font-size: 14px;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.cadastro-agente-form-group input::placeholder {
+  color: #9ca3af;
+}
+
+.cadastro-agente-form-group input:focus {
   border-color: #2563eb;
 }
 
-.form-group input:disabled,
-.form-group select:disabled {
+.cadastro-agente-form-group input:disabled {
   background: #f3f4f6;
   cursor: not-allowed;
 }
 
-.form-help {
-  margin-top: 5px;
+.cadastro-agente-help {
+  margin-top: 6px;
   color: #6b7280;
   font-size: 12px;
+  line-height: 1.4;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
 
-/* 4. ESTADOS DA PÁGINA (ERRO) */
-.cadastro-agente-error {
-  margin-bottom: 20px;
-  padding: 12px 15px;
-  background: #fee2e2;
-  border-radius: 8px;
-  color: #b91c1c;
-  font-size: 14px;
-}
-
-/* 5. PRÉ-VISUALIZAÇÃO DE FOTO */
-.cadastro-agente-foto-preview {
+/* FOTO */
+.cadastro-agente-foto-area {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 30px;
+}
+
+.cadastro-agente-foto-input {
+  flex: 1;
+}
+
+.cadastro-agente-foto-input input {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.cadastro-agente-foto-preview {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cadastro-agente-foto-preview img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #2563eb;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 6. BOTÕES DE AÇÃO */
+
+/* ERRO */
+.cadastro-agente-error {
+  margin-bottom: 22px;
+  padding: 12px 15px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+
+/* AÇÕES */
 .cadastro-agente-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
-.button-secondary,
-.button-primary {
-  padding: 12px 18px;
+.cadastro-agente-actions .button-secondary,
+.cadastro-agente-actions .button-primary {
+  padding: 11px 18px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.button-secondary {
+
+/* BOTÃO SECUNDÁRIO */
+
+.cadastro-agente-actions .button-secondary {
   background: white;
   border: 1px solid #d1d5db;
   color: #374151;
 }
 
-.button-secondary:hover {
+.cadastro-agente-actions .button-secondary:hover {
   background: #f9fafb;
 }
 
-.button-primary {
+
+/* BOTÃO PRINCIPAL */
+
+.cadastro-agente-actions .button-primary {
   background: #2563eb;
-  border: none;
+  border: 1px solid #2563eb;
   color: white;
 }
 
-.button-primary:hover {
+.cadastro-agente-actions .button-primary:hover {
   background: #1d4ed8;
 }
 
-.button-primary:disabled,
-.button-secondary:disabled {
+
+/* DESABILITADOS */
+
+.cadastro-agente-actions .button-primary:disabled,
+.cadastro-agente-actions .button-secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* 7. RESPONSIVIDADE */
+
+/* RESPONSIVIDADE */
 @media (max-width: 700px) {
+
   .cadastro-agente-header {
     align-items: flex-start;
-    gap: 15px;
+  }
+
+  .cadastro-agente-header h1 {
+    font-size: 24px;
+  }
+
+  .cadastro-agente-header p {
+    font-size: 13px;
+  }
+
+  .cadastro-agente-voltar {
+    flex-shrink: 0;
   }
 
   .cadastro-agente-card {
     padding: 20px;
   }
 
-  .form-row {
+  .cadastro-agente-form-grid {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 18px;
+  }
+
+  .cadastro-agente-full {
+    grid-column: auto;
+  }
+
+  .cadastro-agente-foto-area {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .cadastro-agente-foto-preview {
+    justify-content: flex-start;
   }
 
   .cadastro-agente-actions {
     flex-direction: column-reverse;
   }
 
-  .button-secondary,
-  .button-primary {
+  .cadastro-agente-actions .button-secondary,
+  .cadastro-agente-actions .button-primary {
     width: 100%;
   }
 }

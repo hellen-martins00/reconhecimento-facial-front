@@ -15,7 +15,7 @@ function CadastroAgente() {
   try {
     usuarioLogado = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
   } catch (error) {
-    console.error("Erro ao recuperar usuário: ", error)
+    console.error("Erro ao recuperar usuário:", error);
   }
 
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
@@ -31,7 +31,7 @@ function CadastroAgente() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
 
-  // LIMPAR URL DA FOTO AO SAIR
+  // LIMPAR URL DA FOTO
   useEffect(() => {
     return () => {
       if (fotoPreview) {
@@ -42,13 +42,12 @@ function CadastroAgente() {
 
   // FOTO
   function handleFotoChange(event) {
-    const arquivo = event.target.files[0];
+    const arquivo = event.target.files?.[0];
 
     if (!arquivo) {
       return;
     }
 
-    // Liberar preview anterior
     if (fotoPreview) {
       URL.revokeObjectURL(fotoPreview);
     }
@@ -84,10 +83,6 @@ function CadastroAgente() {
 
           await api.post(`/agentes/${agente.id}/foto`, formData);
         } catch (errorFoto) {
-          /*
-           * A falha da foto NÃO impede
-           * o cadastro do agente.
-           */
           console.error(
             "Agente cadastrado, mas houve erro ao cadastrar a foto:",
             errorFoto
@@ -116,7 +111,9 @@ function CadastroAgente() {
         <div className="cadastro-agente-header">
           <div>
             <h1>Acesso negado</h1>
-            <p>Apenas administradores podem cadastrar novos agentes.</p>
+            <p>
+              Apenas administradores podem cadastrar novos agentes.
+            </p>
           </div>
 
           <button
@@ -131,14 +128,16 @@ function CadastroAgente() {
     );
   }
 
-  // TELA
   return (
     <div className="cadastro-agente-page">
+
       {/* CABEÇALHO */}
       <div className="cadastro-agente-header">
         <div>
           <h1>Novo agente</h1>
-          <p>Cadastre um novo agente no sistema.</p>
+          <p>
+            Cadastre um novo agente no sistema.
+          </p>
         </div>
 
         <button
@@ -153,88 +152,156 @@ function CadastroAgente() {
 
       {/* CARD */}
       <div className="cadastro-agente-card">
-        {erro && <div className="cadastro-agente-error">{erro}</div>}
+
+        {erro && (
+          <div className="cadastro-agente-error">
+            {erro}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
-          {/* NOME */}
-          <div className="form-group">
-            <label htmlFor="nome">Nome</label>
-            <input
-              id="nome"
-              type="text"
-              value={nome}
-              onChange={(event) => setNome(event.target.value)}
-              minLength={3}
-              maxLength={150}
-              required
-              disabled={salvando}
-            />
-          </div>
 
-          {/* USUÁRIO */}
-          <div className="form-group">
-            <label htmlFor="usuario">Usuário</label>
-            <input
-              id="usuario"
-              type="text"
-              value={usuario}
-              onChange={(event) => setUsuario(event.target.value)}
-              minLength={3}
-              maxLength={100}
-              required
-              disabled={salvando}
-            />
-            <span className="form-help">
-              Informe o usuário utilizado para acessar o sistema.
-            </span>
-          </div>
+          {/* DADOS DO AGENTE */}
+          <section className="cadastro-agente-section">
 
-          {/* SENHA */}
-          <div className="form-group">
-            <label htmlFor="senha">Senha</label>
-            <input
-              id="senha"
-              type="password"
-              value={senha}
-              onChange={(event) => setSenha(event.target.value)}
-              minLength={6}
-              maxLength={100}
-              required
-              disabled={salvando}
-            />
-            <span className="form-help">
-              A senha deve possuir pelo menos 6 caracteres.
-            </span>
-          </div>
+            <div className="cadastro-agente-section-header">
+              <div>
+                <span className="cadastro-agente-section-label">
+                  DADOS DO AGENTE
+                </span>
+
+                <h2>Informações de acesso</h2>
+
+                <p>
+                  Informe os dados que serão utilizados pelo agente
+                  para acessar o sistema.
+                </p>
+              </div>
+            </div>
+
+            <div className="cadastro-agente-form-grid">
+
+              {/* NOME */}
+              <div className="cadastro-agente-form-group cadastro-agente-full">
+                <label htmlFor="nome">
+                  Nome
+                </label>
+
+                <input
+                  id="nome"
+                  type="text"
+                  value={nome}
+                  onChange={(event) => setNome(event.target.value)}
+                  minLength={3}
+                  maxLength={150}
+                  required
+                  disabled={salvando}
+                  placeholder="Nome completo do agente"
+                />
+              </div>
+
+              {/* USUÁRIO */}
+              <div className="cadastro-agente-form-group">
+                <label htmlFor="usuario">
+                  Usuário
+                </label>
+
+                <input
+                  id="usuario"
+                  type="text"
+                  value={usuario}
+                  onChange={(event) => setUsuario(event.target.value)}
+                  minLength={3}
+                  maxLength={100}
+                  required
+                  disabled={salvando}
+                  placeholder="Usuário de acesso"
+                />
+
+                <span className="cadastro-agente-help">
+                  Usuário utilizado para acessar o sistema.
+                </span>
+              </div>
+
+              {/* SENHA */}
+              <div className="cadastro-agente-form-group">
+                <label htmlFor="senha">
+                  Senha
+                </label>
+
+                <input
+                  id="senha"
+                  type="password"
+                  value={senha}
+                  onChange={(event) => setSenha(event.target.value)}
+                  minLength={6}
+                  maxLength={100}
+                  required
+                  disabled={salvando}
+                  placeholder="Senha de acesso"
+                />
+
+                <span className="cadastro-agente-help">
+                  Mínimo de 6 caracteres.
+                </span>
+              </div>
+
+            </div>
+          </section>
 
           {/* FOTO */}
-          <div className="form-group">
-            <label htmlFor="foto">Foto facial</label>
-            <input
-              id="foto"
-              type="file"
-              accept="image/jpeg,image/png"
-              onChange={handleFotoChange}
-              disabled={salvando}
-            />
-            <span className="form-help">
-              A foto é opcional. Caso não seja cadastrada agora, poderá ser
-              adicionada posteriormente.
-            </span>
-          </div>
+          <section className="cadastro-agente-section">
 
-          {/* PREVIEW */}
-          {fotoPreview && (
-            <div className="cadastro-agente-foto-preview">
-              <img
-                src={fotoPreview}
-                alt={`Pré-visualização de ${nome}`}
-              />
+            <div className="cadastro-agente-section-header">
+              <div>
+                <span className="cadastro-agente-section-label">
+                  IDENTIFICAÇÃO
+                </span>
+
+                <h2>Foto facial</h2>
+
+                <p>
+                  A foto é opcional e poderá ser adicionada
+                  posteriormente.
+                </p>
+              </div>
             </div>
-          )}
+
+            <div className="cadastro-agente-foto-area">
+
+              <div className="cadastro-agente-foto-input">
+                <label htmlFor="foto">
+                  Selecionar foto
+                </label>
+
+                <input
+                  id="foto"
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  onChange={handleFotoChange}
+                  disabled={salvando}
+                />
+
+                <span className="cadastro-agente-help">
+                  Formatos aceitos: JPG e PNG.
+                </span>
+              </div>
+
+              {fotoPreview && (
+                <div className="cadastro-agente-foto-preview">
+                  <img
+                    src={fotoPreview}
+                    alt={`Pré-visualização de ${nome}`}
+                  />
+                </div>
+              )}
+
+            </div>
+          </section>
 
           {/* AÇÕES */}
           <div className="cadastro-agente-actions">
+
             <button
               type="button"
               className="button-secondary"
@@ -249,9 +316,13 @@ function CadastroAgente() {
               className="button-primary"
               disabled={salvando}
             >
-              {salvando ? "Salvando..." : "Cadastrar agente"}
+              {salvando
+                ? "Salvando..."
+                : "Cadastrar agente"}
             </button>
+
           </div>
+
         </form>
       </div>
     </div>
