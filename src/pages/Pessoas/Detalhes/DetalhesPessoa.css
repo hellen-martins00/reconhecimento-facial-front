@@ -1,93 +1,269 @@
-/* =========================================
-   1. ESTRUTURA PRINCIPAL & CONTAINER
-========================================= */
+/* ESTRUTURA PRINCIPAL */
 
 .detalhes-pessoa-page {
   width: 100%;
   min-width: 0;
 }
 
-.detalhes-card {
-  padding: 30px;
+/* CABEÇALHO */
+
+.detalhes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
   margin-bottom: 20px;
+}
+
+.detalhes-voltar,
+.detalhes-editar-topo {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.detalhes-voltar {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.detalhes-voltar:hover {
+  background: #f9fafb;
+}
+
+.detalhes-editar-topo {
+  background: #2563eb;
+  border: none;
+  color: white;
+}
+
+.detalhes-editar-topo:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* IDENTIFICAÇÃO */
+
+.detalhes-identificacao {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  margin-bottom: 18px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
-
-/* =========================================
-   2. CABEÇALHO
-========================================= */
-
-.detalhes-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 25px;
-}
-
-.detalhes-header h1 {
-  margin: 0 0 6px;
-  color: #1f2937;
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.detalhes-header p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 14px;
-}
-
-
-/* =========================================
-   3. BOTÃO VOLTAR
-========================================= */
-
-.detalhes-voltar {
-  padding: 10px 16px;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  color: #374151;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.detalhes-voltar:hover {
-  background: #f9fafb;
-  transform: translateY(-1px);
-}
-
-
-/* =========================================
-   4. FOTO
-========================================= */
-
-.detalhes-foto-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.detalhes-foto {
-  width: 220px;
-  height: 220px;
+.detalhes-identificacao-foto {
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #f3f4f6;
   border: 1px solid #d1d5db;
   border-radius: 12px;
+}
+
+.detalhes-identificacao-foto img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
+.detalhes-sem-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #6b7280;
+  font-size: 13px;
+  text-align: center;
+}
 
-/* =========================================
-   5. CABEÇALHO DAS SEÇÕES
-========================================= */
+.detalhes-identificacao-info {
+  min-width: 0;
+}
+
+.detalhes-identificacao-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.detalhes-identificacao-info h1 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.detalhes-identificacao-cpf {
+  color: #4b5563;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* INDICADORES */
+
+.detalhes-indicadores {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.detalhes-indicador {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  background: #f3f4f6;
+  border-radius: 7px;
+  color: #374151;
+}
+
+.detalhes-indicador strong {
+  font-size: 14px;
+}
+
+.detalhes-indicador span {
+  font-size: 12px;
+}
+
+.detalhes-indicador-alerta {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* ALERTA */
+
+.detalhes-alerta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  color: #9a3412;
+}
+
+.detalhes-alerta-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: #f97316;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.detalhes-alerta strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+}
+
+.detalhes-alerta p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* ABAS */
+
+.detalhes-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  padding: 5px;
+  overflow-x: auto;
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.detalhes-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease,
+    color 0.2s ease;
+}
+
+.detalhes-tab:hover {
+  color: #374151;
+  background: #e5e7eb;
+}
+
+.detalhes-tab.ativa {
+  background: white;
+  color: #2563eb;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.detalhes-tab-contador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.detalhes-tab.ativa
+  .detalhes-tab-contador {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.detalhes-tab-alerta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: #fee2e2;
+  border-radius: 10px;
+  color: #dc2626;
+  font-size: 11px;
+}
+
+/*  CARDS */
+
+.detalhes-card {
+  padding: 28px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+}
 
 .detalhes-section-header {
   margin-bottom: 22px;
@@ -107,10 +283,7 @@
   line-height: 1.5;
 }
 
-
-/* =========================================
-   6. GRID DE DADOS CADASTRAIS
-========================================= */
+/* GRID */
 
 .detalhes-grid {
   display: grid;
@@ -134,17 +307,48 @@
   font-size: 15px;
 }
 
+/* FOTOS */
 
-/* =========================================
-   7. TELEFONES E PASSAGENS
-========================================= */
-
-.detalhes-lista-section {
-  background: #f8fafc;
+.detalhes-fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
+.detalhes-foto-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
 
-/* Lista */
+.detalhes-foto-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.detalhes-foto-item.principal {
+  border: 2px solid #2563eb;
+}
+
+.detalhes-foto-badge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 5px 8px;
+  background: rgba(37, 99, 235, 0.95);
+  border-radius: 5px;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* LISTAS */
 
 .detalhes-lista {
   display: flex;
@@ -152,17 +356,12 @@
   gap: 12px;
 }
 
-
-/* Item individual */
-
 .detalhes-lista-item {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 25px;
-
   padding: 18px;
-
-  background: white;
+  background: #f8fafc;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
 }
@@ -173,70 +372,101 @@
   gap: 6px;
 }
 
-
-/* Label */
-
 .detalhes-item-label {
   color: #6b7280;
   font-size: 12px;
-  font-weight: 500;
 }
-
-
-/* Valor */
 
 .detalhes-lista-item strong {
   color: #1f2937;
   font-size: 15px;
 }
 
+/* PASSAGENS CRIMINAIS */
 
-/* =========================================
-   8. ESTADO VAZIO
-========================================= */
+.detalhes-passagens-card.alerta {
+  border-color: #fecaca;
+}
+
+.detalhes-passagem-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: #fff7f7;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+}
+
+.detalhes-passagem-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  background: #dc2626;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.detalhes-passagem-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 20px;
+}
+
+.detalhes-passagem-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detalhes-passagem-info span {
+  color: #991b1b;
+  font-size: 12px;
+}
+
+.detalhes-passagem-info strong {
+  color: #7f1d1d;
+  font-size: 15px;
+}
+
+/* ESTADO VAZIO */
 
 .detalhes-vazio {
-  padding: 20px;
-
-  background: white;
-
+  padding: 25px;
+  background: #f8fafc;
   border: 1px dashed #d1d5db;
   border-radius: 10px;
-
   color: #6b7280;
-
   font-size: 14px;
   text-align: center;
 }
 
-
-/* =========================================
-   9. BOTÕES DE AÇÃO
-========================================= */
+/* AÇÕES */
 
 .detalhes-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-
-  margin-top: 35px;
-  padding-top: 25px;
-
+  margin-top: 25px;
+  padding-top: 20px;
   border-top: 1px solid #e5e7eb;
 }
 
 .button-secondary,
 .button-primary {
   padding: 11px 18px;
-
   border-radius: 8px;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .button-secondary {
@@ -253,8 +483,6 @@
   background: #2563eb;
   border: none;
   color: white;
-
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
 }
 
 .button-primary:hover {
@@ -262,10 +490,7 @@
   transform: translateY(-1px);
 }
 
-
-/* =========================================
-   10. ESTADOS DA PÁGINA
-========================================= */
+/* LOADING / ERRO */
 
 .detalhes-loading {
   padding: 40px;
@@ -275,85 +500,81 @@
 
 .detalhes-error {
   padding: 14px;
-
   background: #fee2e2;
   border: 1px solid #fecaca;
-
   border-radius: 8px;
-
   color: #b91c1c;
   font-size: 14px;
 }
 
+/* TABLET */
 
-/* =========================================
-   11. TABLET
-========================================= */
-
-@media (max-width: 768px) {
-
-  .detalhes-card {
-    padding: 24px;
-  }
-
-  .detalhes-lista-item {
-    gap: 18px;
-  }
-
-}
-
-/* FOTOS CADASTRADAS */
-
-.detalhes-fotos-section {
-  margin-bottom: 20px;
-}
-
-.detalhes-fotos-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.detalhes-foto-item {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-radius: 10px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-}
-
-.detalhes-foto {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* RESPONSIVIDADE */
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .detalhes-fotos-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-
-/* =========================================
-   12. CELULAR
-========================================= */
+/* CELULAR */
 
 @media (max-width: 700px) {
 
   .detalhes-header {
-    flex-direction: column;
     align-items: stretch;
-    gap: 15px;
   }
 
-  .detalhes-voltar {
-    width: 100%;
+  .detalhes-voltar,
+  .detalhes-editar-topo {
+    flex: 1;
+  }
+
+  .detalhes-identificacao {
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .detalhes-identificacao-foto {
+    width: 95px;
+    height: 95px;
+  }
+
+  .detalhes-identificacao-info h1 {
+    font-size: 20px;
+  }
+
+  .detalhes-identificacao-cpf {
+    font-size: 13px;
+  }
+
+  .detalhes-indicadores {
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .detalhes-indicador {
+    padding: 6px 8px;
+  }
+
+  .detalhes-indicador span {
+    font-size: 11px;
+  }
+
+  .detalhes-alerta {
+    align-items: flex-start;
+  }
+
+  .detalhes-tabs {
+    justify-content: flex-start;
+    margin-right: -2px;
+    scrollbar-width: none;
+  }
+
+  .detalhes-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .detalhes-tab {
+    flex-shrink: 0;
   }
 
   .detalhes-card {
@@ -368,8 +589,16 @@
   .detalhes-lista-item {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
 
-    padding: 16px;
+  .detalhes-fotos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .detalhes-passagem-info {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .detalhes-actions {
@@ -380,27 +609,34 @@
   .button-primary {
     width: 100%;
   }
-
 }
 
-
-/* =========================================
-   13. CELULARES PEQUENOS
-========================================= */
+/* CELULARES PEQUENOS */
 
 @media (max-width: 380px) {
+
+  .detalhes-identificacao {
+    align-items: flex-start;
+  }
+
+  .detalhes-identificacao-foto {
+    width: 80px;
+    height: 80px;
+  }
+
+  .detalhes-identificacao-info h1 {
+    font-size: 18px;
+  }
+
+  .detalhes-identificacao-cpf {
+    font-size: 12px;
+  }
 
   .detalhes-card {
     padding: 16px;
   }
 
-  .detalhes-header h1 {
-    font-size: 24px;
+  .detalhes-fotos-grid {
+    gap: 8px;
   }
-
-  .detalhes-foto {
-    width: 180px;
-    height: 180px;
-  }
-
 }
