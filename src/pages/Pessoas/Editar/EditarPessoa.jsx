@@ -974,20 +974,17 @@ function EditarPessoa() {
               <input
                 id="cep"
                 type="text"
-                value={cep}
+                value={formatarCEP(cep)}
                 onChange={(event) =>
-                  setCep(
-                    event.target.value
-                      .replace(/\D/g, "")
-                      .slice(0, 8)
-                  )
+                  setCep(limparCEP(event.target.value))
                 }
-                maxLength={8}
+                maxLength={9}
+                inputMode="numeric"
                 placeholder="Digite o CEP"
               />
 
               <span className="form-help">
-                Informe apenas os 8 números do CEP.
+                Informe o CEP no formato 00000-000.
               </span>
             </div>
           </section>

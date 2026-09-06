@@ -478,17 +478,18 @@ function CadastroPessoa() {
                 <input
                   id="cep"
                   type="text"
-                  value={cep}
+                  value={formatarCEP(cep)}
                   onChange={(event) =>
-                    setCep(event.target.value.replace(/\D/g, ""))
+                    setCep(limparCEP(event.target.value))
                   }
-                  placeholder="Ex.: 70000000"
-                  maxLength={8}
+                  placeholder="Ex.: 70000-000"
+                  maxLength={9}
+                  inputMode="numeric"
                   required
                 />
 
                 <span className="form-help">
-                  Informe apenas os 8 números do CEP.
+                  Informe o CEP no formato 00000-000.
                 </span>
               </div>
             </div>
