@@ -5,13 +5,13 @@ import api from "../../../services/api";
 
 import "./EditarPessoa.css";
 
+import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
+
 function EditarPessoa() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // =========================
   // DADOS DA PESSOA
-  // =========================
 
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -20,15 +20,11 @@ function EditarPessoa() {
   const [nomeMae, setNomeMae] = useState("");
   const [nomePai, setNomePai] = useState("");
 
-  // =========================
   // TELEFONES
-  // =========================
 
   const [telefones, setTelefones] = useState([]);
 
-  // =========================
   // ENDEREÇO
-  // =========================
 
   const [enderecoId, setEnderecoId] = useState(null);
   const [logradouro, setLogradouro] = useState("");
@@ -38,39 +34,29 @@ function EditarPessoa() {
   const [estado, setEstado] = useState("");
   const [cep, setCep] = useState("");
 
-  // =========================
   // PASSAGENS
-  // =========================
 
   const [passagens, setPassagens] = useState([]);
 
-  // =========================
   // ESTADOS
-  // =========================
 
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
 
-  // =========================
   // FOTO
-  // =========================
 
   const [fotoUrl, setFotoUrl] = useState(null);
   const [novaFoto, setNovaFoto] = useState(null);
 
-  // =========================
   // CARREGAR DADOS
-  // =========================
 
   async function carregarPessoa() {
     setCarregando(true);
     setErro("");
 
     try {
-      // =========================
       // PESSOA
-      // =========================
 
       const respostaPessoa = await api.get(`/pessoas/${id}`);
       const pessoa = respostaPessoa.data;
@@ -82,9 +68,7 @@ function EditarPessoa() {
       setNomeMae(pessoa.nome_mae || "");
       setNomePai(pessoa.nome_pai || "");
 
-      // =========================
       // TELEFONES
-      // =========================
 
       try {
         const respostaTelefones = await api.get(
@@ -105,9 +89,7 @@ function EditarPessoa() {
         setTelefones([]);
       }
 
-      // =========================
       // ENDEREÇO
-      // =========================
 
       try {
         const respostaEndereco = await api.get(
@@ -152,9 +134,7 @@ function EditarPessoa() {
         setCep("");
       }
 
-      // =========================
       // PASSAGENS
-      // =========================
 
       try {
         const respostaPassagens = await api.get(
@@ -175,9 +155,7 @@ function EditarPessoa() {
         setPassagens([]);
       }
 
-      // =========================
       // FOTO
-      // =========================
 
       try {
         const respostaFoto = await api.get(
@@ -223,9 +201,7 @@ function EditarPessoa() {
     carregarPessoa();
   }, [id]);
 
-  // =========================
   // FOTO
-  // =========================
 
   function selecionarFoto(event) {
     const arquivo = event.target.files?.[0];
@@ -241,9 +217,7 @@ function EditarPessoa() {
     setFotoUrl(url);
   }
 
-  // =========================
   // TELEFONES
-  // =========================
 
   function adicionarTelefone() {
     setTelefones([
@@ -297,9 +271,7 @@ function EditarPessoa() {
     );
   }
 
-  // =========================
   // PASSAGENS
-  // =========================
 
   function adicionarPassagem() {
     setPassagens([
@@ -353,9 +325,7 @@ function EditarPessoa() {
     );
   }
 
-  // =========================
   // SALVAR
-  // =========================
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -364,22 +334,18 @@ function EditarPessoa() {
     setSalvando(true);
 
     try {
-      // =========================
       // ATUALIZAR PESSOA
-      // =========================
 
       await api.put(`/pessoas/${id}`, {
         nome,
-        cpf,
+        cpf: limparCPF(cpf),
         data_nascimento: dataNascimento,
         sexo,
         nome_mae: nomeMae,
         nome_pai: nomePai,
       });
 
-      // =========================
       // TELEFONES
-      // =========================
 
       const telefonesValidos = telefones.filter(
         (telefone) =>
@@ -418,9 +384,7 @@ function EditarPessoa() {
         )
       );
 
-      // =========================
       // ENDEREÇO
-      // =========================
 
       const enderecoPreenchido =
         logradouro.trim() !== "" ||
@@ -465,9 +429,7 @@ function EditarPessoa() {
         }
       }
 
-      // =========================
       // NOVAS PASSAGENS
-      // =========================
 
       const novasPassagens = passagens.filter(
         (passagem) =>
@@ -488,9 +450,7 @@ function EditarPessoa() {
         )
       );
 
-      // =========================
       // FOTO
-      // =========================
 
       if (novaFoto) {
         const formData = new FormData();
@@ -506,9 +466,7 @@ function EditarPessoa() {
         );
       }
 
-      // =========================
       // REDIRECIONAR
-      // =========================
 
       navigate(`/pessoas/${id}`);
     } catch (error) {
@@ -549,9 +507,7 @@ function EditarPessoa() {
     }
   }
 
-  // =========================
   // LOADING
-  // =========================
 
   if (carregando) {
     return (
@@ -563,9 +519,7 @@ function EditarPessoa() {
     );
   }
 
-  // =========================
   // ERRO INICIAL
-  // =========================
 
   if (erro && !nome) {
     return (
@@ -586,13 +540,10 @@ function EditarPessoa() {
     );
   }
 
-  // =========================
   // TELA
-  // =========================
 
   return (
     <div className="editar-pessoa-page">
-
       {/* CABEÇALHO */}
 
       <div className="editar-header">
@@ -618,11 +569,9 @@ function EditarPessoa() {
       {/* CARD */}
 
       <div className="editar-pessoa-card">
-
         {/* FOTO */}
 
         <div className="editar-foto-container">
-
           {fotoUrl ? (
             <img
               src={fotoUrl}
@@ -649,7 +598,6 @@ function EditarPessoa() {
             onChange={selecionarFoto}
             hidden
           />
-
         </div>
 
         {erro && (
@@ -659,10 +607,7 @@ function EditarPessoa() {
         )}
 
         <form onSubmit={handleSubmit}>
-
-          {/* =========================
-              DADOS PESSOAIS
-          ========================= */}
+          {/*  DADOS PESSOAIS */}
 
           <div className="form-group">
             <label htmlFor="nome">
@@ -690,11 +635,12 @@ function EditarPessoa() {
             <input
               id="cpf"
               type="text"
-              value={cpf}
+              value={formatarCPF(cpf)}
               onChange={(event) =>
                 setCpf(event.target.value)
               }
-              maxLength={11}
+              maxLength={14}
+              inputMode="numeric"
               required
             />
 
@@ -706,7 +652,6 @@ function EditarPessoa() {
           {/* DATA + SEXO */}
 
           <div className="form-row">
-
             <div className="form-group">
               <label htmlFor="dataNascimento">
                 Data de nascimento
@@ -751,7 +696,6 @@ function EditarPessoa() {
                 </option>
               </select>
             </div>
-
           </div>
 
           {/* MÃE */}
@@ -794,14 +738,10 @@ function EditarPessoa() {
             />
           </div>
 
-          {/* =========================
-              TELEFONES
-          ========================= */}
+          {/* TELEFONES */}
 
           <section className="editar-telefones-section">
-
             <div className="editar-section-header">
-
               <div>
                 <h3>
                   Telefones
@@ -819,23 +759,19 @@ function EditarPessoa() {
               >
                 + Adicionar telefone
               </button>
-
             </div>
 
             <div className="editar-lista">
-
               {telefones.map(
                 (telefone, index) => (
-
                   <div
                     className="editar-item"
                     key={
-                      telefone.id || `novo-${index}`
+                      telefone.id ||
+                      `novo-${index}`
                     }
                   >
-
                     <div className="editar-item-header">
-
                       <span>
                         Telefone {index + 1}
                       </span>
@@ -849,13 +785,10 @@ function EditarPessoa() {
                       >
                         Remover
                       </button>
-
                     </div>
 
                     <div className="editar-telefone-fields">
-
                       <div className="form-group">
-
                         <label>
                           Número
                         </label>
@@ -873,11 +806,9 @@ function EditarPessoa() {
                             )
                           }
                         />
-
                       </div>
 
                       <div className="form-group">
-
                         <label>
                           Tipo
                         </label>
@@ -902,7 +833,6 @@ function EditarPessoa() {
                             Residencial
                           </option>
                         </select>
-
                       </div>
 
                       <button
@@ -914,25 +844,17 @@ function EditarPessoa() {
                       >
                         Remover
                       </button>
-
                     </div>
-
                   </div>
                 )
               )}
-
             </div>
-
           </section>
 
-          {/* =========================
-              ENDEREÇO
-          ========================= */}
+          {/* ENDEREÇO */}
 
           <section className="editar-endereco-section">
-
             <div className="editar-section-header">
-
               <div>
                 <h3>
                   Endereço
@@ -942,11 +864,9 @@ function EditarPessoa() {
                   Endereço residencial vinculado à pessoa.
                 </p>
               </div>
-
             </div>
 
             <div className="form-group">
-
               <label htmlFor="logradouro">
                 Logradouro
               </label>
@@ -962,13 +882,10 @@ function EditarPessoa() {
                 }
                 placeholder="Digite o logradouro"
               />
-
             </div>
 
             <div className="form-row">
-
               <div className="form-group">
-
                 <label htmlFor="numero">
                   Número
                 </label>
@@ -984,11 +901,9 @@ function EditarPessoa() {
                   }
                   placeholder="Número"
                 />
-
               </div>
 
               <div className="form-group">
-
                 <label htmlFor="bairro">
                   Bairro
                 </label>
@@ -1004,15 +919,11 @@ function EditarPessoa() {
                   }
                   placeholder="Digite o bairro"
                 />
-
               </div>
-
             </div>
 
             <div className="form-row">
-
               <div className="form-group">
-
                 <label htmlFor="cidade">
                   Cidade
                 </label>
@@ -1028,11 +939,9 @@ function EditarPessoa() {
                   }
                   placeholder="Digite a cidade"
                 />
-
               </div>
 
               <div className="form-group">
-
                 <label htmlFor="estado">
                   Estado
                 </label>
@@ -1051,13 +960,10 @@ function EditarPessoa() {
                   maxLength={2}
                   placeholder="UF"
                 />
-
               </div>
-
             </div>
 
             <div className="form-group">
-
               <label htmlFor="cep">
                 CEP
               </label>
@@ -1080,19 +986,13 @@ function EditarPessoa() {
               <span className="form-help">
                 Informe apenas os 8 números do CEP.
               </span>
-
             </div>
-
           </section>
 
-          {/* =========================
-              PASSAGENS
-          ========================= */}
+          {/* PASSAGENS */}
 
           <section className="editar-passagens-section">
-
             <div className="editar-section-header">
-
               <div>
                 <h3>
                   Passagens criminais
@@ -1110,14 +1010,11 @@ function EditarPessoa() {
               >
                 + Adicionar passagem
               </button>
-
             </div>
 
             <div className="editar-lista">
-
               {passagens.map(
                 (passagem, index) => (
-
                   <div
                     className="editar-item"
                     key={
@@ -1125,9 +1022,7 @@ function EditarPessoa() {
                       `nova-passagem-${index}`
                     }
                   >
-
                     <div className="editar-item-header">
-
                       <span>
                         Passagem {index + 1}
                       </span>
@@ -1141,13 +1036,10 @@ function EditarPessoa() {
                       >
                         Remover
                       </button>
-
                     </div>
 
                     <div className="editar-passagem-fields">
-
                       <div className="form-group">
-
                         <label>
                           Crime
                         </label>
@@ -1166,11 +1058,9 @@ function EditarPessoa() {
                           }
                           placeholder="Ex.: Furto"
                         />
-
                       </div>
 
                       <div className="form-group">
-
                         <label>
                           Data da ocorrência
                         </label>
@@ -1188,7 +1078,6 @@ function EditarPessoa() {
                             )
                           }
                         />
-
                       </div>
 
                       <button
@@ -1200,23 +1089,16 @@ function EditarPessoa() {
                       >
                         Remover
                       </button>
-
                     </div>
-
                   </div>
                 )
               )}
-
             </div>
-
           </section>
 
-          {/* =========================
-              AÇÕES
-          ========================= */}
+          {/* AÇÕES */}
 
           <div className="editar-actions">
-
             <button
               type="button"
               className="button-secondary"
@@ -1237,13 +1119,9 @@ function EditarPessoa() {
                 ? "Salvando..."
                 : "Salvar alterações"}
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 }

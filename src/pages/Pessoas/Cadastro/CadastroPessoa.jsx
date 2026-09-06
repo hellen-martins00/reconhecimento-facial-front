@@ -5,6 +5,8 @@ import api from "../../../services/api";
 
 import "./CadastroPessoa.css";
 
+import { formatarCPF, limparCPF } from "../../utils/formatarCPF";
+
 function CadastroPessoa() {
   const navigate = useNavigate();
 
@@ -92,7 +94,7 @@ function CadastroPessoa() {
       // 1. Criar pessoa
       const respostaPessoa = await api.post("/pessoas", {
         nome,
-        cpf,
+        cpf: limparCPF(cpf),
         data_nascimento: dataNascimento,
         sexo,
         nome_mae: nomeMae,
@@ -148,7 +150,6 @@ function CadastroPessoa() {
 
       // 4. Voltar para pessoas
       navigate("/pessoas");
-
     } catch (error) {
       console.error("ERRO COMPLETO:", error);
       console.error("RESPOSTA DA API:", error.response?.data);
@@ -166,8 +167,6 @@ function CadastroPessoa() {
       } else {
         setErro("Não foi possível cadastrar a pessoa.");
       }
-
-
     } finally {
       setCarregando(false);
     }
@@ -175,7 +174,6 @@ function CadastroPessoa() {
 
   return (
     <div className="cadastro-pessoa-page">
-
       {/* CABEÇALHO */}
       <div className="cadastro-pessoa-header">
         <div>
@@ -194,15 +192,9 @@ function CadastroPessoa() {
 
       {/* CARD */}
       <div className="cadastro-pessoa-card">
-
-        {erro && (
-          <div className="cadastro-error">
-            {erro}
-          </div>
-        )}
+        {erro && <div className="cadastro-error">{erro}</div>}
 
         <form onSubmit={handleSubmit}>
-
           {/* NOME */}
           <div className="form-group">
             <label htmlFor="nome">Nome</label>
@@ -226,10 +218,11 @@ function CadastroPessoa() {
             <input
               id="cpf"
               type="text"
-              value={cpf}
+              value={formatarCPF(cpf)}
               onChange={(event) => setCpf(event.target.value)}
               placeholder="Digite o CPF"
-              maxLength={11}
+              inputMode="numeric"
+              maxLength={14}
               required
             />
 
@@ -240,9 +233,7 @@ function CadastroPessoa() {
 
           {/* TELEFONES */}
           <section className="telefones-section">
-
             <div className="telefones-header">
-
               <div>
                 <h3>Telefones</h3>
 
@@ -258,22 +249,13 @@ function CadastroPessoa() {
               >
                 + Adicionar telefone
               </button>
-
             </div>
 
             <div className="telefones-lista">
-
               {telefones.map((telefone, index) => (
-
-                <div
-                  className="telefone-item"
-                  key={index}
-                >
-
+                <div className="telefone-item" key={index}>
                   <div className="telefone-item-header">
-                    <span>
-                      Telefone {index + 1}
-                    </span>
+                    <span>Telefone {index + 1}</span>
 
                     {telefones.length > 1 && (
                       <button
@@ -287,7 +269,6 @@ function CadastroPessoa() {
                   </div>
 
                   <div className="telefone-fields">
-
                     <div className="form-group">
                       <label>Número</label>
 
@@ -318,9 +299,7 @@ function CadastroPessoa() {
                           )
                         }
                       >
-                        <option value="PESSOAL">
-                          Pessoal
-                        </option>
+                        <option value="PESSOAL">Pessoal</option>
 
                         <option value="RESIDENCIAL">
                           Residencial
@@ -337,27 +316,21 @@ function CadastroPessoa() {
                         Remover
                       </button>
                     )}
-
                   </div>
-
                 </div>
-
               ))}
-
             </div>
-
           </section>
 
           {/* PASSAGENS CRIMINAIS */}
           <section className="passagens-section">
-
             <div className="passagens-header">
-
               <div>
                 <h3>Passagens criminais</h3>
 
                 <p>
-                  Adicione passagens criminais vinculadas à pessoa, caso existam.
+                  Adicione passagens criminais vinculadas à pessoa, caso
+                  existam.
                 </p>
               </div>
 
@@ -368,23 +341,13 @@ function CadastroPessoa() {
               >
                 + Adicionar passagem
               </button>
-
             </div>
 
             <div className="passagens-lista">
-
               {passagens.map((passagem, index) => (
-
-                <div
-                  className="passagem-item"
-                  key={index}
-                >
-
+                <div className="passagem-item" key={index}>
                   <div className="passagem-item-header">
-
-                    <span>
-                      Passagem {index + 1}
-                    </span>
+                    <span>Passagem {index + 1}</span>
 
                     {passagens.length > 1 && (
                       <button
@@ -395,13 +358,10 @@ function CadastroPessoa() {
                         Remover
                       </button>
                     )}
-
                   </div>
 
                   <div className="passagem-fields">
-
                     <div className="form-group">
-
                       <label>Crime</label>
 
                       <input
@@ -416,11 +376,9 @@ function CadastroPessoa() {
                         }
                         placeholder="Ex.: Furto"
                       />
-
                     </div>
 
                     <div className="form-group">
-
                       <label>Data da ocorrência</label>
 
                       <input
@@ -434,7 +392,6 @@ function CadastroPessoa() {
                           )
                         }
                       />
-
                     </div>
 
                     {passagens.length > 1 && (
@@ -446,45 +403,32 @@ function CadastroPessoa() {
                         Remover
                       </button>
                     )}
-
                   </div>
-
                 </div>
-
               ))}
-
             </div>
-
           </section>
 
           {/* ENDEREÇO */}
           <section className="endereco-section">
-
             <div className="endereco-header">
               <div>
                 <h3>Endereço</h3>
 
-                <p>
-                  Informe o endereço atual da pessoa.
-                </p>
+                <p>Informe o endereço atual da pessoa.</p>
               </div>
             </div>
 
             {/* LOGRADOURO + NÚMERO */}
             <div className="form-row">
-
               <div className="form-group">
-                <label htmlFor="logradouro">
-                  Logradouro
-                </label>
+                <label htmlFor="logradouro">Logradouro</label>
 
                 <input
                   id="logradouro"
                   type="text"
                   value={logradouro}
-                  onChange={(event) =>
-                    setLogradouro(event.target.value)
-                  }
+                  onChange={(event) => setLogradouro(event.target.value)}
                   placeholder="Ex.: Rua das Flores"
                   minLength={3}
                   maxLength={200}
@@ -493,40 +437,30 @@ function CadastroPessoa() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="numero">
-                  Número
-                </label>
+                <label htmlFor="numero">Número</label>
 
                 <input
                   id="numero"
                   type="text"
                   value={numero}
-                  onChange={(event) =>
-                    setNumero(event.target.value)
-                  }
+                  onChange={(event) => setNumero(event.target.value)}
                   placeholder="Ex.: 123"
                   maxLength={20}
                   required
                 />
               </div>
-
             </div>
 
             {/* BAIRRO + CEP */}
             <div className="form-row">
-
               <div className="form-group">
-                <label htmlFor="bairro">
-                  Bairro
-                </label>
+                <label htmlFor="bairro">Bairro</label>
 
                 <input
                   id="bairro"
                   type="text"
                   value={bairro}
-                  onChange={(event) =>
-                    setBairro(event.target.value)
-                  }
+                  onChange={(event) => setBairro(event.target.value)}
                   placeholder="Digite o bairro"
                   minLength={2}
                   maxLength={100}
@@ -535,9 +469,7 @@ function CadastroPessoa() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="cep">
-                  CEP
-                </label>
+                <label htmlFor="cep">CEP</label>
 
                 <input
                   id="cep"
@@ -555,24 +487,18 @@ function CadastroPessoa() {
                   Informe apenas os 8 números do CEP.
                 </span>
               </div>
-
             </div>
 
             {/* CIDADE + ESTADO */}
             <div className="form-row">
-
               <div className="form-group">
-                <label htmlFor="cidade">
-                  Cidade
-                </label>
+                <label htmlFor="cidade">Cidade</label>
 
                 <input
                   id="cidade"
                   type="text"
                   value={cidade}
-                  onChange={(event) =>
-                    setCidade(event.target.value)
-                  }
+                  onChange={(event) => setCidade(event.target.value)}
                   placeholder="Digite a cidade"
                   minLength={2}
                   maxLength={100}
@@ -581,21 +507,15 @@ function CadastroPessoa() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="estado">
-                  Estado
-                </label>
+                <label htmlFor="estado">Estado</label>
 
                 <select
                   id="estado"
                   value={estado}
-                  onChange={(event) =>
-                    setEstado(event.target.value)
-                  }
+                  onChange={(event) => setEstado(event.target.value)}
                   required
                 >
-                  <option value="">
-                    Selecione
-                  </option>
+                  <option value="">Selecione</option>
 
                   <option value="AC">Acre</option>
                   <option value="AL">Alagoas</option>
@@ -626,26 +546,19 @@ function CadastroPessoa() {
                   <option value="TO">Tocantins</option>
                 </select>
               </div>
-
             </div>
-
           </section>
 
           {/* DATA E SEXO */}
           <div className="form-row">
-
             <div className="form-group">
-              <label htmlFor="dataNascimento">
-                Data de nascimento
-              </label>
+              <label htmlFor="dataNascimento">Data de nascimento</label>
 
               <input
                 id="dataNascimento"
                 type="date"
                 value={dataNascimento}
-                onChange={(event) =>
-                  setDataNascimento(event.target.value)
-                }
+                onChange={(event) => setDataNascimento(event.target.value)}
                 required
               />
             </div>
@@ -656,40 +569,27 @@ function CadastroPessoa() {
               <select
                 id="sexo"
                 value={sexo}
-                onChange={(event) =>
-                  setSexo(event.target.value)
-                }
+                onChange={(event) => setSexo(event.target.value)}
                 required
               >
-                <option value="">
-                  Selecione
-                </option>
+                <option value="">Selecione</option>
 
-                <option value="M">
-                  Masculino
-                </option>
+                <option value="M">Masculino</option>
 
-                <option value="F">
-                  Feminino
-                </option>
+                <option value="F">Feminino</option>
               </select>
             </div>
-
           </div>
 
           {/* MÃE */}
           <div className="form-group">
-            <label htmlFor="nomeMae">
-              Nome da mãe
-            </label>
+            <label htmlFor="nomeMae">Nome da mãe</label>
 
             <input
               id="nomeMae"
               type="text"
               value={nomeMae}
-              onChange={(event) =>
-                setNomeMae(event.target.value)
-              }
+              onChange={(event) => setNomeMae(event.target.value)}
               placeholder="Digite o nome da mãe"
               required
             />
@@ -697,17 +597,13 @@ function CadastroPessoa() {
 
           {/* PAI */}
           <div className="form-group">
-            <label htmlFor="nomePai">
-              Nome do pai
-            </label>
+            <label htmlFor="nomePai">Nome do pai</label>
 
             <input
               id="nomePai"
               type="text"
               value={nomePai}
-              onChange={(event) =>
-                setNomePai(event.target.value)
-              }
+              onChange={(event) => setNomePai(event.target.value)}
               placeholder="Digite o nome do pai"
               required
             />
@@ -715,7 +611,6 @@ function CadastroPessoa() {
 
           {/* AÇÕES */}
           <div className="cadastro-actions">
-
             <button
               type="button"
               className="button-secondary"
@@ -730,17 +625,11 @@ function CadastroPessoa() {
               className="button-primary"
               disabled={carregando}
             >
-              {carregando
-                ? "Cadastrando..."
-                : "Cadastrar pessoa"}
+              {carregando ? "Cadastrando..." : "Cadastrar pessoa"}
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 }

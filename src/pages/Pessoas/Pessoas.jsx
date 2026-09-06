@@ -4,6 +4,8 @@ import api from "../../services/api";
 
 import "./Pessoas.css";
 
+import { formatarCPF } from "../../utils/formatarCPF";
+
 function Pessoas() {
   const [pessoas, setPessoas] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -60,9 +62,10 @@ function Pessoas() {
       setPessoas(pessoasComFotos);
     } catch (error) {
       console.error(error);
+
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível carregar as pessoas."
+          "Não foi possível carregar as pessoas."
       );
     } finally {
       setCarregando(false);
@@ -94,13 +97,12 @@ function Pessoas() {
       setTimeout(() => {
         setSucesso("");
       }, 4000);
-
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível excluir a pessoa."
+          "Não foi possível excluir a pessoa."
       );
     }
   }
@@ -161,9 +163,7 @@ function Pessoas() {
           </div>
         ) : (
           <>
-            {/* =========================
-      TABELA - DESKTOP
-  ========================= */}
+            {/* TABELA - DESKTOP  */}
 
             <div className="pessoas-table-container">
               <table className="pessoas-table">
@@ -198,11 +198,14 @@ function Pessoas() {
                         </div>
                       </td>
 
-                      <td>{pessoa.cpf}</td>
+                      <td>{formatarCPF(pessoa.cpf)}</td>
 
                       <td>
                         {pessoa.data_nascimento
-                          ? pessoa.data_nascimento.split("-").reverse().join("/")
+                          ? pessoa.data_nascimento
+                              .split("-")
+                              .reverse()
+                              .join("/")
                           : ""}
                       </td>
 
@@ -242,16 +245,13 @@ function Pessoas() {
 
             {/* CARDS - MOBILE */}
             <div className="pessoas-mobile-list">
-
               {pessoas.map((pessoa) => (
                 <div
                   className="pessoa-mobile-card"
                   key={pessoa.id}
                 >
-
                   {/* TOPO */}
                   <div className="pessoa-mobile-header">
-
                     {pessoa.foto_url ? (
                       <img
                         src={pessoa.foto_url}
@@ -267,22 +267,17 @@ function Pessoas() {
                     <div className="pessoa-mobile-nome">
                       <h3>{pessoa.nome}</h3>
 
-                      <span>
-                        {pessoa.sexo}
-                      </span>
+                      <span>{pessoa.sexo}</span>
                     </div>
-
                   </div>
-
 
                   {/* INFORMAÇÕES */}
                   <div className="pessoa-mobile-info">
-
                     <div>
                       <span>CPF</span>
 
                       <strong>
-                        {pessoa.cpf}
+                        {formatarCPF(pessoa.cpf)}
                       </strong>
                     </div>
 
@@ -291,17 +286,17 @@ function Pessoas() {
 
                       <strong>
                         {pessoa.data_nascimento
-                          ? pessoa.data_nascimento.split("-").reverse().join("/")
+                          ? pessoa.data_nascimento
+                              .split("-")
+                              .reverse()
+                              .join("/")
                           : ""}
                       </strong>
                     </div>
-
                   </div>
-
 
                   {/* AÇÕES */}
                   <div className="pessoa-mobile-actions">
-
                     <button
                       className="pessoa-visualizar"
                       onClick={() =>
@@ -328,12 +323,9 @@ function Pessoas() {
                     >
                       Excluir
                     </button>
-
                   </div>
-
                 </div>
               ))}
-
             </div>
           </>
         )}
