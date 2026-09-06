@@ -5,7 +5,10 @@ import api from "../../../services/api";
 
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
-import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
+import {
+  formatarTelefone,
+  limparTelefone,
+} from "../../../utils/formatarTelefone";
 
 import "./EditarPessoa.css";
 
@@ -45,17 +48,120 @@ function EditarPessoa() {
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
+  const [errosCampos, setErrosCampos] = useState({});
 
   // FOTO
 
   const [fotoUrl, setFotoUrl] = useState(null);
   const [novaFoto, setNovaFoto] = useState(null);
 
+  // TRADUZIR ERROS DA API
+
+  function traduzirErro(campo, mensagem) {
+    if (!mensagem) {
+      return "Valor inválido.";
+    }
+
+    if (campo === "cep") {
+      if (mensagem.includes("at least 8 characters")) {
+        return "CEP deve ter 8 números.";
+      }
+
+      if (mensagem.includes("at most 8 characters")) {
+        return "CEP deve ter no máximo 8 números.";
+      }
+    }
+
+    if (campo === "cpf") {
+      if (mensagem.includes("at least 11 characters")) {
+        return "CPF deve ter 11 números.";
+      }
+
+      if (mensagem.includes("at most 11 characters")) {
+        return "CPF deve ter no máximo 11 números.";
+      }
+    }
+
+    if (campo === "nome") {
+      if (mensagem.includes("at least 3 characters")) {
+        return "O nome deve ter pelo menos 3 caracteres.";
+      }
+
+      if (mensagem.includes("at most 150 characters")) {
+        return "O nome deve ter no máximo 150 caracteres.";
+      }
+    }
+
+    if (campo === "logradouro") {
+      if (mensagem.includes("at least 3 characters")) {
+        return "O logradouro deve ter pelo menos 3 caracteres.";
+      }
+
+      if (mensagem.includes("at most 200 characters")) {
+        return "O logradouro deve ter no máximo 200 caracteres.";
+      }
+    }
+
+    if (campo === "bairro") {
+      if (mensagem.includes("at least 2 characters")) {
+        return "O bairro deve ter pelo menos 2 caracteres.";
+      }
+
+      if (mensagem.includes("at most 100 characters")) {
+        return "O bairro deve ter no máximo 100 caracteres.";
+      }
+    }
+
+    if (campo === "cidade") {
+      if (mensagem.includes("at least 2 characters")) {
+        return "A cidade deve ter pelo menos 2 caracteres.";
+      }
+
+      if (mensagem.includes("at most 100 characters")) {
+        return "A cidade deve ter no máximo 100 caracteres.";
+      }
+    }
+
+    if (mensagem === "Field required") {
+      return "Este campo é obrigatório.";
+    }
+
+    if (mensagem.includes("valid date")) {
+      return "Informe uma data válida.";
+    }
+
+    if (mensagem.includes("String should")) {
+      return "Valor inválido.";
+    }
+
+    return mensagem;
+  }
+
+  function tratarErrosValidacao(detalhe) {
+    const novosErros = {};
+
+    if (Array.isArray(detalhe)) {
+      detalhe.forEach((item) => {
+        const campo =
+          Array.isArray(item.loc) && item.loc.length > 0
+            ? item.loc[item.loc.length - 1]
+            : null;
+
+        if (campo) {
+          novosErros[campo] = traduzirErro(campo, item.msg);
+        }
+      });
+    }
+
+    return novosErros;
+  }
+
   // CARREGAR DADOS
 
   async function carregarPessoa() {
     setCarregando(true);
     setErro("");
+    setErrosCampos({});
 
     try {
       // PESSOA
@@ -187,7 +293,17 @@ function EditarPessoa() {
 
       const detalhe = error.response?.data?.detail;
 
-      if (typeof detalhe === "string") {
+      if (Array.isArray(detalhe)) {
+        const novosErros = tratarErrosValidacao(detalhe);
+
+        setErrosCampos(novosErros);
+
+        if (Object.keys(novosErros).length === 0) {
+          setErro(
+            "Não foi possível carregar os dados da pessoa."
+          );
+        }
+      } else if (typeof detalhe === "string") {
         setErro(detalhe);
       } else {
         setErro(
@@ -333,6 +449,7 @@ function EditarPessoa() {
     event.preventDefault();
 
     setErro("");
+    setErrosCampos({});
     setSalvando(true);
 
     try {
@@ -486,17 +603,15 @@ function EditarPessoa() {
         error.response?.data?.detail;
 
       if (Array.isArray(detalhe)) {
-        setErro(
-          detalhe
-            .map((item) => {
-              const campo = Array.isArray(item.loc)
-                ? item.loc[item.loc.length - 1]
-                : "";
+        const novosErros = tratarErrosValidacao(detalhe);
 
-              return `${campo}: ${item.msg}`;
-            })
-            .join(" | ")
-        );
+        setErrosCampos(novosErros);
+
+        if (Object.keys(novosErros).length === 0) {
+          setErro(
+            "Não foi possível atualizar a pessoa."
+          );
+        }
       } else if (typeof detalhe === "string") {
         setErro(detalhe);
       } else {
@@ -529,6 +644,7 @@ function EditarPessoa() {
         <div className="editar-header">
           <div>
             <h1>Editar pessoa</h1>
+
             <p>
               Atualize os dados cadastrais.
             </p>
@@ -609,7 +725,7 @@ function EditarPessoa() {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/*  DADOS PESSOAIS */}
+          {/* DADOS PESSOAIS */}
 
           <div className="form-group">
             <label htmlFor="nome">
@@ -620,13 +736,25 @@ function EditarPessoa() {
               id="nome"
               type="text"
               value={nome}
-              onChange={(event) =>
-                setNome(event.target.value)
-              }
+              onChange={(event) => {
+                setNome(event.target.value);
+
+                setErrosCampos((anteriores) => ({
+                  ...anteriores,
+                  nome: "",
+                }));
+              }}
               minLength={3}
               maxLength={150}
               required
+              className={errosCampos.nome ? "input-error" : ""}
             />
+
+            {errosCampos.nome && (
+              <span className="form-error">
+                {errosCampos.nome}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -638,17 +766,29 @@ function EditarPessoa() {
               id="cpf"
               type="text"
               value={formatarCPF(cpf)}
-              onChange={(event) =>
-                setCpf(limparCPF(event.target.value))
-              }
+              onChange={(event) => {
+                setCpf(limparCPF(event.target.value));
+
+                setErrosCampos((anteriores) => ({
+                  ...anteriores,
+                  cpf: "",
+                }));
+              }}
               maxLength={14}
               inputMode="numeric"
               required
+              className={errosCampos.cpf ? "input-error" : ""}
             />
 
             <span className="form-help">
               Informe apenas os 11 números do CPF.
             </span>
+
+            {errosCampos.cpf && (
+              <span className="form-error">
+                {errosCampos.cpf}
+              </span>
+            )}
           </div>
 
           {/* DATA + SEXO */}
@@ -663,13 +803,29 @@ function EditarPessoa() {
                 id="dataNascimento"
                 type="date"
                 value={dataNascimento}
-                onChange={(event) =>
+                onChange={(event) => {
                   setDataNascimento(
                     event.target.value
-                  )
-                }
+                  );
+
+                  setErrosCampos((anteriores) => ({
+                    ...anteriores,
+                    data_nascimento: "",
+                  }));
+                }}
                 required
+                className={
+                  errosCampos.data_nascimento
+                    ? "input-error"
+                    : ""
+                }
               />
+
+              {errosCampos.data_nascimento && (
+                <span className="form-error">
+                  {errosCampos.data_nascimento}
+                </span>
+              )}
             </div>
 
             <div className="form-group">
@@ -680,10 +836,20 @@ function EditarPessoa() {
               <select
                 id="sexo"
                 value={sexo}
-                onChange={(event) =>
-                  setSexo(event.target.value)
-                }
+                onChange={(event) => {
+                  setSexo(event.target.value);
+
+                  setErrosCampos((anteriores) => ({
+                    ...anteriores,
+                    sexo: "",
+                  }));
+                }}
                 required
+                className={
+                  errosCampos.sexo
+                    ? "input-error"
+                    : ""
+                }
               >
                 <option value="">
                   Selecione
@@ -697,6 +863,12 @@ function EditarPessoa() {
                   Feminino
                 </option>
               </select>
+
+              {errosCampos.sexo && (
+                <span className="form-error">
+                  {errosCampos.sexo}
+                </span>
+              )}
             </div>
           </div>
 
@@ -711,13 +883,29 @@ function EditarPessoa() {
               id="nomeMae"
               type="text"
               value={nomeMae}
-              onChange={(event) =>
+              onChange={(event) => {
                 setNomeMae(
                   event.target.value
-                )
-              }
+                );
+
+                setErrosCampos((anteriores) => ({
+                  ...anteriores,
+                  nome_mae: "",
+                }));
+              }}
               required
+              className={
+                errosCampos.nome_mae
+                  ? "input-error"
+                  : ""
+              }
             />
+
+            {errosCampos.nome_mae && (
+              <span className="form-error">
+                {errosCampos.nome_mae}
+              </span>
+            )}
           </div>
 
           {/* PAI */}
@@ -731,13 +919,29 @@ function EditarPessoa() {
               id="nomePai"
               type="text"
               value={nomePai}
-              onChange={(event) =>
+              onChange={(event) => {
                 setNomePai(
                   event.target.value
-                )
-              }
+                );
+
+                setErrosCampos((anteriores) => ({
+                  ...anteriores,
+                  nome_pai: "",
+                }));
+              }}
               required
+              className={
+                errosCampos.nome_pai
+                  ? "input-error"
+                  : ""
+              }
             />
+
+            {errosCampos.nome_pai && (
+              <span className="form-error">
+                {errosCampos.nome_pai}
+              </span>
+            )}
           </div>
 
           {/* TELEFONES */}
@@ -878,13 +1082,29 @@ function EditarPessoa() {
                 id="logradouro"
                 type="text"
                 value={logradouro}
-                onChange={(event) =>
+                onChange={(event) => {
                   setLogradouro(
                     event.target.value
-                  )
-                }
+                  );
+
+                  setErrosCampos((anteriores) => ({
+                    ...anteriores,
+                    logradouro: "",
+                  }));
+                }}
                 placeholder="Digite o logradouro"
+                className={
+                  errosCampos.logradouro
+                    ? "input-error"
+                    : ""
+                }
               />
+
+              {errosCampos.logradouro && (
+                <span className="form-error">
+                  {errosCampos.logradouro}
+                </span>
+              )}
             </div>
 
             <div className="form-row">
@@ -897,13 +1117,29 @@ function EditarPessoa() {
                   id="numero"
                   type="text"
                   value={numero}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setNumero(
                       event.target.value
-                    )
-                  }
+                    );
+
+                    setErrosCampos((anteriores) => ({
+                      ...anteriores,
+                      numero: "",
+                    }));
+                  }}
                   placeholder="Número"
+                  className={
+                    errosCampos.numero
+                      ? "input-error"
+                      : ""
+                  }
                 />
+
+                {errosCampos.numero && (
+                  <span className="form-error">
+                    {errosCampos.numero}
+                  </span>
+                )}
               </div>
 
               <div className="form-group">
@@ -915,13 +1151,29 @@ function EditarPessoa() {
                   id="bairro"
                   type="text"
                   value={bairro}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setBairro(
                       event.target.value
-                    )
-                  }
+                    );
+
+                    setErrosCampos((anteriores) => ({
+                      ...anteriores,
+                      bairro: "",
+                    }));
+                  }}
                   placeholder="Digite o bairro"
+                  className={
+                    errosCampos.bairro
+                      ? "input-error"
+                      : ""
+                  }
                 />
+
+                {errosCampos.bairro && (
+                  <span className="form-error">
+                    {errosCampos.bairro}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -935,13 +1187,29 @@ function EditarPessoa() {
                   id="cidade"
                   type="text"
                   value={cidade}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setCidade(
                       event.target.value
-                    )
-                  }
+                    );
+
+                    setErrosCampos((anteriores) => ({
+                      ...anteriores,
+                      cidade: "",
+                    }));
+                  }}
                   placeholder="Digite a cidade"
+                  className={
+                    errosCampos.cidade
+                      ? "input-error"
+                      : ""
+                  }
                 />
+
+                {errosCampos.cidade && (
+                  <span className="form-error">
+                    {errosCampos.cidade}
+                  </span>
+                )}
               </div>
 
               <div className="form-group">
@@ -953,16 +1221,32 @@ function EditarPessoa() {
                   id="estado"
                   type="text"
                   value={estado}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setEstado(
                       event.target.value
                         .toUpperCase()
                         .slice(0, 2)
-                    )
-                  }
+                    );
+
+                    setErrosCampos((anteriores) => ({
+                      ...anteriores,
+                      estado: "",
+                    }));
+                  }}
                   maxLength={2}
                   placeholder="UF"
+                  className={
+                    errosCampos.estado
+                      ? "input-error"
+                      : ""
+                  }
                 />
+
+                {errosCampos.estado && (
+                  <span className="form-error">
+                    {errosCampos.estado}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -975,17 +1259,33 @@ function EditarPessoa() {
                 id="cep"
                 type="text"
                 value={formatarCEP(cep)}
-                onChange={(event) =>
-                  setCep(limparCEP(event.target.value))
-                }
+                onChange={(event) => {
+                  setCep(limparCEP(event.target.value));
+
+                  setErrosCampos((anteriores) => ({
+                    ...anteriores,
+                    cep: "",
+                  }));
+                }}
                 maxLength={9}
                 inputMode="numeric"
                 placeholder="Digite o CEP"
+                className={
+                  errosCampos.cep
+                    ? "input-error"
+                    : ""
+                }
               />
 
               <span className="form-help">
                 Informe o CEP no formato 00000-000.
               </span>
+
+              {errosCampos.cep && (
+                <span className="form-error">
+                  {errosCampos.cep}
+                </span>
+              )}
             </div>
           </section>
 
