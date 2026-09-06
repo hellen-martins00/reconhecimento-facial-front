@@ -727,7 +727,7 @@ function DetalhesPessoa() {
           className="button-secondary"
           onClick={() => navigate("/pessoas")}
         >
-          Voltar para pessoas
+          Voltar
         </button>
 
         <button
@@ -738,7 +738,7 @@ function DetalhesPessoa() {
             )
           }
         >
-          Editar pessoa
+          Editar
         </button>
 
       </div>

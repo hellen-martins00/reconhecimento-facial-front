@@ -410,6 +410,7 @@
 .detalhes-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 10px;
   margin-top: 25px;
   padding-top: 20px;
@@ -423,8 +424,8 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease,
-    transform 0.2s ease;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .button-secondary {
@@ -559,42 +560,19 @@
     gap: 12px;
   }
 
+  /* AÇÕES NO CELULAR */
   .detalhes-actions {
-    flex-direction: column-reverse;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
   }
 
   .button-secondary,
   .button-primary {
-    width: 100%;
-  }
-}
-
-/* CELULARES PEQUENOS */
-
-@media (max-width: 380px) {
-
-  .detalhes-identificacao {
-    align-items: flex-start;
-  }
-
-  .detalhes-identificacao-foto {
-    width: 80px;
-    height: 80px;
-  }
-
-  .detalhes-identificacao-info h1 {
-    font-size: 18px;
-  }
-
-  .detalhes-identificacao-cpf {
-    font-size: 12px;
-  }
-
-  .detalhes-card {
-    padding: 16px;
-  }
-
-  .detalhes-fotos-grid {
-    gap: 8px;
+    width: auto;
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }
