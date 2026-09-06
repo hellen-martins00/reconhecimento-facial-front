@@ -232,7 +232,7 @@ function CadastroPessoa() {
               id="cpf"
               type="text"
               value={formatarCPF(cpf)}
-              onChange={(event) => setCpf(event.target.value)}
+              onChange={(event) => setCpf(limparCPF(event.target.value))}
               placeholder="Digite o CPF"
               inputMode="numeric"
               maxLength={14}
