@@ -4,7 +4,7 @@ import api from "../../services/api";
 
 import "./Pessoas.css";
 
-import { formatarCPF } from "../../utils/formatarCPF";
+import { formatarCPF } from "../../../utils/formatarCPF";
 
 function Pessoas() {
   const [pessoas, setPessoas] = useState([]);

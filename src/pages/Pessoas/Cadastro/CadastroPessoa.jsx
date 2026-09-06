@@ -5,7 +5,7 @@ import api from "../../../services/api";
 
 import "./CadastroPessoa.css";
 
-import { formatarCPF, limparCPF } from "../../utils/formatarCPF";
+import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 
 function CadastroPessoa() {
   const navigate = useNavigate();
