@@ -132,12 +132,6 @@
   text-align: center;
 }
 
-/* AÇÕES DESKTOP */
-.pessoas-actions {
-  width: 60px;
-  text-align: center;
-}
-
 /* LISTA MOBILE */
 .pessoas-mobile-list {
   display: none;
@@ -270,82 +264,15 @@
     font-size: 13px;
   }
 
-  /* MENU DE AÇÕES - MOBILE */
-
-.pessoa-mobile-menu-container {
-  position: relative;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.pessoa-mobile-menu-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
-  border-radius: 7px;
-  color: #4b5563;
-  font-size: 25px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.pessoa-mobile-menu-button:hover {
-  background: #f3f4f6;
-}
-
-.pessoa-mobile-menu {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  min-width: 145px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 5px;
-  z-index: 100;
-}
-
-.pessoa-mobile-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.pessoa-mobile-menu button:hover {
-  background: #f3f4f6;
-}
-
-.pessoa-mobile-menu .pessoa-menu-excluir {
-  color: #dc2626;
-}
-
-.pessoa-mobile-menu .pessoa-menu-excluir:hover {
-  background: #fef2f2;
-}
-
 
 /* RESPONSIVIDADE */
+
 @media (max-width: 768px) {
 
-  /* PÁGINA */
   .pessoas-page {
     width: 100%;
   }
 
-
-  /* CABEÇALHO */
   .pessoas-header {
     flex-direction: column;
     align-items: stretch;
@@ -360,14 +287,10 @@
     width: 100%;
   }
 
-
-  /* ESCONDER TABELA */
   .pessoas-table-container {
     display: none;
   }
 
-
-  /* MOSTRAR CARDS */
   .pessoas-mobile-list {
     display: flex;
     flex-direction: column;
@@ -375,102 +298,83 @@
     padding: 14px;
   }
 
-
-  /* CARD */
   .pessoa-mobile-card {
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     padding: 16px;
-    box-shadow:
-      0 3px 10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
   }
 
-
-  /* TOPO */
   .pessoa-mobile-header {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
-}
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+  }
 
-
-  /* FOTO */
-  .pessoa-mobile-foto {
-    width: 56px;
-    height: 56px;
-    border-radius: 10px;
-    object-fit: cover;
+  .pessoa-mobile-menu-container {
+    position: relative;
+    margin-left: auto;
     flex-shrink: 0;
   }
 
-
-  /* SEM FOTO */
-  .pessoa-mobile-sem-foto {
-    width: 56px;
-    height: 56px;
+  .pessoa-mobile-menu-button {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    color: #4b5563;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .pessoa-mobile-menu-button:hover {
     background: #f3f4f6;
-    border-radius: 10px;
-    color: #6b7280;
-    font-size: 10px;
-    text-align: center;
-    flex-shrink: 0;
   }
 
-
-  /* NOME */
-  .pessoa-mobile-nome {
-    min-width: 0;
+  .pessoa-mobile-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    min-width: 145px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    padding: 5px;
+    z-index: 100;
   }
 
-  .pessoa-mobile-nome h3 {
-    margin: 0 0 5px;
-    color: #1f2937;
-    font-size: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .pessoa-mobile-nome span {
-    color: #6b7280;
-    font-size: 13px;
-  }
-
-
-  /* INFORMAÇÕES */
-  .pessoa-mobile-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 16px 0;
-  }
-
-  .pessoa-mobile-info div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .pessoa-mobile-info span {
-    color: #9ca3af;
-    font-size: 11px;
-  }
-
-  .pessoa-mobile-info strong {
+  .pessoa-mobile-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
     color: #374151;
     font-size: 13px;
-    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
   }
 
-  .pessoas-table-container {
-    display: none;
+  .pessoa-mobile-menu button:hover {
+    background: #f3f4f6;
   }
 
+  .pessoa-mobile-menu .pessoa-menu-excluir {
+    color: #dc2626;
+  }
+
+  .pessoa-mobile-menu .pessoa-menu-excluir:hover {
+    background: #fef2f2;
+  }
 }
