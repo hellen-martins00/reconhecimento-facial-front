@@ -276,9 +276,10 @@ function Pessoas() {
                                 type="button"
                                 className="pessoa-menu-excluir"
                                 onClick={(e) => {
+                                  e.preventDefault();
                                   e.stopPropagation();
-                                  excluirPessoa(pessoa.id, pessoa.nome);
                                   setMenuAberto(null);
+                                  excluirPessoa(pessoa.id, pessoa.nome);
                                 }}
                               >
                                 Excluir
@@ -358,9 +359,10 @@ function Pessoas() {
                             type="button"
                             className="pessoa-menu-excluir"
                             onClick={(e) => {
+                              e.preventDefault();
                               e.stopPropagation();
-                              excluirPessoa(pessoa.id, pessoa.nome);
                               setMenuAberto(null);
+                              excluirPessoa(pessoa.id, pessoa.nome);
                             }}
                           >
                             Excluir
