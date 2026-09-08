@@ -73,7 +73,7 @@ function Pessoas() {
     }
   }
 
-  async function excluirPessoa(id, nome) {
+  /*async function excluirPessoa(id, nome) {
     const confirmar = window.confirm(
       `Tem certeza que deseja excluir a pessoa "${nome}"?`
     );
@@ -99,6 +99,60 @@ function Pessoas() {
       }, 4000);
     } catch (error) {
       console.error(error);
+
+      setErro(
+        error.response?.data?.detail ||
+        "Não foi possível excluir a pessoa."
+      );
+    }
+  }*/
+
+  async function excluirPessoa(id, nome) {
+    console.log("1 - FUNÇÃO EXCLUIRPESSOA:", id, nome);
+
+    const confirmar = window.confirm(
+      `Tem certeza que deseja excluir a pessoa "${nome}"?`
+    );
+
+    console.log("2 - CONFIRMAÇÃO:", confirmar);
+
+    if (!confirmar) {
+      console.log("3 - USUÁRIO CANCELOU");
+      return;
+    }
+
+    try {
+      console.log("4 - ENVIANDO DELETE PARA API:", `/pessoas/${id}`);
+
+      setErro("");
+      setSucesso("");
+
+      await api.delete(`/pessoas/${id}`);
+
+      console.log("5 - DELETE REALIZADO COM SUCESSO");
+
+      setPessoas((pessoasAtuais) =>
+        pessoasAtuais.filter((pessoa) => pessoa.id !== id)
+      );
+
+      setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
+
+      setTimeout(() => {
+        setSucesso("");
+      }, 4000);
+
+    } catch (error) {
+      console.error("6 - ERRO AO EXCLUIR:", error);
+
+      console.error(
+        "STATUS:",
+        error.response?.status
+      );
+
+      console.error(
+        "RESPOSTA DA API:",
+        error.response?.data
+      );
 
       setErro(
         error.response?.data?.detail ||
@@ -275,8 +329,6 @@ function Pessoas() {
                               <button
                                 className="pessoa-menu-excluir"
                                 onClick={() => {
-                                  console.log("CLICOU EM EXCLUIR:", pessoa.id, pessoa.nome);
-
                                   setMenuAberto(null);
                                   excluirPessoa(pessoa.id, pessoa.nome);
                                 }}
@@ -357,6 +409,12 @@ function Pessoas() {
                           <button
                             className="pessoa-menu-excluir"
                             onClick={() => {
+                              console.log(
+                                "MOBILE - CLICOU EM EXCLUIR:",
+                                pessoa.id,
+                                pessoa.nome
+                              );
+
                               setMenuAberto(null);
                               excluirPessoa(pessoa.id, pessoa.nome);
                             }}
