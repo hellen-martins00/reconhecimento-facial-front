@@ -7,7 +7,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* 2. CABEÇALHO & BOTÃO DE CRIAÇÃO */
@@ -134,33 +134,8 @@
 
 /* AÇÕES DESKTOP */
 .pessoas-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.pessoas-actions button {
-  padding: 7px 10px;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 12px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.pessoas-actions button:hover {
-  background: #f3f4f6;
-}
-
-.pessoas-actions .pessoa-excluir {
-  color: #dc2626;
-  border-color: #fecaca;
-}
-
-.pessoas-actions .pessoa-excluir:hover {
-  background: #fef2f2;
+  width: 60px;
+  text-align: center;
 }
 
 /* LISTA MOBILE */
@@ -206,6 +181,158 @@
   border-radius: 50%;
   font-size: 13px;
   font-weight: 700;
+}
+
+/* MENU DE AÇÕES - DESKTOP */
+
+  .pessoas-actions {
+    width: 60px;
+    text-align: center;
+  }
+
+  .pessoa-menu-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .pessoa-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #4b5563;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .pessoa-menu-button:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+
+  /* MENU */
+
+  .pessoa-menu {
+    position: absolute;
+    top: 38px;
+    right: 0;
+    min-width: 140px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    padding: 5px;
+    z-index: 100;
+  }
+
+  .pessoa-menu button {
+    display: block;
+    width: 100%;
+    padding: 9px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .pessoa-menu button:hover {
+    background: #f3f4f6;
+  }
+
+  .pessoa-menu .pessoa-menu-excluir {
+    color: #dc2626;
+  }
+
+  .pessoa-menu .pessoa-menu-excluir:hover {
+    background: #fef2f2;
+  }
+
+
+  /* ESTADOS */
+  .pessoas-loading,
+  .pessoas-empty {
+    padding: 35px 20px;
+  }
+
+  .pessoas-success {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  /* MENU DE AÇÕES - MOBILE */
+
+.pessoa-mobile-menu-container {
+  position: relative;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.pessoa-mobile-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: #4b5563;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pessoa-mobile-menu-button:hover {
+  background: #f3f4f6;
+}
+
+.pessoa-mobile-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  min-width: 145px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 5px;
+  z-index: 100;
+}
+
+.pessoa-mobile-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pessoa-mobile-menu button:hover {
+  background: #f3f4f6;
+}
+
+.pessoa-mobile-menu .pessoa-menu-excluir {
+  color: #dc2626;
+}
+
+.pessoa-mobile-menu .pessoa-menu-excluir:hover {
+  background: #fef2f2;
 }
 
 
@@ -262,12 +389,13 @@
 
   /* TOPO */
   .pessoa-mobile-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f3f4f6;
-  }
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
 
 
   /* FOTO */
@@ -339,61 +467,6 @@
     color: #374151;
     font-size: 13px;
     font-weight: 600;
-  }
-
-
-  /* AÇÕES */
-  .pessoa-mobile-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .pessoa-mobile-actions button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-
-  /* VISUALIZAR */
-  .pessoa-visualizar {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #2563eb;
-  }
-
-  .pessoa-visualizar:hover {
-    background: #dbeafe;
-  }
-
-
-  /* EDITAR */
-  .pessoa-editar {
-    background: #f9fafb;
-    border: 1px solid #d1d5db;
-    color: #374151;
-  }
-
-  .pessoa-editar:hover {
-    background: #f3f4f6;
-  }
-
-
-  /* ESTADOS */
-  .pessoas-loading,
-  .pessoas-empty {
-    padding: 35px 20px;
-  }
-
-  .pessoas-success {
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    font-size: 13px;
   }
 
 }

@@ -11,6 +11,7 @@ function Pessoas() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
+  const [menuAberto, setMenuAberto] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,7 +66,7 @@ function Pessoas() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar as pessoas."
+        "Não foi possível carregar as pessoas."
       );
     } finally {
       setCarregando(false);
@@ -101,7 +102,7 @@ function Pessoas() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível excluir a pessoa."
+        "Não foi possível excluir a pessoa."
       );
     }
   }
@@ -229,46 +230,60 @@ function Pessoas() {
                       <td>
                         {pessoa.data_nascimento
                           ? pessoa.data_nascimento
-                              .split("-")
-                              .reverse()
-                              .join("/")
+                            .split("-")
+                            .reverse()
+                            .join("/")
                           : ""}
                       </td>
 
                       <td>{pessoa.sexo}</td>
 
                       <td className="pessoas-actions">
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/pessoas/${pessoa.id}`
-                            )
-                          }
-                        >
-                          Visualizar
-                        </button>
+                        <div className="pessoa-menu-container">
+                          <button
+                            className="pessoa-menu-button"
+                            onClick={() =>
+                              setMenuAberto(
+                                menuAberto === pessoa.id ? null : pessoa.id
+                              )
+                            }
+                            aria-label={`Ações para ${pessoa.nome}`}
+                          >
+                            ⋮
+                          </button>
 
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/pessoas/${pessoa.id}/editar`
-                            )
-                          }
-                        >
-                          Editar
-                        </button>
+                          {menuAberto === pessoa.id && (
+                            <div className="pessoa-menu">
+                              <button
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  navigate(`/pessoas/${pessoa.id}`);
+                                }}
+                              >
+                                Visualizar
+                              </button>
 
-                        <button
-                          className="pessoa-excluir"
-                          onClick={() =>
-                            excluirPessoa(
-                              pessoa.id,
-                              pessoa.nome
-                            )
-                          }
-                        >
-                          Excluir
-                        </button>
+                              <button
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  navigate(`/pessoas/${pessoa.id}/editar`);
+                                }}
+                              >
+                                Editar
+                              </button>
+
+                              <button
+                                className="pessoa-menu-excluir"
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  excluirPessoa(pessoa.id, pessoa.nome);
+                                }}
+                              >
+                                Excluir
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -301,8 +316,53 @@ function Pessoas() {
 
                     <div className="pessoa-mobile-nome">
                       <h3>{pessoa.nome}</h3>
-
                       <span>{pessoa.sexo}</span>
+                    </div>
+
+                    <div className="pessoa-mobile-menu-container">
+                      <button
+                        className="pessoa-mobile-menu-button"
+                        onClick={() =>
+                          setMenuAberto(
+                            menuAberto === pessoa.id ? null : pessoa.id
+                          )
+                        }
+                        aria-label={`Ações para ${pessoa.nome}`}
+                      >
+                        ⋮
+                      </button>
+
+                      {menuAberto === pessoa.id && (
+                        <div className="pessoa-mobile-menu">
+                          <button
+                            onClick={() => {
+                              setMenuAberto(null);
+                              navigate(`/pessoas/${pessoa.id}`);
+                            }}
+                          >
+                            Visualizar
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setMenuAberto(null);
+                              navigate(`/pessoas/${pessoa.id}/editar`);
+                            }}
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            className="pessoa-menu-excluir"
+                            onClick={() => {
+                              setMenuAberto(null);
+                              excluirPessoa(pessoa.id, pessoa.nome);
+                            }}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -323,9 +383,9 @@ function Pessoas() {
                       <strong>
                         {pessoa.data_nascimento
                           ? pessoa.data_nascimento
-                              .split("-")
-                              .reverse()
-                              .join("/")
+                            .split("-")
+                            .reverse()
+                            .join("/")
                           : ""}
                       </strong>
                     </div>
@@ -333,41 +393,52 @@ function Pessoas() {
 
                   {/* AÇÕES */}
 
-                  <div className="pessoa-mobile-actions">
+                  <div className="pessoa-mobile-menu-container">
                     <button
-                      className="pessoa-visualizar"
+                      className="pessoa-mobile-menu-button"
                       onClick={() =>
-                        navigate(
-                          `/pessoas/${pessoa.id}`
+                        setMenuAberto(
+                          menuAberto === pessoa.id ? null : pessoa.id
                         )
                       }
+                      aria-label={`Ações para ${pessoa.nome}`}
                     >
-                      Visualizar
+                      ⋮
                     </button>
 
-                    <button
-                      className="pessoa-editar"
-                      onClick={() =>
-                        navigate(
-                          `/pessoas/${pessoa.id}/editar`
-                        )
-                      }
-                    >
-                      Editar
-                    </button>
+                    {menuAberto === pessoa.id && (
+                      <div className="pessoa-mobile-menu">
+                        <button
+                          onClick={() => {
+                            setMenuAberto(null);
+                            navigate(`/pessoas/${pessoa.id}`);
+                          }}
+                        >
+                          Visualizar
+                        </button>
 
-                    <button
-                      className="pessoa-excluir"
-                      onClick={() =>
-                        excluirPessoa(
-                          pessoa.id,
-                          pessoa.nome
-                        )
-                      }
-                    >
-                      Excluir
-                    </button>
+                        <button
+                          onClick={() => {
+                            setMenuAberto(null);
+                            navigate(`/pessoas/${pessoa.id}/editar`);
+                          }}
+                        >
+                          Editar
+                        </button>
+
+                        <button
+                          className="pessoa-menu-excluir"
+                          onClick={() => {
+                            setMenuAberto(null);
+                            excluirPessoa(pessoa.id, pessoa.nome);
+                          }}
+                        >
+                          Excluir
+                        </button>
+                      </div>
+                    )}
                   </div>
+
                 </div>
               ))}
             </div>
