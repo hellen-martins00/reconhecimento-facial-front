@@ -391,54 +391,6 @@ function Pessoas() {
                     </div>
                   </div>
 
-                  {/* AÇÕES */}
-
-                  <div className="pessoa-mobile-menu-container">
-                    <button
-                      className="pessoa-mobile-menu-button"
-                      onClick={() =>
-                        setMenuAberto(
-                          menuAberto === pessoa.id ? null : pessoa.id
-                        )
-                      }
-                      aria-label={`Ações para ${pessoa.nome}`}
-                    >
-                      ⋮
-                    </button>
-
-                    {menuAberto === pessoa.id && (
-                      <div className="pessoa-mobile-menu">
-                        <button
-                          onClick={() => {
-                            setMenuAberto(null);
-                            navigate(`/pessoas/${pessoa.id}`);
-                          }}
-                        >
-                          Visualizar
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setMenuAberto(null);
-                            navigate(`/pessoas/${pessoa.id}/editar`);
-                          }}
-                        >
-                          Editar
-                        </button>
-
-                        <button
-                          className="pessoa-menu-excluir"
-                          onClick={() => {
-                            setMenuAberto(null);
-                            excluirPessoa(pessoa.id, pessoa.nome);
-                          }}
-                        >
-                          Excluir
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
                 </div>
               ))}
             </div>
