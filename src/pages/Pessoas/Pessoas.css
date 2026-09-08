@@ -76,7 +76,7 @@
 /* 4. TABELA DE DADOS */
 .pessoas-table-container {
   width: 100%;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .pessoas-table {
@@ -467,6 +467,10 @@
     color: #374151;
     font-size: 13px;
     font-weight: 600;
+  }
+
+  .pessoas-table-container {
+    display: none;
   }
 
 }
