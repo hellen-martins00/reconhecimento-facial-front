@@ -275,6 +275,8 @@ function Pessoas() {
                               <button
                                 className="pessoa-menu-excluir"
                                 onClick={() => {
+                                  console.log("CLICOU EM EXCLUIR:", pessoa.id, pessoa.nome);
+
                                   setMenuAberto(null);
                                   excluirPessoa(pessoa.id, pessoa.nome);
                                 }}
