@@ -10,6 +10,7 @@ function Agentes() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [excluindo, setExcluindo] = useState(null);
+  const [menuAberto, setMenuAberto] = useState(null);
 
   const navigate = useNavigate();
 
@@ -100,7 +101,7 @@ function Agentes() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar os agentes."
+        "Não foi possível carregar os agentes."
       );
     } finally {
       setCarregando(false);
@@ -151,7 +152,7 @@ function Agentes() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível excluir o agente."
+        "Não foi possível excluir o agente."
       );
     } finally {
       setExcluindo(null);
@@ -259,51 +260,69 @@ function Agentes() {
 
                       {/* AÇÕES */}
                       <td className="agentes-actions">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            navigate(`/agentes/${agente.id}`)
-                          }
-                          disabled={
-                            excluindo === agente.id
-                          }
-                        >
-                          Visualizar
-                        </button>
-
-                        {(isAdmin ||
-                          usuario?.id === agente.id) && (
+                        <div className="agente-menu-container">
                           <button
                             type="button"
+                            className="agente-menu-button"
                             onClick={() =>
-                              navigate(
-                                `/agentes/${agente.id}/editar`
+                              setMenuAberto(
+                                menuAberto === agente.id ? null : agente.id
                               )
                             }
-                            disabled={
-                              excluindo === agente.id
-                            }
+                            aria-label={`Ações para ${agente.nome}`}
                           >
-                            Editar
+                            ⋮
                           </button>
-                        )}
 
-                        {isAdmin && (
-                          <button
-                            type="button"
-                            className="agente-excluir"
-                            onClick={() =>
-                              handleExcluir(agente)
-                            }
-                            disabled={
-                              excluindo === agente.id
-                            }
-                          >
-                            {excluindo === agente.id
-                              ? "Excluindo..."
-                              : "Excluir"}
-                          </button>
-                        )}
+                          {menuAberto === agente.id && (
+                            <div className="agente-menu">
+                              {/* VISUALIZAR */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  navigate(`/agentes/${agente.id}`);
+                                }}
+                                disabled={excluindo === agente.id}
+                              >
+                                Visualizar
+                              </button>
+
+                              {/* EDITAR */}
+                              {(isAdmin || usuario?.id === agente.id) && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setMenuAberto(null);
+                                    navigate(`/agentes/${agente.id}/editar`);
+                                  }}
+                                  disabled={excluindo === agente.id}
+                                >
+                                  Editar
+                                </button>
+                              )}
+
+                              {/* EXCLUIR */}
+                              {isAdmin && (
+                                <button
+                                  type="button"
+                                  className="agente-menu-excluir"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setMenuAberto(null);
+                                    handleExcluir(agente);
+                                  }}
+                                  disabled={excluindo === agente.id}
+                                >
+                                  {excluindo === agente.id
+                                    ? "Excluindo..."
+                                    : "Excluir"}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -341,6 +360,71 @@ function Agentes() {
                         {agente.perfil}
                       </span>
                     </div>
+
+                    {/* MENU DE TRÊS PONTINHOS */}
+                    <div className="agente-mobile-menu-container">
+                      <button
+                        type="button"
+                        className="agente-mobile-menu-button"
+                        onClick={() =>
+                          setMenuAberto(
+                            menuAberto === agente.id ? null : agente.id
+                          )
+                        }
+                        aria-label={`Ações para ${agente.nome}`}
+                      >
+                        ⋮
+                      </button>
+
+                      {menuAberto === agente.id && (
+                        <div className="agente-mobile-menu">
+                          {/* VISUALIZAR */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMenuAberto(null);
+                              navigate(`/agentes/${agente.id}`);
+                            }}
+                            disabled={excluindo === agente.id}
+                          >
+                            Visualizar
+                          </button>
+
+                          {/* EDITAR */}
+                          {(isAdmin || usuario?.id === agente.id) && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMenuAberto(null);
+                                navigate(`/agentes/${agente.id}/editar`);
+                              }}
+                              disabled={excluindo === agente.id}
+                            >
+                              Editar
+                            </button>
+                          )}
+
+                          {/* EXCLUIR */}
+                          {isAdmin && (
+                            <button
+                              type="button"
+                              className="agente-menu-excluir"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setMenuAberto(null);
+                                handleExcluir(agente);
+                              }}
+                              disabled={excluindo === agente.id}
+                            >
+                              {excluindo === agente.id
+                                ? "Excluindo..."
+                                : "Excluir"}
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* INFORMAÇÕES */}
@@ -365,57 +449,6 @@ function Agentes() {
                         {formatarData(agente.created_at)}
                       </strong>
                     </div>
-                  </div>
-
-                  {/* AÇÕES */}
-                  <div className="agente-mobile-actions">
-                    <button
-                      className="agente-visualizar"
-                      type="button"
-                      onClick={() =>
-                        navigate(`/agentes/${agente.id}`)
-                      }
-                      disabled={
-                        excluindo === agente.id
-                      }
-                    >
-                      Visualizar
-                    </button>
-
-                    {(isAdmin ||
-                      usuario?.id === agente.id) && (
-                      <button
-                        className="agente-editar"
-                        type="button"
-                        onClick={() =>
-                          navigate(
-                            `/agentes/${agente.id}/editar`
-                          )
-                        }
-                        disabled={
-                          excluindo === agente.id
-                        }
-                      >
-                        Editar
-                      </button>
-                    )}
-
-                    {isAdmin && (
-                      <button
-                        className="agente-excluir"
-                        type="button"
-                        onClick={() =>
-                          handleExcluir(agente)
-                        }
-                        disabled={
-                          excluindo === agente.id
-                        }
-                      >
-                        {excluindo === agente.id
-                          ? "Excluindo..."
-                          : "Excluir"}
-                      </button>
-                    )}
                   </div>
                 </div>
               ))}
