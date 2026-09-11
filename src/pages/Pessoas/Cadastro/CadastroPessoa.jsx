@@ -364,9 +364,7 @@ function CadastroPessoa() {
 
   // CADASTRO FINAL
   async function handleSubmit(event) {
-    event.preventDefault();
-
-    if(etapaAtual !== 5) {
+    if (etapaAtual !== 5) {
       return
     }
 
@@ -590,7 +588,7 @@ function CadastroPessoa() {
           </div>
         )}
 
-        <form
+        <div
           onSubmit={handleSubmit}
         >
 
@@ -1671,8 +1669,9 @@ function CadastroPessoa() {
               </button>
             ) : (
               <button
-                type="submit"
+                type="button"
                 className="button-primary"
+                onClick={handleSubmit}
                 disabled={carregando}
               >
                 {carregando
@@ -1680,10 +1679,10 @@ function CadastroPessoa() {
                   : "Cadastrar pessoa"}
               </button>
             )}
-          </div>
-        </form>
+        </div>
       </div>
     </div>
+    </div >
   );
 }
 
