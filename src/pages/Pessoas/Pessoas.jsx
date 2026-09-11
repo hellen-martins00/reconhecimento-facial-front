@@ -13,6 +13,11 @@ function Pessoas() {
   const [sucesso, setSucesso] = useState("");
   const [menuAberto, setMenuAberto] = useState(null);
 
+  const usuarioSalvo = localStorage.getItem("usuario");
+  const usuarioLogado = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+  const isAdmin = usuarioLogado?.perfil === "ADMIN";
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -272,18 +277,20 @@ function Pessoas() {
                                 Editar
                               </button>
 
-                              <button
-                                type="button"
-                                className="pessoa-menu-excluir"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setMenuAberto(null);
-                                  excluirPessoa(pessoa.id, pessoa.nome);
-                                }}
-                              >
-                                Excluir
-                              </button>
+                              {isAdmin && (
+                                <button
+                                  type="button"
+                                  className="pessoa-menu-excluir"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setMenuAberto(null);
+                                    excluirPessoa(pessoa.id, pessoa.nome);
+                                  }}
+                                >
+                                  Excluir
+                                </button>
+                              )}
                             </div>
                           )}
                         </div>
@@ -355,18 +362,20 @@ function Pessoas() {
                             Editar
                           </button>
 
-                          <button
-                            type="button"
-                            className="pessoa-menu-excluir"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setMenuAberto(null);
-                              excluirPessoa(pessoa.id, pessoa.nome);
-                            }}
-                          >
-                            Excluir
-                          </button>
+                          {isAdmin && (
+                            <button
+                              type="button"
+                              className="pessoa-menu-excluir"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setMenuAberto(null);
+                                excluirPessoa(pessoa.id, pessoa.nome);
+                              }}
+                            >
+                              Excluir
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
