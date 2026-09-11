@@ -153,6 +153,11 @@ function CadastroPessoa() {
       return false;
     }
 
+    if (nome.trim().length > 150) {
+      setErro("O nome deve ter no máximo 150 caracteres.");
+      return false;
+    }
+
     if (!cpf.trim()) {
       setErro("Informe o CPF.");
       return false;
@@ -174,6 +179,7 @@ function CadastroPessoa() {
       setErroDataNascimento("A data de nascimento não pode ser futura.")
       return false;
     }
+
     setErroDataNascimento("");
 
     if (!sexo) {
@@ -186,8 +192,18 @@ function CadastroPessoa() {
       return false;
     }
 
+    if (nomeMae.trim().length > 150) {
+      setErro("O nome da mãe deve ter no máximo 150 caracteres.");
+      return false;
+    }
+
     if (!nomePai.trim()) {
       setErro("Informe o nome do pai.");
+      return false;
+    }
+
+    if (nomePai.trim().length > 150) {
+      setErro("O nome do pai deve ter no máximo 150 caracteres.");
       return false;
     }
 
@@ -606,6 +622,7 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={nome}
+                  maxLength={150}
                   onChange={(event) =>
                     setNome(
                       event.target.value
@@ -661,7 +678,7 @@ function CadastroPessoa() {
                   {erroDataNascimento && (
                     <span className="cadastro-campo-erro">
                       {erroDataNascimento}
-                      </span>
+                    </span>
                   )}
                 </div>
 
@@ -707,6 +724,7 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={nomeMae}
+                  maxLength={150}
                   onChange={(event) =>
                     setNomeMae(
                       event.target.value
@@ -727,6 +745,7 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={nomePai}
+                  maxLength={150}
                   onChange={(event) =>
                     setNomePai(
                       event.target.value
