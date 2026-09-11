@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { UserRound, Images, Phone, MapPin, FileWarning } from "lucide-react";
+
 import api from "../../../services/api";
 
 import { formatarCPF } from "../../../utils/formatarCPF";
@@ -335,6 +337,7 @@ function DetalhesPessoa() {
           }
           onClick={() => setAbaAtiva("dados")}
         >
+          <UserRound size={17} strokeWidth={2} />
           Dados pessoais
         </button>
 
@@ -346,7 +349,9 @@ function DetalhesPessoa() {
           }
           onClick={() => setAbaAtiva("fotos")}
         >
+          <Images size={17} strokeWidth={2} />
           Fotos
+          
           <span className="detalhes-tab-contador">
             {fotos.length}
           </span>
@@ -360,6 +365,7 @@ function DetalhesPessoa() {
           }
           onClick={() => setAbaAtiva("contatos")}
         >
+          <Phone size={17} strokeWidth={2} />
           Contatos
         </button>
 
@@ -371,6 +377,7 @@ function DetalhesPessoa() {
           }
           onClick={() => setAbaAtiva("endereco")}
         >
+          <MapPin size={17} strokeWidth={2} />
           Endereço
         </button>
 
@@ -382,6 +389,7 @@ function DetalhesPessoa() {
           }
           onClick={() => setAbaAtiva("passagens")}
         >
+          <FileWarning size={17} strokeWidth={2} />
           Passagens
 
           {passagens.length > 0 && (

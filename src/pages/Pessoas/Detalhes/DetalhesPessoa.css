@@ -557,6 +557,13 @@
   }
 
   .detalhes-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .detalhes-tab svg {
     flex-shrink: 0;
   }
 
