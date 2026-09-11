@@ -366,6 +366,10 @@ function CadastroPessoa() {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if(etapaAtual !== 5) {
+      return
+    }
+
     setErro("");
     setCarregando(true);
 
