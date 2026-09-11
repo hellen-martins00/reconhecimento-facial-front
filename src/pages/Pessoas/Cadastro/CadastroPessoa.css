@@ -277,6 +277,23 @@
   line-height: 1.5;
 }
 
+.cadastro-campo-erro {
+  display: block;
+  margin-top: 6px;
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.campo-com-erro {
+  border-color: #dc2626 !important;
+}
+
+.campo-com-erro:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10) !important;
+}
+
 /* SEÇÕES INTERNAS */
 .cadastro-section {
   display: flex;

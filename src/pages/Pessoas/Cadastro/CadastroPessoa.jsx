@@ -649,8 +649,9 @@ function CadastroPessoa() {
 
                   <input
                     type="date"
-                    max={obterDataHoje}
                     value={dataNascimento}
+                    max={obterDataHoje()}
+                    className={erroDataNascimento ? "campo-com-erro" : ""}
                     onChange={(event) => {
                       setDataNascimento(event.target.value);
                       setErroDataNascimento("");
@@ -658,7 +659,9 @@ function CadastroPessoa() {
                   />
 
                   {erroDataNascimento && (
-                    <span className="cadastro-campo-erro">{erroDataNascimento}</span>
+                    <span className="cadastro-campo-erro">
+                      {erroDataNascimento}
+                      </span>
                   )}
                 </div>
 
