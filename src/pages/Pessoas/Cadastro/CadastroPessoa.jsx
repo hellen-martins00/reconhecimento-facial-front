@@ -47,6 +47,7 @@ function CadastroPessoa() {
 
   // CONTROLE
   const [erro, setErro] = useState("");
+  const [erroDataNascimento, setErroDataNascimento] = useState("");
   const [carregando, setCarregando] = useState(false);
 
   // CONFIGURAÇÃO DAS ETAPAS
@@ -136,6 +137,15 @@ function CadastroPessoa() {
     setPassagens(novasPassagens);
   }
 
+  function obterDataHoje() {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    return `${ano}-${mes}-${dia}`;
+  }
+
   // VALIDAÇÃO DA ETAPA 1
   function validarIdentificacao() {
     if (!nome.trim()) {
@@ -156,9 +166,15 @@ function CadastroPessoa() {
     }
 
     if (!dataNascimento) {
-      setErro("Informe a data de nascimento.");
+      setErroDataNascimento("Informe a data de nascimento.");
       return false;
     }
+
+    if (dataNascimento > obterDataHoje()) {
+      setErroDataNascimento("A data de nascimento não pode ser futura.")
+      return false;
+    }
+    setErroDataNascimento("");
 
     if (!sexo) {
       setErro("Selecione o sexo.");
@@ -490,15 +506,13 @@ function CadastroPessoa() {
           return (
             <div
               key={etapa.numero}
-              className={`cadastro-step ${
-                atual
-                  ? "cadastro-step-atual"
-                  : ""
-              } ${
-                concluida
+              className={`cadastro-step ${atual
+                ? "cadastro-step-atual"
+                : ""
+                } ${concluida
                   ? "cadastro-step-concluida"
                   : ""
-              }`}
+                }`}
             >
 
               <button
@@ -537,8 +551,8 @@ function CadastroPessoa() {
 
               {index <
                 etapas.length - 1 && (
-                <div className="cadastro-step-linha" />
-              )}
+                  <div className="cadastro-step-linha" />
+                )}
 
             </div>
           );
@@ -628,7 +642,6 @@ function CadastroPessoa() {
                 </div>
 
                 <div className="cadastro-form-group">
-
                   <label>
                     Data de nascimento
                     <span>*</span>
@@ -636,14 +649,17 @@ function CadastroPessoa() {
 
                   <input
                     type="date"
+                    max={obterDataHoje}
                     value={dataNascimento}
-                    onChange={(event) =>
-                      setDataNascimento(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => {
+                      setDataNascimento(event.target.value);
+                      setErroDataNascimento("");
+                    }}
                   />
 
+                  {erroDataNascimento && (
+                    <span className="cadastro-campo-erro">{erroDataNascimento}</span>
+                  )}
                 </div>
 
               </div>
@@ -821,18 +837,18 @@ function CadastroPessoa() {
 
                       {telefones.length >
                         1 && (
-                        <button
-                          type="button"
-                          className="cadastro-remover"
-                          onClick={() =>
-                            removerTelefone(
-                              index
-                            )
-                          }
-                        >
-                          Remover telefone
-                        </button>
-                      )}
+                          <button
+                            type="button"
+                            className="cadastro-remover"
+                            onClick={() =>
+                              removerTelefone(
+                                index
+                              )
+                            }
+                          >
+                            Remover telefone
+                          </button>
+                        )}
 
                     </div>
                   )
@@ -1334,9 +1350,9 @@ function CadastroPessoa() {
                     <strong>
                       {dataNascimento
                         ? dataNascimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
+                          .split("-")
+                          .reverse()
+                          .join("/")
                         : "-"}
                     </strong>
                   </div>
@@ -1350,8 +1366,8 @@ function CadastroPessoa() {
                       {sexo === "M"
                         ? "Masculino"
                         : sexo === "F"
-                        ? "Feminino"
-                        : "-"}
+                          ? "Feminino"
+                          : "-"}
                     </strong>
                   </div>
 
