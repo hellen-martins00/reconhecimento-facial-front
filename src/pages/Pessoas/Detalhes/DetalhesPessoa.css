@@ -153,10 +153,10 @@
 }
 
 .detalhes-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 8px;
   min-height: 40px;
   padding: 8px 14px;
   border: none;
@@ -167,8 +167,11 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s ease,
-    color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.detalhes-tab svg {
+  flex-shrink: 0;
 }
 
 .detalhes-tab:hover {
@@ -260,10 +263,12 @@
 }
 
 .detalhes-field strong {
-  color: #1f2937;
-  font-size: 15px;
+  display: block;
   min-width: 0;
   max-width: 100%;
+  color: #1f2937;
+  font-size: 15px;
+  white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -556,24 +561,18 @@
     display: none;
   }
 
-  .detalhes-tab {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .detalhes-tab svg {
-    flex-shrink: 0;
-  }
-
   .detalhes-card {
     padding: 20px;
   }
 
   .detalhes-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+  }
+
+  .detalhes-grid>.detalhes-field {
+    min-width: 0;
   }
 
   .detalhes-lista-item {
