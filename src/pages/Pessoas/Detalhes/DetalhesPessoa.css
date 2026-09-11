@@ -262,6 +262,10 @@
 .detalhes-field strong {
   color: #1f2937;
   font-size: 15px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* FOTOS */
@@ -335,8 +339,12 @@
 }
 
 .detalhes-lista-item strong {
+  min-width: 0;
+  max-width: 100%;
   color: #1f2937;
   font-size: 15px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* PASSAGENS CRIMINAIS */
@@ -388,8 +396,12 @@
 }
 
 .detalhes-passagem-info strong {
+  min-width: 0;
+  max-width: 100%;
   color: #7f1d1d;
   font-size: 15px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ESTADO VAZIO */
@@ -505,7 +517,12 @@
   }
 
   .detalhes-identificacao-info h1 {
-    font-size: 20px;
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 26px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .detalhes-identificacao-cpf {
