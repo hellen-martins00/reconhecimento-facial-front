@@ -1076,6 +1076,34 @@
     min-width: 0;
     padding: 13px;
   }
+
+  .editar-form-group input[type="date"] {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    /* Remove a estilização padrão do iOS/Safari */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* Força a mesma altura, borda e raio dos demais campos */
+    min-height: 45px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1f2937;
+    padding: 12px 14px;
+
+    /* Garante o alinhamento do texto no Safari */
+    display: flex;
+    align-items: center;
+  }
+
+  /* Remove os espaçamentos internos ocultos que o WebKit injeta */
+  .editar-form-group input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+  }
 }
 
 /* CELULARES MENORES */

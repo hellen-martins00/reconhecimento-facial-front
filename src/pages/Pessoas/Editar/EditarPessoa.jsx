@@ -3,20 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../../services/api";
 
-import {
-  formatarCPF,
-  limparCPF,
-} from "../../../utils/formatarCPF";
+import { formatarCPF, limparCPF, } from "../../../utils/formatarCPF";
 
-import {
-  formatarCEP,
-  limparCEP,
-} from "../../../utils/formatarCEP";
+import { formatarCEP, limparCEP, } from "../../../utils/formatarCEP";
 
-import {
-  formatarTelefone,
-  limparTelefone,
-} from "../../../utils/formatarTelefone";
+import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
 
 import "./EditarPessoa.css";
 
@@ -59,7 +50,18 @@ function EditarPessoa() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
 
+  const [erroDataNascimento, setErroDataNascimento] = useState("");
+
   const erroRef = useRef(null);
+
+  function obterDataHoje() {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    return `${ano}-${mes}-${dia}`;
+  }
 
   // ETAPAS
   const etapas = [
@@ -448,15 +450,34 @@ function EditarPessoa() {
         return false;
       }
 
-      if (limparCPF(cpf).length !== 11) {
+      if (nome.trim().length > 150) {
+        setErro("O nome deve ter no máximo 150 caracteres.");
+        return false;
+      }
+
+      if (!cpf.trim()) {
+        setErro("Informe o CPF.");
+        return false;
+      }
+
+      const cpfLimpo = limparCPF(cpf);
+
+      if (cpfLimpo.length !== 11) {
         setErro("Informe um CPF válido com 11 números.");
         return false;
       }
 
       if (!dataNascimento) {
-        setErro("Informe a data de nascimento.");
+        setErroDataNascimento("Informe a data de nascimento.");
         return false;
       }
+
+      if (dataNascimento > obterDataHoje()) {
+        setErroDataNascimento("A data de nascimento não pode ser futura.");
+        return false;
+      }
+
+      setErroDataNascimento("");
 
       if (!sexo) {
         setErro("Selecione o sexo.");
@@ -468,8 +489,18 @@ function EditarPessoa() {
         return false;
       }
 
+      if (nomeMae.trim().length > 150) {
+        setErro("O nome da mãe deve ter no máximo 150 caracteres.");
+        return false;
+      }
+
       if (!nomePai.trim()) {
         setErro("Informe o nome do pai.");
+        return false;
+      }
+
+      if (nomePai.trim().length > 150) {
+        setErro("O nome do pai deve ter no máximo 150 caracteres.");
         return false;
       }
     }
@@ -792,9 +823,6 @@ function EditarPessoa() {
       setSalvando(false);
     }
 
-    const detalhe =
-      error.response?.data?.detail;
-
     if (Array.isArray(detalhe)) {
       setErro(
         detalhe
@@ -1078,13 +1106,19 @@ function EditarPessoa() {
                     id="dataNascimento"
                     type="date"
                     value={dataNascimento}
-                    onChange={(event) =>
-                      setDataNascimento(
-                        event.target.value
-                      )
-                    }
+                    max={obterDataHoje()}
+                    onChange={(event) => {
+                      setDataNascimento(event.target.value)
+                      setErroDataNascimento("");
+                    }}
                     required
                   />
+
+                  {erroDataNascimento && (
+                    <span className="editar-form-error">
+                      {erroDataNascimento}
+                    </span>
+                  )}
                 </div>
 
                 <div className="editar-form-group">
