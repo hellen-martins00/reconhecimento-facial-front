@@ -247,8 +247,10 @@
 .cadastro-form-group input,
 .cadastro-form-group select {
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   padding: 12px 14px;
   background: #ffffff;
   border: 1px solid #d1d5db;
@@ -717,10 +719,13 @@
   }
 
   .cadastro-form-group input[type="date"] {
+    display: block;
     width: 100%;
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    overflow: hidden;
   }
 
   .cadastro-item {
