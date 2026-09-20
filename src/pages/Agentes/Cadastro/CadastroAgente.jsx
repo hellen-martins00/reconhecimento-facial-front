@@ -56,6 +56,9 @@ function CadastroAgente() {
 
     const url = URL.createObjectURL(arquivo);
     setFotoPreview(url);
+
+    // Limpar erro anterior ao selecionar uma nova foto
+    setErro("");
   }
 
   // CADASTRAR AGENTE
@@ -77,27 +80,26 @@ function CadastroAgente() {
 
       // 2. CADASTRAR FOTO, SE INFORMADA
       if (foto) {
-        try {
-          const formData = new FormData();
-          formData.append("arquivo", foto);
+        const formData = new FormData();
+        formData.append("arquivo", foto);
 
-          await api.post(`/agentes/${agente.id}/foto`, formData);
-        } catch (errorFoto) {
-          console.error(
-            "Agente cadastrado, mas houve erro ao cadastrar a foto:",
-            errorFoto
-          );
-        }
+        // Se o backend rejeitar a foto, o erro vai para o
+        // catch principal e será exibido para o usuário.
+        await api.post(
+          `/agentes/${agente.id}/foto`,
+          formData
+        );
       }
 
       // 3. IR PARA OS DETALHES
       navigate(`/agentes/${agente.id}`);
+
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível cadastrar o agente."
+        "Não foi possível cadastrar o agente."
       );
     } finally {
       setSalvando(false);
@@ -191,7 +193,9 @@ function CadastroAgente() {
                   id="nome"
                   type="text"
                   value={nome}
-                  onChange={(event) => setNome(event.target.value)}
+                  onChange={(event) =>
+                    setNome(event.target.value)
+                  }
                   minLength={3}
                   maxLength={150}
                   required
@@ -210,7 +214,9 @@ function CadastroAgente() {
                   id="usuario"
                   type="text"
                   value={usuario}
-                  onChange={(event) => setUsuario(event.target.value)}
+                  onChange={(event) =>
+                    setUsuario(event.target.value)
+                  }
                   minLength={3}
                   maxLength={100}
                   required
@@ -233,7 +239,9 @@ function CadastroAgente() {
                   id="senha"
                   type="password"
                   value={senha}
-                  onChange={(event) => setSenha(event.target.value)}
+                  onChange={(event) =>
+                    setSenha(event.target.value)
+                  }
                   minLength={6}
                   maxLength={100}
                   required
