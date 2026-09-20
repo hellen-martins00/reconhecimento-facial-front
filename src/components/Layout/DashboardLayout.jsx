@@ -33,13 +33,17 @@ function DashboardLayout({ children }) {
       }
 
       try {
-        const resposta = await api.get(`/agentes/${usuario.id}/foto`, {responseType: "blob", });
+        const resposta = await api.get(
+          `/agentes/${usuario.id}/foto`,
+          {
+            responseType: "blob",
+          }
+        );
 
         const url = URL.createObjectURL(resposta.data);
 
         setFotoAgente(url);
       } catch (error) {
-        // Agente sem foto cadastrada
         setFotoAgente(null);
       }
     }
@@ -47,9 +51,13 @@ function DashboardLayout({ children }) {
     carregarFotoAgente();
 
     return () => {
-      if (fotoAgente) {
-        URL.revokeObjectURL(fotoAgente);
-      }
+      setFotoAgente((urlAnterior) => {
+        if (urlAnterior) {
+          URL.revokeObjectURL(urlAnterior);
+        }
+
+        return null;
+      });
     };
   }, [usuario?.id]);
 
@@ -106,6 +114,7 @@ function DashboardLayout({ children }) {
               <img
                 src={fotoAgente}
                 alt={`Foto de ${usuario?.nome || "agente"}`}
+                onError={() => setFotoAgente(null)}
               />
             ) : (
               <span className="sem-foto">Sem foto</span>
@@ -150,8 +159,8 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${location.pathname === "/dashboard"
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() => handleNavigate("/dashboard")}
           >
@@ -161,8 +170,8 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${location.pathname.startsWith("/pessoas")
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() => handleNavigate("/pessoas")}
           >
@@ -172,8 +181,8 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${location.pathname.startsWith("/agentes")
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() => handleNavigate("/agentes")}
           >
@@ -183,8 +192,8 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${location.pathname === "/reconhecimento"
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             onClick={() =>
               handleNavigate("/reconhecimento")
