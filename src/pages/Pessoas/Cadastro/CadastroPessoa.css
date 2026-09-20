@@ -720,12 +720,12 @@
 
   .cadastro-form-group input[type="date"] {
     display: block;
-    width: 100%;
-    max-width: 100%;
+    width: calc(100% - 2px);
+    max-width: calc(100% - 2px);
     min-width: 0;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    overflow: hidden;
+    padding: 12px 10px;
   }
 
   .cadastro-item {
