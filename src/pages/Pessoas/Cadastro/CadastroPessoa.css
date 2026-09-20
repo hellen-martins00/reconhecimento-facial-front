@@ -618,14 +618,6 @@
 
 /* CELULAR */
 @media (max-width: 600px) {
-  .cadastro-form-group input[type="date"] {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    appearance: none;
-  }
 
   .cadastro-pessoa-page {
     width: 100%;
@@ -729,12 +721,6 @@
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .cadastro-form-group input[type="date"]::-webkit-calendar-picker-indicator {
-    margin-right: 0;
   }
 
   .cadastro-item {
