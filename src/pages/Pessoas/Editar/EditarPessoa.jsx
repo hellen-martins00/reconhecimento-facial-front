@@ -90,6 +90,56 @@ function EditarPessoa() {
     },
   ];
 
+  function formatarErroApi(error) {
+    const detalhe = error.response?.data?.detail;
+
+    if (Array.isArray(detalhe)) {
+      return detalhe
+        .map((item) => {
+          const campo =
+            Array.isArray(item.loc)
+              ? item.loc[item.loc.length - 1]
+              : "";
+
+          const mensagens = {
+            data_nascimento:
+              "A data de nascimento não pode ser futura.",
+
+            cpf:
+              "Informe um CPF válido.",
+
+            nome:
+              "Informe um nome válido.",
+
+            sexo:
+              "Selecione o sexo.",
+
+            nome_mae:
+              "Informe o nome da mãe.",
+
+            nome_pai:
+              "Informe o nome do pai.",
+          };
+
+          return (
+            mensagens[campo] ||
+            item.msg?.replace(/^Value error,?\s*/i, "") ||
+            "Verifique os dados informados."
+          );
+        })
+        .join(" ");
+    }
+
+    if (typeof detalhe === "string") {
+      return detalhe.replace(
+        /^Value error,?\s*/i,
+        ""
+      );
+    }
+
+    return "Não foi possível atualizar a pessoa. Verifique os dados informados.";
+  }
+
   // CARREGAR DADOS
   async function carregarPessoa() {
     setCarregando(true);
@@ -721,6 +771,7 @@ function EditarPessoa() {
 
       // REDIRECIONAR
       navigate(`/pessoas/${id}`);
+
     } catch (error) {
       console.error(
         "Erro ao atualizar pessoa:",
@@ -732,35 +783,41 @@ function EditarPessoa() {
         error.response?.data
       );
 
-      const detalhe =
-        error.response?.data?.detail;
+      setErro(formatarErroApi(error));
 
-      if (Array.isArray(detalhe)) {
-        setErro(
-          detalhe
-            .map((item) => {
-              const campo =
-                Array.isArray(item.loc)
-                  ? item.loc[
-                  item.loc.length - 1
-                  ]
-                  : "";
-
-              return `${campo}: ${item.msg}`;
-            })
-            .join(" | ")
-        );
-      } else if (
-        typeof detalhe === "string"
-      ) {
-        setErro(detalhe);
-      } else {
-        setErro(
-          "Não foi possível atualizar a pessoa."
-        );
-      }
+      // Garante que o usuário veja o erro
+      // mesmo estando no final da página.
+      window.scrollTo({ top: 0, behavior: "smooth", });
     } finally {
       setSalvando(false);
+    }
+
+    const detalhe =
+      error.response?.data?.detail;
+
+    if (Array.isArray(detalhe)) {
+      setErro(
+        detalhe
+          .map((item) => {
+            const campo =
+              Array.isArray(item.loc)
+                ? item.loc[
+                item.loc.length - 1
+                ]
+                : "";
+
+            return `${campo}: ${item.msg}`;
+          })
+          .join(" | ")
+      );
+    } else if (
+      typeof detalhe === "string"
+    ) {
+      setErro(detalhe);
+    } else {
+      setErro(
+        "Não foi possível atualizar a pessoa."
+      );
     }
   }
 
