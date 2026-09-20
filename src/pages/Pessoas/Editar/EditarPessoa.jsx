@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../../services/api";
@@ -59,6 +59,8 @@ function EditarPessoa() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
 
+  const erroRef = useRef(null);
+
   // ETAPAS
   const etapas = [
     {
@@ -114,9 +116,9 @@ function EditarPessoa() {
         setTelefones(
           Array.isArray(respostaTelefones.data)
             ? respostaTelefones.data.map((telefone) => ({
-                ...telefone,
-                novo: false,
-              }))
+              ...telefone,
+              novo: false,
+            }))
             : []
         );
       } catch (error) {
@@ -183,9 +185,9 @@ function EditarPessoa() {
         setPassagens(
           Array.isArray(respostaPassagens.data)
             ? respostaPassagens.data.map((passagem) => ({
-                ...passagem,
-                novo: false,
-              }))
+              ...passagem,
+              novo: false,
+            }))
             : []
         );
       } catch (error) {
@@ -247,6 +249,23 @@ function EditarPessoa() {
       }
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!erro) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (erroRef.current) {
+        erroRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [erro]);
 
   // FOTO
   function selecionarFoto(event) {
@@ -723,8 +742,8 @@ function EditarPessoa() {
               const campo =
                 Array.isArray(item.loc)
                   ? item.loc[
-                      item.loc.length - 1
-                    ]
+                  item.loc.length - 1
+                  ]
                   : "";
 
               return `${campo}: ${item.msg}`;
@@ -826,15 +845,13 @@ function EditarPessoa() {
 
           return (
             <div
-              className={`editar-step ${
-                atual
-                  ? "editar-step-atual"
-                  : ""
-              } ${
-                concluida
+              className={`editar-step ${atual
+                ? "editar-step-atual"
+                : ""
+                } ${concluida
                   ? "editar-step-concluida"
                   : ""
-              }`}
+                }`}
               key={etapa.numero}
             >
               <button
@@ -867,8 +884,8 @@ function EditarPessoa() {
 
               {index <
                 etapas.length - 1 && (
-                <span className="editar-step-linha" />
-              )}
+                  <span className="editar-step-linha" />
+                )}
             </div>
           );
         })}
@@ -878,7 +895,10 @@ function EditarPessoa() {
       <div className="editar-pessoa-card">
 
         {erro && (
-          <div className="editar-error">
+          <div
+            ref={erroRef}
+            className="editar-error"
+          >
             {erro}
           </div>
         )}
@@ -1732,9 +1752,9 @@ function EditarPessoa() {
                       <strong>
                         {dataNascimento
                           ? dataNascimento
-                              .split("-")
-                              .reverse()
-                              .join("/")
+                            .split("-")
+                            .reverse()
+                            .join("/")
                           : "—"}
                       </strong>
                     </div>
@@ -1746,8 +1766,8 @@ function EditarPessoa() {
                         {sexo === "M"
                           ? "Masculino"
                           : sexo === "F"
-                          ? "Feminino"
-                          : "—"}
+                            ? "Feminino"
+                            : "—"}
                       </strong>
                     </div>
 
@@ -1827,7 +1847,7 @@ function EditarPessoa() {
 
                             <span>
                               {telefone.tipo ===
-                              "RESIDENCIAL"
+                                "RESIDENCIAL"
                                 ? "Residencial"
                                 : "Pessoal"}
                             </span>
@@ -1870,11 +1890,11 @@ function EditarPessoa() {
                 </div>
 
                 {logradouro ||
-                numero ||
-                bairro ||
-                cidade ||
-                estado ||
-                cep ? (
+                  numero ||
+                  bairro ||
+                  cidade ||
+                  estado ||
+                  cep ? (
                   <div className="editar-revisao-grid">
 
                     <div className="editar-revisao-endereco-completo">
