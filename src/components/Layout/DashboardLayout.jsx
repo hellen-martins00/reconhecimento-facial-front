@@ -108,7 +108,7 @@ function DashboardLayout({ children }) {
                 alt={`Foto de ${usuario?.nome || "agente"}`}
               />
             ) : (
-              <span>{inicial}</span>
+              <span className="sem-foto">Sem foto</span>
             )}
 
             {/* INDICADOR DE SESSÃO */}
