@@ -33,18 +33,13 @@ function DashboardLayout({ children }) {
       }
 
       try {
-        const resposta = await api.get(
-          `/fotos/agente/${usuario.id}/arquivo`,
-          {
-            responseType: "blob",
-          }
-        );
+        const resposta = await api.get(`/agentes/${usuario.id}/foto`, {responseType: "blob", });
 
         const url = URL.createObjectURL(resposta.data);
 
         setFotoAgente(url);
       } catch (error) {
-        // Se o agente não possuir foto, utiliza o avatar padrão
+        // Agente sem foto cadastrada
         setFotoAgente(null);
       }
     }
@@ -52,13 +47,9 @@ function DashboardLayout({ children }) {
     carregarFotoAgente();
 
     return () => {
-      setFotoAgente((urlAnterior) => {
-        if (urlAnterior) {
-          URL.revokeObjectURL(urlAnterior);
-        }
-
-        return null;
-      });
+      if (fotoAgente) {
+        URL.revokeObjectURL(fotoAgente);
+      }
     };
   }, [usuario?.id]);
 
@@ -158,11 +149,10 @@ function DashboardLayout({ children }) {
 
           <button
             type="button"
-            className={`menu-item ${
-              location.pathname === "/dashboard"
+            className={`menu-item ${location.pathname === "/dashboard"
                 ? "active"
                 : ""
-            }`}
+              }`}
             onClick={() => handleNavigate("/dashboard")}
           >
             Dashboard
@@ -170,11 +160,10 @@ function DashboardLayout({ children }) {
 
           <button
             type="button"
-            className={`menu-item ${
-              location.pathname.startsWith("/pessoas")
+            className={`menu-item ${location.pathname.startsWith("/pessoas")
                 ? "active"
                 : ""
-            }`}
+              }`}
             onClick={() => handleNavigate("/pessoas")}
           >
             Pessoas
@@ -182,11 +171,10 @@ function DashboardLayout({ children }) {
 
           <button
             type="button"
-            className={`menu-item ${
-              location.pathname.startsWith("/agentes")
+            className={`menu-item ${location.pathname.startsWith("/agentes")
                 ? "active"
                 : ""
-            }`}
+              }`}
             onClick={() => handleNavigate("/agentes")}
           >
             Agentes
@@ -194,11 +182,10 @@ function DashboardLayout({ children }) {
 
           <button
             type="button"
-            className={`menu-item ${
-              location.pathname === "/reconhecimento"
+            className={`menu-item ${location.pathname === "/reconhecimento"
                 ? "active"
                 : ""
-            }`}
+              }`}
             onClick={() =>
               handleNavigate("/reconhecimento")
             }
