@@ -723,6 +723,13 @@
     border-radius: 9px;
   }
 
+  .cadastro-form-group input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
+
   .cadastro-item-header {
     margin-bottom: 14px;
   }
