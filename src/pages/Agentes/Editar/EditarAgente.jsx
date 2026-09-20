@@ -9,9 +9,7 @@ function EditarAgente() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // =========================================
   // ESTADOS
-  // =========================================
 
   const [nome, setNome] = useState("");
   const [usuario, setUsuario] = useState("");
@@ -22,15 +20,14 @@ function EditarAgente() {
   const [novaFoto, setNovaFoto] = useState(null);
   const [novaFotoPreview, setNovaFotoPreview] = useState(null);
 
-  const [possuiCadastroFacial, setPossuiCadastroFacial] = useState(false);
+  const [possuiCadastroFacial, setPossuiCadastroFacial] =
+    useState(false);
 
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
 
-  // =========================================
   // USUÁRIO LOGADO E PERMISSÕES
-  // =========================================
 
   const usuarioSalvo = localStorage.getItem("usuario");
 
@@ -55,25 +52,24 @@ function EditarAgente() {
   const podeEditar =
     isAdmin || isProprioAgente;
 
-  // =========================================
   // CARREGAR AGENTE
-  // =========================================
 
   useEffect(() => {
-    let isMounted = true;
-    let objectUrlCarregado = null;
+    let ativo = true;
+    let urlFoto = null;
 
     async function carregarAgente() {
       setCarregando(true);
       setErro("");
 
       try {
-        // DADOS DO AGENTE
         const resposta = await api.get(
           `/agentes/${id}`
         );
 
-        if (!isMounted) return;
+        if (!ativo) {
+          return;
+        }
 
         const agente = resposta.data;
 
@@ -81,7 +77,10 @@ function EditarAgente() {
         setUsuario(agente.usuario || "");
         setPerfil(agente.perfil || "");
 
-        // FOTO FACIAL
+
+        // CARREGAR FOTO FACIAL
+
+
         try {
           const respostaFoto = await api.get(
             `/agentes/${id}/foto`,
@@ -90,41 +89,49 @@ function EditarAgente() {
             }
           );
 
-          if (isMounted) {
-            objectUrlCarregado =
-              URL.createObjectURL(
-                respostaFoto.data
-              );
-
-            setFotoUrl(objectUrlCarregado);
-            setPossuiCadastroFacial(true);
+          if (!ativo) {
+            return;
           }
-        } catch (errorFoto) {
-          if (isMounted) {
-            setFotoUrl(null);
-            setPossuiCadastroFacial(false);
 
-            if (
-              errorFoto.response?.status !== 404
-            ) {
-              console.error(
-                "Erro ao carregar foto:",
-                errorFoto
-              );
-            }
+          urlFoto = URL.createObjectURL(
+            respostaFoto.data
+          );
+
+          setFotoUrl(urlFoto);
+          setPossuiCadastroFacial(true);
+        } catch (errorFoto) {
+          if (!ativo) {
+            return;
+          }
+
+          setFotoUrl(null);
+          setPossuiCadastroFacial(false);
+
+          if (
+            errorFoto.response?.status !== 404
+          ) {
+            console.error(
+              "Erro ao carregar foto:",
+              errorFoto
+            );
           }
         }
       } catch (error) {
-        if (isMounted) {
-          console.error(error);
-
-          setErro(
-            error.response?.data?.detail ||
-              "Não foi possível carregar os dados do agente."
-          );
+        if (!ativo) {
+          return;
         }
+
+        console.error(
+          "Erro ao carregar agente:",
+          error
+        );
+
+        setErro(
+          error.response?.data?.detail ||
+            "Não foi possível carregar os dados do agente."
+        );
       } finally {
-        if (isMounted) {
+        if (ativo) {
           setCarregando(false);
         }
       }
@@ -133,19 +140,15 @@ function EditarAgente() {
     carregarAgente();
 
     return () => {
-      isMounted = false;
+      ativo = false;
 
-      if (objectUrlCarregado) {
-        URL.revokeObjectURL(
-          objectUrlCarregado
-        );
+      if (urlFoto) {
+        URL.revokeObjectURL(urlFoto);
       }
     };
   }, [id]);
 
-  // =========================================
   // LIMPAR PREVIEW DA NOVA FOTO
-  // =========================================
 
   useEffect(() => {
     return () => {
@@ -157,9 +160,7 @@ function EditarAgente() {
     };
   }, [novaFotoPreview]);
 
-  // =========================================
-  // SELECIONAR NOVA FOTO
-  // =========================================
+  // SELECIONAR FOTO
 
   function handleFotoChange(event) {
     const arquivo =
@@ -189,23 +190,29 @@ function EditarAgente() {
 
     setErro("");
 
-    if (novaFotoPreview) {
-      URL.revokeObjectURL(
-        novaFotoPreview
-      );
-    }
-
     setNovaFoto(arquivo);
 
-    const url =
+    const previewUrl =
       URL.createObjectURL(arquivo);
 
-    setNovaFotoPreview(url);
+    setNovaFotoPreview(previewUrl);
   }
 
-  // =========================================
+  // REMOVER NOVA FOTO SELECIONADA
+
+  function limparNovaFoto() {
+    setNovaFoto(null);
+    setNovaFotoPreview(null);
+
+    const input =
+      document.getElementById("foto");
+
+    if (input) {
+      input.value = "";
+    }
+  }
+
   // SALVAR ALTERAÇÕES
-  // =========================================
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -214,6 +221,23 @@ function EditarAgente() {
       setErro(
         "Você não tem permissão para editar este agente."
       );
+
+      return;
+    }
+
+    if (!nome.trim()) {
+      setErro(
+        "Informe o nome do agente."
+      );
+
+      return;
+    }
+
+    if (!usuario.trim()) {
+      setErro(
+        "Informe o usuário."
+      );
+
       return;
     }
 
@@ -221,17 +245,13 @@ function EditarAgente() {
     setSalvando(true);
 
     try {
-      // =====================================
-      // 1. ATUALIZAR DADOS
-      // =====================================
+      // 1. ATUALIZAR DADOS DO AGENTE
 
       const dadosAgente = {
         nome: nome.trim(),
         usuario: usuario.trim(),
       };
 
-      // Só envia senha se o usuário digitou
-      // uma nova senha.
       if (senha.trim() !== "") {
         dadosAgente.senha = senha;
       }
@@ -241,9 +261,7 @@ function EditarAgente() {
         dadosAgente
       );
 
-      // =====================================
       // 2. ATUALIZAR/CADASTRAR FOTO
-      // =====================================
 
       if (novaFoto) {
         const formData = new FormData();
@@ -266,9 +284,7 @@ function EditarAgente() {
         }
       }
 
-      // =====================================
       // 3. ATUALIZAR USUÁRIO LOGADO
-      // =====================================
 
       if (isProprioAgente) {
         const usuarioAtualizado = {
@@ -285,9 +301,7 @@ function EditarAgente() {
         );
       }
 
-      // =====================================
-      // 4. VOLTAR PARA DETALHES
-      // =====================================
+      // 4. VOLTAR
 
       navigate(`/agentes/${id}`);
     } catch (error) {
@@ -308,31 +322,33 @@ function EditarAgente() {
     }
   }
 
-  // =========================================
-  // CARREGANDO
-  // =========================================
+  // CARREGAMENTO
 
   if (carregando) {
     return (
       <div className="editar-agente-page">
         <div className="editar-agente-loading">
-          Carregando dados do agente...
+          <div className="editar-agente-spinner" />
+
+          <span>
+            Carregando dados do agente...
+          </span>
         </div>
       </div>
     );
   }
 
-  // =========================================
   // ERRO AO CARREGAR
-  // =========================================
 
   if (erro && !nome) {
     return (
       <div className="editar-agente-page">
 
         <div className="editar-agente-header">
+
           <div>
             <h1>Editar agente</h1>
+
             <p>
               Atualize os dados cadastrais.
             </p>
@@ -347,9 +363,13 @@ function EditarAgente() {
           >
             Voltar
           </button>
+
         </div>
 
-        <div className="editar-agente-error">
+        <div
+          className="editar-agente-error"
+          role="alert"
+        >
           {erro}
         </div>
 
@@ -357,15 +377,14 @@ function EditarAgente() {
     );
   }
 
-  // =========================================
   // SEM PERMISSÃO
-  // =========================================
 
   if (!podeEditar) {
     return (
       <div className="editar-agente-page">
 
         <div className="editar-agente-header">
+
           <div>
             <h1>Acesso não permitido</h1>
 
@@ -383,9 +402,13 @@ function EditarAgente() {
           >
             Voltar
           </button>
+
         </div>
 
-        <div className="editar-agente-error">
+        <div
+          className="editar-agente-error"
+          role="alert"
+        >
           Você só pode editar seus próprios
           dados.
         </div>
@@ -394,14 +417,18 @@ function EditarAgente() {
     );
   }
 
-  // =========================================
+  // FOTO ATUAL A SER EXIBIDA
+
+  const fotoExibida =
+    novaFotoPreview || fotoUrl;
+
   // TELA
-  // =========================================
 
   return (
     <div className="editar-agente-page">
 
       {/* CABEÇALHO */}
+
       <div className="editar-agente-header">
 
         <div>
@@ -409,7 +436,7 @@ function EditarAgente() {
 
           <p>
             Atualize os dados cadastrais e a
-            foto facial.
+            identificação facial.
           </p>
         </div>
 
@@ -426,40 +453,131 @@ function EditarAgente() {
 
       </div>
 
-      {/* CARD */}
+      {/* CARD PRINCIPAL */}
+
       <div className="editar-agente-card">
 
         {erro && (
-          <div className="editar-agente-error">
+          <div
+            className="editar-agente-error"
+            role="alert"
+          >
             {erro}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
 
-          {/* =================================
-              DADOS DO AGENTE
-          ================================= */}
+          {/* IDENTIDADE DO AGENTE */}
+
+          <section className="editar-agente-identity">
+
+            <div className="editar-agente-avatar">
+
+              {fotoExibida ? (
+                <img
+                  src={fotoExibida}
+                  alt={`Foto de ${nome}`}
+                  onError={() => {
+                    setFotoUrl(null);
+                    setNovaFotoPreview(null);
+                    setPossuiCadastroFacial(false);
+                  }}
+                />
+              ) : (
+                <span>
+                  Sem foto
+                </span>
+              )}
+
+            </div>
+
+            <div className="editar-agente-identity-info">
+
+              <span className="editar-agente-section-label">
+                IDENTIFICAÇÃO DO AGENTE
+              </span>
+
+              <h2>
+                {nome || "Agente"}
+              </h2>
+
+              <p>
+                {usuario || "Usuário não informado"}
+              </p>
+
+              {perfil && (
+                <span className="editar-agente-profile">
+                  {perfil}
+                </span>
+              )}
+
+              <div className="editar-agente-photo-actions">
+
+                <label
+                  htmlFor="foto"
+                  className="editar-agente-photo-button"
+                >
+                  {fotoExibida
+                    ? "Alterar foto"
+                    : "Cadastrar foto"}
+                </label>
+
+                <input
+                  id="foto"
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  onChange={handleFotoChange}
+                  disabled={salvando}
+                  hidden
+                />
+
+                {novaFoto && (
+                  <button
+                    type="button"
+                    className="editar-agente-remove-photo"
+                    onClick={limparNovaFoto}
+                    disabled={salvando}
+                  >
+                    Cancelar nova foto
+                  </button>
+                )}
+
+              </div>
+
+              <span className="editar-agente-help">
+                JPG ou PNG.
+              </span>
+
+              {novaFoto && (
+                <span className="editar-agente-selected-file">
+                  Nova foto selecionada:{" "}
+                  {novaFoto.name}
+                </span>
+              )}
+
+            </div>
+
+          </section>
+
+          {/* DADOS DE ACESSO */}
 
           <section className="editar-agente-section">
 
             <div className="editar-agente-section-header">
 
-              <div>
-                <span className="editar-agente-section-label">
-                  DADOS DO AGENTE
-                </span>
+              <span className="editar-agente-section-label">
+                DADOS DO AGENTE
+              </span>
 
-                <h2>
-                  Informações de acesso
-                </h2>
+              <h2>
+                Informações de acesso
+              </h2>
 
-                <p>
-                  Atualize as informações
-                  utilizadas para acessar o
-                  sistema.
-                </p>
-              </div>
+              <p>
+                Atualize as informações utilizadas
+                para acessar o sistema.
+              </p>
 
             </div>
 
@@ -478,9 +596,7 @@ function EditarAgente() {
                   type="text"
                   value={nome}
                   onChange={(event) =>
-                    setNome(
-                      event.target.value
-                    )
+                    setNome(event.target.value)
                   }
                   minLength={3}
                   maxLength={150}
@@ -531,13 +647,13 @@ function EditarAgente() {
                 />
 
                 <span className="editar-agente-help">
-                  O perfil não pode ser
-                  alterado nesta tela.
+                  O perfil não pode ser alterado
+                  nesta tela.
                 </span>
 
               </div>
 
-              {/* NOVA SENHA */}
+              {/* SENHA */}
 
               <div className="editar-agente-form-group editar-agente-full">
 
@@ -561,8 +677,8 @@ function EditarAgente() {
                 />
 
                 <span className="editar-agente-help">
-                  Deixe em branco para manter
-                  a senha atual.
+                  Deixe em branco para manter a
+                  senha atual.
                 </span>
 
               </div>
@@ -571,85 +687,7 @@ function EditarAgente() {
 
           </section>
 
-          {/* =================================
-              FOTO FACIAL
-          ================================= */}
-
-          <section className="editar-agente-section">
-
-            <div className="editar-agente-section-header">
-
-              <div>
-                <span className="editar-agente-section-label">
-                  IDENTIFICAÇÃO
-                </span>
-
-                <h2>
-                  Foto facial
-                </h2>
-
-                <p>
-                  {possuiCadastroFacial
-                    ? "Atualize a foto facial cadastrada."
-                    : "Este agente ainda não possui uma foto facial cadastrada."}
-                </p>
-              </div>
-
-            </div>
-
-            <div className="editar-agente-foto-area">
-
-              <div className="editar-agente-foto-input">
-
-                <label htmlFor="foto">
-                  {possuiCadastroFacial
-                    ? "Alterar foto facial"
-                    : "Cadastrar foto facial"}
-                </label>
-
-                <input
-                  id="foto"
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  onChange={handleFotoChange}
-                  disabled={salvando}
-                />
-
-                <span className="editar-agente-help">
-                  Selecione uma imagem JPG ou
-                  PNG.
-                </span>
-
-              </div>
-
-              {/* FOTO */}
-              <div className="editar-agente-foto-preview">
-
-                {novaFotoPreview ? (
-                  <img
-                    src={novaFotoPreview}
-                    alt="Nova foto selecionada"
-                  />
-                ) : fotoUrl ? (
-                  <img
-                    src={fotoUrl}
-                    alt={`Foto de ${nome}`}
-                  />
-                ) : (
-                  <div className="editar-agente-sem-foto">
-                    Sem foto
-                  </div>
-                )}
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* =================================
-              AÇÕES
-          ================================= */}
+          {/* AÇÕES */}
 
           <div className="editar-agente-actions">
 
