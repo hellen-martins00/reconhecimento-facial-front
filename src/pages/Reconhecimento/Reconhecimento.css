@@ -1,9 +1,11 @@
 /* PÁGINA */
+
 .reconhecimento-page {
   width: 100%;
 }
 
 /* CABEÇALHO */
+
 .reconhecimento-header {
   display: flex;
   align-items: center;
@@ -26,8 +28,8 @@
   line-height: 1.5;
 }
 
-
 /* BOTÃO VOLTAR */
+
 .reconhecimento-voltar {
   flex-shrink: 0;
   padding: 10px 16px;
@@ -38,15 +40,22 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .reconhecimento-voltar:hover {
   background: #f9fafb;
 }
 
+.reconhecimento-voltar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* CARD PRINCIPAL */
+
 .reconhecimento-card {
   width: 100%;
   max-width: 1000px;
@@ -57,8 +66,8 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-
 /* MENSAGEM DE ERRO */
+
 .reconhecimento-error {
   margin-bottom: 22px;
   padding: 12px 15px;
@@ -70,8 +79,8 @@
   line-height: 1.5;
 }
 
-
 /* CÂMERA */
+
 .reconhecimento-camera {
   display: flex;
   flex-direction: column;
@@ -80,11 +89,12 @@
 }
 
 .reconhecimento-video-container {
+  position: relative;
   width: 100%;
   max-width: 820px;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,12 +107,13 @@
   height: 100%;
   display: block;
   object-fit: contain;
-  /* Espelha apenas a visualização da câmera */
+
+  /* Espelha somente a visualização da câmera */
   transform: scaleX(-1);
 }
 
-
 /* PLACEHOLDER DA CÂMERA */
+
 .reconhecimento-camera-placeholder {
   width: 100%;
   height: 100%;
@@ -115,14 +126,17 @@
 }
 
 .reconhecimento-camera-placeholder span {
-  font-size: 14px;
   color: #d1d5db;
+  font-size: 14px;
 }
 
+/* BOTÕES */
 
-/* BOTÕES DA PÁGINA */
 .reconhecimento-card .button-primary,
-.reconhecimento-card .button-secondary {
+.reconhecimento-card .button-secondary,
+.reconhecimento-button-primary,
+.reconhecimento-button-secondary {
+  box-sizing: border-box;
   border-radius: 8px;
   padding: 11px 18px;
   font-size: 14px;
@@ -134,40 +148,54 @@
     transform 0.1s ease;
 }
 
-.reconhecimento-card .button-primary {
+/* PRINCIPAL */
+
+.reconhecimento-card .button-primary,
+.reconhecimento-button-primary {
   background: #2563eb;
   border: 1px solid #2563eb;
   color: white;
 }
 
-.reconhecimento-card .button-primary:hover {
+.reconhecimento-card .button-primary:hover,
+.reconhecimento-button-primary:hover {
   background: #1d4ed8;
   border-color: #1d4ed8;
 }
 
-.reconhecimento-card .button-secondary {
+/* SECUNDÁRIO */
+
+.reconhecimento-card .button-secondary,
+.reconhecimento-button-secondary {
   background: white;
   border: 1px solid #d1d5db;
   color: #374151;
 }
 
-.reconhecimento-card .button-secondary:hover {
+.reconhecimento-card .button-secondary:hover,
+.reconhecimento-button-secondary:hover {
   background: #f9fafb;
 }
 
+/* ESTADOS */
+
 .reconhecimento-card .button-primary:active,
-.reconhecimento-card .button-secondary:active {
+.reconhecimento-card .button-secondary:active,
+.reconhecimento-button-primary:active,
+.reconhecimento-button-secondary:active {
   transform: scale(0.98);
 }
 
 .reconhecimento-card .button-primary:disabled,
-.reconhecimento-card .button-secondary:disabled {
+.reconhecimento-card .button-secondary:disabled,
+.reconhecimento-button-primary:disabled,
+.reconhecimento-button-secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-
 /* PREVIEW DA FOTO */
+
 .reconhecimento-preview {
   display: flex;
   flex-direction: column;
@@ -192,22 +220,6 @@
   border-radius: 12px;
 }
 
-.reconhecimento-button-primary {
-  background: #2563eb;
-  border: 1px solid #2563eb;
-  color: white;
-  border-radius: 8px;
-  padding: 11px 18px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.reconhecimento-button-primary:hover {
-  background: #1d4ed8;
-}
-
-
 /* AÇÕES */
 
 .reconhecimento-actions {
@@ -218,8 +230,8 @@
   margin-top: 6px;
 }
 
-
 /* RESULTADO */
+
 .reconhecimento-resultado {
   width: 100%;
   max-width: 760px;
@@ -229,8 +241,8 @@
   gap: 18px;
 }
 
+/* PESSOA RECONHECIDA */
 
-/* RECONHECIDO */
 .reconhecimento-sucesso {
   padding: 18px 20px;
   background: #f0fdf4;
@@ -251,8 +263,8 @@
   font-size: 14px;
 }
 
-
 /* DADOS DA PESSOA */
+
 .reconhecimento-pessoa {
   padding: 20px;
   background: #fafafa;
@@ -277,8 +289,8 @@
   color: #374151;
 }
 
-
 /* PESSOA NÃO ENCONTRADA */
+
 .reconhecimento-nao-encontrado {
   padding: 18px 20px;
   background: #fffbeb;
@@ -299,8 +311,8 @@
   font-size: 14px;
 }
 
-
 /* FOTOS CADASTRADAS */
+
 .reconhecimento-fotos {
   width: 100%;
   box-sizing: border-box;
@@ -317,16 +329,19 @@
   font-weight: 700;
 }
 
-
 /* GRID DE FOTOS */
+
 .reconhecimento-fotos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  );
   gap: 14px;
 }
 
-
 /* ITEM DA FOTO */
+
 .reconhecimento-foto-item {
   position: relative;
   padding: 5px;
@@ -338,15 +353,16 @@
     box-shadow 0.2s ease;
 }
 
+/* FOTO CORRESPONDENTE */
 
-/* FOTO USADA NO RECONHECIMENTO */
 .reconhecimento-foto-item.correspondente {
   border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  box-shadow:
+    0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-
 /* IMAGEM */
+
 .reconhecimento-foto-image-container {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -362,7 +378,6 @@
   object-fit: cover;
 }
 
-
 /* BADGE */
 
 .reconhecimento-foto-badge {
@@ -377,8 +392,8 @@
   font-weight: 600;
 }
 
-
 /* LOADING / VAZIO */
+
 .reconhecimento-fotos-loading,
 .reconhecimento-fotos-vazia {
   padding: 18px;
@@ -387,8 +402,8 @@
   font-size: 14px;
 }
 
-
 /* RESPONSIVO */
+
 @media (max-width: 768px) {
 
   .reconhecimento-header {
@@ -430,13 +445,16 @@
   }
 
   .reconhecimento-fotos-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
     gap: 10px;
   }
 }
 
-
 /* CELULAR PEQUENO */
+
 @media (max-width: 480px) {
 
   .reconhecimento-header {
