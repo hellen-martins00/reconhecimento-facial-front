@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import api from "../../services/api";
 import "./DashboardLayout.css";
 
 function DashboardLayout({ children }) {
@@ -22,12 +23,48 @@ function DashboardLayout({ children }) {
     localStorage.removeItem("usuario");
   }
 
+  // FOTO DO AGENTE
+  const [fotoAgente, setFotoAgente] = useState(null);
+
+  useEffect(() => {
+    async function carregarFotoAgente() {
+      if (!usuario?.id) {
+        return;
+      }
+
+      try {
+        const resposta = await api.get(
+          `/fotos/agente/${usuario.id}/arquivo`,
+          {
+            responseType: "blob",
+          }
+        );
+
+        const url = URL.createObjectURL(resposta.data);
+
+        setFotoAgente(url);
+      } catch (error) {
+        // Se o agente não possuir foto, utiliza o avatar padrão
+        setFotoAgente(null);
+      }
+    }
+
+    carregarFotoAgente();
+
+    return () => {
+      setFotoAgente((urlAnterior) => {
+        if (urlAnterior) {
+          URL.revokeObjectURL(urlAnterior);
+        }
+
+        return null;
+      });
+    };
+  }, [usuario?.id]);
+
   // NAVEGAÇÃO
   function handleNavigate(path) {
     navigate(path);
-
-    // Fecha o menu após clicar em uma opção
-    // Isso é especialmente importante no celular
     setMenuAberto(false);
   }
 
@@ -41,10 +78,14 @@ function DashboardLayout({ children }) {
     navigate("/login", { replace: true });
   }
 
+  // PRIMEIRA LETRA DO NOME
+  const inicial =
+    usuario?.nome?.trim()?.charAt(0)?.toUpperCase() || "U";
+
   return (
     <div className="dashboard-layout">
 
-      {/* OVERLAY - aparece quando o menu está aberto */}
+      {/* OVERLAY */}
       {menuAberto && (
         <div
           className="sidebar-overlay"
@@ -52,7 +93,7 @@ function DashboardLayout({ children }) {
         />
       )}
 
-      {/* BOTÃO PARA ABRIR/FECHAR MENU */}
+      {/* BOTÃO MENU */}
       <button
         type="button"
         className="menu-toggle-btn"
@@ -65,7 +106,48 @@ function DashboardLayout({ children }) {
       {/* MENU LATERAL */}
       <aside className={`sidebar ${menuAberto ? "open" : ""}`}>
 
-        {/* CABEÇALHO */}
+        {/* PERFIL DO AGENTE */}
+        <div className="sidebar-profile">
+
+          <div className="sidebar-avatar">
+
+            {fotoAgente ? (
+              <img
+                src={fotoAgente}
+                alt={`Foto de ${usuario?.nome || "agente"}`}
+              />
+            ) : (
+              <span>{inicial}</span>
+            )}
+
+            {/* INDICADOR DE SESSÃO */}
+            <span
+              className="sidebar-status"
+              title="Sessão ativa"
+            />
+          </div>
+
+          <div className="sidebar-profile-info">
+
+            <strong>
+              {usuario?.nome || "Usuário"}
+            </strong>
+
+            <span>
+              {usuario?.usuario || ""}
+            </span>
+
+            {usuario?.perfil && (
+              <small>
+                {usuario.perfil}
+              </small>
+            )}
+
+          </div>
+
+        </div>
+
+        {/* IDENTIDADE DO SISTEMA */}
         <div className="sidebar-header">
           <h2>Reconhecimento</h2>
           <span>Facial</span>
@@ -77,7 +159,9 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${
-              location.pathname === "/dashboard" ? "active" : ""
+              location.pathname === "/dashboard"
+                ? "active"
+                : ""
             }`}
             onClick={() => handleNavigate("/dashboard")}
           >
@@ -87,7 +171,9 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${
-              location.pathname.startsWith("/pessoas") ? "active" : ""
+              location.pathname.startsWith("/pessoas")
+                ? "active"
+                : ""
             }`}
             onClick={() => handleNavigate("/pessoas")}
           >
@@ -97,7 +183,9 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${
-              location.pathname.startsWith("/agentes") ? "active" : ""
+              location.pathname.startsWith("/agentes")
+                ? "active"
+                : ""
             }`}
             onClick={() => handleNavigate("/agentes")}
           >
@@ -107,9 +195,13 @@ function DashboardLayout({ children }) {
           <button
             type="button"
             className={`menu-item ${
-              location.pathname === "/reconhecimento" ? "active" : ""
+              location.pathname === "/reconhecimento"
+                ? "active"
+                : ""
             }`}
-            onClick={() => handleNavigate("/reconhecimento")}
+            onClick={() =>
+              handleNavigate("/reconhecimento")
+            }
           >
             Reconhecimento facial
           </button>
@@ -118,16 +210,6 @@ function DashboardLayout({ children }) {
 
         {/* RODAPÉ */}
         <div className="sidebar-footer">
-
-          <div className="sidebar-user">
-            <strong>{usuario?.nome || "Usuário"}</strong>
-
-            <span>{usuario?.usuario || ""}</span>
-
-            {usuario?.perfil && (
-              <small>{usuario.perfil}</small>
-            )}
-          </div>
 
           <button
             type="button"

@@ -1,6 +1,4 @@
-/* =========================
-   LAYOUT PRINCIPAL
-========================= */
+/* LAYOUT PRINCIPAL */
 
 .dashboard-layout {
   display: flex;
@@ -16,70 +14,51 @@
   padding: 35px;
 }
 
-
-/* =========================
-   BOTÃO MENU
-========================= */
+/* BOTÃO MENU */
 
 .menu-toggle-btn {
   position: fixed;
   top: 15px;
   left: 15px;
   z-index: 1200;
-
   width: 42px;
   height: 42px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: none;
   border-radius: 8px;
-
   background: #111827;
   color: white;
-
   font-size: 22px;
   cursor: pointer;
-
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .menu-toggle-btn:hover {
   background: #2563eb;
 }
 
-
-/* =========================
-   SIDEBAR
-========================= */
+/* SIDEBAR */
 
 .sidebar {
   position: fixed;
-
   top: 0;
   left: -270px;
-
   width: 250px;
   height: 100vh;
-
   background: #111827;
   color: white;
-
   display: flex;
   flex-direction: column;
-
   padding: 75px 16px 24px;
-
   box-sizing: border-box;
-
   z-index: 1100;
-
   transition: left 0.3s ease;
-
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
 }
 
@@ -87,13 +66,106 @@
   left: 0;
 }
 
+/* PERFIL DO AGENTE */
 
-/* =========================
-   HEADER SIDEBAR
-========================= */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+
+/* AVATAR */
+
+.sidebar-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  overflow: visible;
+  background: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #374151;
+  box-sizing: border-box;
+}
+
+.sidebar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.sidebar-avatar span:not(.sidebar-status) {
+  color: #93c5fd;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* STATUS DA SESSÃO */
+
+.sidebar-status {
+  position: absolute;
+  right: -1px;
+  bottom: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #111827;
+  box-sizing: border-box;
+}
+
+/* INFORMAÇÕES DO AGENTE */
+
+.sidebar-profile-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-profile-info strong {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-profile-info span {
+  margin-top: 3px;
+  color: #9ca3af;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-profile-info small {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(37, 99, 235, 0.15);
+  color: #93c5fd;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* HEADER SIDEBAR */
 
 .sidebar-header {
-  padding: 0 10px 25px;
+  padding: 0 10px 20px;
 }
 
 .sidebar-header h2 {
@@ -109,32 +181,24 @@
 }
 
 
-/* =========================
-   MENU
-========================= */
+/* MENU */
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 6px;
-
   flex: 1;
 }
 
 .menu-item {
   width: 100%;
-
   padding: 12px 14px;
-
   background: transparent;
   border: none;
   border-radius: 8px;
-
   color: #d1d5db;
-
   font-size: 14px;
   text-align: left;
-
   cursor: pointer;
 
   transition:
@@ -152,41 +216,15 @@
   color: white;
 }
 
-
-/* =========================
-   RODAPÉ / LOGOUT
-========================= */
+/* RODAPÉ */
 
 .sidebar-footer {
   margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.sidebar-user {
-  display: flex;
-  flex-direction: column;
-
-  padding: 12px 10px;
-  margin-bottom: 8px;
-}
-
-.sidebar-user strong {
-  color: white;
-  font-size: 14px;
-}
-
-.sidebar-user span {
-  margin-top: 3px;
-
-  color: #9ca3af;
-  font-size: 12px;
-}
-
-.sidebar-user small {
-  margin-top: 5px;
-
-  color: #93c5fd;
-  font-size: 11px;
-}
+/* LOGOUT */
 
 .logout {
   color: #f87171;
@@ -197,24 +235,16 @@
   color: white;
 }
 
-
-/* =========================
-   OVERLAY
-========================= */
+/* OVERLAY */
 
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-
   background: rgba(0, 0, 0, 0.45);
-
   z-index: 1050;
 }
 
-
-/* =========================
-   RESPONSIVIDADE
-========================= */
+/* RESPONSIVIDADE */
 
 @media (max-width: 768px) {
 
@@ -223,7 +253,6 @@
   }
 
 }
-
 
 @media (max-width: 480px) {
 
@@ -234,7 +263,6 @@
   .sidebar {
     width: 85%;
     max-width: 280px;
-
     left: -100%;
   }
 
