@@ -1097,28 +1097,37 @@ function EditarPessoa() {
 
               <div className="editar-form-row">
 
-                <div className="editar-form-group">
-                  <label htmlFor="dataNascimento">
-                    Data de nascimento <span>*</span>
-                  </label>
+                <div className="editar-form-row">
 
-                  <input
-                    id="dataNascimento"
-                    type="date"
-                    value={dataNascimento}
-                    max={obterDataHoje()}
-                    onChange={(event) => {
-                      setDataNascimento(event.target.value)
-                      setErroDataNascimento("");
-                    }}
-                    required
-                  />
+                  <div className="editar-form-group">
+                    <label htmlFor="dataNascimento">
+                      Data de nascimento <span>*</span>
+                    </label>
 
-                  {erroDataNascimento && (
-                    <span className="editar-form-error">
-                      {erroDataNascimento}
-                    </span>
-                  )}
+                    <input
+                      id="dataNascimento"
+                      type="date"
+                      value={dataNascimento}
+                      max={obterDataHoje()}
+                      className={
+                        erroDataNascimento
+                          ? "editar-input-erro"
+                          : ""
+                      }
+                      onChange={(event) => {
+                        setDataNascimento(event.target.value);
+                        setErroDataNascimento("");
+                      }}
+                      required
+                    />
+
+                    {erroDataNascimento && (
+                      <span className="editar-form-error">
+                        {erroDataNascimento}
+                      </span>
+                    )}
+                  </div>
+
                 </div>
 
                 <div className="editar-form-group">
