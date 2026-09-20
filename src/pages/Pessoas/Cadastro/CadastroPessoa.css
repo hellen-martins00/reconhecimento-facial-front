@@ -718,16 +718,6 @@
     font-size: 14px;
   }
 
-  .cadastro-form-group input[type="date"] {
-    display: block;
-    width: calc(100% - 2px);
-    max-width: calc(100% - 2px);
-    min-width: 0;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    padding: 12px 10px;
-  }
-
   .cadastro-item {
     padding: 15px;
     border-radius: 9px;
