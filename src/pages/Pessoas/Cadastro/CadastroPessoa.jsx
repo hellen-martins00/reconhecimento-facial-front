@@ -6,10 +6,7 @@ import api from "../../../services/api";
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
 import { formatarData } from "../../../utils/formatarData";
-import {
-  formatarTelefone,
-  limparTelefone,
-} from "../../../utils/formatarTelefone";
+import { formatarTelefone, limparTelefone } from "../../../utils/formatarTelefone";
 
 import "./CadastroPessoa.css";
 
@@ -130,6 +127,7 @@ function CadastroPessoa() {
 
   // CONTROLE
   const [erro, setErro] = useState("");
+  const [erroCPF, setErroCPF] = useState("");
   const [erroDataNascimento, setErroDataNascimento] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -245,6 +243,42 @@ function CadastroPessoa() {
     const dia = String(hoje.getDate()).padStart(2, "0");
 
     return `${ano}-${mes}-${dia}`;
+  }
+
+  async function validarCPFDisponivel() {
+    const cpfLimpo = limparCPF(cpf);
+
+    if (cpfLimpo.length !== LIMITES.cpf) {
+      setErroCPF("Informe um CPF válido com 11 números.");
+      return false;
+    }
+
+    try {
+      const resposta = await api.get(
+        `/pessoas/verificar-cpf/${cpfLimpo}`
+      );
+
+      if (!resposta.data.disponivel) {
+        setErroCPF(
+          "Já existe uma pessoa cadastrada com este CPF."
+        );
+
+        return false;
+      }
+
+      setErroCPF("");
+
+      return true;
+
+    } catch (error) {
+      console.error("Erro ao verificar CPF:", error);
+
+      setErro(
+        "Não foi possível verificar o CPF. Tente novamente."
+      );
+
+      return false;
+    }
   }
 
   // VALIDAÇÃO DA ETAPA 1
@@ -491,32 +525,72 @@ function CadastroPessoa() {
   }
 
   // AVANÇAR ETAPA
-  function avancarEtapa() {
-    setErro("");
-
-    let podeAvancar = true;
-
-    if (etapaAtual === 1) {
-      podeAvancar = validarIdentificacao();
-    }
-
-    if (etapaAtual === 2) {
-      podeAvancar = validarTelefones();
-    }
-
-    if (etapaAtual === 3) {
-      podeAvancar = validarEndereco();
-    }
-
-    if (etapaAtual === 4) {
-      podeAvancar = validarPassagens();
-    }
-
-    if (!podeAvancar) {
+  async function avancarEtapa() {
+    if (carregando) {
       return;
     }
 
-    setEtapaAtual((etapa) => etapa + 1);
+    setErro("");
+
+    // ETAPA 1
+    if (etapaAtual === 1) {
+      const identificacaoValida = validarIdentificacao();
+
+      if (!identificacaoValida) {
+        return;
+      }
+
+      setCarregando(true);
+
+      try {
+        const cpfDisponivel = await validarCPFDisponivel();
+
+        if (!cpfDisponivel) {
+          return;
+        }
+
+        setEtapaAtual(2);
+      } finally {
+        setCarregando(false);
+      }
+
+      return;
+    }
+
+    // ETAPA 2
+    if (etapaAtual === 2) {
+      const telefonesValidos = validarTelefones();
+
+      if (!telefonesValidos) {
+        return;
+      }
+
+      setEtapaAtual(3);
+      return;
+    }
+
+    // ETAPA 3
+    if (etapaAtual === 3) {
+      const enderecoValido = validarEndereco();
+
+      if (!enderecoValido) {
+        return;
+      }
+
+      setEtapaAtual(4);
+      return;
+    }
+
+    // ETAPA 4
+    if (etapaAtual === 4) {
+      const passagensValidas = validarPassagens();
+
+      if (!passagensValidas) {
+        return;
+      }
+
+      setEtapaAtual(5);
+    }
   }
 
   // VOLTAR ETAPA
@@ -834,11 +908,21 @@ function CadastroPessoa() {
                     value={formatarCPF(cpf)}
                     onChange={(event) => {
                       setErro("");
+                      setErroCPF("");
                       setCpf(limparCPF(event.target.value));
                     }}
                     placeholder="000.000.000-00"
                     maxLength={14}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    className={erroCPF ? "campo-com-erro" : ""}
                   />
+
+                  {erroCPF && (
+                    <span className="cadastro-campo-erro">
+                      {erroCPF}
+                    </span>
+                  )}
 
                 </div>
 
