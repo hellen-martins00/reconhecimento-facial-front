@@ -246,6 +246,11 @@ function CadastroPessoa() {
       return false;
     }
 
+    if (logradouro.trim().length > 100) {
+      setErro("O logradouro deve ter no máximo 100 caracteres.");
+      return false;
+    }
+
     if (!numero.trim()) {
       setErro("Informe o número.");
       return false;
@@ -256,8 +261,18 @@ function CadastroPessoa() {
       return false;
     }
 
+    if (bairro.trim().length > 100) {
+      setErro("O bairro deve ter no máximo 100 caracteres.");
+      return false;
+    }
+
     if (!cidade.trim()) {
       setErro("Informe a cidade.");
+      return false;
+    }
+
+    if (cidade.trim().length > 100) {
+      setErro("A cidade deve ter no máximo 100 caracteres.");
       return false;
     }
 
@@ -453,16 +468,25 @@ function CadastroPessoa() {
         error.response?.data?.detail;
 
       if (Array.isArray(detalhe)) {
-        setErro(
-          detalhe
-            .map(
-              (erro) =>
-                `${erro.loc?.join(
-                  " → "
-                )}: ${erro.msg}`
-            )
-            .join(" | ")
-        );
+        const mensagens = detalhe.map((erro) => {
+          const campo = erro.loc?.[erro.loc.length - 1];
+
+          if (campo === "bairro") {
+            return "O bairro deve ter no máximo 100 caracteres.";
+          }
+
+          if (campo === "cidade") {
+            return "A cidade deve ter no máximo 100 caracteres.";
+          }
+
+          if (campo === "logradouro") {
+            return "O logradouro deve ter no máximo 100 caracteres.";
+          }
+
+          return erro.msg;
+        });
+
+        setErro(mensagens.join(" "));
       } else if (
         typeof detalhe === "string"
       ) {
@@ -925,6 +949,7 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={logradouro}
+                  maxLength={100}
                   onChange={(event) =>
                     setLogradouro(
                       event.target.value
@@ -992,6 +1017,7 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={bairro}
+                  maxLength={100}
                   onChange={(event) =>
                     setBairro(
                       event.target.value
@@ -1014,6 +1040,7 @@ function CadastroPessoa() {
                   <input
                     type="text"
                     value={cidade}
+                    maxLength={100}
                     onChange={(event) =>
                       setCidade(
                         event.target.value
@@ -1679,9 +1706,9 @@ function CadastroPessoa() {
                   : "Cadastrar pessoa"}
               </button>
             )}
+          </div>
         </div>
       </div>
-    </div>
     </div >
   );
 }
