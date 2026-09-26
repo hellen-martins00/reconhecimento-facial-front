@@ -12,6 +12,7 @@
 
 /* CARD */
 .login-card {
+  position: relative;
   width: 100%;
   max-width: 440px;
   padding: 32px;

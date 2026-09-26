@@ -336,18 +336,17 @@ function Login() {
             )}
 
             <button
-              type="button"
+              type="submit"
               className="login-submit"
               disabled={carregando}
-              onClick={capturarRosto}
             >
               {carregando ? (
                 <>
                   <span className="login-button-spinner"></span>
-                  Reconhecendo...
+                  Entrando...
                 </>
               ) : (
-                "Reconhecer rosto"
+                "Entrar"
               )}
             </button>
 
@@ -393,9 +392,14 @@ function Login() {
               disabled={carregando}
               onClick={capturarRosto}
             >
-              {carregando
-                ? "Reconhecendo..."
-                : "Reconhecer rosto"}
+              {carregando ? (
+                <>
+                  <span className="login-button-spinner"></span>
+                  Reconhecendo...
+                </>
+              ) : (
+                "Reconhecer rosto"
+              )}
             </button>
 
           </div>
