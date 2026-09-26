@@ -58,7 +58,7 @@ function Login() {
       } else {
         setErro(
           error.response?.data?.detail ||
-            "Não foi possível realizar o login."
+          "Não foi possível realizar o login."
         );
       }
     } finally {
@@ -185,8 +185,8 @@ function Login() {
 
       setErro(
         error.response?.data?.detail ||
-          error.message ||
-          "Não foi possível realizar o reconhecimento facial."
+        error.message ||
+        "Não foi possível realizar o reconhecimento facial."
       );
     } finally {
       setCarregando(false);
@@ -216,11 +216,44 @@ function Login() {
     };
   }, [modo]);
 
+  function mensagemCarregamento() {
+    if (modo === "facial") {
+      return {
+        titulo: "Aguarde...",
+        descricao: "Estamos analisando seu rosto.",
+      };
+    }
+
+    return {
+      titulo: "Aguarde...",
+      descricao: "Estamos realizando seu login.",
+    };
+  }
+
   // INTERFACE
 
   return (
     <div className="login-page">
+
       <div className="login-card">
+
+        {carregando && (
+          <div className="login-loading-overlay">
+            <div className="login-loading-content">
+              <div className="login-loading-spinner">
+                <span></span>
+              </div>
+
+              <strong>
+                {mensagemCarregamento().titulo}
+              </strong>
+
+              <p>
+                {mensagemCarregamento().descricao}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* CABEÇALHO */}
         <div className="login-header">
@@ -237,9 +270,8 @@ function Login() {
 
           <button
             type="button"
-            className={`login-option ${
-              modo === "senha" ? "active" : ""
-            }`}
+            className={`login-option ${modo === "senha" ? "active" : ""
+              }`}
             onClick={() => alterarModo("senha")}
           >
             Usuário e senha
@@ -247,9 +279,8 @@ function Login() {
 
           <button
             type="button"
-            className={`login-option ${
-              modo === "facial" ? "active" : ""
-            }`}
+            className={`login-option ${modo === "facial" ? "active" : ""
+              }`}
             onClick={() => alterarModo("facial")}
           >
             Reconhecimento facial
@@ -305,13 +336,19 @@ function Login() {
             )}
 
             <button
-              type="submit"
+              type="button"
               className="login-submit"
               disabled={carregando}
+              onClick={capturarRosto}
             >
-              {carregando
-                ? "Entrando..."
-                : "Entrar"}
+              {carregando ? (
+                <>
+                  <span className="login-button-spinner"></span>
+                  Reconhecendo...
+                </>
+              ) : (
+                "Reconhecer rosto"
+              )}
             </button>
 
           </form>
