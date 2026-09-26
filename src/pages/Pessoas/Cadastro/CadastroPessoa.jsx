@@ -5,6 +5,7 @@ import api from "../../../services/api";
 
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
+import { formatarData } from "../../../utils/formatarData";
 import {
   formatarTelefone,
   limparTelefone,
@@ -14,6 +15,88 @@ import "./CadastroPessoa.css";
 
 function CadastroPessoa() {
   const navigate = useNavigate();
+
+  // Limites alinhados aos schemas do backend.
+  const LIMITES = {
+    nome: { min: 3, max: 150 },
+    cpf: 11,
+    nomeMae: { min: 3, max: 150 },
+    nomePai: { min: 3, max: 150 },
+    telefone: { min: 10, max: 11 },
+    tipoTelefone: { min: 3, max: 20 },
+    logradouro: { min: 3, max: 200 },
+    numero: { min: 1, max: 20 },
+    bairro: { min: 2, max: 100 },
+    cidade: { min: 2, max: 100 },
+    estado: 2,
+    cep: 8,
+    crime: { min: 3, max: 150 },
+  };
+
+  function textoLimpo(valor) {
+    return String(valor ?? "").trim();
+  }
+
+  function obterMensagemErroApi(error) {
+    const detalhe = error.response?.data?.detail;
+
+    if (Array.isArray(detalhe)) {
+      return detalhe
+        .map((item) => {
+          const campo = item.loc?.[item.loc.length - 1];
+          const mensagem = String(item.msg ?? "")
+            .replace(/^Value error,\s*/i, "")
+            .trim();
+
+          const mensagensPorCampo = {
+            nome: "Verifique o nome.",
+            cpf: "Verifique o CPF.",
+            data_nascimento: "Verifique a data de nascimento.",
+            sexo: "Verifique o sexo.",
+            nome_mae: "Verifique o nome da mãe.",
+            nome_pai: "Verifique o nome do pai.",
+            numero: "Verifique o número do endereço.",
+            logradouro: "Verifique o logradouro.",
+            bairro: "Verifique o bairro.",
+            cidade: "Verifique a cidade.",
+            estado: "Verifique o estado.",
+            cep: "Verifique o CEP.",
+            crime: "Verifique o crime.",
+            data_ocorrencia: "Verifique a data da ocorrência.",
+            tipo: "Verifique o tipo do telefone.",
+          };
+
+          if (campo === "numero" && /no máximo 20/i.test(mensagem)) {
+            return "O número do endereço deve ter no máximo 20 caracteres.";
+          }
+
+          if (campo === "logradouro" && /no máximo 200/i.test(mensagem)) {
+            return "O logradouro deve ter no máximo 200 caracteres.";
+          }
+
+          if (campo === "crime" && /no máximo 150/i.test(mensagem)) {
+            return "O crime deve ter no máximo 150 caracteres.";
+          }
+
+          return mensagensPorCampo[campo] || mensagem || "Verifique os dados informados.";
+        })
+        .join(" ");
+    }
+
+    if (typeof detalhe === "string" && detalhe.trim()) {
+      return detalhe.replace(/^Value error,\s*/i, "").trim();
+    }
+
+    if (!error.response) {
+      return "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
+    }
+
+    if (error.response.status === 409) {
+      return "Não foi possível concluir o cadastro porque um dos dados informados já está cadastrado.";
+    }
+
+    return "Não foi possível cadastrar a pessoa. Verifique os dados e tente novamente.";
+  }
 
   // ETAPA ATUAL
   const [etapaAtual, setEtapaAtual] = useState(1);
@@ -81,8 +164,10 @@ function CadastroPessoa() {
 
   // TELEFONES
   function adicionarTelefone() {
-    setTelefones([
-      ...telefones,
+    setErro("");
+
+    setTelefones((telefonesAtuais) => [
+      ...telefonesAtuais,
       {
         numero: "",
         tipo: "PESSOAL",
@@ -91,29 +176,39 @@ function CadastroPessoa() {
   }
 
   function removerTelefone(index) {
-    setTelefones(
-      telefones.filter(
+    setErro("");
+
+    setTelefones((telefonesAtuais) =>
+      telefonesAtuais.filter(
         (_, telefoneIndex) => telefoneIndex !== index
       )
     );
   }
 
   function alterarTelefone(index, campo, valor) {
-    const novosTelefones = [...telefones];
+    setErro("");
 
-    if (campo === "numero") {
-      novosTelefones[index][campo] = formatarTelefone(valor);
-    } else {
-      novosTelefones[index][campo] = valor;
-    }
-
-    setTelefones(novosTelefones);
+    setTelefones((telefonesAtuais) =>
+      telefonesAtuais.map((telefone, telefoneIndex) =>
+        telefoneIndex === index
+          ? {
+            ...telefone,
+            [campo]:
+              campo === "numero"
+                ? limparTelefone(valor)
+                : valor,
+          }
+          : telefone
+      )
+    );
   }
 
   // PASSAGENS
   function adicionarPassagem() {
-    setPassagens([
-      ...passagens,
+    setErro("");
+
+    setPassagens((passagensAtuais) => [
+      ...passagensAtuais,
       {
         crime: "",
         data_ocorrencia: "",
@@ -122,19 +217,25 @@ function CadastroPessoa() {
   }
 
   function removerPassagem(index) {
-    setPassagens(
-      passagens.filter(
+    setErro("");
+
+    setPassagens((passagensAtuais) =>
+      passagensAtuais.filter(
         (_, passagemIndex) => passagemIndex !== index
       )
     );
   }
 
   function alterarPassagem(index, campo, valor) {
-    const novasPassagens = [...passagens];
+    setErro("");
 
-    novasPassagens[index][campo] = valor;
-
-    setPassagens(novasPassagens);
+    setPassagens((passagensAtuais) =>
+      passagensAtuais.map((passagem, passagemIndex) =>
+        passagemIndex === index
+          ? { ...passagem, [campo]: valor }
+          : passagem
+      )
+    );
   }
 
   function obterDataHoje() {
@@ -148,24 +249,27 @@ function CadastroPessoa() {
 
   // VALIDAÇÃO DA ETAPA 1
   function validarIdentificacao() {
-    if (!nome.trim()) {
+    const nomeValor = textoLimpo(nome);
+    const cpfLimpo = limparCPF(cpf);
+    const maeValor = textoLimpo(nomeMae);
+    const paiValor = textoLimpo(nomePai);
+
+    if (!nomeValor) {
       setErro("Informe o nome da pessoa.");
       return false;
     }
 
-    if (nome.trim().length > 150) {
-      setErro("O nome deve ter no máximo 150 caracteres.");
+    if (nomeValor.length < LIMITES.nome.min) {
+      setErro(`O nome deve ter pelo menos ${LIMITES.nome.min} caracteres.`);
       return false;
     }
 
-    if (!cpf.trim()) {
-      setErro("Informe o CPF.");
+    if (nomeValor.length > LIMITES.nome.max) {
+      setErro(`O nome deve ter no máximo ${LIMITES.nome.max} caracteres.`);
       return false;
     }
 
-    const cpfLimpo = limparCPF(cpf);
-
-    if (cpfLimpo.length !== 11) {
+    if (cpfLimpo.length !== LIMITES.cpf) {
       setErro("Informe um CPF válido com 11 números.");
       return false;
     }
@@ -176,7 +280,7 @@ function CadastroPessoa() {
     }
 
     if (dataNascimento > obterDataHoje()) {
-      setErroDataNascimento("A data de nascimento não pode ser futura.")
+      setErroDataNascimento("A data de nascimento não pode ser futura.");
       return false;
     }
 
@@ -187,23 +291,33 @@ function CadastroPessoa() {
       return false;
     }
 
-    if (!nomeMae.trim()) {
+    if (!maeValor) {
       setErro("Informe o nome da mãe.");
       return false;
     }
 
-    if (nomeMae.trim().length > 150) {
-      setErro("O nome da mãe deve ter no máximo 150 caracteres.");
+    if (maeValor.length < LIMITES.nomeMae.min) {
+      setErro(`O nome da mãe deve ter pelo menos ${LIMITES.nomeMae.min} caracteres.`);
       return false;
     }
 
-    if (!nomePai.trim()) {
+    if (maeValor.length > LIMITES.nomeMae.max) {
+      setErro(`O nome da mãe deve ter no máximo ${LIMITES.nomeMae.max} caracteres.`);
+      return false;
+    }
+
+    if (!paiValor) {
       setErro("Informe o nome do pai.");
       return false;
     }
 
-    if (nomePai.trim().length > 150) {
-      setErro("O nome do pai deve ter no máximo 150 caracteres.");
+    if (paiValor.length < LIMITES.nomePai.min) {
+      setErro(`O nome do pai deve ter pelo menos ${LIMITES.nomePai.min} caracteres.`);
+      return false;
+    }
+
+    if (paiValor.length > LIMITES.nomePai.max) {
+      setErro(`O nome do pai deve ter no máximo ${LIMITES.nomePai.max} caracteres.`);
       return false;
     }
 
@@ -213,27 +327,39 @@ function CadastroPessoa() {
   // VALIDAÇÃO DA ETAPA 2
   function validarTelefones() {
     const telefonesPreenchidos = telefones.filter(
-      (telefone) => telefone.numero.trim() !== ""
+      (telefone) => limparTelefone(telefone.numero).length > 0
     );
-
-    /*
-     * O backend atual permite cadastrar a pessoa sem telefone.
-     * Por isso, não vamos obrigar o preenchimento de telefone.
-     */
 
     for (const telefone of telefonesPreenchidos) {
       const numeroLimpo = limparTelefone(telefone.numero);
 
       if (
-        numeroLimpo.length !== 10 &&
-        numeroLimpo.length !== 11
+        numeroLimpo.length < LIMITES.telefone.min ||
+        numeroLimpo.length > LIMITES.telefone.max
       ) {
-        setErro(
-          "Informe um telefone válido com DDD."
-        );
-
+        setErro("Informe um telefone válido com DDD.");
         return false;
       }
+
+      const tipo = textoLimpo(telefone.tipo);
+
+      if (
+        tipo.length < LIMITES.tipoTelefone.min ||
+        tipo.length > LIMITES.tipoTelefone.max
+      ) {
+        setErro("Informe um tipo de telefone válido.");
+        return false;
+      }
+    }
+
+    // Evita cadastrar o mesmo número duas vezes para a mesma pessoa.
+    const numeros = telefonesPreenchidos.map((telefone) =>
+      limparTelefone(telefone.numero)
+    );
+
+    if (new Set(numeros).size !== numeros.length) {
+      setErro("Não é permitido cadastrar o mesmo telefone mais de uma vez.");
+      return false;
     }
 
     return true;
@@ -241,49 +367,82 @@ function CadastroPessoa() {
 
   // VALIDAÇÃO DA ETAPA 3
   function validarEndereco() {
-    if (!logradouro.trim()) {
+    const logradouroValor = textoLimpo(logradouro);
+    const numeroValor = textoLimpo(numero);
+    const bairroValor = textoLimpo(bairro);
+    const cidadeValor = textoLimpo(cidade);
+    const estadoValor = textoLimpo(estado);
+    const cepLimpo = limparCEP(cep);
+
+    if (!logradouroValor) {
       setErro("Informe o logradouro.");
       return false;
     }
 
-    if (logradouro.trim().length > 100) {
-      setErro("O logradouro deve ter no máximo 100 caracteres.");
+    if (logradouroValor.length < LIMITES.logradouro.min) {
+      setErro(`O logradouro deve ter pelo menos ${LIMITES.logradouro.min} caracteres.`);
       return false;
     }
 
-    if (!numero.trim()) {
+    if (logradouroValor.length > LIMITES.logradouro.max) {
+      setErro(`O logradouro deve ter no máximo ${LIMITES.logradouro.max} caracteres.`);
+      return false;
+    }
+
+    if (!numeroValor) {
       setErro("Informe o número.");
       return false;
     }
 
-    if (!bairro.trim()) {
+    if (numeroValor.length > LIMITES.numero.max) {
+      setErro(`O número deve ter no máximo ${LIMITES.numero.max} caracteres.`);
+      return false;
+    }
+
+    if (!bairroValor) {
       setErro("Informe o bairro.");
       return false;
     }
 
-    if (bairro.trim().length > 100) {
-      setErro("O bairro deve ter no máximo 100 caracteres.");
+    if (bairroValor.length < LIMITES.bairro.min) {
+      setErro(`O bairro deve ter pelo menos ${LIMITES.bairro.min} caracteres.`);
       return false;
     }
 
-    if (!cidade.trim()) {
+    if (bairroValor.length > LIMITES.bairro.max) {
+      setErro(`O bairro deve ter no máximo ${LIMITES.bairro.max} caracteres.`);
+      return false;
+    }
+
+    if (!cidadeValor) {
       setErro("Informe a cidade.");
       return false;
     }
 
-    if (cidade.trim().length > 100) {
-      setErro("A cidade deve ter no máximo 100 caracteres.");
+    if (cidadeValor.length < LIMITES.cidade.min) {
+      setErro(`A cidade deve ter pelo menos ${LIMITES.cidade.min} caracteres.`);
       return false;
     }
 
-    if (!estado.trim()) {
+    if (cidadeValor.length > LIMITES.cidade.max) {
+      setErro(`A cidade deve ter no máximo ${LIMITES.cidade.max} caracteres.`);
+      return false;
+    }
+
+    if (!estadoValor) {
       setErro("Informe o estado.");
       return false;
     }
 
-    const cepLimpo = limparCEP(cep);
+    if (
+      estadoValor.length !== LIMITES.estado ||
+      !/^[A-Za-zÀ-ÿ]{2}$/.test(estadoValor)
+    ) {
+      setErro("O estado deve conter exatamente 2 letras.");
+      return false;
+    }
 
-    if (cepLimpo.length !== 8) {
+    if (cepLimpo.length !== LIMITES.cep) {
       setErro("Informe um CEP válido com 8 números.");
       return false;
     }
@@ -294,28 +453,36 @@ function CadastroPessoa() {
   // VALIDAÇÃO DA ETAPA 4
   function validarPassagens() {
     for (const passagem of passagens) {
-      const crimePreenchido = passagem.crime.trim() !== "";
-      const dataPreenchida =
-        passagem.data_ocorrencia !== "";
+      const crimeValor = textoLimpo(passagem.crime);
+      const dataValor = passagem.data_ocorrencia;
 
-      /*
-       * Se começou a preencher uma passagem,
-       * os dois campos passam a ser obrigatórios.
-       */
+      // Linha totalmente vazia é permitida: significa que não há passagem.
+      if (!crimeValor && !dataValor) {
+        continue;
+      }
 
-      if (crimePreenchido && !dataPreenchida) {
-        setErro(
-          "Informe a data da ocorrência da passagem criminal."
-        );
-
+      if (!crimeValor) {
+        setErro("Informe o crime da passagem criminal.");
         return false;
       }
 
-      if (!crimePreenchido && dataPreenchida) {
+      if (
+        crimeValor.length < LIMITES.crime.min ||
+        crimeValor.length > LIMITES.crime.max
+      ) {
         setErro(
-          "Informe o crime da passagem criminal."
+          `O crime deve ter entre ${LIMITES.crime.min} e ${LIMITES.crime.max} caracteres.`
         );
+        return false;
+      }
 
+      if (!dataValor) {
+        setErro("Informe a data da ocorrência da passagem criminal.");
+        return false;
+      }
+
+      if (dataValor > obterDataHoje()) {
+        setErro("A data da ocorrência não pode ser futura.");
         return false;
       }
     }
@@ -379,129 +546,119 @@ function CadastroPessoa() {
 
   // CADASTRO FINAL
   async function handleSubmit(event) {
-    if (etapaAtual !== 5) {
-      return
+    event?.preventDefault();
+
+    if (etapaAtual !== 5 || carregando) {
+      return;
+    }
+
+    // Garante que todos os dados estejam válidos mesmo que o usuário
+    // tenha voltado diretamente para a etapa de revisão.
+    if (!validarIdentificacao()) {
+      setEtapaAtual(1);
+      return;
+    }
+
+    if (!validarTelefones()) {
+      setEtapaAtual(2);
+      return;
+    }
+
+    if (!validarEndereco()) {
+      setEtapaAtual(3);
+      return;
+    }
+
+    if (!validarPassagens()) {
+      setEtapaAtual(4);
+      return;
     }
 
     setErro("");
     setCarregando(true);
 
+    const dadosPessoa = {
+      nome: textoLimpo(nome),
+      cpf: limparCPF(cpf),
+      data_nascimento: dataNascimento,
+      sexo,
+      nome_mae: textoLimpo(nomeMae),
+      nome_pai: textoLimpo(nomePai),
+    };
+
+    const telefonesValidos = telefones
+      .map((telefone) => ({
+        numero: limparTelefone(telefone.numero),
+        tipo: textoLimpo(telefone.tipo),
+      }))
+      .filter((telefone) => telefone.numero);
+
+    const dadosEndereco = {
+      logradouro: textoLimpo(logradouro),
+      numero: textoLimpo(numero),
+      bairro: textoLimpo(bairro),
+      cidade: textoLimpo(cidade),
+      estado: textoLimpo(estado).toUpperCase(),
+      cep: limparCEP(cep),
+    };
+
+    const passagensValidas = passagens
+      .map((passagem) => ({
+        crime: textoLimpo(passagem.crime),
+        data_ocorrencia: passagem.data_ocorrencia,
+      }))
+      .filter(
+        (passagem) =>
+          passagem.crime && passagem.data_ocorrencia
+      );
+
     try {
-      // CRIA A PESSOA
-      const respostaPessoa = await api.post("/pessoas", {
-        nome,
-        cpf: limparCPF(cpf),
-        data_nascimento: dataNascimento,
-        sexo,
-        nome_mae: nomeMae,
-        nome_pai: nomePai,
-      });
+      // ATENÇÃO: como o backend possui endpoints separados, o cadastro
+      // ainda não é transacional. Se uma etapa posterior falhar, a pessoa
+      // poderá ter sido criada parcialmente. O ideal é futuramente expor
+      // um endpoint único de cadastro completo no backend.
+      const respostaPessoa = await api.post(
+        "/pessoas",
+        dadosPessoa
+      );
 
       const pessoaCriada = respostaPessoa.data;
-
-      // CRIA OS TELEFONES
-      const telefonesValidos = telefones.filter(
-        (telefone) =>
-          telefone.numero.trim() !== ""
-      );
 
       await Promise.all(
         telefonesValidos.map((telefone) =>
           api.post("/telefones", {
             pessoa_id: pessoaCriada.id,
-            numero: limparTelefone(
-              telefone.numero
-            ),
+            numero: telefone.numero,
             tipo: telefone.tipo,
           })
         )
       );
 
-      // CRIA O ENDEREÇO
       await api.post("/enderecos", {
         pessoa_id: pessoaCriada.id,
-        logradouro,
-        numero,
-        bairro,
-        cidade,
-        estado,
-        cep: limparCEP(cep),
+        ...dadosEndereco,
       });
-
-      // CRIA AS PASSAGENS
-      const passagensValidas = passagens.filter(
-        (passagem) =>
-          passagem.crime.trim() !== "" &&
-          passagem.data_ocorrencia !== ""
-      );
 
       await Promise.all(
         passagensValidas.map((passagem) =>
           api.post("/passagens", {
             pessoa_id: pessoaCriada.id,
             crime: passagem.crime,
-            data_ocorrencia:
-              passagem.data_ocorrencia,
+            data_ocorrencia: passagem.data_ocorrencia,
           })
         )
       );
 
-      // FINALIZA
       navigate("/pessoas", {
         state: {
-          sucesso:
-            "Pessoa cadastrada com sucesso!",
+          sucesso: "Pessoa cadastrada com sucesso!",
         },
       });
     } catch (error) {
-      console.error(
-        "ERRO COMPLETO:",
-        error
-      );
+      console.error("Erro no cadastro da pessoa:", error);
+      console.error("Resposta da API:", error.response?.data);
 
-      console.error(
-        "RESPOSTA DA API:",
-        error.response?.data
-      );
-
-      const detalhe =
-        error.response?.data?.detail;
-
-      if (Array.isArray(detalhe)) {
-        const mensagens = detalhe.map((erro) => {
-          const campo = erro.loc?.[erro.loc.length - 1];
-
-          if (campo === "bairro") {
-            return "O bairro deve ter no máximo 100 caracteres.";
-          }
-
-          if (campo === "cidade") {
-            return "A cidade deve ter no máximo 100 caracteres.";
-          }
-
-          if (campo === "logradouro") {
-            return "O logradouro deve ter no máximo 100 caracteres.";
-          }
-
-          return erro.msg;
-        });
-
-        setErro(mensagens.join(" "));
-      } else if (
-        typeof detalhe === "string"
-      ) {
-        setErro(detalhe);
-      } else {
-        setErro(
-          "Não foi possível cadastrar a pessoa."
-        );
-      }
-
-      /*
-       * Caso aconteça algum erro no cadastro final,
-       * continuamos na etapa de revisão para que o usuário
-       * possa tentar novamente.
-       */
+      setErro(obterMensagemErroApi(error));
     } finally {
       setCarregando(false);
     }
@@ -607,13 +764,18 @@ function CadastroPessoa() {
 
         {/* ERRO */}
         {erro && (
-          <div className="cadastro-error">
+          <div
+            className="cadastro-error"
+            role="alert"
+            aria-live="polite"
+          >
             {erro}
           </div>
         )}
 
-        <div
+        <form
           onSubmit={handleSubmit}
+          noValidate
         >
 
           {/* ETAPA 1 - IDENTIFICAÇÃO */}
@@ -649,11 +811,10 @@ function CadastroPessoa() {
                   type="text"
                   value={nome}
                   maxLength={150}
-                  onChange={(event) =>
-                    setNome(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => {
+                    setErro("");
+                    setNome(event.target.value);
+                  }}
                   placeholder="Digite o nome completo"
                 />
 
@@ -671,13 +832,10 @@ function CadastroPessoa() {
                   <input
                     type="text"
                     value={formatarCPF(cpf)}
-                    onChange={(event) =>
-                      setCpf(
-                        limparCPF(
-                          event.target.value
-                        )
-                      )
-                    }
+                    onChange={(event) => {
+                      setErro("");
+                      setCpf(limparCPF(event.target.value));
+                    }}
                     placeholder="000.000.000-00"
                     maxLength={14}
                   />
@@ -697,6 +855,7 @@ function CadastroPessoa() {
                     className={erroDataNascimento ? "campo-com-erro" : ""}
                     onChange={(event) => {
                       setDataNascimento(event.target.value);
+                      setErro("");
                       setErroDataNascimento("");
                     }}
                   />
@@ -751,11 +910,10 @@ function CadastroPessoa() {
                   type="text"
                   value={nomeMae}
                   maxLength={150}
-                  onChange={(event) =>
-                    setNomeMae(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => {
+                    setErro("");
+                    setNomeMae(event.target.value);
+                  }}
                   placeholder="Digite o nome da mãe"
                 />
 
@@ -772,11 +930,10 @@ function CadastroPessoa() {
                   type="text"
                   value={nomePai}
                   maxLength={150}
-                  onChange={(event) =>
-                    setNomePai(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => {
+                    setErro("");
+                    setNomePai(event.target.value);
+                  }}
                   placeholder="Digite o nome do pai"
                 />
 
@@ -826,9 +983,7 @@ function CadastroPessoa() {
 
                           <input
                             type="text"
-                            value={
-                              telefone.numero
-                            }
+                            value={formatarTelefone(telefone.numero)}
                             onChange={(event) =>
                               alterarTelefone(
                                 index,
@@ -837,6 +992,8 @@ function CadastroPessoa() {
                               )
                             }
                             placeholder="(61) 99999-9999"
+                            inputMode="numeric"
+                            autoComplete="tel"
                             maxLength={15}
                           />
 
@@ -949,12 +1106,11 @@ function CadastroPessoa() {
                 <input
                   type="text"
                   value={logradouro}
-                  maxLength={100}
-                  onChange={(event) =>
-                    setLogradouro(
-                      event.target.value
-                    )
-                  }
+                  maxLength={200}
+                  onChange={(event) => {
+                    setErro("");
+                    setLogradouro(event.target.value);
+                  }}
                   placeholder="Rua, avenida, praça..."
                 />
 
@@ -972,12 +1128,12 @@ function CadastroPessoa() {
                   <input
                     type="text"
                     value={numero}
+                    maxLength={20}
                     onChange={(event) =>
-                      setNumero(
-                        event.target.value
-                      )
+                      setNumero(event.target.value)
                     }
                     placeholder="Número"
+                    inputMode="text"
                   />
 
                 </div>
@@ -992,13 +1148,10 @@ function CadastroPessoa() {
                   <input
                     type="text"
                     value={formatarCEP(cep)}
-                    onChange={(event) =>
-                      setCep(
-                        limparCEP(
-                          event.target.value
-                        )
-                      )
-                    }
+                    onChange={(event) => {
+                      setErro("");
+                      setCep(limparCEP(event.target.value));
+                    }}
                     placeholder="00000-000"
                     maxLength={9}
                   />
@@ -1041,11 +1194,10 @@ function CadastroPessoa() {
                     type="text"
                     value={cidade}
                     maxLength={100}
-                    onChange={(event) =>
-                      setCidade(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => {
+                      setErro("");
+                      setCidade(event.target.value);
+                    }}
                     placeholder="Digite a cidade"
                   />
 
@@ -1060,11 +1212,10 @@ function CadastroPessoa() {
 
                   <select
                     value={estado}
-                    onChange={(event) =>
-                      setEstado(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => {
+                      setErro("");
+                      setEstado(event.target.value);
+                    }}
                   >
 
                     <option value="">
@@ -1264,9 +1415,8 @@ function CadastroPessoa() {
 
                           <input
                             type="text"
-                            value={
-                              passagem.crime
-                            }
+                            value={passagem.crime}
+                            maxLength={150}
                             onChange={(event) =>
                               alterarPassagem(
                                 index,
@@ -1400,10 +1550,7 @@ function CadastroPessoa() {
 
                     <strong>
                       {dataNascimento
-                        ? dataNascimento
-                          .split("-")
-                          .reverse()
-                          .join("/")
+                        ? formatarData(dataNascimento)
                         : "-"}
                     </strong>
                   </div>
@@ -1498,7 +1645,7 @@ function CadastroPessoa() {
                           >
 
                             <strong>
-                              {telefone.numero}
+                              {formatarTelefone(telefone.numero)}
                             </strong>
 
                             <span>
@@ -1654,10 +1801,7 @@ function CadastroPessoa() {
                             </strong>
 
                             <span>
-                              {passagem.data_ocorrencia
-                                .split("-")
-                                .reverse()
-                                .join("/")}
+                              {formatarData(passagem.data_ocorrencia)}
                             </span>
 
                           </div>
@@ -1696,9 +1840,8 @@ function CadastroPessoa() {
               </button>
             ) : (
               <button
-                type="button"
+                type="submit"
                 className="button-primary"
-                onClick={handleSubmit}
                 disabled={carregando}
               >
                 {carregando
@@ -1707,9 +1850,9 @@ function CadastroPessoa() {
               </button>
             )}
           </div>
-        </div>
+        </form>
       </div>
-    </div >
+    </div>
   );
 }
 
