@@ -525,8 +525,10 @@ function CadastroPessoa() {
   }
 
   // AVANÇAR ETAPA
-  async function avancarEtapa() {
-    if (carregando) {
+  async function avancarEtapa(event) {
+    event?.preventDefault(); // Evita a submissão acidental do form
+
+    if (carregando || etapaAtual >= 5) {
       return;
     }
 
