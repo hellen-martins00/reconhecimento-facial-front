@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
-
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -11,7 +10,8 @@ function Dashboard() {
   const [totalPessoas, setTotalPessoas] = useState(0);
   const [totalAgentes, setTotalAgentes] = useState(0);
   const [totalFaces, setTotalFaces] = useState(0);
-  const [totalReconhecimentos, setTotalReconhecimentos] = useState(0);
+  const [totalReconhecimentos, setTotalReconhecimentos] =
+    useState(0);
 
   const [carregando, setCarregando] = useState(true);
 
@@ -35,23 +35,15 @@ function Dashboard() {
         api.get("/reconhecimento/total"),
       ]);
 
-      // QUANTIDADE DE PESSOAS
       setTotalPessoas(pessoasResponse.data.length);
-
-      // QUANTIDADE DE AGENTES
       setTotalAgentes(agentesResponse.data.length);
-
-      // QUANTIDADE DE FACES/FOTOS CADASTRADAS
       setTotalFaces(fotosResponse.data.length);
-
-      // QUANTIDADE DE RECONHECIMENTOS
       setTotalReconhecimentos(
         reconhecimentosResponse.data.total
       );
-
     } catch (error) {
       console.error(
-        "Erro ao carregar dados do dashboard:",
+        "Erro ao carregar dados do painel:",
         error
       );
     } finally {
@@ -59,117 +51,102 @@ function Dashboard() {
     }
   }
 
+  const indicadores = [
+    {
+      titulo: "Pessoas cadastradas",
+      valor: totalPessoas,
+      icone: "👤",
+      descricao: "Registros disponíveis",
+    },
+    {
+      titulo: "Registros faciais",
+      valor: totalFaces,
+      icone: "📸",
+      descricao: "Imagens cadastradas",
+    },
+    {
+      titulo: "Agentes cadastrados",
+      valor: totalAgentes,
+      icone: "👮",
+      descricao: "Usuários do sistema",
+    },
+    {
+      titulo: "Buscas faciais realizadas",
+      valor: totalReconhecimentos,
+      icone: "🔎",
+      descricao: "Consultas registradas",
+    },
+  ];
+
   return (
     <div className="dashboard-page">
-
-      {/* CABEÇALHO */}
       <header className="dashboard-header">
         <div>
           <h1>Painel</h1>
-
           <p>
-            Visão geral do sistema de reconhecimento facial.
+            Visão geral da rede de identificação de pessoas
+            desaparecidas.
           </p>
         </div>
       </header>
 
-      {/* CARDS */}
       <section className="dashboard-cards">
+        {indicadores.map((indicador) => (
+          <article
+            className="dashboard-card"
+            key={indicador.titulo}
+          >
+            <div className="dashboard-card-header">
+              <span className="dashboard-card-icon">
+                {indicador.icone}
+              </span>
 
-        {/* PESSOAS */}
-        <div className="dashboard-card">
-          <div className="dashboard-card-header">
-            <span className="dashboard-card-icon">
-              👤
-            </span>
+              <div className="dashboard-card-info">
+                <span className="dashboard-card-title">
+                  {indicador.titulo}
+                </span>
 
-            <span className="dashboard-card-title">
-              Pessoas cadastradas
-            </span>
-          </div>
+                <span className="dashboard-card-description">
+                  {indicador.descricao}
+                </span>
+              </div>
+            </div>
 
-          <strong>
-            {carregando ? "..." : totalPessoas}
-          </strong>
-        </div>
-
-
-        {/* AGENTES */}
-        <div className="dashboard-card">
-          <div className="dashboard-card-header">
-            <span className="dashboard-card-icon">
-              👮
-            </span>
-
-            <span className="dashboard-card-title">
-              Agentes cadastrados
-            </span>
-          </div>
-
-          <strong>
-            {carregando ? "..." : totalAgentes}
-          </strong>
-        </div>
-
-
-        {/* FACES */}
-        <div className="dashboard-card">
-          <div className="dashboard-card-header">
-            <span className="dashboard-card-icon">
-              📸
-            </span>
-
-            <span className="dashboard-card-title">
-              Faces cadastradas
-            </span>
-          </div>
-
-          <strong>
-            {carregando ? "..." : totalFaces}
-          </strong>
-        </div>
-
-
-        {/* RECONHECIMENTOS */}
-        <div className="dashboard-card">
-          <div className="dashboard-card-header">
-            <span className="dashboard-card-icon">
-              🔍
-            </span>
-
-            <span className="dashboard-card-title">
-              Reconhecimentos realizados
-            </span>
-          </div>
-
-          <strong>
-            {carregando ? "..." : totalReconhecimentos}
-          </strong>
-        </div>
-
+            <strong>
+              {carregando ? "..." : indicador.valor}
+            </strong>
+          </article>
+        ))}
       </section>
 
-
-      {/* ÁREA DE RECONHECIMENTO */}
       <section className="recognition-card">
+        <div className="recognition-card-content">
+          <span className="recognition-main-icon">
+            <span aria-hidden="true">⌕</span>
+          </span>
 
-        <div>
-          <h2>Reconhecimento Facial</h2>
+          <div>
+            <h2>Buscar correspondência facial</h2>
 
-          <p>
-            Realize uma nova identificação facial utilizando a câmera.
-          </p>
+            <p>
+              Compare uma imagem com os registros faciais
+              disponíveis e consulte possíveis correspondências.
+            </p>
+
+            <span className="recognition-note">
+              O resultado é indicativo e requer análise humana.
+            </span>
+          </div>
         </div>
 
         <button
           type="button"
           onClick={() => navigate("/reconhecimento")}
         >
-          Iniciar reconhecimento
+          Iniciar busca facial
+          <span aria-hidden="true"> →</span>
         </button>
-
       </section>
-
     </div>
   );
 }
