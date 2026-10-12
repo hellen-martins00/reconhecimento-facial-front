@@ -88,7 +88,7 @@ function Dashboard() {
 
   const indicadores = [
     {
-      titulo: "Pessoas cadastradas",
+      titulo: "Pessoas Desaparecidas Cadastradas",
       valor: totalPessoas,
       descricao: "Pessoas registradas no sistema",
       icone: Users,
@@ -241,9 +241,7 @@ function Dashboard() {
             <h2>Reconhecimento facial</h2>
 
             <p>
-              Consulte os registros faciais cadastrados e
-              verifique possíveis correspondências para apoiar
-              a identificação de pessoas.
+              Submeta ou capture uma fotografia para realizar o cruzamento biométrico automatizado com a base do Cadastro de Pessoas Desaparecidas.
             </p>
 
             <div className="recognition-disclaimer">
@@ -349,8 +347,7 @@ function Dashboard() {
         <ShieldCheck size={16} />
 
         <span>
-          Sistema de apoio à identificação. Utilize os resultados
-          de reconhecimento facial com análise humana.
+          Sistema de apoio à identificação e localização de pessoas desaparecidas. Os resultados do cruzamento biométrico devem ser validados por agentes habilitados.
         </span>
       </div>
     </div>

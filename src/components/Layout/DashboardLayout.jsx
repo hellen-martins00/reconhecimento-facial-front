@@ -266,7 +266,7 @@ function DashboardLayout({ children }) {
         <header className="dashboard-topbar">
           <div className="topbar-context">
             <span className="topbar-overline">
-              SISTEMA DE APOIO À SEGURANÇA
+              SISTEMA DE LOCALIZAÇÃO DE PESSOAS DESAPARECIDAS
             </span>
 
             <span className="topbar-page">
