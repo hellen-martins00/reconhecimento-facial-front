@@ -352,63 +352,6 @@
   word-break: break-word;
 }
 
-/* PASSAGENS CRIMINAIS */
-
-.detalhes-passagens-card.alerta {
-  border-color: #fecaca;
-}
-
-.detalhes-passagem-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 16px;
-  background: #fff7f7;
-  border: 1px solid #fecaca;
-  border-radius: 10px;
-}
-
-.detalhes-passagem-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  background: #dc2626;
-  border-radius: 50%;
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.detalhes-passagem-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-  gap: 20px;
-}
-
-.detalhes-passagem-info div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.detalhes-passagem-info span {
-  color: #991b1b;
-  font-size: 12px;
-}
-
-.detalhes-passagem-info strong {
-  min-width: 0;
-  max-width: 100%;
-  color: #7f1d1d;
-  font-size: 15px;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
 /* ESTADO VAZIO */
 
 .detalhes-vazio {
@@ -420,8 +363,6 @@
   font-size: 14px;
   text-align: center;
 }
-
-/* AÇÕES */
 
 /* AÇÕES */
 
@@ -488,6 +429,133 @@
   border-radius: 8px;
   color: #b91c1c;
   font-size: 14px;
+}
+
+
+/* INDICADOR DE REGISTROS DE DESAPARECIMENTO */
+
+.detalhes-indicador-desaparecimento {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+/* ABA DE DESAPARECIMENTOS */
+
+.detalhes-tab-desaparecimento {
+  color: #6b7280;
+}
+
+.detalhes-tab-desaparecimento:hover {
+  color: #9a3412;
+}
+
+/* CARD DE REGISTROS DE DESAPARECIMENTO */
+
+.detalhes-desaparecimentos-card.alerta {
+  border-color: #fed7aa;
+}
+
+.detalhes-desaparecimento-item {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+}
+
+.detalhes-desaparecimento-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detalhes-desaparecimento-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  background: #ffedd5;
+  border-radius: 9px;
+  color: #c2410c;
+}
+
+.detalhes-desaparecimento-cabecalho > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.detalhes-desaparecimento-cabecalho strong {
+  color: #7c2d12;
+  font-size: 15px;
+}
+
+.detalhes-desaparecimento-cabecalho span {
+  color: #9a3412;
+  font-size: 12px;
+}
+
+.detalhes-desaparecimento-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #fed7aa;
+}
+
+.detalhes-desaparecimento-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.detalhes-desaparecimento-info span {
+  color: #9a3412;
+  font-size: 12px;
+}
+
+.detalhes-desaparecimento-info strong {
+  color: #7c2d12;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.detalhes-desaparecimento-info .detalhes-desaparecimento-descricao {
+  grid-column: 1 / -1;
+}
+
+.detalhes-desaparecimento-descricao p {
+  margin: 0;
+  color: #7c2d12;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 700px) {
+  .detalhes-desaparecimento-item {
+    padding: 15px;
+  }
+
+  .detalhes-desaparecimento-info {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+
+  .detalhes-desaparecimento-info .detalhes-desaparecimento-descricao {
+    grid-column: auto;
+  }
 }
 
 /* TABLET */

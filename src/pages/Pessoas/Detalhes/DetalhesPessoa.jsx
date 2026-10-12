@@ -1,7 +1,14 @@
+
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { UserRound, Images, Phone, MapPin, FileWarning } from "lucide-react";
+import {
+  UserRound,
+  Images,
+  Phone,
+  MapPin,
+  ClipboardList,
+} from "lucide-react";
 
 import api from "../../../services/api";
 
@@ -18,7 +25,8 @@ function DetalhesPessoa() {
 
   const [pessoa, setPessoa] = useState(null);
   const [telefones, setTelefones] = useState([]);
-  const [passagens, setPassagens] = useState([]);
+  const [registrosDesaparecimento, setRegistrosDesaparecimento] =
+    useState([]);
   const [endereco, setEndereco] = useState(null);
 
   const [fotos, setFotos] = useState([]);
@@ -45,14 +53,10 @@ function DetalhesPessoa() {
   // CARREGAR FOTOS
   async function carregarFotos() {
     setCarregandoFotos(true);
-
     limparUrlsFotos();
 
     try {
-      const respostaFotos = await api.get(
-        `/fotos/pessoa/${id}`
-      );
-
+      const respostaFotos = await api.get(`/fotos/pessoa/${id}`);
       const fotosCadastradas = respostaFotos.data;
 
       if (
@@ -65,8 +69,7 @@ function DetalhesPessoa() {
 
       const fotosOrdenadas = [...fotosCadastradas].sort(
         (a, b) =>
-          new Date(b.data_upload) -
-          new Date(a.data_upload)
+          new Date(b.data_upload) - new Date(a.data_upload)
       );
 
       const fotosComUrl = await Promise.all(
@@ -74,15 +77,10 @@ function DetalhesPessoa() {
           try {
             const respostaArquivo = await api.get(
               `/fotos/${foto.id}/arquivo`,
-              {
-                responseType: "blob",
-              }
+              { responseType: "blob" }
             );
 
-            const url = URL.createObjectURL(
-              respostaArquivo.data
-            );
-
+            const url = URL.createObjectURL(respostaArquivo.data);
             fotosUrlsRef.current.push(url);
 
             return {
@@ -90,41 +88,29 @@ function DetalhesPessoa() {
               url,
             };
           } catch (error) {
-            console.error(
-              `Erro ao carregar foto ${foto.id}:`,
-              error
-            );
-
+            console.error(`Erro ao carregar foto ${foto.id}:`, error);
             return null;
           }
         })
       );
 
-      setFotos(
-        fotosComUrl.filter(Boolean)
-      );
+      setFotos(fotosComUrl.filter(Boolean));
     } catch (error) {
-      console.error(
-        "Erro ao carregar fotos:",
-        error
-      );
-
+      console.error("Erro ao carregar fotos:", error);
       setFotos([]);
     } finally {
       setCarregandoFotos(false);
     }
   }
 
+  // CARREGAR DADOS DA PESSOA
   async function carregarPessoa() {
     setCarregando(true);
     setErro("");
 
     try {
-      // PESSOA
-      const respostaPessoa = await api.get(
-        `/pessoas/${id}`
-      );
-
+      // DADOS PESSOAIS
+      const respostaPessoa = await api.get(`/pessoas/${id}`);
       setPessoa(respostaPessoa.data);
 
       // TELEFONES
@@ -133,13 +119,13 @@ function DetalhesPessoa() {
           `/telefones/pessoa/${id}`
         );
 
-        setTelefones(respostaTelefones.data);
-      } catch (error) {
-        console.error(
-          "Erro ao carregar telefones:",
-          error
+        setTelefones(
+          Array.isArray(respostaTelefones.data)
+            ? respostaTelefones.data
+            : []
         );
-
+      } catch (error) {
+        console.error("Erro ao carregar telefones:", error);
         setTelefones([]);
       }
 
@@ -151,43 +137,40 @@ function DetalhesPessoa() {
 
         const enderecos = respostaEndereco.data;
 
-        if (
-          Array.isArray(enderecos) &&
-          enderecos.length > 0
-        ) {
-          setEndereco(enderecos[0]);
-        } else {
-          setEndereco(null);
-        }
-      } catch (error) {
-        console.error(
-          "Erro ao carregar endereço:",
-          error
+        setEndereco(
+          Array.isArray(enderecos) && enderecos.length > 0
+            ? enderecos[0]
+            : null
         );
-
+      } catch (error) {
+        console.error("Erro ao carregar endereço:", error);
         setEndereco(null);
       }
 
-      // PASSAGENS
+      // REGISTROS DE DESAPARECIMENTO
       try {
-        const respostaPassagens = await api.get(
-          `/passagens/pessoa/${id}`
+        const respostaRegistros = await api.get(
+          `/desaparecimentos/pessoa/${id}`
         );
 
-        setPassagens(respostaPassagens.data);
+        setRegistrosDesaparecimento(
+          Array.isArray(respostaRegistros.data)
+            ? respostaRegistros.data
+            : []
+        );
       } catch (error) {
         console.error(
-          "Erro ao carregar passagens:",
+          "Erro ao carregar registros de desaparecimento:",
           error
         );
 
-        setPassagens([]);
+        setRegistrosDesaparecimento([]);
       }
 
       // FOTOS
       await carregarFotos();
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao carregar pessoa:", error);
 
       setErro(
         error.response?.data?.detail ||
@@ -206,6 +189,7 @@ function DetalhesPessoa() {
     };
   }, [id]);
 
+  // CARREGAMENTO
   if (carregando) {
     return (
       <div className="detalhes-pessoa-page">
@@ -216,13 +200,14 @@ function DetalhesPessoa() {
     );
   }
 
+  // ERRO
   if (erro) {
     return (
       <div className="detalhes-pessoa-page">
         <div className="detalhes-header">
           <div>
-            <h1>Pessoa</h1>
-            <p>Detalhes do cadastro</p>
+            <h1>Detalhes da pessoa</h1>
+            <p>Informações do cadastro</p>
           </div>
 
           <button
@@ -233,21 +218,23 @@ function DetalhesPessoa() {
           </button>
         </div>
 
-        <div className="detalhes-error">
-          {erro}
-        </div>
+        <div className="detalhes-error">{erro}</div>
       </div>
     );
   }
 
   const fotoPrincipal = fotos[0];
 
+  const registrosOrdenados = [...registrosDesaparecimento].sort(
+    (a, b) =>
+      new Date(b.data_desaparecimento) -
+      new Date(a.data_desaparecimento)
+  );
+
   return (
     <div className="detalhes-pessoa-page">
-
       {/* IDENTIFICAÇÃO */}
       <section className="detalhes-identificacao">
-
         <div className="detalhes-identificacao-foto">
           {fotoPrincipal ? (
             <img
@@ -255,9 +242,7 @@ function DetalhesPessoa() {
               alt={`Foto de ${pessoa.nome}`}
             />
           ) : (
-            <div className="detalhes-sem-foto">
-              Sem foto
-            </div>
+            <div className="detalhes-sem-foto">Sem foto</div>
           )}
         </div>
 
@@ -273,7 +258,6 @@ function DetalhesPessoa() {
           </div>
 
           <div className="detalhes-indicadores">
-
             <div className="detalhes-indicador">
               <strong>{fotos.length}</strong>
               <span>
@@ -285,42 +269,38 @@ function DetalhesPessoa() {
 
             <div
               className={
-                passagens.length > 0
-                  ? "detalhes-indicador detalhes-indicador-alerta"
+                registrosDesaparecimento.length > 0
+                  ? "detalhes-indicador detalhes-indicador-desaparecimento"
                   : "detalhes-indicador"
               }
             >
-              <strong>{passagens.length}</strong>
-
+              <strong>{registrosDesaparecimento.length}</strong>
               <span>
-                {passagens.length === 1
-                  ? "passagem criminal"
-                  : "passagens criminais"}
+                {registrosDesaparecimento.length === 1
+                  ? "registro de desaparecimento"
+                  : "registros de desaparecimento"}
               </span>
             </div>
-
           </div>
         </div>
-
       </section>
 
-      {/* ALERTA DE PASSAGENS */}
-      {passagens.length > 0 && (
+      {/* ALERTA DE DESAPARECIMENTO */}
+      {registrosDesaparecimento.length > 0 && (
         <div className="detalhes-alerta">
-          <span className="detalhes-alerta-icon">
-            !
-          </span>
+          <span className="detalhes-alerta-icon">!</span>
 
           <div>
             <strong>
-              Atenção: registros criminais encontrados
+              Atenção: registros de desaparecimento encontrados
             </strong>
 
             <p>
-              Esta pessoa possui {passagens.length}{" "}
-              {passagens.length === 1
-                ? "passagem criminal registrada."
-                : "passagens criminais registradas."}
+              Esta pessoa possui{" "}
+              {registrosDesaparecimento.length}{" "}
+              {registrosDesaparecimento.length === 1
+                ? "registro de desaparecimento."
+                : "registros de desaparecimento."}
             </p>
           </div>
         </div>
@@ -328,7 +308,6 @@ function DetalhesPessoa() {
 
       {/* ABAS */}
       <div className="detalhes-tabs">
-
         <button
           className={
             abaAtiva === "dados"
@@ -351,7 +330,7 @@ function DetalhesPessoa() {
         >
           <Images size={17} strokeWidth={2} />
           Fotos
-          
+
           <span className="detalhes-tab-contador">
             {fotos.length}
           </span>
@@ -383,110 +362,84 @@ function DetalhesPessoa() {
 
         <button
           className={
-            abaAtiva === "passagens"
+            abaAtiva === "desaparecimentos"
               ? "detalhes-tab ativa"
-              : "detalhes-tab detalhes-tab-passagens"
+              : "detalhes-tab detalhes-tab-desaparecimento"
           }
-          onClick={() => setAbaAtiva("passagens")}
+          onClick={() => setAbaAtiva("desaparecimentos")}
         >
-          <FileWarning size={17} strokeWidth={2} />
-          Passagens
+          <ClipboardList size={17} strokeWidth={2} />
+          Desaparecimentos
 
-          {passagens.length > 0 && (
+          {registrosDesaparecimento.length > 0 && (
             <span className="detalhes-tab-alerta">
-              {passagens.length}
+              {registrosDesaparecimento.length}
             </span>
           )}
         </button>
-
       </div>
 
       {/* CONTEÚDO DAS ABAS */}
       <div className="detalhes-conteudo">
-
         {/* DADOS PESSOAIS */}
         {abaAtiva === "dados" && (
           <section className="detalhes-card">
-
             <div className="detalhes-section-header">
               <div>
                 <h2>Dados pessoais</h2>
-
-                <p>
-                  Informações pessoais cadastradas.
-                </p>
+                <p>Informações pessoais cadastradas.</p>
               </div>
             </div>
 
             <div className="detalhes-grid">
-
               <div className="detalhes-field">
                 <span>Nome</span>
-                <strong>
-                  {pessoa.nome}
-                </strong>
+                <strong>{pessoa.nome}</strong>
               </div>
 
               <div className="detalhes-field">
                 <span>CPF</span>
-                <strong>
-                  {formatarCPF(pessoa.cpf)}
-                </strong>
+                <strong>{formatarCPF(pessoa.cpf)}</strong>
               </div>
 
               <div className="detalhes-field">
                 <span>Data de nascimento</span>
                 <strong>
-                  {formatarData(
-                    pessoa.data_nascimento
-                  )}
+                  {formatarData(pessoa.data_nascimento)}
                 </strong>
               </div>
 
               <div className="detalhes-field">
                 <span>Sexo</span>
-
                 <strong>
                   {pessoa.sexo === "M"
                     ? "Masculino"
                     : pessoa.sexo === "F"
                       ? "Feminino"
-                      : pessoa.sexo}
+                      : pessoa.sexo || "Não informado"}
                 </strong>
               </div>
 
               <div className="detalhes-field">
                 <span>Nome da mãe</span>
-
-                <strong>
-                  {pessoa.nome_mae || "Não informado"}
-                </strong>
+                <strong>{pessoa.nome_mae || "Não informado"}</strong>
               </div>
 
               <div className="detalhes-field">
                 <span>Nome do pai</span>
-
-                <strong>
-                  {pessoa.nome_pai || "Não informado"}
-                </strong>
+                <strong>{pessoa.nome_pai || "Não informado"}</strong>
               </div>
-
             </div>
-
           </section>
         )}
 
         {/* FOTOS */}
         {abaAtiva === "fotos" && (
           <section className="detalhes-card">
-
             <div className="detalhes-section-header">
               <div>
                 <h2>Fotos cadastradas</h2>
-
-                <p>
-                  Fotos vinculadas à pessoa no sistema.
-                </p>
+                <p>Fotos vinculadas à pessoa no sistema.</p>
               </div>
             </div>
 
@@ -523,21 +476,16 @@ function DetalhesPessoa() {
                 ))}
               </div>
             )}
-
           </section>
         )}
 
         {/* CONTATOS */}
         {abaAtiva === "contatos" && (
           <section className="detalhes-card">
-
             <div className="detalhes-section-header">
               <div>
                 <h2>Contatos</h2>
-
-                <p>
-                  Telefones vinculados à pessoa.
-                </p>
+                <p>Telefones vinculados à pessoa.</p>
               </div>
             </div>
 
@@ -556,11 +504,8 @@ function DetalhesPessoa() {
                       <span className="detalhes-item-label">
                         Número
                       </span>
-
                       <strong>
-                        {formatarTelefone(
-                          telefone.numero
-                        )}
+                        {formatarTelefone(telefone.numero)}
                       </strong>
                     </div>
 
@@ -568,34 +513,28 @@ function DetalhesPessoa() {
                       <span className="detalhes-item-label">
                         Tipo
                       </span>
-
                       <strong>
                         {telefone.tipo === "PESSOAL"
                           ? "Pessoal"
                           : telefone.tipo === "RESIDENCIAL"
                             ? "Residencial"
-                            : telefone.tipo}
+                            : telefone.tipo || "Não informado"}
                       </strong>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-
           </section>
         )}
 
         {/* ENDEREÇO */}
         {abaAtiva === "endereco" && (
           <section className="detalhes-card">
-
             <div className="detalhes-section-header">
               <div>
                 <h2>Endereço</h2>
-
-                <p>
-                  Endereço residencial vinculado à pessoa.
-                </p>
+                <p>Endereço residencial vinculado à pessoa.</p>
               </div>
             </div>
 
@@ -605,133 +544,123 @@ function DetalhesPessoa() {
               </div>
             ) : (
               <div className="detalhes-grid">
-
                 <div className="detalhes-field">
                   <span>Logradouro</span>
-                  <strong>
-                    {endereco.logradouro}
-                  </strong>
+                  <strong>{endereco.logradouro}</strong>
                 </div>
 
                 <div className="detalhes-field">
                   <span>Número</span>
-                  <strong>
-                    {endereco.numero}
-                  </strong>
+                  <strong>{endereco.numero}</strong>
                 </div>
 
                 <div className="detalhes-field">
                   <span>Bairro</span>
-                  <strong>
-                    {endereco.bairro}
-                  </strong>
+                  <strong>{endereco.bairro}</strong>
                 </div>
 
                 <div className="detalhes-field">
                   <span>Cidade</span>
-                  <strong>
-                    {endereco.cidade}
-                  </strong>
+                  <strong>{endereco.cidade}</strong>
                 </div>
 
                 <div className="detalhes-field">
                   <span>Estado</span>
-                  <strong>
-                    {endereco.estado}
-                  </strong>
+                  <strong>{endereco.estado}</strong>
                 </div>
 
                 <div className="detalhes-field">
                   <span>CEP</span>
-                  <strong>
-                    {formatarCEP(endereco.cep)}
-                  </strong>
+                  <strong>{formatarCEP(endereco.cep)}</strong>
                 </div>
-
               </div>
             )}
-
           </section>
         )}
 
-        {/* PASSAGENS */}
-        {abaAtiva === "passagens" && (
+        {/* REGISTROS DE DESAPARECIMENTO */}
+        {abaAtiva === "desaparecimentos" && (
           <section
             className={
-              passagens.length > 0
-                ? "detalhes-card detalhes-passagens-card alerta"
+              registrosDesaparecimento.length > 0
+                ? "detalhes-card detalhes-desaparecimentos-card alerta"
                 : "detalhes-card"
             }
           >
-
             <div className="detalhes-section-header">
               <div>
-                <h2>Passagens criminais</h2>
-
+                <h2>Registros de desaparecimento</h2>
                 <p>
-                  Registros vinculados à pessoa.
+                  Informações sobre ocorrências de desaparecimento
+                  vinculadas à pessoa.
                 </p>
               </div>
             </div>
 
-            {passagens.length === 0 ? (
+            {registrosOrdenados.length === 0 ? (
               <div className="detalhes-vazio">
-                Nenhuma passagem criminal cadastrada.
+                Nenhum registro de desaparecimento cadastrado.
               </div>
             ) : (
               <div className="detalhes-lista">
-
-                {passagens.map((passagem) => (
-                  <div
-                    className="detalhes-passagem-item"
-                    key={passagem.id}
+                {registrosOrdenados.map((registro) => (
+                  <article
+                    className="detalhes-desaparecimento-item"
+                    key={registro.id}
                   >
-
-                    <div className="detalhes-passagem-icon">
-                      !
-                    </div>
-
-                    <div className="detalhes-passagem-info">
-
-                      <div>
-                        <span>
-                          Crime
-                        </span>
-
-                        <strong>
-                          {passagem.crime}
-                        </strong>
+                    <div className="detalhes-desaparecimento-cabecalho">
+                      <div className="detalhes-desaparecimento-icon">
+                        <ClipboardList size={18} />
                       </div>
 
                       <div>
+                        <strong>Registro de desaparecimento</strong>
                         <span>
-                          Data da ocorrência
+                          Data:{" "}
+                          {formatarData(
+                            registro.data_desaparecimento
+                          )}
                         </span>
+                      </div>
+                    </div>
 
+                    <div className="detalhes-desaparecimento-info">
+                      <div>
+                        <span>Data do desaparecimento</span>
                         <strong>
                           {formatarData(
-                            passagem.data_ocorrencia
+                            registro.data_desaparecimento
                           )}
                         </strong>
                       </div>
 
+                      <div>
+                        <span>Local do desaparecimento</span>
+                        <strong>
+                          {registro.local_desaparecimento ||
+                            "Não informado"}
+                        </strong>
+                      </div>
+
+                      <div className="detalhes-desaparecimento-descricao">
+                        <span>Descrição</span>
+                        <p>
+                          {registro.descricao || "Não informada"}
+                        </p>
+                      </div>
                     </div>
-
-                  </div>
+                  </article>
                 ))}
-
               </div>
             )}
-
           </section>
         )}
-
       </div>
 
       {/* AÇÕES */}
       <div className="detalhes-actions">
-
         <button
+          type="button"
           className="button-secondary"
           onClick={() => navigate("/pessoas")}
         >
@@ -739,18 +668,13 @@ function DetalhesPessoa() {
         </button>
 
         <button
+          type="button"
           className="button-primary"
-          onClick={() =>
-            navigate(
-              `/pessoas/${pessoa.id}/editar`
-            )
-          }
+          onClick={() => navigate(`/pessoas/${pessoa.id}/editar`)}
         >
           Editar
         </button>
-
       </div>
-
     </div>
   );
 }
