@@ -38,8 +38,8 @@ function EditarPessoa() {
   const [estado, setEstado] = useState("");
   const [cep, setCep] = useState("");
 
-  // PASSAGENS
-  const [passagens, setPassagens] = useState([]);
+  // REGISTROS DE DESAPARECIMENTO
+  const [registrosDesaparecimento, setRegistrosDesaparecimento] = useState([]);
 
   // FOTO
   const [fotoUrl, setFotoUrl] = useState(null);
@@ -82,7 +82,7 @@ function EditarPessoa() {
     },
     {
       numero: 4,
-      titulo: "Passagens",
+      titulo: "Desaparecimentos",
       descricao: "Registros",
     },
     {
@@ -228,27 +228,27 @@ function EditarPessoa() {
         setCep("");
       }
 
-      // PASSAGENS
+      // REGISTROS DE DESAPARECIMENTO
       try {
-        const respostaPassagens = await api.get(
-          `/passagens/pessoa/${id}`
+        const respostaRegistros = await api.get(
+          `/desaparecimentos/pessoa/${id}`
         );
 
-        setPassagens(
-          Array.isArray(respostaPassagens.data)
-            ? respostaPassagens.data.map((passagem) => ({
-              ...passagem,
+        setRegistrosDesaparecimento(
+          Array.isArray(respostaRegistros.data)
+            ? respostaRegistros.data.map((registro) => ({
+              ...registro,
               novo: false,
             }))
             : []
         );
       } catch (error) {
         console.error(
-          "Erro ao carregar passagens:",
+          "Erro ao carregar registros de desaparecimento:",
           error
         );
 
-        setPassagens([]);
+        setRegistrosDesaparecimento([]);
       }
 
       // FOTO
@@ -387,55 +387,50 @@ function EditarPessoa() {
     );
   }
 
-  // PASSAGENS
-  function adicionarPassagem() {
-    setPassagens([
-      ...passagens,
+  // REGISTROS DE DESAPARECIMENTO
+  function adicionarRegistroDesaparecimento() {
+    setRegistrosDesaparecimento([
+      ...registrosDesaparecimento,
       {
-        crime: "",
-        data_ocorrencia: "",
+        data_desaparecimento: "",
+        local_desaparecimento: "",
+        descricao: "",
         novo: true,
       },
     ]);
   }
 
-  function alterarPassagem(index, campo, valor) {
-    const novasPassagens = [...passagens];
+  function alterarRegistroDesaparecimento(index, campo, valor) {
+    const novosRegistros = [...registrosDesaparecimento];
 
-    novasPassagens[index] = {
-      ...novasPassagens[index],
+    novosRegistros[index] = {
+      ...novosRegistros[index],
       [campo]: valor,
     };
 
-    setPassagens(novasPassagens);
+    setRegistrosDesaparecimento(novosRegistros);
   }
 
-  async function removerPassagem(index) {
-    const passagem = passagens[index];
+  async function removerRegistroDesaparecimento(index) {
+    const registro = registrosDesaparecimento[index];
 
-    if (passagem.id) {
+    if (registro.id) {
       try {
-        await api.delete(
-          `/passagens/${passagem.id}`
-        );
+        await api.delete(`/desaparecimentos/${registro.id}`);
       } catch (error) {
         console.error(
-          "Erro ao remover passagem:",
+          "Erro ao remover registro de desaparecimento:",
           error
         );
 
-        setErro(
-          "Não foi possível remover a passagem criminal."
-        );
-
+        setErro("Não foi possível remover o registro de desaparecimento.");
         return;
       }
     }
 
-    setPassagens(
-      passagens.filter(
-        (_, passagemIndex) =>
-          passagemIndex !== index
+    setRegistrosDesaparecimento(
+      registrosDesaparecimento.filter(
+        (_, registroIndex) => registroIndex !== index
       )
     );
   }
@@ -581,24 +576,30 @@ function EditarPessoa() {
     }
 
     if (etapa === 4) {
-      const passagemInvalida = passagens.some(
-        (passagem) => {
-          const crime =
-            passagem.crime?.trim() || "";
+      const registroInvalido = registrosDesaparecimento.some(
+        (registro) => {
+          const data = registro.data_desaparecimento || "";
+          const local = registro.local_desaparecimento?.trim() || "";
+          const descricao = registro.descricao?.trim() || "";
 
-          const data =
-            passagem.data_ocorrencia || "";
+          const preenchido = data || local || descricao;
+
+          if (!preenchido) {
+            return false;
+          }
 
           return (
-            (crime && !data) ||
-            (!crime && data)
+            !data ||
+            !local ||
+            !descricao ||
+            data > obterDataHoje()
           );
         }
       );
 
-      if (passagemInvalida) {
+      if (registroInvalido) {
         setErro(
-          "Preencha o crime e a data da ocorrência em todas as passagens."
+          "Preencha a data, o local e a descrição de todos os registros. A data não pode ser futura."
         );
 
         return false;
@@ -764,23 +765,42 @@ function EditarPessoa() {
         }
       }
 
-      // NOVAS PASSAGENS
-      const novasPassagens =
-        passagens.filter(
-          (passagem) =>
-            passagem.novo &&
-            passagem.crime &&
-            passagem.crime.trim() !== "" &&
-            passagem.data_ocorrencia !== ""
-        );
+      // NOVOS REGISTROS DE DESAPARECIMENTO
+      const novosRegistros = registrosDesaparecimento.filter(
+        (registro) =>
+          registro.novo &&
+          registro.data_desaparecimento &&
+          registro.local_desaparecimento?.trim() &&
+          registro.descricao?.trim()
+      );
 
       await Promise.all(
-        novasPassagens.map((passagem) =>
-          api.post("/passagens", {
+        novosRegistros.map((registro) =>
+          api.post("/desaparecimentos", {
             pessoa_id: id,
-            crime: passagem.crime,
-            data_ocorrencia:
-              passagem.data_ocorrencia,
+            data_desaparecimento: registro.data_desaparecimento,
+            local_desaparecimento: registro.local_desaparecimento.trim(),
+            descricao: registro.descricao.trim(),
+          })
+        )
+      );
+
+      // ATUALIZAR REGISTROS EXISTENTES
+      const registrosExistentes = registrosDesaparecimento.filter(
+        (registro) =>
+          registro.id &&
+          !registro.novo &&
+          registro.data_desaparecimento &&
+          registro.local_desaparecimento?.trim() &&
+          registro.descricao?.trim()
+      );
+
+      await Promise.all(
+        registrosExistentes.map((registro) =>
+          api.put(`/desaparecimentos/${registro.id}`, {
+            data_desaparecimento: registro.data_desaparecimento,
+            local_desaparecimento: registro.local_desaparecimento.trim(),
+            descricao: registro.descricao.trim(),
           })
         )
       );
@@ -821,31 +841,6 @@ function EditarPessoa() {
       window.scrollTo({ top: 0, behavior: "smooth", });
     } finally {
       setSalvando(false);
-    }
-
-    if (Array.isArray(detalhe)) {
-      setErro(
-        detalhe
-          .map((item) => {
-            const campo =
-              Array.isArray(item.loc)
-                ? item.loc[
-                item.loc.length - 1
-                ]
-                : "";
-
-            return `${campo}: ${item.msg}`;
-          })
-          .join(" | ")
-      );
-    } else if (
-      typeof detalhe === "string"
-    ) {
-      setErro(detalhe);
-    } else {
-      setErro(
-        "Não foi possível atualizar a pessoa."
-      );
     }
   }
 
@@ -1591,160 +1586,144 @@ function EditarPessoa() {
             </section>
           )}
 
-          {/* ETAPA 4 */}
+          {/* ETAPA 4 - REGISTROS DE DESAPARECIMENTO */}
 
           {etapaAtual === 4 && (
             <section className="editar-etapa">
-
               <div className="editar-etapa-header">
                 <span className="editar-etapa-numero-label">
                   Etapa 04
                 </span>
 
-                <h2>Passagens criminais</h2>
+                <h2>Registros de desaparecimento</h2>
 
                 <p>
-                  Gerencie os registros vinculados
-                  à pessoa.
+                  Gerencie os registros de desaparecimento vinculados à pessoa.
                 </p>
               </div>
 
               <section className="editar-section">
-
                 <div className="editar-section-header">
                   <div>
-                    <h3>
-                      Registros cadastrados
-                    </h3>
+                    <h3>Registros cadastrados</h3>
 
                     <p>
-                      Edite, remova ou adicione
-                      uma nova passagem.
+                      Edite, remova ou adicione registros de desaparecimento.
                     </p>
                   </div>
 
                   <button
                     type="button"
                     className="editar-adicionar"
-                    onClick={
-                      adicionarPassagem
-                    }
+                    onClick={adicionarRegistroDesaparecimento}
+                    disabled={salvando}
                   >
-                    + Adicionar passagem
+                    + Adicionar registro
                   </button>
                 </div>
 
                 <div className="editar-lista">
-
-                  {passagens.length === 0 ? (
+                  {registrosDesaparecimento.length === 0 ? (
                     <div className="editar-vazio">
-                      <strong>
-                        Nenhuma passagem criminal
-                        cadastrada
-                      </strong>
+                      <strong>Nenhum registro de desaparecimento cadastrado</strong>
 
                       <p>
-                        Clique em "Adicionar passagem"
-                        para incluir um registro.
+                        Clique em "Adicionar registro" para incluir um registro.
                       </p>
                     </div>
                   ) : (
-                    passagens.map(
-                      (passagem, index) => (
-                        <div
-                          className="editar-item"
-                          key={
-                            passagem.id ||
-                            `nova-passagem-${index}`
-                          }
-                        >
-                          <div className="editar-item-header">
-                            <strong>
-                              Passagem {index + 1}
-                            </strong>
+                    registrosDesaparecimento.map((registro, index) => (
+                      <div
+                        className="editar-item"
+                        key={registro.id || `novo-registro-${index}`}
+                      >
+                        <div className="editar-item-header">
+                          <strong>Registro {index + 1}</strong>
 
-                            <button
-                              type="button"
-                              className="editar-remover-mobile"
-                              onClick={() =>
-                                removerPassagem(
-                                  index
-                                )
-                              }
-                            >
-                              Remover
-                            </button>
-                          </div>
-
-                          <div className="editar-passagem-fields">
-
-                            <div className="editar-form-group">
-                              <label>
-                                Crime
-                              </label>
-
-                              <input
-                                type="text"
-                                value={
-                                  passagem.crime ||
-                                  ""
-                                }
-                                onChange={(event) =>
-                                  alterarPassagem(
-                                    index,
-                                    "crime",
-                                    event.target.value
-                                  )
-                                }
-                                placeholder="Ex.: Furto"
-                              />
-                            </div>
-
-                            <div className="editar-form-group">
-                              <label>
-                                Data da ocorrência
-                              </label>
-
-                              <input
-                                type="date"
-                                value={
-                                  passagem.data_ocorrencia ||
-                                  ""
-                                }
-                                onChange={(event) =>
-                                  alterarPassagem(
-                                    index,
-                                    "data_ocorrencia",
-                                    event.target.value
-                                  )
-                                }
-                              />
-                            </div>
-
-                            <button
-                              type="button"
-                              className="editar-remover"
-                              onClick={() =>
-                                removerPassagem(
-                                  index
-                                )
-                              }
-                            >
-                              Remover
-                            </button>
-
-                          </div>
+                          <button
+                            type="button"
+                            className="editar-remover-mobile"
+                            onClick={() =>
+                              removerRegistroDesaparecimento(index)
+                            }
+                            disabled={salvando}
+                          >
+                            Remover
+                          </button>
                         </div>
-                      )
-                    )
+
+                        <div className="editar-desaparecimento-fields">
+                          <div className="editar-form-group">
+                            <label>Data do desaparecimento</label>
+
+                            <input
+                              type="date"
+                              value={registro.data_desaparecimento || ""}
+                              max={obterDataHoje()}
+                              onChange={(event) =>
+                                alterarRegistroDesaparecimento(
+                                  index,
+                                  "data_desaparecimento",
+                                  event.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          <div className="editar-form-group">
+                            <label>Local do desaparecimento</label>
+
+                            <input
+                              type="text"
+                              value={registro.local_desaparecimento || ""}
+                              maxLength={200}
+                              placeholder="Informe o local"
+                              onChange={(event) =>
+                                alterarRegistroDesaparecimento(
+                                  index,
+                                  "local_desaparecimento",
+                                  event.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          <div className="editar-form-group">
+                            <label>Descrição</label>
+
+                            <textarea
+                              value={registro.descricao || ""}
+                              maxLength={500}
+                              rows={3}
+                              placeholder="Descreva as informações do desaparecimento"
+                              onChange={(event) =>
+                                alterarRegistroDesaparecimento(
+                                  index,
+                                  "descricao",
+                                  event.target.value
+                                )
+                              }
+                            />
+                          </div>
+
+                          <button
+                            type="button"
+                            className="editar-remover"
+                            onClick={() =>
+                              removerRegistroDesaparecimento(index)
+                            }
+                            disabled={salvando}
+                          >
+                            Remover
+                          </button>
+                        </div>
+                      </div>
+                    ))
                   )}
-
                 </div>
-
               </section>
 
               <div className="editar-actions">
-
                 <button
                   type="button"
                   className="editar-button-secondary"
@@ -1763,9 +1742,7 @@ function EditarPessoa() {
                   Revisar alterações
                   <span>→</span>
                 </button>
-
               </div>
-
             </section>
           )}
 
@@ -2060,79 +2037,66 @@ function EditarPessoa() {
 
               </div>
 
-              {/* PASSAGENS */}
+              {/* REGISTROS DE DESAPARECIMENTO */}
 
-              <div className="editar-revisao-section editar-revisao-passagens">
-
+              <div className="editar-revisao-section editar-revisao-desaparecimento">
                 <div className="editar-revisao-header">
                   <div>
-                    <span>
-                      Registros
-                    </span>
+                    <span>Registros</span>
 
-                    <h3>
-                      Passagens criminais
-                    </h3>
+                    <h3>Desaparecimentos</h3>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() =>
-                      irParaEtapa(4)
-                    }
+                    onClick={() => irParaEtapa(4)}
                     disabled={salvando}
                   >
                     Editar
                   </button>
                 </div>
 
-                {passagens.filter(
-                  (passagem) =>
-                    passagem.crime &&
-                    passagem.data_ocorrencia
-                ).length > 0 ? (
+                {registrosDesaparecimento.some(
+                  (registro) =>
+                    registro.data_desaparecimento ||
+                    registro.local_desaparecimento ||
+                    registro.descricao
+                ) ? (
                   <div className="editar-revisao-lista">
-
-                    {passagens
+                    {registrosDesaparecimento
                       .filter(
-                        (passagem) =>
-                          passagem.crime &&
-                          passagem.data_ocorrencia
+                        (registro) =>
+                          registro.data_desaparecimento ||
+                          registro.local_desaparecimento ||
+                          registro.descricao
                       )
-                      .map(
-                        (
-                          passagem,
-                          index
-                        ) => (
-                          <div
-                            className="editar-revisao-item"
-                            key={
-                              passagem.id ||
-                              `passagem-revisao-${index}`
-                            }
-                          >
-                            <strong>
-                              {passagem.crime}
-                            </strong>
+                      .map((registro, index) => (
+                        <div
+                          className="editar-revisao-item"
+                          key={registro.id || `registro-revisao-${index}`}
+                        >
+                          <strong>
+                            {registro.local_desaparecimento || "Local não informado"}
+                          </strong>
 
-                            <span>
-                              {passagem.data_ocorrencia
+                          <span>
+                            {registro.data_desaparecimento
+                              ? registro.data_desaparecimento
                                 .split("-")
                                 .reverse()
-                                .join("/")}
-                            </span>
-                          </div>
-                        )
-                      )}
+                                .join("/")
+                              : "Data não informada"}
+                          </span>
 
+                          <p>{registro.descricao || "Sem descrição"}</p>
+                        </div>
+                      ))}
                   </div>
                 ) : (
                   <p className="editar-revisao-vazio">
-                    Nenhuma passagem criminal
-                    cadastrada.
+                    Nenhum registro de desaparecimento cadastrado.
                   </p>
                 )}
-
               </div>
 
               {/* AÇÕES FINAIS */}

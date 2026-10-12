@@ -491,18 +491,6 @@
   margin-bottom: 0;
 }
 
-/* CAMPOS DE PASSAGEM */
-.editar-passagem-fields {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px auto;
-  align-items: end;
-  gap: 15px;
-}
-
-.editar-passagem-fields .editar-form-group {
-  margin-bottom: 0;
-}
-
 /* REMOVER */
 .editar-remover {
   height: 44px;
@@ -844,8 +832,7 @@
     height: 155px;
   }
 
-  .editar-telefone-fields,
-  .editar-passagem-fields {
+  .editar-telefone-fields {
     grid-template-columns: minmax(0, 1fr) 160px;
   }
 
@@ -1008,9 +995,9 @@
     margin-bottom: 14px;
   }
 
-  /* TELEFONES E PASSAGENS */
+  /* TELEFONES E Desaparecimento */
   .editar-telefone-fields,
-  .editar-passagem-fields {
+  .editar-desaparecimento-fields {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -1018,7 +1005,7 @@
   }
 
   .editar-telefone-fields .editar-form-group,
-  .editar-passagem-fields .editar-form-group {
+  .editar-desaparecimento-fields .editar-form-group {
     width: 100%;
     margin-bottom: 16px;
   }
