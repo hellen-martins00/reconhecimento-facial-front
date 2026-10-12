@@ -13,6 +13,8 @@ import {
   Database,
   RefreshCw,
   Activity,
+  FileSearch,
+  MapPinCheck,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -88,7 +90,7 @@ function Dashboard() {
 
   const indicadores = [
     {
-      titulo: "Pessoas Desaparecidas Cadastradas",
+      titulo: "Pessoas cadastradas",
       valor: totalPessoas,
       descricao: "Pessoas registradas no sistema",
       icone: Users,
@@ -96,28 +98,28 @@ function Dashboard() {
       destino: "/pessoas",
     },
     {
-      titulo: "Registros faciais",
-      valor: totalFaces,
-      descricao: "Imagens cadastradas",
-      icone: Camera,
+      titulo: "Casos em aberto",
+      valor: null,
+      descricao: "Desaparecimentos ainda não encerrados",
+      icone: FileSearch,
       cor: "blue",
+      destino: "/registros-desaparecimento",
+    },
+    {
+      titulo: "Registros biométricos",
+      valor: totalFaces,
+      descricao: "Imagens cadastradas para comparação",
+      icone: Camera,
+      cor: "purple",
       destino: "/pessoas",
     },
     {
-      titulo: "Agentes cadastrados",
-      valor: totalAgentes,
-      descricao: "Usuários do sistema",
-      icone: ShieldCheck,
-      cor: "purple",
-      destino: "/agentes",
-    },
-    {
-      titulo: "Buscas faciais",
-      valor: totalReconhecimentos,
-      descricao: "Consultas contabilizadas",
-      icone: ScanFace,
+      titulo: "Pessoas localizadas",
+      valor: null,
+      descricao: "Localizações confirmadas e registradas",
+      icone: MapPinCheck,
       cor: "green",
-      destino: "/reconhecimento",
+      destino: "/registros-desaparecimento",
     },
   ];
 
@@ -208,7 +210,7 @@ function Dashboard() {
                   </span>
 
                   <strong className="dashboard-card-value">
-                    {carregando
+                    {carregando || indicador.valor === null
                       ? "—"
                       : indicador.valor.toLocaleString("pt-BR")}
                   </strong>
