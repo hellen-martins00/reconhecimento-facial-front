@@ -2,6 +2,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import {
+  LayoutDashboard,
+  Users,
+  ShieldCheck,
+  ScanFace,
+  LogOut,
+  Menu,
+  X,
+  Bell,
+  ChevronRight,
+} from "lucide-react";
+
 import api from "../../services/api";
 import "./DashboardLayout.css";
 
@@ -25,6 +37,7 @@ function DashboardLayout({ children }) {
 
   useEffect(() => {
     let urlFoto;
+    let cancelado = false;
 
     async function carregarFotoAgente() {
       if (!usuario?.id) {
@@ -38,16 +51,22 @@ function DashboardLayout({ children }) {
           { responseType: "blob" }
         );
 
+        if (cancelado) return;
+
         urlFoto = URL.createObjectURL(resposta.data);
         setFotoAgente(urlFoto);
       } catch {
-        setFotoAgente(null);
+        if (!cancelado) {
+          setFotoAgente(null);
+        }
       }
     }
 
     carregarFotoAgente();
 
     return () => {
+      cancelado = true;
+
       if (urlFoto) {
         URL.revokeObjectURL(urlFoto);
       }
@@ -67,6 +86,11 @@ function DashboardLayout({ children }) {
       window.removeEventListener("keydown", handleEscape);
     };
   }, []);
+
+  // Fecha o menu móvel ao trocar de página.
+  useEffect(() => {
+    setMenuAberto(false);
+  }, [location.pathname]);
 
   function handleNavigate(path) {
     navigate(path);
@@ -88,36 +112,38 @@ function DashboardLayout({ children }) {
     {
       label: "Painel",
       path: "/dashboard",
+      icon: LayoutDashboard,
       active: location.pathname === "/dashboard",
-      icon: "▦",
     },
     {
       label: "Pessoas cadastradas",
       path: "/pessoas",
+      icon: Users,
       active: location.pathname.startsWith("/pessoas"),
-      icon: "♙",
     },
     {
       label: "Agentes",
       path: "/agentes",
+      icon: ShieldCheck,
       active: location.pathname.startsWith("/agentes"),
-      icon: "♧",
     },
     {
       label: "Busca facial",
       path: "/reconhecimento",
+      icon: ScanFace,
       active: location.pathname.startsWith("/reconhecimento"),
-      icon: "⌕",
     },
   ];
 
   return (
     <div className="dashboard-layout">
       {menuAberto && (
-        <div
+        <button
+          type="button"
           className="sidebar-overlay"
           onClick={() => setMenuAberto(false)}
-          aria-hidden="true"
+          aria-label="Fechar menu"
+          tabIndex={-1}
         />
       )}
 
@@ -129,18 +155,17 @@ function DashboardLayout({ children }) {
         aria-expanded={menuAberto}
         aria-controls="menu-lateral"
       >
-        {menuAberto ? "✕" : "☰"}
+        {menuAberto ? <X size={22} /> : <Menu size={22} />}
       </button>
 
       <aside
         id="menu-lateral"
         className={`sidebar ${menuAberto ? "open" : ""}`}
         aria-label="Menu principal"
-        aria-hidden={!menuAberto}
       >
         <div className="sidebar-brand">
-          <div className="sidebar-brand-icon" aria-hidden="true">
-            <span>R</span>
+          <div className="sidebar-brand-icon">
+            <ScanFace size={25} />
           </div>
 
           <div className="sidebar-brand-text">
@@ -171,7 +196,6 @@ function DashboardLayout({ children }) {
 
           <div className="sidebar-profile-info">
             <strong>{usuario?.nome || "Usuário"}</strong>
-
             <span>{usuario?.usuario || ""}</span>
 
             {usuario?.perfil && (
@@ -185,28 +209,41 @@ function DashboardLayout({ children }) {
         </div>
 
         <nav className="sidebar-menu">
-          {menuItems.map((item) => (
-            <button
-              key={item.path}
-              type="button"
-              className={`menu-item ${
-                item.active ? "active" : ""
-              }`}
-              onClick={() => handleNavigate(item.path)}
-              aria-current={item.active ? "page" : undefined}
-              tabIndex={menuAberto ? 0 : -1}
-            >
-              <span className="menu-item-icon" aria-hidden="true">
-                {item.icon}
-              </span>
+          {menuItems.map((item) => {
+            const Icone = item.icon;
 
-              <span>{item.label}</span>
-            </button>
-          ))}
+            return (
+              <button
+                key={item.path}
+                type="button"
+                className={`menu-item ${
+                  item.active ? "active" : ""
+                }`}
+                onClick={() => handleNavigate(item.path)}
+                aria-current={item.active ? "page" : undefined}
+              >
+                <Icone
+                  className="menu-item-icon"
+                  size={19}
+                  strokeWidth={1.8}
+                />
+
+                <span>{item.label}</span>
+
+                {item.active && (
+                  <ChevronRight
+                    className="menu-item-arrow"
+                    size={16}
+                  />
+                )}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="sidebar-footer">
           <div className="sidebar-footer-note">
+            <span className="sidebar-footer-indicator" />
             Sistema de apoio à identificação
           </div>
 
@@ -214,19 +251,68 @@ function DashboardLayout({ children }) {
             type="button"
             className="menu-item logout"
             onClick={handleLogout}
-            tabIndex={menuAberto ? 0 : -1}
           >
-            <span className="menu-item-icon" aria-hidden="true">
-              ↪
-            </span>
-
+            <LogOut size={19} className="menu-item-icon" />
             <span>Sair do sistema</span>
           </button>
+
+          <div className="sidebar-version">
+            REDE BIOMÉTRICA · SISTEMA DE APOIO
+          </div>
         </div>
       </aside>
 
       <main className="dashboard-layout-content">
-        {children}
+        <header className="dashboard-topbar">
+          <div className="topbar-context">
+            <span className="topbar-overline">
+              SISTEMA DE APOIO À SEGURANÇA
+            </span>
+
+            <span className="topbar-page">
+              {menuItems.find((item) => item.active)?.label ||
+                "Detalhes"}
+            </span>
+          </div>
+
+          <div className="topbar-actions">
+            <span className="topbar-status">
+              <span className="status-dot" />
+              Sistema disponível
+            </span>
+
+            <div className="topbar-divider" />
+
+            <div className="topbar-user">
+              <div className="topbar-user-info">
+                <strong>{usuario?.nome || "Usuário"}</strong>
+                <span>{usuario?.perfil || "Acesso autorizado"}</span>
+              </div>
+
+              <div className="topbar-avatar">
+                {fotoAgente ? (
+                  <img
+                    src={fotoAgente}
+                    alt=""
+                  />
+                ) : (
+                  inicial
+                )}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="dashboard-page-content">
+          {children}
+        </div>
+
+        <footer className="dashboard-footer">
+          <span>
+            Rede Biométrica — Sistema de apoio à identificação
+          </span>
+          <span>Área restrita a usuários autorizados</span>
+        </footer>
       </main>
     </div>
   );
