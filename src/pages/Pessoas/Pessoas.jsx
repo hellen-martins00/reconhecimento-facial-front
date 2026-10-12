@@ -436,8 +436,8 @@ function Pessoas() {
                   className="pessoa-mobile-card"
                   key={pessoa.id}
                 >
-                  {/* TOPO */}
 
+                  {/* TOPO */}
                   <div className="pessoa-mobile-header">
                     {pessoa.foto_url ? (
                       <img
@@ -453,42 +453,12 @@ function Pessoas() {
 
                     <div className="pessoa-mobile-nome">
                       <h3>{pessoa.nome}</h3>
-                      <span>{pessoa.sexo}</span>
+                      <span>{pessoa.sexo || "Não informado"}</span>
                     </div>
-
-                    <div>
-                      <span>Data do desaparecimento</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.data_desaparecimento
-                          ? pessoa.registro_desaparecimento.data_desaparecimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
-                          : "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>Local do desaparecimento</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>Status do caso</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.status === "LOCALIZADO"
-                          ? "Localizado"
-                          : pessoa.registro_desaparecimento?.status === "DESAPARECIDO"
-                            ? "Desaparecido"
-                            : "Sem registro"}
-                      </strong>
-                    </div>
-
 
                     <div className="pessoa-mobile-menu-container">
                       <button
+                        type="button"
                         className="pessoa-mobile-menu-button"
                         onClick={() =>
                           setMenuAberto(
@@ -496,6 +466,7 @@ function Pessoas() {
                           )
                         }
                         aria-label={`Ações para ${pessoa.nome}`}
+                        aria-expanded={menuAberto === pessoa.id}
                       >
                         ⋮
                       </button>
@@ -503,6 +474,7 @@ function Pessoas() {
                       {menuAberto === pessoa.id && (
                         <div className="pessoa-mobile-menu">
                           <button
+                            type="button"
                             onClick={() => {
                               setMenuAberto(null);
                               navigate(`/pessoas/${pessoa.id}`);
@@ -512,6 +484,7 @@ function Pessoas() {
                           </button>
 
                           <button
+                            type="button"
                             onClick={() => {
                               setMenuAberto(null);
                               navigate(`/pessoas/${pessoa.id}/editar`);
@@ -524,9 +497,7 @@ function Pessoas() {
                             <button
                               type="button"
                               className="pessoa-menu-excluir"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
+                              onClick={() => {
                                 setMenuAberto(null);
                                 excluirPessoa(pessoa.id, pessoa.nome);
                               }}
@@ -550,28 +521,20 @@ function Pessoas() {
                       )}
                     </div>
                   </div>
-
+                  
                   {/* INFORMAÇÕES */}
-
                   <div className="pessoa-mobile-info">
                     <div>
                       <span>CPF</span>
-
-                      <strong>
-                        {formatarCPF(pessoa.cpf)}
-                      </strong>
+                      <strong>{formatarCPF(pessoa.cpf)}</strong>
                     </div>
 
                     <div>
                       <span>Data de nascimento</span>
-
                       <strong>
                         {pessoa.data_nascimento
-                          ? pessoa.data_nascimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
-                          : ""}
+                          ? pessoa.data_nascimento.split("-").reverse().join("/")
+                          : "—"}
                       </strong>
                     </div>
 
@@ -604,8 +567,8 @@ function Pessoas() {
                             : "Sem registro"}
                       </strong>
                     </div>
-
                   </div>
+
 
                 </div>
               ))}
