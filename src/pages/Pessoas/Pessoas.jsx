@@ -27,30 +27,46 @@ function Pessoas() {
     setErro("");
 
     try {
-      const resposta = await api.get("/pessoas");
+      const [respostaPessoas, respostaDesaparecimentos] =
+        await Promise.all([
+          api.get("/pessoas"),
+          api.get("/desaparecimentos"),
+        ]);
+
+      const registros = Array.isArray(respostaDesaparecimentos.data)
+        ? respostaDesaparecimentos.data
+        : [];
+
+      const pessoasComRegistros = respostaPessoas.data.map((pessoa) => {
+        const registrosDaPessoa = registros
+          .filter((registro) => registro.pessoa_id === pessoa.id)
+          .sort((a, b) =>
+            (b.data_desaparecimento || "").localeCompare(
+              a.data_desaparecimento || ""
+            )
+          );
+
+        return {
+          ...pessoa,
+          registro_desaparecimento: registrosDaPessoa[0] || null,
+        };
+      });
 
       const pessoasComFotos = await Promise.all(
-        resposta.data.map(async (pessoa) => {
+        pessoasComRegistros.map(async (pessoa) => {
           if (!pessoa.foto_id) {
-            return {
-              ...pessoa,
-              foto_url: null,
-            };
+            return { ...pessoa, foto_url: null };
           }
 
           try {
             const respostaFoto = await api.get(
               `/fotos/${pessoa.foto_id}/arquivo`,
-              {
-                responseType: "blob",
-              }
+              { responseType: "blob" }
             );
-
-            const fotoUrl = URL.createObjectURL(respostaFoto.data);
 
             return {
               ...pessoa,
-              foto_url: fotoUrl,
+              foto_url: URL.createObjectURL(respostaFoto.data),
             };
           } catch (error) {
             console.error(
@@ -58,10 +74,7 @@ function Pessoas() {
               error
             );
 
-            return {
-              ...pessoa,
-              foto_url: null,
-            };
+            return { ...pessoa, foto_url: null };
           }
         })
       );
@@ -72,10 +85,47 @@ function Pessoas() {
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível carregar as pessoas."
+        "Não foi possível carregar as pessoas e os registros."
       );
     } finally {
       setCarregando(false);
+    }
+  }
+
+  async function marcarComoLocalizada(pessoa) {
+    const registro = pessoa.registro_desaparecimento;
+
+    if (!registro) {
+      setErro("Essa pessoa não possui registro de desaparecimento.");
+      return;
+    }
+
+    const confirmar = window.confirm(
+      `Confirma que ${pessoa.nome} foi localizada?`
+    );
+
+    if (!confirmar) return;
+
+    try {
+      setErro("");
+      setSucesso("");
+
+      await api.put(`/desaparecimentos/${registro.id}`, {
+        status: "LOCALIZADO",
+      });
+
+      await carregarPessoas();
+
+      setSucesso(
+        `O caso de ${pessoa.nome} foi atualizado para LOCALIZADO.`
+      );
+    } catch (error) {
+      console.error(error);
+
+      setErro(
+        error.response?.data?.detail ||
+        "Não foi possível atualizar o status do caso."
+      );
     }
   }
 
@@ -233,6 +283,9 @@ function Pessoas() {
                     <th>CPF</th>
                     <th>Data de nascimento</th>
                     <th>Sexo</th>
+                    <th>Data do desaparecimento</th>
+                    <th>Local do desaparecimento</th>
+                    <th>Status do caso</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -272,6 +325,37 @@ function Pessoas() {
                       </td>
 
                       <td>{pessoa.sexo}</td>
+
+                      <td>
+                        {pessoa.registro_desaparecimento?.data_desaparecimento
+                          ? pessoa.registro_desaparecimento.data_desaparecimento
+                            .split("-")
+                            .reverse()
+                            .join("/")
+                          : "—"}
+                      </td>
+
+                      <td>
+                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
+                      </td>
+
+                      <td>
+                        {pessoa.registro_desaparecimento ? (
+                          <span
+                            className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                              ? "localizado"
+                              : "desaparecido"
+                              }`}
+                          >
+                            {pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                              ? "Localizado"
+                              : "Desaparecido"}
+                          </span>
+                        ) : (
+                          "Sem registro"
+                        )}
+                      </td>
+
 
                       <td className="pessoas-actions">
                         <div className="pessoa-menu-container">
@@ -321,6 +405,19 @@ function Pessoas() {
                                   Excluir
                                 </button>
                               )}
+
+                              {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setMenuAberto(null);
+                                    marcarComoLocalizada(pessoa);
+                                  }}
+                                >
+                                  Marcar como localizada
+                                </button>
+                              )}
+
                             </div>
                           )}
                         </div>
@@ -358,6 +455,37 @@ function Pessoas() {
                       <h3>{pessoa.nome}</h3>
                       <span>{pessoa.sexo}</span>
                     </div>
+
+                    <div>
+                      <span>Data do desaparecimento</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.data_desaparecimento
+                          ? pessoa.registro_desaparecimento.data_desaparecimento
+                            .split("-")
+                            .reverse()
+                            .join("/")
+                          : "—"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Local do desaparecimento</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Status do caso</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.status === "LOCALIZADO"
+                          ? "Localizado"
+                          : pessoa.registro_desaparecimento?.status === "DESAPARECIDO"
+                            ? "Desaparecido"
+                            : "Sem registro"}
+                      </strong>
+                    </div>
+
 
                     <div className="pessoa-mobile-menu-container">
                       <button
@@ -406,6 +534,18 @@ function Pessoas() {
                               Excluir
                             </button>
                           )}
+
+                          {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMenuAberto(null);
+                                marcarComoLocalizada(pessoa);
+                              }}
+                            >
+                              Marcar como localizada
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -434,6 +574,37 @@ function Pessoas() {
                           : ""}
                       </strong>
                     </div>
+
+                    <div>
+                      <span>Data do desaparecimento</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.data_desaparecimento
+                          ? pessoa.registro_desaparecimento.data_desaparecimento
+                            .split("-")
+                            .reverse()
+                            .join("/")
+                          : "—"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Local do desaparecimento</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>Status do caso</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.status === "LOCALIZADO"
+                          ? "Localizado"
+                          : pessoa.registro_desaparecimento?.status === "DESAPARECIDO"
+                            ? "Desaparecido"
+                            : "Sem registro"}
+                      </strong>
+                    </div>
+
                   </div>
 
                 </div>
