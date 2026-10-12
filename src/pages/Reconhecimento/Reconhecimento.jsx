@@ -1,22 +1,24 @@
+
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
-
 import "./Reconhecimento.css";
+
+const TAMANHO_MAXIMO_IMAGEM = 10 * 1024 * 1024;
+const TIPOS_IMAGEM = ["image/jpeg", "image/png"];
 
 function Reconhecimento() {
   const navigate = useNavigate();
 
   // REFS
-
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const fotosUrlsRef = useRef([]);
+  const arquivoInputRef = useRef(null);
 
   // ESTADOS
-
   const [cameraAtiva, setCameraAtiva] = useState(false);
   const [imagemCapturada, setImagemCapturada] = useState(null);
   const [resultado, setResultado] = useState(null);
@@ -27,8 +29,7 @@ function Reconhecimento() {
   const [reconhecendo, setReconhecendo] = useState(false);
   const [erro, setErro] = useState("");
 
-  // LIMPAR URLS DAS FOTOS
-
+  // LIMPAR URLS DAS FOTOS CADASTRADAS
   function limparUrlsFotos() {
     fotosUrlsRef.current.forEach((url) => {
       URL.revokeObjectURL(url);
@@ -38,11 +39,9 @@ function Reconhecimento() {
   }
 
   // INICIAR CÂMERA
-
   async function iniciarCamera() {
     setErro("");
 
-    // Evita abrir uma segunda câmera
     if (streamRef.current) {
       pararCamera();
     }
@@ -69,19 +68,15 @@ function Reconhecimento() {
         });
 
       streamRef.current = mediaStream;
-
       setCameraAtiva(true);
     } catch (error) {
-      console.error(
-        "Erro ao acessar câmera:",
-        error
-      );
+      console.error("Erro ao acessar câmera:", error);
 
       setCameraAtiva(false);
 
       if (error.name === "NotAllowedError") {
         setErro(
-          "Permissão para acessar a câmera foi negada. Autorize o uso da câmera no navegador e tente novamente."
+          "A permissão para acessar a câmera foi negada. Autorize o uso da câmera no navegador e tente novamente."
         );
       } else if (error.name === "NotFoundError") {
         setErro(
@@ -89,14 +84,13 @@ function Reconhecimento() {
         );
       } else {
         setErro(
-          "Não foi possível acessar a câmera. Verifique se o navegador possui permissão para utilizá-la."
+          "Não foi possível acessar a câmera. Verifique as permissões do navegador."
         );
       }
     }
   }
 
-  // VINCULAR STREAM AO VÍDEO
-
+  // VINCULAR CÂMERA AO VÍDEO
   useEffect(() => {
     if (
       !cameraAtiva ||
@@ -107,19 +101,14 @@ function Reconhecimento() {
     }
 
     const video = videoRef.current;
-
     video.srcObject = streamRef.current;
 
     video.play().catch((error) => {
-      console.error(
-        "Erro ao reproduzir câmera:",
-        error
-      );
+      console.error("Erro ao reproduzir câmera:", error);
     });
   }, [cameraAtiva]);
 
   // PARAR CÂMERA
-
   function pararCamera() {
     if (streamRef.current) {
       streamRef.current
@@ -136,16 +125,20 @@ function Reconhecimento() {
     setCameraAtiva(false);
   }
 
-  // CAPTURAR FOTO
+  // LIMPAR RESULTADOS ANTERIORES
+  function limparResultadoAnterior() {
+    limparUrlsFotos();
+    setFotosPessoa([]);
+    setResultado(null);
+  }
 
+  // CAPTURAR FOTO PELA CÂMERA
   function capturarFoto() {
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
     if (!video || !canvas) {
-      setErro(
-        "Não foi possível acessar a câmera."
-      );
+      setErro("Não foi possível acessar a câmera.");
       return;
     }
 
@@ -169,69 +162,113 @@ function Reconhecimento() {
     const contexto = canvas.getContext("2d");
 
     if (!contexto) {
-      setErro(
-        "Não foi possível processar a imagem."
-      );
+      setErro("Não foi possível processar a imagem.");
       return;
     }
 
-    contexto.drawImage(
-      video,
-      0,
-      0,
-      largura,
-      altura
-    );
+    contexto.drawImage(video, 0, 0, largura, altura);
 
-    const imagem = canvas.toDataURL(
-      "image/jpeg",
-      0.9
-    );
+    const imagem = canvas.toDataURL("image/jpeg", 0.9);
 
-    if (
-      !imagem ||
-      imagem === "data:," ||
-      !imagem.startsWith("data:image/")
-    ) {
+    if (!imagem || !imagem.startsWith("data:image/")) {
       setErro(
         "Não foi possível capturar a imagem. Tente novamente."
       );
       return;
     }
 
+    limparResultadoAnterior();
     setImagemCapturada(imagem);
-    setResultado(null);
     setErro("");
 
     pararCamera();
   }
 
-  // CARREGAR FOTOS DA PESSOA
+  // ABRIR SELETOR DE ARQUIVOS
+  function abrirSeletorImagem() {
+    if (reconhecendo) return;
 
+    setErro("");
+    arquivoInputRef.current?.click();
+  }
+
+  // SELECIONAR IMAGEM DO COMPUTADOR OU CELULAR
+  function selecionarImagem(event) {
+    const arquivo = event.target.files?.[0];
+
+    // Permite selecionar o mesmo arquivo novamente depois.
+    event.target.value = "";
+
+    if (!arquivo) return;
+
+    setErro("");
+
+    if (!TIPOS_IMAGEM.includes(arquivo.type)) {
+      setErro(
+        "Formato inválido. Selecione uma imagem JPG, JPEG ou PNG."
+      );
+      return;
+    }
+
+    if (arquivo.size > TAMANHO_MAXIMO_IMAGEM) {
+      setErro(
+        "A imagem deve ter no máximo 10 MB."
+      );
+      return;
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = () => {
+      if (
+        typeof leitor.result !== "string" ||
+        !leitor.result.startsWith("data:image/")
+      ) {
+        setErro("Não foi possível carregar a imagem selecionada.");
+        return;
+      }
+
+      pararCamera();
+      limparResultadoAnterior();
+
+      setImagemCapturada(leitor.result);
+      setErro("");
+    };
+
+    leitor.onerror = () => {
+      setErro(
+        "Não foi possível abrir a imagem. Tente selecionar outro arquivo."
+      );
+    };
+
+    leitor.readAsDataURL(arquivo);
+  }
+
+  // CARREGAR FOTOS CADASTRADAS DA PESSOA
   async function carregarFotosPessoa(
     pessoaId,
     fotoCorrespondenteId
   ) {
     setCarregandoFotos(true);
     limparUrlsFotos();
+    setFotosPessoa([]);
 
     try {
       const resposta = await api.get(
         `/fotos/pessoa/${pessoaId}`
       );
 
-      const fotos = resposta.data;
+      const fotos = Array.isArray(resposta.data)
+        ? resposta.data
+        : [];
 
       const fotosComUrl = await Promise.all(
         fotos.map(async (foto) => {
           try {
-            const respostaArquivo =
-              await api.get(
-                `/fotos/${foto.id}/arquivo`,
-                {
-                  responseType: "blob",
-                }
-              );
+            const respostaArquivo = await api.get(
+              `/fotos/${foto.id}/arquivo`,
+              { responseType: "blob" }
+            );
 
             const url = URL.createObjectURL(
               respostaArquivo.data
@@ -257,9 +294,7 @@ function Reconhecimento() {
         })
       );
 
-      setFotosPessoa(
-        fotosComUrl.filter(Boolean)
-      );
+      setFotosPessoa(fotosComUrl.filter(Boolean));
     } catch (error) {
       console.error(
         "Erro ao carregar fotos da pessoa:",
@@ -273,43 +308,38 @@ function Reconhecimento() {
   }
 
   // RECONHECER PESSOA
-
   async function reconhecer() {
-    if (!imagemCapturada || reconhecendo) {
-      return;
-    }
+    if (!imagemCapturada || reconhecendo) return;
 
     setReconhecendo(true);
     setErro("");
     setResultado(null);
+    limparUrlsFotos();
+    setFotosPessoa([]);
 
     try {
-      const respostaBase64 =
-        await fetch(imagemCapturada);
-
-      const blob =
-        await respostaBase64.blob();
+      const respostaImagem = await fetch(imagemCapturada);
+      const blob = await respostaImagem.blob();
 
       if (!blob || blob.size === 0) {
-        throw new Error(
-          "A imagem capturada está vazia."
-        );
+        throw new Error("A imagem selecionada está vazia.");
       }
+
+      const tipoImagem = TIPOS_IMAGEM.includes(blob.type)
+        ? blob.type
+        : "image/jpeg";
+
+      const extensao =
+        tipoImagem === "image/png" ? "png" : "jpg";
 
       const arquivo = new File(
         [blob],
-        "reconhecimento.jpg",
-        {
-          type: "image/jpeg",
-        }
+        `reconhecimento.${extensao}`,
+        { type: tipoImagem }
       );
 
       const formData = new FormData();
-
-      formData.append(
-        "arquivo",
-        arquivo
-      );
+      formData.append("arquivo", arquivo);
 
       const resposta = await api.post(
         "/reconhecimento",
@@ -317,23 +347,16 @@ function Reconhecimento() {
       );
 
       const dados = resposta.data;
-
       setResultado(dados);
 
-      if (
-        dados.reconhecido &&
-        dados.pessoa?.id
-      ) {
+      if (dados.reconhecido && dados.pessoa?.id) {
         await carregarFotosPessoa(
           dados.pessoa.id,
           dados.foto?.id
         );
       }
     } catch (error) {
-      console.error(
-        "Erro no reconhecimento:",
-        error
-      );
+      console.error("Erro no reconhecimento:", error);
 
       setErro(
         error.response?.data?.detail ||
@@ -346,7 +369,6 @@ function Reconhecimento() {
   }
 
   // NOVA CONSULTA
-
   function novaConsulta() {
     pararCamera();
     limparUrlsFotos();
@@ -360,7 +382,6 @@ function Reconhecimento() {
   }
 
   // LIMPEZA AO SAIR DA TELA
-
   useEffect(() => {
     return () => {
       if (streamRef.current) {
@@ -380,20 +401,14 @@ function Reconhecimento() {
   }, []);
 
   // RENDERIZAÇÃO
-
   return (
     <div className="reconhecimento-page">
-
-      {/* CABEÇALHO */}
-
       <div className="reconhecimento-header">
-
         <div>
           <h1>Reconhecimento facial</h1>
-
           <p>
-            Capture uma imagem para verificar
-            se a pessoa está cadastrada.
+            Capture uma foto ou selecione uma imagem para
+            verificar possíveis correspondências.
           </p>
         </div>
 
@@ -408,15 +423,9 @@ function Reconhecimento() {
         >
           Voltar
         </button>
-
       </div>
 
-      {/* CARD PRINCIPAL */}
-
       <div className="reconhecimento-card">
-
-        {/* ERRO */}
-
         {erro && (
           <div
             className="reconhecimento-error"
@@ -426,43 +435,57 @@ function Reconhecimento() {
           </div>
         )}
 
+        {/* INPUT DE IMAGEM */}
+        <input
+          ref={arquivoInputRef}
+          type="file"
+          accept="image/jpeg,image/png,.jpg,.jpeg,.png"
+          onChange={selecionarImagem}
+          className="reconhecimento-input-arquivo"
+          aria-label="Selecionar imagem para reconhecimento"
+        />
+
         {/* CÂMERA */}
+        {!imagemCapturada && !resultado && (
+          <div className="reconhecimento-camera">
+            <div className="reconhecimento-video-container">
+              {cameraAtiva ? (
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="reconhecimento-video"
+                />
+              ) : (
+                <div className="reconhecimento-camera-placeholder">
+                  <span>Câmera desligada</span>
 
-        {!imagemCapturada &&
-          !resultado && (
-            <div className="reconhecimento-camera">
-
-              <div className="reconhecimento-video-container">
-
-                {cameraAtiva ? (
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="reconhecimento-video"
-                  />
-                ) : (
-                  <div className="reconhecimento-camera-placeholder">
-
-                    <span>
-                      Câmera desligada
-                    </span>
-
+                  <div className="reconhecimento-opcoes-imagem">
                     <button
                       type="button"
                       className="button-primary"
                       onClick={iniciarCamera}
                     >
+                      <span className="reconhecimento-icone">📷</span>
                       Abrir câmera
                     </button>
 
+                    <button
+                      type="button"
+                      className="reconhecimento-button-secondary"
+                      onClick={abrirSeletorImagem}
+                    >
+                      <span className="reconhecimento-icone">🖼️</span>
+                      Selecionar imagem
+                    </button>
                   </div>
-                )}
+                </div>
+              )}
+            </div>
 
-              </div>
-
-              {cameraAtiva && (
+            {cameraAtiva && (
+              <div className="reconhecimento-opcoes-camera">
                 <button
                   type="button"
                   className="reconhecimento-button-primary"
@@ -470,82 +493,82 @@ function Reconhecimento() {
                 >
                   Capturar foto
                 </button>
-              )}
-
-            </div>
-          )}
-
-        {/* PREVIEW */}
-
-        {imagemCapturada &&
-          !resultado && (
-            <div className="reconhecimento-preview">
-
-              <h2>Foto capturada</h2>
-
-              <img
-                src={imagemCapturada}
-                alt="Imagem capturada para reconhecimento"
-                className="reconhecimento-preview-image"
-              />
-
-              <div className="reconhecimento-actions">
 
                 <button
                   type="button"
                   className="reconhecimento-button-secondary"
-                  onClick={novaConsulta}
-                  disabled={reconhecendo}
+                  onClick={() => {
+                    pararCamera();
+                    abrirSeletorImagem();
+                  }}
                 >
-                  Tirar outra foto
+                  Selecionar imagem
                 </button>
-
-                <button
-                  type="button"
-                  className="button-primary"
-                  onClick={reconhecer}
-                  disabled={reconhecendo}
-                >
-                  {reconhecendo
-                    ? "Reconhecendo..."
-                    : "Reconhecer pessoa"}
-                </button>
-
               </div>
+            )}
+          </div>
+        )}
 
+        {/* PRÉ-VISUALIZAÇÃO */}
+        {imagemCapturada && !resultado && (
+          <div className="reconhecimento-preview">
+            <h2>Imagem para reconhecimento</h2>
+
+            <img
+              src={imagemCapturada}
+              alt="Imagem selecionada para reconhecimento facial"
+              className="reconhecimento-preview-image"
+            />
+
+            <div className="reconhecimento-actions">
+              <button
+                type="button"
+                className="reconhecimento-button-secondary"
+                onClick={novaConsulta}
+                disabled={reconhecendo}
+              >
+                Nova imagem
+              </button>
+
+              <button
+                type="button"
+                className="reconhecimento-button-secondary"
+                onClick={abrirSeletorImagem}
+                disabled={reconhecendo}
+              >
+                Trocar imagem
+              </button>
+
+              <button
+                type="button"
+                className="button-primary"
+                onClick={reconhecer}
+                disabled={reconhecendo}
+              >
+                {reconhecendo
+                  ? "Reconhecendo..."
+                  : "Reconhecer pessoa"}
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
         {/* RESULTADO */}
-
         {resultado && (
           <div className="reconhecimento-resultado">
-
-            {resultado.reconhecido ? (
+            {resultado.reconhecido && resultado.pessoa ? (
               <>
-                {/* SUCESSO */}
-
                 <div className="reconhecimento-sucesso">
-
-                  <h2>
-                    Pessoa reconhecida
-                  </h2>
-
+                  <h2>Possível correspondência encontrada</h2>
                   <p>
-                    Foi encontrada uma
-                    correspondência na base
-                    de dados.
+                    O sistema encontrou uma correspondência
+                    na base de dados. Confira as informações
+                    antes de tirar conclusões.
                   </p>
-
                 </div>
 
-                {/* DADOS DA PESSOA */}
-
                 <div className="reconhecimento-pessoa">
-
-                  <h3>
-                    {resultado.pessoa.nome}
-                  </h3>
+                  <h3>{resultado.pessoa.nome}</h3>
 
                   <p>
                     <strong>CPF:</strong>{" "}
@@ -553,76 +576,62 @@ function Reconhecimento() {
                   </p>
 
                   <p>
-                    <strong>Distância:</strong>{" "}
+                    <strong>Distância facial:</strong>{" "}
                     {resultado.distancia != null
-                      ? resultado.distancia.toFixed(
-                          4
-                        )
+                      ? resultado.distancia.toFixed(4)
                       : "-"}
                   </p>
 
+                  <p className="reconhecimento-aviso">
+                    A distância facial não representa uma
+                    porcentagem de certeza da identidade.
+                    A correspondência precisa ser verificada
+                    por um agente.
+                  </p>
                 </div>
 
-                {/* FOTOS */}
-
                 <div className="reconhecimento-fotos">
-
-                  <h3>
-                    Fotos cadastradas
-                  </h3>
+                  <h3>Fotos cadastradas</h3>
 
                   {carregandoFotos ? (
                     <div className="reconhecimento-fotos-loading">
                       Carregando fotos...
                     </div>
-                  ) : fotosPessoa.length ===
-                    0 ? (
+                  ) : fotosPessoa.length === 0 ? (
                     <div className="reconhecimento-fotos-vazia">
                       Nenhuma foto cadastrada.
                     </div>
                   ) : (
                     <div className="reconhecimento-fotos-grid">
-
-                      {fotosPessoa.map(
-                        (foto) => (
-                          <div
-                            key={foto.id}
-                            className={
-                              foto.correspondente
-                                ? "reconhecimento-foto-item correspondente"
-                                : "reconhecimento-foto-item"
-                            }
-                          >
-
-                            <div className="reconhecimento-foto-image-container">
-
-                              <img
-                                src={foto.url}
-                                alt={`Foto de ${resultado.pessoa.nome}`}
-                                className="reconhecimento-foto-image"
-                              />
-
-                            </div>
-
-                            {foto.correspondente && (
-                              <span className="reconhecimento-foto-badge">
-                                Foto correspondente
-                              </span>
-                            )}
-
+                      {fotosPessoa.map((foto) => (
+                        <div
+                          key={foto.id}
+                          className={
+                            foto.correspondente
+                              ? "reconhecimento-foto-item correspondente"
+                              : "reconhecimento-foto-item"
+                          }
+                        >
+                          <div className="reconhecimento-foto-image-container">
+                            <img
+                              src={foto.url}
+                              alt={`Foto cadastrada de ${resultado.pessoa.nome}`}
+                              className="reconhecimento-foto-image"
+                            />
                           </div>
-                        )
-                      )}
 
+                          {foto.correspondente && (
+                            <span className="reconhecimento-foto-badge">
+                              Foto correspondente
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   )}
-
                 </div>
 
-                {/* AÇÕES */}
-
                 <div className="reconhecimento-actions">
-
                   <button
                     type="button"
                     className="button-secondary"
@@ -642,31 +651,21 @@ function Reconhecimento() {
                   >
                     Ver detalhes
                   </button>
-
                 </div>
               </>
             ) : (
               <>
-                {/* NÃO ENCONTRADO */}
-
                 <div className="reconhecimento-nao-encontrado">
-
-                  <h2>
-                    Pessoa não encontrada
-                  </h2>
-
+                  <h2>Nenhuma correspondência encontrada</h2>
                   <p>
-                    Não foi encontrada uma
-                    correspondência na base
-                    de dados.
+                    Não foi encontrada uma correspondência
+                    na base de dados. Isso não confirma que
+                    a pessoa não esteja cadastrada ou que
+                    seja uma pessoa desaparecida.
                   </p>
-
                 </div>
 
-                {/* AÇÕES */}
-
                 <div className="reconhecimento-actions">
-
                   <button
                     type="button"
                     className="button-secondary"
@@ -679,33 +678,25 @@ function Reconhecimento() {
                     type="button"
                     className="button-primary"
                     onClick={() =>
-                      navigate(
-                        "/pessoas/cadastro",
-                        {
-                          state: {
-                            foto: imagemCapturada,
-                          },
-                        }
-                      )
+                      navigate("/pessoas/cadastro", {
+                        state: {
+                          foto: imagemCapturada,
+                        },
+                      })
                     }
                   >
                     Cadastrar pessoa
                   </button>
-
                 </div>
               </>
             )}
-
           </div>
         )}
-
-        {/* CANVAS OCULTO */}
 
         <canvas
           ref={canvasRef}
           style={{ display: "none" }}
         />
-
       </div>
     </div>
   );
