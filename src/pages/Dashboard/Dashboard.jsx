@@ -26,8 +26,10 @@ function Dashboard() {
   const [totalPessoas, setTotalPessoas] = useState(0);
   const [totalAgentes, setTotalAgentes] = useState(0);
   const [totalFaces, setTotalFaces] = useState(0);
-  const [totalReconhecimentos, setTotalReconhecimentos] =
-    useState(0);
+  const [totalReconhecimentos, setTotalReconhecimentos] = useState(0);
+
+  const [casosEmAberto, setCasosEmAberto] = useState(0);
+  const [pessoasLocalizadas, setPessoasLocalizadas] = useState(0);
 
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -46,11 +48,13 @@ function Dashboard() {
         agentesResponse,
         fotosResponse,
         reconhecimentosResponse,
+        estatisticasResponse,
       ] = await Promise.all([
         api.get("/pessoas"),
         api.get("/agentes"),
         api.get("/fotos"),
         api.get("/reconhecimento/total"),
+        api.get("/desaparecimentos/estatisticas"),
       ]);
 
       setTotalPessoas(
@@ -74,6 +78,14 @@ function Dashboard() {
       setTotalReconhecimentos(
         Number(reconhecimentosResponse.data?.total ?? 0)
       );
+
+      setCasosEmAberto(
+        Number(estatisticasResponse.data?.casos_em_aberto ?? 0)
+      );
+
+      setPessoasLocalizadas(
+        Number(estatisticasResponse.data?.pessoas_localizadas ?? 0)
+      );
     } catch (error) {
       console.error(
         "Erro ao carregar dados do painel:",
@@ -88,6 +100,7 @@ function Dashboard() {
     }
   }
 
+
   const indicadores = [
     {
       titulo: "Pessoas cadastradas",
@@ -99,7 +112,7 @@ function Dashboard() {
     },
     {
       titulo: "Casos em aberto",
-      valor: null,
+      valor: casosEmAberto,
       descricao: "Desaparecimentos ainda não encerrados",
       icone: FileSearch,
       cor: "blue",
@@ -115,8 +128,8 @@ function Dashboard() {
     },
     {
       titulo: "Pessoas localizadas",
-      valor: null,
-      descricao: "Localizações confirmadas e registradas",
+      valor: pessoasLocalizadas,
+      descricao: "Localizações confirmadas",
       icone: MapPinCheck,
       cor: "green",
       destino: "/registros-desaparecimento",
