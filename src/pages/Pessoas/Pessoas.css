@@ -1,20 +1,33 @@
-/* 1. ESTRUTURA PRINCIPAL & CONTAINER */
+
+/* ========================================
+   1. ESTRUTURA PRINCIPAL
+======================================== */
+
 .pessoas-page {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .pessoas-card {
-  background: white;
+  width: 100%;
+  min-width: 0;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   overflow: visible;
+  box-sizing: border-box;
 }
 
-/* 2. CABEÇALHO & BOTÃO DE CRIAÇÃO */
+/* ========================================
+   2. CABEÇALHO E BOTÃO DE CRIAÇÃO
+======================================== */
+
 .pessoas-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 25px;
 }
 
@@ -35,7 +48,7 @@
   background: #2563eb;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -45,10 +58,13 @@
   background: #1d4ed8;
 }
 
-/* 3. ESTADOS DA PÁGINA (CARREGANDO, VAZIO & ERRO) */
+/* ========================================
+   3. CARREGAMENTO, VAZIO E ERRO
+======================================== */
+
 .pessoas-loading,
 .pessoas-empty {
-  padding: 50px;
+  padding: 35px 20px;
   text-align: center;
 }
 
@@ -71,12 +87,90 @@
   border-radius: 8px;
   color: #b91c1c;
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
-/* 4. TABELA DE DADOS */
+/* ========================================
+   4. MENSAGEM DE SUCESSO
+======================================== */
+
+.pessoas-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.pessoas-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background: #22c55e;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ========================================
+   5. CAMPO DE BUSCA
+======================================== */
+
+.pessoas-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  padding: 0 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+}
+
+.pessoas-search span {
+  flex-shrink: 0;
+  font-size: 23px;
+}
+
+.pessoas-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.pessoas-search:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ========================================
+   6. TABELA DESKTOP
+======================================== */
+
 .pessoas-table-container {
   width: 100%;
-  overflow: visible;
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .pessoas-table {
@@ -104,17 +198,22 @@
   background: #f9fafb;
 }
 
-/* 5. ELEMENTOS DAS LINHAS (AVATAR & AÇÕES) */
+/* ========================================
+   7. FOTOS E NOMES DESKTOP
+======================================== */
+
 .pessoa-nome {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .pessoa-foto {
   display: block;
   width: 42px;
   height: 42px;
+  flex-shrink: 0;
   border-radius: 6px;
   object-fit: cover;
 }
@@ -125,23 +224,249 @@
   justify-content: center;
   width: 42px;
   height: 42px;
+  flex-shrink: 0;
   background: #f1f1f1;
   border-radius: 6px;
-  color: #777;
+  color: #777777;
   font-size: 9px;
   text-align: center;
 }
 
-/* LISTA MOBILE */
+/* ========================================
+   8. LISTA MOBILE
+======================================== */
+
 .pessoas-mobile-list {
   display: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
+.pessoa-mobile-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* ========================================
+   9. CABEÇALHO DO CARD MOBILE
+======================================== */
+
+.pessoa-mobile-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Foto da pessoa */
+
+.pessoa-mobile-foto {
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.pessoa-mobile-sem-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  box-sizing: border-box;
+  background: #f3f4f6;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 9px;
+  text-align: center;
+}
+
+/* Nome e sexo */
+
+.pessoa-mobile-nome {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pessoa-mobile-nome h3 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.pessoa-mobile-nome span {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   10. MENU DE AÇÕES MOBILE
+======================================== */
+
+.pessoa-mobile-menu-container {
+  position: relative;
+  flex: 0 0 36px;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.pessoa-mobile-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: #4b5563;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pessoa-mobile-menu-button:hover {
+  background: #f3f4f6;
+}
+
+.pessoa-mobile-menu {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  width: max-content;
+  min-width: 150px;
+  max-width: calc(100vw - 80px);
+  box-sizing: border-box;
+  padding: 5px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+}
+
+.pessoa-mobile-menu button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 13px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.pessoa-mobile-menu button:hover {
+  background: #f3f4f6;
+}
+
+.pessoa-mobile-menu .pessoa-menu-excluir {
+  color: #dc2626;
+}
+
+.pessoa-mobile-menu .pessoa-menu-excluir:hover {
+  background: #fef2f2;
+}
+
+/* ========================================
+   11. INFORMAÇÕES DO CARD MOBILE
+======================================== */
+
+.pessoa-mobile-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 12px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 16px 0 4px;
+}
+
+.pessoa-mobile-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pessoa-mobile-info span {
+  color: #9ca3af;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.pessoa-mobile-info strong {
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   12. STATUS DO DESAPARECIMENTO
+======================================== */
+
+.status-caso {
+  display: inline-block;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-desaparecido {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-localizado {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ========================================
+   13. BOTÃO EXCLUIR
+======================================== */
+
 .pessoa-excluir {
-  background: #fff;
+  padding: 8px 14px;
+  background: #ffffff;
   color: #dc2626;
   border: 1px solid #fecaca;
-  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -151,33 +476,10 @@
   background: #fef2f2;
 }
 
-.pessoas-success {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  padding: 12px 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
-  border-radius: 8px;
-  font-size: 14px;
-}
+/* ========================================
+   14. MENU DE AÇÕES DESKTOP
+======================================== */
 
-.pessoas-success-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  background: #22c55e;
-  color: white;
-  border-radius: 50%;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* MENU DE AÇÕES - DESKTOP */
 .pessoas-actions {
   width: 60px;
   text-align: center;
@@ -208,17 +510,16 @@
   color: #111827;
 }
 
-/* MENU */
 .pessoa-menu {
   position: absolute;
   top: 38px;
   right: 0;
   min-width: 140px;
-  background: white;
+  padding: 5px;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 5px;
   z-index: 100;
 }
 
@@ -247,257 +548,124 @@
   background: #fef2f2;
 }
 
-/* ESTADOS */
-.pessoas-loading,
-.pessoas-empty {
-  padding: 35px 20px;
-}
+/* ========================================
+   15. RESPONSIVIDADE PARA CELULARES
+======================================== */
 
-.pessoas-success {
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 16px;
-  padding: 12px 14px;
-  font-size: 13px;
-}
-
-.pessoas-search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 0 16px;
-  min-height: 48px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  color: #6b7280;
-}
-
-.pessoas-search span {
-  font-size: 23px;
-}
-
-.pessoas-search input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #1f2937;
-  font-size: 14px;
-}
-
-.pessoas-search:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.status-caso {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.status-desaparecido {
-  background: #fef2f2;
-  color: #b91c1c;
-}
-
-.status-localizado {
-  background: #dcfce7;
-  color: #166534;
-}
-
-/* RESPONSIVIDADE */
 @media (max-width: 768px) {
-  /* PÁGINA */
+  /* Página */
+
   .pessoas-page {
     width: 100%;
+    max-width: 100%;
   }
 
-  /* CABEÇALHO */
+  .pessoas-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Cabeçalho */
+
   .pessoas-header {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
+    margin-bottom: 20px;
   }
 
   .pessoas-header h1 {
     font-size: 24px;
+    overflow-wrap: anywhere;
   }
 
   .pessoas-new-button {
     width: 100%;
+    box-sizing: border-box;
   }
 
-  /* ESCONDER TABELA */
+  /* Busca */
+
+  .pessoas-search {
+    margin-bottom: 16px;
+    padding: 0 12px;
+  }
+
+  /* Esconde a tabela no celular */
+
   .pessoas-table-container {
     display: none;
   }
 
-  /* MOSTRAR CARDS */
+  /* Exibe os cards */
+
   .pessoas-mobile-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .pessoa-mobile-card {
     padding: 14px;
   }
 
-  /* CARD */
-  .pessoa-mobile-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+  /* Informações */
+
+  .pessoa-mobile-info {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px 10px;
   }
 
-  /* TOPO */
-  .pessoa-mobile-header {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f3f4f6;
-  }
-
-  /* FOTO */
-  .pessoa-mobile-foto {
-    width: 56px;
-    height: 56px;
-    border-radius: 10px;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-
-  /* SEM FOTO */
-  .pessoa-mobile-sem-foto {
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f3f4f6;
-    border-radius: 10px;
-    color: #6b7280;
-    font-size: 10px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  /* NOME */
-  .pessoa-mobile-nome {
-    min-width: 0;
-  }
+  /* Ajuste para telas muito estreitas */
 
   .pessoa-mobile-nome h3 {
-    margin: 0 0 5px;
-    color: #1f2937;
-    font-size: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .pessoa-mobile-nome span {
-    color: #6b7280;
     font-size: 13px;
-  }
-
-  /* INFORMAÇÕES */
-  .pessoa-mobile-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 16px 0;
-  }
-
-  .pessoa-mobile-info div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
   }
 
   .pessoa-mobile-info span {
-    color: #9ca3af;
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .pessoa-mobile-info strong {
-    color: #374151;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+  }
+}
+
+/* ========================================
+   16. CELULARES MUITO ESTREITOS
+======================================== */
+
+@media (max-width: 360px) {
+  .pessoas-mobile-list {
+    padding: 8px;
   }
 
-  .pessoas-table-container {
-    display: none;
+  .pessoa-mobile-card {
+    padding: 10px;
   }
 
-  /* MENU DE AÇÕES - MOBILE */
+  .pessoa-mobile-header {
+    gap: 8px;
+  }
+
+  .pessoa-mobile-foto,
+  .pessoa-mobile-sem-foto {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
   .pessoa-mobile-menu-container {
-    position: relative;
-    margin-left: auto;
-    flex-shrink: 0;
+    flex-basis: 32px;
   }
 
   .pessoa-mobile-menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: none;
-    border-radius: 7px;
-    color: #4b5563;
-    font-size: 25px;
-    line-height: 1;
-    cursor: pointer;
+    width: 32px;
+    height: 32px;
   }
 
-  .pessoa-mobile-menu-button:hover {
-    background: #f3f4f6;
-  }
-
-  .pessoa-mobile-menu {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    min-width: 145px;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    padding: 5px;
-    z-index: 100;
-  }
-
-  .pessoa-mobile-menu button {
-    display: block;
-    width: 100%;
-    padding: 10px 12px;
-    background: transparent;
-    border: none;
-    border-radius: 6px;
-    color: #374151;
-    font-size: 13px;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .pessoa-mobile-menu button:hover {
-    background: #f3f4f6;
-  }
-
-  .pessoa-mobile-menu .pessoa-menu-excluir {
-    color: #dc2626;
-  }
-
-  .pessoa-mobile-menu .pessoa-menu-excluir:hover {
-    background: #fef2f2;
+  .pessoa-mobile-info {
+    gap: 14px 8px;
   }
 }
