@@ -261,6 +261,37 @@
   font-size: 13px;
 }
 
+.pessoas-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 16px;
+  min-height: 48px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+}
+
+.pessoas-search span {
+  font-size: 23px;
+}
+
+.pessoas-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.pessoas-search:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 /* RESPONSIVIDADE */
 @media (max-width: 768px) {
   /* PÁGINA */

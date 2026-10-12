@@ -12,6 +12,7 @@ function Pessoas() {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [menuAberto, setMenuAberto] = useState(null);
+  const [busca, setBusca] = useState("");
 
   const usuarioSalvo = localStorage.getItem("usuario");
   const usuarioLogado = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
@@ -139,24 +140,53 @@ function Pessoas() {
     carregarPessoas();
   }, []);
 
+  const pessoasFiltradas = pessoas.filter((pessoa) => {
+    const termo = busca.trim().toLowerCase();
+
+    if (!termo) return true;
+
+    const nome = (pessoa.nome || "").toLowerCase();
+    const cpf = (pessoa.cpf || "").replace(/\D/g, "");
+    const buscaCpf = termo.replace(/\D/g, "");
+
+    return (
+      nome.includes(termo) ||
+      (buscaCpf !== "" && cpf.includes(buscaCpf))
+    );
+  });
+
   return (
     <div className="pessoas-page">
       {/* CABEÇALHO */}
       <div className="pessoas-header">
         <div>
-          <h1>Pessoas</h1>
+          <h1>Pessoas desaparecidas</h1>
 
           <p>
-            Gerencie as pessoas cadastradas no sistema.
+            Consulte e gerencie os registros utilizados no
+            processo de identificação facial.
           </p>
         </div>
 
         <button
+          type="button"
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          + Adicionar Pessoa
+          + Cadastrar pessoa
         </button>
+      </div>
+
+      <div className="pessoas-search">
+        <span aria-hidden="true">⌕</span>
+
+        <input
+          type="search"
+          placeholder="Buscar por nome ou CPF..."
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          aria-label="Buscar pessoa por nome ou CPF"
+        />
       </div>
 
       {/* MENSAGEM DE ERRO */}
@@ -208,7 +238,7 @@ function Pessoas() {
                 </thead>
 
                 <tbody>
-                  {pessoas.map((pessoa) => (
+                  {pessoasFiltradas.map((pessoa) => (
                     <tr key={pessoa.id}>
                       <td>
                         <div className="pessoa-nome">
@@ -304,7 +334,7 @@ function Pessoas() {
             {/* CARDS - MOBILE */}
 
             <div className="pessoas-mobile-list">
-              {pessoas.map((pessoa) => (
+              {pessoasFiltradas.map((pessoa) => (
                 <div
                   className="pessoa-mobile-card"
                   key={pessoa.id}
