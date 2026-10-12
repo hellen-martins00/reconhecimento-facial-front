@@ -116,19 +116,19 @@ function DashboardLayout({ children }) {
       active: location.pathname === "/dashboard",
     },
     {
-      label: "Pessoas cadastradas",
+      label: "Pessoas desaparecidas",
       path: "/pessoas",
       icon: Users,
       active: location.pathname.startsWith("/pessoas"),
     },
     {
-      label: "Agentes",
+      label: "Agentes de segurança",
       path: "/agentes",
       icon: ShieldCheck,
       active: location.pathname.startsWith("/agentes"),
     },
     {
-      label: "Busca facial",
+      label: "Busca biométrica",
       path: "/reconhecimento",
       icon: ScanFace,
       active: location.pathname.startsWith("/reconhecimento"),
