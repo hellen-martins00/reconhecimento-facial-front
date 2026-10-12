@@ -548,6 +548,58 @@
   background: #fef2f2;
 }
 
+/* STATUS DO CASO — DESKTOP E MOBILE */
+
+.status-caso {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.status-desaparecido {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-localizado {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-sem-registro {
+  display: inline-block;
+  width: fit-content;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Evita que o estilo das informações do card
+   remova as cores do status no celular */
+
+.pessoa-mobile-info .status-caso {
+  font-weight: 600;
+}
+
+.pessoa-mobile-info .status-desaparecido {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.pessoa-mobile-info .status-localizado {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
 /* ========================================
    15. RESPONSIVIDADE PARA CELULARES
 ======================================== */

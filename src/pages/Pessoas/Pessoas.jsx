@@ -521,7 +521,7 @@ function Pessoas() {
                       )}
                     </div>
                   </div>
-                  
+
                   {/* INFORMAÇÕES */}
                   <div className="pessoa-mobile-info">
                     <div>
@@ -559,13 +559,23 @@ function Pessoas() {
 
                     <div>
                       <span>Status do caso</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.status === "LOCALIZADO"
-                          ? "Localizado"
-                          : pessoa.registro_desaparecimento?.status === "DESAPARECIDO"
-                            ? "Desaparecido"
-                            : "Sem registro"}
-                      </strong>
+
+                      {pessoa.registro_desaparecimento ? (
+                        <strong
+                          className={`status-caso ${pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                              ? "status-localizado"
+                              : "status-desaparecido"
+                            }`}
+                        >
+                          {pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                            ? "Localizado"
+                            : "Desaparecido"}
+                        </strong>
+                      ) : (
+                        <strong className="status-sem-registro">
+                          Sem registro
+                        </strong>
+                      )}
                     </div>
                   </div>
 
