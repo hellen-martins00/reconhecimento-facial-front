@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,95 +7,119 @@ import api from "../../../services/api";
 import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import { formatarCEP, limparCEP } from "../../../utils/formatarCEP";
 import { formatarData } from "../../../utils/formatarData";
-import { formatarTelefone, limparTelefone } from "../../../utils/formatarTelefone";
+import {
+  formatarTelefone,
+  limparTelefone,
+} from "../../../utils/formatarTelefone";
 
 import "./CadastroPessoa.css";
 
+const LIMITES = {
+  nome: { min: 3, max: 150 },
+  cpf: 11,
+  nomeMae: { min: 3, max: 150 },
+  nomePai: { min: 3, max: 150 },
+  telefone: { min: 10, max: 11 },
+  tipoTelefone: { min: 3, max: 20 },
+  logradouro: { min: 3, max: 200 },
+  numero: { min: 1, max: 20 },
+  bairro: { min: 2, max: 100 },
+  cidade: { min: 2, max: 100 },
+  estado: 2,
+  cep: 8,
+  localDesaparecimento: { min: 3, max: 200 },
+  descricaoDesaparecimento: { min: 3, max: 500 },
+};
+
+const ETAPAS = [
+  { numero: 1, titulo: "Identificação", descricao: "Dados pessoais" },
+  { numero: 2, titulo: "Telefones", descricao: "Contatos" },
+  { numero: 3, titulo: "Endereço", descricao: "Localização" },
+  { numero: 4, titulo: "Desaparecimento", descricao: "Registros" },
+  { numero: 5, titulo: "Revisão", descricao: "Conferência" },
+];
+
+function textoLimpo(valor) {
+  return String(valor ?? "").trim();
+}
+
+function obterDataHoje() {
+  const hoje = new Date();
+  const ano = hoje.getFullYear();
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+  const dia = String(hoje.getDate()).padStart(2, "0");
+
+  return `${ano}-${mes}-${dia}`;
+}
+
+function obterMensagemErroApi(error) {
+  const detalhe = error.response?.data?.detail;
+
+  if (Array.isArray(detalhe)) {
+    return detalhe
+      .map((item) => {
+        const campo = item.loc?.[item.loc.length - 1];
+        const mensagem = String(item.msg ?? "")
+          .replace(/^Value error,\s*/i, "")
+          .trim();
+
+        const mensagensPorCampo = {
+          nome: "Verifique o nome.",
+          cpf: "Verifique o CPF.",
+          data_nascimento: "Verifique a data de nascimento.",
+          sexo: "Verifique o sexo.",
+          nome_mae: "Verifique o nome da mãe.",
+          nome_pai: "Verifique o nome do pai.",
+          numero: "Verifique o número do endereço.",
+          logradouro: "Verifique o logradouro.",
+          bairro: "Verifique o bairro.",
+          cidade: "Verifique a cidade.",
+          estado: "Verifique o estado.",
+          cep: "Verifique o CEP.",
+          crime: "Verifique o crime.",
+          data_ocorrencia: "Verifique a data da ocorrência.",
+          tipo: "Verifique o tipo do telefone.",
+          data_desaparecimento: "Verifique a data do desaparecimento.",
+          local_desaparecimento: "Verifique o local do desaparecimento.",
+          descricao: "Verifique a descrição do desaparecimento.",
+          pessoa_id: "Verifique a pessoa vinculada ao registro.",
+        };
+
+        if (campo === "numero" && /no máximo 20/i.test(mensagem)) {
+          return "O número do endereço deve ter no máximo 20 caracteres.";
+        }
+
+        if (campo === "logradouro" && /no máximo 200/i.test(mensagem)) {
+          return "O logradouro deve ter no máximo 200 caracteres.";
+        }
+
+        if (campo === "crime" && /no máximo 150/i.test(mensagem)) {
+          return "O crime deve ter no máximo 150 caracteres.";
+        }
+
+        return mensagensPorCampo[campo] || mensagem ||
+          "Verifique os dados informados.";
+      })
+      .join(" ");
+  }
+
+  if (typeof detalhe === "string" && detalhe.trim()) {
+    return detalhe.replace(/^Value error,\s*/i, "").trim();
+  }
+
+  if (!error.response) {
+    return "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
+  }
+
+  if (error.response.status === 409) {
+    return "Não foi possível concluir o cadastro porque um dos dados informados já está cadastrado.";
+  }
+
+  return "Não foi possível concluir o cadastro. Verifique os dados e tente novamente.";
+}
+
 function CadastroPessoa() {
   const navigate = useNavigate();
-
-  // Limites alinhados aos schemas do backend.
-  const LIMITES = {
-    nome: { min: 3, max: 150 },
-    cpf: 11,
-    nomeMae: { min: 3, max: 150 },
-    nomePai: { min: 3, max: 150 },
-    telefone: { min: 10, max: 11 },
-    tipoTelefone: { min: 3, max: 20 },
-    logradouro: { min: 3, max: 200 },
-    numero: { min: 1, max: 20 },
-    bairro: { min: 2, max: 100 },
-    cidade: { min: 2, max: 100 },
-    estado: 2,
-    cep: 8,
-    localDesaparecimento: { min: 3, max: 200 },
-    descricaoDesaparecimento: { min: 3, max: 500 },
-  };
-
-  function textoLimpo(valor) {
-    return String(valor ?? "").trim();
-  }
-
-  function obterMensagemErroApi(error) {
-    const detalhe = error.response?.data?.detail;
-
-    if (Array.isArray(detalhe)) {
-      return detalhe
-        .map((item) => {
-          const campo = item.loc?.[item.loc.length - 1];
-          const mensagem = String(item.msg ?? "")
-            .replace(/^Value error,\s*/i, "")
-            .trim();
-
-          const mensagensPorCampo = {
-            nome: "Verifique o nome.",
-            cpf: "Verifique o CPF.",
-            data_nascimento: "Verifique a data de nascimento.",
-            sexo: "Verifique o sexo.",
-            nome_mae: "Verifique o nome da mãe.",
-            nome_pai: "Verifique o nome do pai.",
-            numero: "Verifique o número do endereço.",
-            logradouro: "Verifique o logradouro.",
-            bairro: "Verifique o bairro.",
-            cidade: "Verifique a cidade.",
-            estado: "Verifique o estado.",
-            cep: "Verifique o CEP.",
-            crime: "Verifique o crime.",
-            data_ocorrencia: "Verifique a data da ocorrência.",
-            tipo: "Verifique o tipo do telefone.",
-          };
-
-          if (campo === "numero" && /no máximo 20/i.test(mensagem)) {
-            return "O número do endereço deve ter no máximo 20 caracteres.";
-          }
-
-          if (campo === "logradouro" && /no máximo 200/i.test(mensagem)) {
-            return "O logradouro deve ter no máximo 200 caracteres.";
-          }
-
-          if (campo === "crime" && /no máximo 150/i.test(mensagem)) {
-            return "O crime deve ter no máximo 150 caracteres.";
-          }
-
-          return mensagensPorCampo[campo] || mensagem || "Verifique os dados informados.";
-        })
-        .join(" ");
-    }
-
-    if (typeof detalhe === "string" && detalhe.trim()) {
-      return detalhe.replace(/^Value error,\s*/i, "").trim();
-    }
-
-    if (!error.response) {
-      return "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-    }
-
-    if (error.response.status === 409) {
-      return "Não foi possível concluir o cadastro porque um dos dados informados já está cadastrado.";
-    }
-
-    return "Não foi possível cadastrar a pessoa. Verifique os dados e tente novamente.";
-  }
 
   // ETAPA ATUAL
   const [etapaAtual, setEtapaAtual] = useState(1);
@@ -109,10 +134,7 @@ function CadastroPessoa() {
 
   // TELEFONES
   const [telefones, setTelefones] = useState([
-    {
-      numero: "",
-      tipo: "PESSOAL",
-    },
+    { numero: "", tipo: "PESSOAL" },
   ]);
 
   // ENDEREÇO
@@ -124,7 +146,8 @@ function CadastroPessoa() {
   const [cep, setCep] = useState("");
 
   // REGISTROS DE DESAPARECIMENTO
-  const [registrosDesaparecimento, setRegistrosDesaparecimento] = useState([]);
+  const [registrosDesaparecimento, setRegistrosDesaparecimento] =
+    useState([]);
 
   // CONTROLE
   const [erro, setErro] = useState("");
@@ -132,71 +155,35 @@ function CadastroPessoa() {
   const [erroDataNascimento, setErroDataNascimento] = useState("");
   const [carregando, setCarregando] = useState(false);
 
-  // CONFIGURAÇÃO DAS ETAPAS
-  const etapas = [
-    {
-      numero: 1,
-      titulo: "Identificação",
-      descricao: "Dados pessoais",
-    },
-    {
-      numero: 2,
-      titulo: "Telefones",
-      descricao: "Contatos",
-    },
-    {
-      numero: 3,
-      titulo: "Endereço",
-      descricao: "Localização",
-    },
-    {
-      numero: 4,
-      titulo: "Desaparecimento",
-      descricao: "Registros",
-    },
-    {
-      numero: 5,
-      titulo: "Revisão",
-      descricao: "Conferência",
-    },
-  ];
-
   // TELEFONES
   function adicionarTelefone() {
     setErro("");
 
-    setTelefones((telefonesAtuais) => [
-      ...telefonesAtuais,
-      {
-        numero: "",
-        tipo: "PESSOAL",
-      },
+    setTelefones((atuais) => [
+      ...atuais,
+      { numero: "", tipo: "PESSOAL" },
     ]);
   }
 
   function removerTelefone(index) {
     setErro("");
 
-    setTelefones((telefonesAtuais) =>
-      telefonesAtuais.filter(
-        (_, telefoneIndex) => telefoneIndex !== index
-      )
+    setTelefones((atuais) =>
+      atuais.filter((_, i) => i !== index)
     );
   }
 
   function alterarTelefone(index, campo, valor) {
     setErro("");
 
-    setTelefones((telefonesAtuais) =>
-      telefonesAtuais.map((telefone, telefoneIndex) =>
-        telefoneIndex === index
+    setTelefones((atuais) =>
+      atuais.map((telefone, i) =>
+        i === index
           ? {
-            ...telefone,
-            [campo]:
-              campo === "numero"
-                ? limparTelefone(valor)
-                : valor,
-          }
+              ...telefone,
+              [campo]:
+                campo === "numero" ? limparTelefone(valor) : valor,
+            }
           : telefone
       )
     );
@@ -206,8 +193,8 @@ function CadastroPessoa() {
   function adicionarRegistroDesaparecimento() {
     setErro("");
 
-    setRegistrosDesaparecimento((registrosAtuais) => [
-      ...registrosAtuais,
+    setRegistrosDesaparecimento((atuais) => [
+      ...atuais,
       {
         data_desaparecimento: "",
         local_desaparecimento: "",
@@ -219,32 +206,24 @@ function CadastroPessoa() {
   function removerRegistroDesaparecimento(index) {
     setErro("");
 
-    setRegistrosDesaparecimento((registrosAtuais) =>
-      registrosAtuais.filter((_, registroIndex) => registroIndex !== index)
+    setRegistrosDesaparecimento((atuais) =>
+      atuais.filter((_, i) => i !== index)
     );
   }
 
   function alterarRegistroDesaparecimento(index, campo, valor) {
     setErro("");
 
-    setRegistrosDesaparecimento((registrosAtuais) =>
-      registrosAtuais.map((registro, registroIndex) =>
-        registroIndex === index
+    setRegistrosDesaparecimento((atuais) =>
+      atuais.map((registro, i) =>
+        i === index
           ? { ...registro, [campo]: valor }
           : registro
       )
     );
   }
 
-  function obterDataHoje() {
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoje.getDate()).padStart(2, "0");
-
-    return `${ano}-${mes}-${dia}`;
-  }
-
+  // VERIFICAÇÃO DO CPF
   async function validarCPFDisponivel() {
     const cpfLimpo = limparCPF(cpf);
 
@@ -258,18 +237,13 @@ function CadastroPessoa() {
         `/pessoas/verificar-cpf/${cpfLimpo}`
       );
 
-      if (!resposta.data.disponivel) {
-        setErroCPF(
-          "Já existe uma pessoa cadastrada com este CPF."
-        );
-
+      if (!resposta.data?.disponivel) {
+        setErroCPF("Já existe uma pessoa cadastrada com este CPF.");
         return false;
       }
 
       setErroCPF("");
-
       return true;
-
     } catch (error) {
       console.error("Erro ao verificar CPF:", error);
 
@@ -293,13 +267,13 @@ function CadastroPessoa() {
       return false;
     }
 
-    if (nomeValor.length < LIMITES.nome.min) {
-      setErro(`O nome deve ter pelo menos ${LIMITES.nome.min} caracteres.`);
-      return false;
-    }
-
-    if (nomeValor.length > LIMITES.nome.max) {
-      setErro(`O nome deve ter no máximo ${LIMITES.nome.max} caracteres.`);
+    if (
+      nomeValor.length < LIMITES.nome.min ||
+      nomeValor.length > LIMITES.nome.max
+    ) {
+      setErro(
+        `O nome deve ter entre ${LIMITES.nome.min} e ${LIMITES.nome.max} caracteres.`
+      );
       return false;
     }
 
@@ -314,7 +288,9 @@ function CadastroPessoa() {
     }
 
     if (dataNascimento > obterDataHoje()) {
-      setErroDataNascimento("A data de nascimento não pode ser futura.");
+      setErroDataNascimento(
+        "A data de nascimento não pode ser futura."
+      );
       return false;
     }
 
@@ -325,33 +301,23 @@ function CadastroPessoa() {
       return false;
     }
 
-    if (!maeValor) {
-      setErro("Informe o nome da mãe.");
+    if (
+      maeValor.length < LIMITES.nomeMae.min ||
+      maeValor.length > LIMITES.nomeMae.max
+    ) {
+      setErro(
+        `O nome da mãe deve ter entre ${LIMITES.nomeMae.min} e ${LIMITES.nomeMae.max} caracteres.`
+      );
       return false;
     }
 
-    if (maeValor.length < LIMITES.nomeMae.min) {
-      setErro(`O nome da mãe deve ter pelo menos ${LIMITES.nomeMae.min} caracteres.`);
-      return false;
-    }
-
-    if (maeValor.length > LIMITES.nomeMae.max) {
-      setErro(`O nome da mãe deve ter no máximo ${LIMITES.nomeMae.max} caracteres.`);
-      return false;
-    }
-
-    if (!paiValor) {
-      setErro("Informe o nome do pai.");
-      return false;
-    }
-
-    if (paiValor.length < LIMITES.nomePai.min) {
-      setErro(`O nome do pai deve ter pelo menos ${LIMITES.nomePai.min} caracteres.`);
-      return false;
-    }
-
-    if (paiValor.length > LIMITES.nomePai.max) {
-      setErro(`O nome do pai deve ter no máximo ${LIMITES.nomePai.max} caracteres.`);
+    if (
+      paiValor.length < LIMITES.nomePai.min ||
+      paiValor.length > LIMITES.nomePai.max
+    ) {
+      setErro(
+        `O nome do pai deve ter entre ${LIMITES.nomePai.min} e ${LIMITES.nomePai.max} caracteres.`
+      );
       return false;
     }
 
@@ -360,12 +326,13 @@ function CadastroPessoa() {
 
   // VALIDAÇÃO DA ETAPA 2
   function validarTelefones() {
-    const telefonesPreenchidos = telefones.filter(
+    const preenchidos = telefones.filter(
       (telefone) => limparTelefone(telefone.numero).length > 0
     );
 
-    for (const telefone of telefonesPreenchidos) {
+    for (const telefone of preenchidos) {
       const numeroLimpo = limparTelefone(telefone.numero);
+      const tipo = textoLimpo(telefone.tipo);
 
       if (
         numeroLimpo.length < LIMITES.telefone.min ||
@@ -374,8 +341,6 @@ function CadastroPessoa() {
         setErro("Informe um telefone válido com DDD.");
         return false;
       }
-
-      const tipo = textoLimpo(telefone.tipo);
 
       if (
         tipo.length < LIMITES.tipoTelefone.min ||
@@ -386,13 +351,14 @@ function CadastroPessoa() {
       }
     }
 
-    // Evita cadastrar o mesmo número duas vezes para a mesma pessoa.
-    const numeros = telefonesPreenchidos.map((telefone) =>
+    const numeros = preenchidos.map((telefone) =>
       limparTelefone(telefone.numero)
     );
 
     if (new Set(numeros).size !== numeros.length) {
-      setErro("Não é permitido cadastrar o mesmo telefone mais de uma vez.");
+      setErro(
+        "Não é permitido cadastrar o mesmo telefone mais de uma vez."
+      );
       return false;
     }
 
@@ -408,63 +374,43 @@ function CadastroPessoa() {
     const estadoValor = textoLimpo(estado);
     const cepLimpo = limparCEP(cep);
 
-    if (!logradouroValor) {
-      setErro("Informe o logradouro.");
+    if (
+      logradouroValor.length < LIMITES.logradouro.min ||
+      logradouroValor.length > LIMITES.logradouro.max
+    ) {
+      setErro(
+        `O logradouro deve ter entre ${LIMITES.logradouro.min} e ${LIMITES.logradouro.max} caracteres.`
+      );
       return false;
     }
 
-    if (logradouroValor.length < LIMITES.logradouro.min) {
-      setErro(`O logradouro deve ter pelo menos ${LIMITES.logradouro.min} caracteres.`);
+    if (
+      !numeroValor ||
+      numeroValor.length > LIMITES.numero.max
+    ) {
+      setErro(
+        `Informe o número do endereço, com até ${LIMITES.numero.max} caracteres.`
+      );
       return false;
     }
 
-    if (logradouroValor.length > LIMITES.logradouro.max) {
-      setErro(`O logradouro deve ter no máximo ${LIMITES.logradouro.max} caracteres.`);
+    if (
+      bairroValor.length < LIMITES.bairro.min ||
+      bairroValor.length > LIMITES.bairro.max
+    ) {
+      setErro(
+        `O bairro deve ter entre ${LIMITES.bairro.min} e ${LIMITES.bairro.max} caracteres.`
+      );
       return false;
     }
 
-    if (!numeroValor) {
-      setErro("Informe o número.");
-      return false;
-    }
-
-    if (numeroValor.length > LIMITES.numero.max) {
-      setErro(`O número deve ter no máximo ${LIMITES.numero.max} caracteres.`);
-      return false;
-    }
-
-    if (!bairroValor) {
-      setErro("Informe o bairro.");
-      return false;
-    }
-
-    if (bairroValor.length < LIMITES.bairro.min) {
-      setErro(`O bairro deve ter pelo menos ${LIMITES.bairro.min} caracteres.`);
-      return false;
-    }
-
-    if (bairroValor.length > LIMITES.bairro.max) {
-      setErro(`O bairro deve ter no máximo ${LIMITES.bairro.max} caracteres.`);
-      return false;
-    }
-
-    if (!cidadeValor) {
-      setErro("Informe a cidade.");
-      return false;
-    }
-
-    if (cidadeValor.length < LIMITES.cidade.min) {
-      setErro(`A cidade deve ter pelo menos ${LIMITES.cidade.min} caracteres.`);
-      return false;
-    }
-
-    if (cidadeValor.length > LIMITES.cidade.max) {
-      setErro(`A cidade deve ter no máximo ${LIMITES.cidade.max} caracteres.`);
-      return false;
-    }
-
-    if (!estadoValor) {
-      setErro("Informe o estado.");
+    if (
+      cidadeValor.length < LIMITES.cidade.min ||
+      cidadeValor.length > LIMITES.cidade.max
+    ) {
+      setErro(
+        `A cidade deve ter entre ${LIMITES.cidade.min} e ${LIMITES.cidade.max} caracteres.`
+      );
       return false;
     }
 
@@ -472,7 +418,7 @@ function CadastroPessoa() {
       estadoValor.length !== LIMITES.estado ||
       !/^[A-Za-zÀ-ÿ]{2}$/.test(estadoValor)
     ) {
-      setErro("O estado deve conter exatamente 2 letras.");
+      setErro("Selecione um estado válido.");
       return false;
     }
 
@@ -491,7 +437,7 @@ function CadastroPessoa() {
       const local = textoLimpo(registro.local_desaparecimento);
       const descricao = textoLimpo(registro.descricao);
 
-      // Registro totalmente vazio é permitido.
+      // Permite manter um item vazio sem enviá-lo à API.
       if (!data && !local && !descricao) {
         continue;
       }
@@ -502,12 +448,9 @@ function CadastroPessoa() {
       }
 
       if (data > obterDataHoje()) {
-        setErro("A data do desaparecimento não pode ser futura.");
-        return false;
-      }
-
-      if (!local) {
-        setErro("Informe o local do desaparecimento.");
+        setErro(
+          "A data do desaparecimento não pode ser futura."
+        );
         return false;
       }
 
@@ -518,11 +461,6 @@ function CadastroPessoa() {
         setErro(
           `O local deve ter entre ${LIMITES.localDesaparecimento.min} e ${LIMITES.localDesaparecimento.max} caracteres.`
         );
-        return false;
-      }
-
-      if (!descricao) {
-        setErro("Informe a descrição das circunstâncias do desaparecimento.");
         return false;
       }
 
@@ -542,7 +480,7 @@ function CadastroPessoa() {
 
   // AVANÇAR ETAPA
   async function avancarEtapa(event) {
-    event?.preventDefault(); // Evita a submissão acidental do form
+    event?.preventDefault();
 
     if (carregando || etapaAtual >= 5) {
       return;
@@ -550,11 +488,8 @@ function CadastroPessoa() {
 
     setErro("");
 
-    // ETAPA 1
     if (etapaAtual === 1) {
-      const identificacaoValida = validarIdentificacao();
-
-      if (!identificacaoValida) {
+      if (!validarIdentificacao()) {
         return;
       }
 
@@ -563,11 +498,9 @@ function CadastroPessoa() {
       try {
         const cpfDisponivel = await validarCPFDisponivel();
 
-        if (!cpfDisponivel) {
-          return;
+        if (cpfDisponivel) {
+          setEtapaAtual(2);
         }
-
-        setEtapaAtual(2);
       } finally {
         setCarregando(false);
       }
@@ -575,11 +508,8 @@ function CadastroPessoa() {
       return;
     }
 
-    // ETAPA 2
     if (etapaAtual === 2) {
-      const telefonesValidos = validarTelefones();
-
-      if (!telefonesValidos) {
+      if (!validarTelefones()) {
         return;
       }
 
@@ -587,11 +517,8 @@ function CadastroPessoa() {
       return;
     }
 
-    // ETAPA 3
     if (etapaAtual === 3) {
-      const enderecoValido = validarEndereco();
-
-      if (!enderecoValido) {
+      if (!validarEndereco()) {
         return;
       }
 
@@ -599,11 +526,8 @@ function CadastroPessoa() {
       return;
     }
 
-    // ETAPA 4
     if (etapaAtual === 4) {
-      const registrosValidos = validarRegistrosDesaparecimento();
-
-      if (!registrosValidos) {
+      if (!validarRegistrosDesaparecimento()) {
         return;
       }
 
@@ -623,13 +547,8 @@ function CadastroPessoa() {
     setEtapaAtual((etapa) => etapa - 1);
   }
 
-  // IR DIRETAMENTE PARA UMA ETAPA
+  // VOLTAR PARA UMA ETAPA JÁ CONCLUÍDA
   function irParaEtapa(numeroEtapa) {
-    /*
-     * Só permitimos voltar para etapas já concluídas.
-     * Isso evita pular etapas obrigatórias.
-     */
-
     if (numeroEtapa < etapaAtual) {
       setErro("");
       setEtapaAtual(numeroEtapa);
@@ -638,14 +557,14 @@ function CadastroPessoa() {
 
   // CADASTRO FINAL
   async function handleSubmit(event) {
-    event?.preventDefault();
+    event.preventDefault();
 
     if (etapaAtual !== 5 || carregando) {
       return;
     }
 
-    // Garante que todos os dados estejam válidos mesmo que o usuário
-    // tenha voltado diretamente para a etapa de revisão.
+    setErro("");
+
     if (!validarIdentificacao()) {
       setEtapaAtual(1);
       return;
@@ -666,7 +585,6 @@ function CadastroPessoa() {
       return;
     }
 
-    setErro("");
     setCarregando(true);
 
     const dadosPessoa = {
@@ -703,15 +621,14 @@ function CadastroPessoa() {
       )
       .map((registro) => ({
         data_desaparecimento: registro.data_desaparecimento,
-        local_desaparecimento: textoLimpo(registro.local_desaparecimento),
+        local_desaparecimento: textoLimpo(
+          registro.local_desaparecimento
+        ),
         descricao: textoLimpo(registro.descricao),
       }));
 
     try {
-      // ATENÇÃO: como o backend possui endpoints separados, o cadastro
-      // ainda não é transacional. Se uma etapa posterior falhar, a pessoa
-      // poderá ter sido criada parcialmente. O ideal é futuramente expor
-      // um endpoint único de cadastro completo no backend.
+      // 1. Cria a pessoa.
       const respostaPessoa = await api.post(
         "/pessoas",
         dadosPessoa
@@ -719,29 +636,35 @@ function CadastroPessoa() {
 
       const pessoaCriada = respostaPessoa.data;
 
-      await Promise.all(
-        telefonesValidos.map((telefone) =>
-          api.post("/telefones", {
-            pessoa_id: pessoaCriada.id,
-            numero: telefone.numero,
-            tipo: telefone.tipo,
-          })
-        )
-      );
+      if (!pessoaCriada?.id) {
+        throw new Error(
+          "A API não retornou o identificador da pessoa cadastrada."
+        );
+      }
 
+      // 2. Cria os telefones informados.
+      for (const telefone of telefonesValidos) {
+        await api.post("/telefones", {
+          pessoa_id: pessoaCriada.id,
+          numero: telefone.numero,
+          tipo: telefone.tipo,
+        });
+      }
+
+      // 3. Cria o endereço.
       await api.post("/enderecos", {
         pessoa_id: pessoaCriada.id,
         ...dadosEndereco,
       });
 
-      await Promise.all(
-        registrosValidos.map((registro) =>
-          api.post("/desaparecimentos", {
-            pessoa_id: pessoaCriada.id,
-            ...registro,
-          })
-        )
-      );
+      // 4. Cria os registros de desaparecimento.
+      // O backend deve definir o status inicial como DESAPARECIDO.
+      for (const registro of registrosValidos) {
+        await api.post("/desaparecimentos", {
+          pessoa_id: pessoaCriada.id,
+          ...registro,
+        });
+      }
 
       navigate("/pessoas", {
         state: {
@@ -758,105 +681,63 @@ function CadastroPessoa() {
     }
   }
 
-  // RENDERIZAÇÃO
   return (
     <div className="cadastro-pessoa-page">
-
       {/* CABEÇALHO */}
       <div className="cadastro-pessoa-header">
-
         <div>
           <h1>Adicionar Pessoa</h1>
-
-          <p>
-            Cadastre os dados da pessoa no sistema.
-          </p>
+          <p>Cadastre os dados da pessoa no sistema.</p>
         </div>
 
         <button
           type="button"
           className="cadastro-voltar"
-          onClick={() =>
-            navigate("/pessoas")
-          }
+          onClick={() => navigate("/pessoas")}
         >
           Voltar
         </button>
-
       </div>
 
       {/* STEPPER */}
       <div className="cadastro-stepper">
-
-        {etapas.map((etapa, index) => {
-
-          const concluida =
-            etapa.numero < etapaAtual;
-
-          const atual =
-            etapa.numero === etapaAtual;
+        {ETAPAS.map((etapa, index) => {
+          const concluida = etapa.numero < etapaAtual;
+          const atual = etapa.numero === etapaAtual;
 
           return (
             <div
               key={etapa.numero}
-              className={`cadastro-step ${atual
-                ? "cadastro-step-atual"
-                : ""
-                } ${concluida
-                  ? "cadastro-step-concluida"
-                  : ""
-                }`}
+              className={`cadastro-step ${
+                atual ? "cadastro-step-atual" : ""
+              } ${concluida ? "cadastro-step-concluida" : ""}`}
             >
-
               <button
                 type="button"
                 className="cadastro-step-button"
-                onClick={() =>
-                  irParaEtapa(
-                    etapa.numero
-                  )
-                }
-                disabled={
-                  etapa.numero >=
-                  etapaAtual
-                }
+                onClick={() => irParaEtapa(etapa.numero)}
+                disabled={etapa.numero >= etapaAtual || carregando}
               >
                 <span className="cadastro-step-numero">
-
-                  {concluida
-                    ? "✓"
-                    : etapa.numero}
-
+                  {concluida ? "✓" : etapa.numero}
                 </span>
 
                 <span className="cadastro-step-info">
-
-                  <strong>
-                    {etapa.titulo}
-                  </strong>
-
-                  <small>
-                    {etapa.descricao}
-                  </small>
-
+                  <strong>{etapa.titulo}</strong>
+                  <small>{etapa.descricao}</small>
                 </span>
               </button>
 
-              {index <
-                etapas.length - 1 && (
-                  <div className="cadastro-step-linha" />
-                )}
-
+              {index < ETAPAS.length - 1 && (
+                <div className="cadastro-step-linha" />
+              )}
             </div>
           );
         })}
-
       </div>
 
       {/* CARD PRINCIPAL */}
       <div className="cadastro-pessoa-card">
-
-        {/* ERRO */}
         {erro && (
           <div
             className="cadastro-error"
@@ -867,62 +748,42 @@ function CadastroPessoa() {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-        >
-
+        <form onSubmit={handleSubmit} noValidate>
           {/* ETAPA 1 - IDENTIFICAÇÃO */}
           {etapaAtual === 1 && (
             <section className="cadastro-etapa">
-
               <div className="cadastro-etapa-header">
-
                 <div>
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 1 DE 5
                   </span>
-
-                  <h2>
-                    Dados de identificação
-                  </h2>
-
-                  <p>
-                    Informe os dados pessoais da pessoa.
-                  </p>
+                  <h2>Dados de identificação</h2>
+                  <p>Informe os dados pessoais da pessoa.</p>
                 </div>
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Nome completo
-                  <span>*</span>
+                  Nome completo <span>*</span>
                 </label>
-
                 <input
                   type="text"
                   value={nome}
-                  maxLength={150}
+                  maxLength={LIMITES.nome.max}
                   onChange={(event) => {
                     setErro("");
                     setNome(event.target.value);
                   }}
                   placeholder="Digite o nome completo"
+                  autoComplete="name"
                 />
-
               </div>
 
               <div className="cadastro-form-row">
-
                 <div className="cadastro-form-group">
-
                   <label>
-                    CPF
-                    <span>*</span>
+                    CPF <span>*</span>
                   </label>
-
                   <input
                     type="text"
                     value={formatarCPF(cpf)}
@@ -943,20 +804,19 @@ function CadastroPessoa() {
                       {erroCPF}
                     </span>
                   )}
-
                 </div>
 
                 <div className="cadastro-form-group">
                   <label>
-                    Data de nascimento
-                    <span>*</span>
+                    Data de nascimento <span>*</span>
                   </label>
-
                   <input
                     type="date"
                     value={dataNascimento}
                     max={obterDataHoje()}
-                    className={erroDataNascimento ? "campo-com-erro" : ""}
+                    className={
+                      erroDataNascimento ? "campo-com-erro" : ""
+                    }
                     onChange={(event) => {
                       setDataNascimento(event.target.value);
                       setErro("");
@@ -970,16 +830,12 @@ function CadastroPessoa() {
                     </span>
                   )}
                 </div>
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Sexo
-                  <span>*</span>
+                  Sexo <span>*</span>
                 </label>
-
                 <select
                   value={sexo}
                   onChange={(event) => {
@@ -987,262 +843,175 @@ function CadastroPessoa() {
                     setErro("");
                   }}
                 >
-                  <option value="">
-                    Selecione
-                  </option>
-
-                  <option value="M">
-                    Masculino
-                  </option>
-
-                  <option value="F">
-                    Feminino
-                  </option>
+                  <option value="">Selecione</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Feminino</option>
                 </select>
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Nome da mãe
-                  <span>*</span>
+                  Nome da mãe <span>*</span>
                 </label>
-
                 <input
                   type="text"
                   value={nomeMae}
-                  maxLength={150}
+                  maxLength={LIMITES.nomeMae.max}
                   onChange={(event) => {
                     setErro("");
                     setNomeMae(event.target.value);
                   }}
                   placeholder="Digite o nome da mãe"
                 />
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Nome do pai
-                  <span>*</span>
+                  Nome do pai <span>*</span>
                 </label>
-
                 <input
                   type="text"
                   value={nomePai}
-                  maxLength={150}
+                  maxLength={LIMITES.nomePai.max}
                   onChange={(event) => {
                     setErro("");
                     setNomePai(event.target.value);
                   }}
                   placeholder="Digite o nome do pai"
                 />
-
               </div>
-
             </section>
           )}
 
           {/* ETAPA 2 - TELEFONES */}
           {etapaAtual === 2 && (
             <section className="cadastro-etapa">
-
               <div className="cadastro-etapa-header">
-
                 <div>
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 2 DE 5
                   </span>
-
-                  <h2>
-                    Telefones
-                  </h2>
-
-                  <p>
-                    Cadastre os números de contato da pessoa.
-                  </p>
+                  <h2>Telefones</h2>
+                  <p>Cadastre os números de contato da pessoa.</p>
                 </div>
-
               </div>
 
               <div className="cadastro-section">
-
-                {telefones.map(
-                  (telefone, index) => (
-                    <div
-                      className="cadastro-item"
-                      key={index}
-                    >
-
-                      <div className="cadastro-form-row">
-
-                        <div className="cadastro-form-group">
-
-                          <label>
-                            Telefone
-                          </label>
-
-                          <input
-                            type="text"
-                            value={formatarTelefone(telefone.numero)}
-                            onChange={(event) =>
-                              alterarTelefone(
-                                index,
-                                "numero",
-                                event.target.value
-                              )
-                            }
-                            placeholder="(61) 99999-9999"
-                            inputMode="numeric"
-                            autoComplete="tel"
-                            maxLength={15}
-                          />
-
-                        </div>
-
-                        <div className="cadastro-form-group">
-
-                          <label>
-                            Tipo
-                          </label>
-
-                          <select
-                            value={telefone.tipo}
-                            onChange={(event) =>
-                              alterarTelefone(index, "tipo", event.target.value)
-
-                            }
-                          >
-
-                            <option value="PESSOAL">
-                              Pessoal
-                            </option>
-
-                            <option value="TRABALHO">
-                              Trabalho
-                            </option>
-
-                            <option value="RESIDENCIAL">
-                              Residencial
-                            </option>
-
-                            <option value="OUTRO">
-                              Outro
-                            </option>
-
-                          </select>
-
-                        </div>
-
+                {telefones.map((telefone, index) => (
+                  <div className="cadastro-item" key={index}>
+                    <div className="cadastro-form-row">
+                      <div className="cadastro-form-group">
+                        <label>Telefone</label>
+                        <input
+                          type="text"
+                          value={formatarTelefone(telefone.numero)}
+                          onChange={(event) =>
+                            alterarTelefone(
+                              index,
+                              "numero",
+                              event.target.value
+                            )
+                          }
+                          placeholder="(61) 99999-9999"
+                          inputMode="numeric"
+                          autoComplete="tel"
+                          maxLength={15}
+                        />
                       </div>
 
-                      {telefones.length >
-                        1 && (
-                          <button
-                            type="button"
-                            className="cadastro-remover"
-                            onClick={() =>
-                              removerTelefone(
-                                index
-                              )
-                            }
-                          >
-                            Remover telefone
-                          </button>
-                        )}
-
+                      <div className="cadastro-form-group">
+                        <label>Tipo</label>
+                        <select
+                          value={telefone.tipo}
+                          onChange={(event) =>
+                            alterarTelefone(
+                              index,
+                              "tipo",
+                              event.target.value
+                            )
+                          }
+                        >
+                          <option value="PESSOAL">Pessoal</option>
+                          <option value="TRABALHO">Trabalho</option>
+                          <option value="RESIDENCIAL">Residencial</option>
+                          <option value="OUTRO">Outro</option>
+                        </select>
+                      </div>
                     </div>
-                  )
-                )}
+
+                    {telefones.length > 1 && (
+                      <button
+                        type="button"
+                        className="cadastro-remover"
+                        onClick={() => removerTelefone(index)}
+                      >
+                        Remover telefone
+                      </button>
+                    )}
+                  </div>
+                ))}
 
                 <button
                   type="button"
                   className="cadastro-adicionar"
-                  onClick={
-                    adicionarTelefone
-                  }
+                  onClick={adicionarTelefone}
                 >
                   + Adicionar telefone
                 </button>
-
               </div>
-
             </section>
           )}
 
           {/* ETAPA 3 - ENDEREÇO */}
           {etapaAtual === 3 && (
             <section className="cadastro-etapa">
-
               <div className="cadastro-etapa-header">
-
                 <div>
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 3 DE 5
                   </span>
-
-                  <h2>
-                    Endereço
-                  </h2>
-
-                  <p>
-                    Informe o endereço atual da pessoa.
-                  </p>
+                  <h2>Endereço</h2>
+                  <p>Informe o endereço atual da pessoa.</p>
                 </div>
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Logradouro
-                  <span>*</span>
+                  Logradouro <span>*</span>
                 </label>
-
                 <input
                   type="text"
                   value={logradouro}
-                  maxLength={200}
+                  maxLength={LIMITES.logradouro.max}
                   onChange={(event) => {
                     setErro("");
                     setLogradouro(event.target.value);
                   }}
                   placeholder="Rua, avenida, praça..."
                 />
-
               </div>
 
               <div className="cadastro-form-row">
-
                 <div className="cadastro-form-group">
-
                   <label>
-                    Número
-                    <span>*</span>
+                    Número <span>*</span>
                   </label>
-
                   <input
                     type="text"
                     value={numero}
-                    maxLength={20}
-                    onChange={(event) =>
-                      setNumero(event.target.value)
-                    }
+                    maxLength={LIMITES.numero.max}
+                    onChange={(event) => {
+                      setErro("");
+                      setNumero(event.target.value);
+                    }}
                     placeholder="Número"
-                    inputMode="text"
                   />
-
                 </div>
 
                 <div className="cadastro-form-group">
-
                   <label>
-                    CEP
-                    <span>*</span>
+                    CEP <span>*</span>
                   </label>
-
                   <input
                     type="text"
                     value={formatarCEP(cep)}
@@ -1252,62 +1021,48 @@ function CadastroPessoa() {
                     }}
                     placeholder="00000-000"
                     maxLength={9}
+                    inputMode="numeric"
                   />
-
                 </div>
-
               </div>
 
               <div className="cadastro-form-group">
-
                 <label>
-                  Bairro
-                  <span>*</span>
+                  Bairro <span>*</span>
                 </label>
-
                 <input
                   type="text"
                   value={bairro}
-                  maxLength={100}
-                  onChange={(event) =>
-                    setBairro(
-                      event.target.value
-                    )
-                  }
+                  maxLength={LIMITES.bairro.max}
+                  onChange={(event) => {
+                    setErro("");
+                    setBairro(event.target.value);
+                  }}
                   placeholder="Digite o bairro"
                 />
-
               </div>
 
               <div className="cadastro-form-row">
-
                 <div className="cadastro-form-group">
-
                   <label>
-                    Cidade
-                    <span>*</span>
+                    Cidade <span>*</span>
                   </label>
-
                   <input
                     type="text"
                     value={cidade}
-                    maxLength={100}
+                    maxLength={LIMITES.cidade.max}
                     onChange={(event) => {
                       setErro("");
                       setCidade(event.target.value);
                     }}
                     placeholder="Digite a cidade"
                   />
-
                 </div>
 
                 <div className="cadastro-form-group">
-
                   <label>
-                    Estado
-                    <span>*</span>
+                    Estado <span>*</span>
                   </label>
-
                   <select
                     value={estado}
                     onChange={(event) => {
@@ -1315,129 +1070,41 @@ function CadastroPessoa() {
                       setEstado(event.target.value);
                     }}
                   >
-
-                    <option value="">
-                      Selecione
-                    </option>
-
-                    <option value="AC">
-                      Acre
-                    </option>
-
-                    <option value="AL">
-                      Alagoas
-                    </option>
-
-                    <option value="AP">
-                      Amapá
-                    </option>
-
-                    <option value="AM">
-                      Amazonas
-                    </option>
-
-                    <option value="BA">
-                      Bahia
-                    </option>
-
-                    <option value="CE">
-                      Ceará
-                    </option>
-
-                    <option value="DF">
-                      Distrito Federal
-                    </option>
-
-                    <option value="ES">
-                      Espírito Santo
-                    </option>
-
-                    <option value="GO">
-                      Goiás
-                    </option>
-
-                    <option value="MA">
-                      Maranhão
-                    </option>
-
-                    <option value="MT">
-                      Mato Grosso
-                    </option>
-
-                    <option value="MS">
-                      Mato Grosso do Sul
-                    </option>
-
-                    <option value="MG">
-                      Minas Gerais
-                    </option>
-
-                    <option value="PA">
-                      Pará
-                    </option>
-
-                    <option value="PB">
-                      Paraíba
-                    </option>
-
-                    <option value="PR">
-                      Paraná
-                    </option>
-
-                    <option value="PE">
-                      Pernambuco
-                    </option>
-
-                    <option value="PI">
-                      Piauí
-                    </option>
-
-                    <option value="RJ">
-                      Rio de Janeiro
-                    </option>
-
-                    <option value="RN">
-                      Rio Grande do Norte
-                    </option>
-
-                    <option value="RS">
-                      Rio Grande do Sul
-                    </option>
-
-                    <option value="RO">
-                      Rondônia
-                    </option>
-
-                    <option value="RR">
-                      Roraima
-                    </option>
-
-                    <option value="SC">
-                      Santa Catarina
-                    </option>
-
-                    <option value="SP">
-                      São Paulo
-                    </option>
-
-                    <option value="SE">
-                      Sergipe
-                    </option>
-
-                    <option value="TO">
-                      Tocantins
-                    </option>
-
+                    <option value="">Selecione</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
                   </select>
-
                 </div>
-
               </div>
-
             </section>
           )}
 
-          {/* ETAPA 4 - REGISTROS DE DESAPARECIMENTO */}
+          {/* ETAPA 4 - DESAPARECIMENTO */}
           {etapaAtual === 4 && (
             <section className="cadastro-etapa">
               <div className="cadastro-etapa-header">
@@ -1445,9 +1112,7 @@ function CadastroPessoa() {
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 4 DE 5
                   </span>
-
                   <h2>Registros de Desaparecimento</h2>
-
                   <p>
                     Registre informações sobre o desaparecimento da pessoa.
                   </p>
@@ -1458,7 +1123,6 @@ function CadastroPessoa() {
                 {registrosDesaparecimento.length === 0 && (
                   <div className="cadastro-vazio">
                     <strong>Nenhum registro de desaparecimento</strong>
-
                     <p>
                       Caso exista um registro, adicione as informações abaixo.
                     </p>
@@ -1469,11 +1133,12 @@ function CadastroPessoa() {
                   <div className="cadastro-item" key={index}>
                     <div className="cadastro-item-header">
                       <strong>Registro {index + 1}</strong>
-
                       <button
                         type="button"
                         className="cadastro-remover"
-                        onClick={() => removerRegistroDesaparecimento(index)}
+                        onClick={() =>
+                          removerRegistroDesaparecimento(index)
+                        }
                       >
                         Remover
                       </button>
@@ -1481,7 +1146,6 @@ function CadastroPessoa() {
 
                     <div className="cadastro-form-group">
                       <label>Data do desaparecimento</label>
-
                       <input
                         type="date"
                         value={registro.data_desaparecimento}
@@ -1498,11 +1162,10 @@ function CadastroPessoa() {
 
                     <div className="cadastro-form-group">
                       <label>Local do desaparecimento</label>
-
                       <input
                         type="text"
                         value={registro.local_desaparecimento}
-                        maxLength={200}
+                        maxLength={LIMITES.localDesaparecimento.max}
                         placeholder="Informe o local onde a pessoa foi vista pela última vez"
                         onChange={(event) =>
                           alterarRegistroDesaparecimento(
@@ -1516,10 +1179,9 @@ function CadastroPessoa() {
 
                     <div className="cadastro-form-group">
                       <label>Descrição das circunstâncias</label>
-
                       <textarea
                         value={registro.descricao}
-                        maxLength={500}
+                        maxLength={LIMITES.descricaoDesaparecimento.max}
                         rows={4}
                         placeholder="Descreva as circunstâncias do desaparecimento"
                         onChange={(event) =>
@@ -1546,93 +1208,49 @@ function CadastroPessoa() {
           )}
 
           {/* ETAPA 5 - REVISÃO */}
-
           {etapaAtual === 5 && (
             <section className="cadastro-etapa">
-
               <div className="cadastro-etapa-header">
-
                 <div>
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 5 DE 5
                   </span>
-
-                  <h2>
-                    Revisar cadastro
-                  </h2>
-
+                  <h2>Revisar cadastro</h2>
                   <p>
                     Confira os dados antes de concluir o cadastro.
                   </p>
                 </div>
-
               </div>
 
               {/* IDENTIFICAÇÃO */}
               <div className="cadastro-revisao-section">
-
                 <div className="cadastro-revisao-header">
-
                   <div>
-                    <span>
-                      IDENTIFICAÇÃO
-                    </span>
-
-                    <h3>
-                      Dados pessoais
-                    </h3>
+                    <span>IDENTIFICAÇÃO</span>
+                    <h3>Dados pessoais</h3>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(1)
-                    }
-                  >
+                  <button type="button" onClick={() => irParaEtapa(1)}>
                     Editar
                   </button>
-
                 </div>
 
                 <div className="cadastro-revisao-grid">
-
                   <div>
-                    <small>
-                      Nome
-                    </small>
-
+                    <small>Nome</small>
+                    <strong>{nome}</strong>
+                  </div>
+                  <div>
+                    <small>CPF</small>
+                    <strong>{formatarCPF(cpf)}</strong>
+                  </div>
+                  <div>
+                    <small>Data de nascimento</small>
                     <strong>
-                      {nome}
+                      {dataNascimento ? formatarData(dataNascimento) : "-"}
                     </strong>
                   </div>
-
                   <div>
-                    <small>
-                      CPF
-                    </small>
-
-                    <strong>
-                      {formatarCPF(cpf)}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <small>
-                      Data de nascimento
-                    </small>
-
-                    <strong>
-                      {dataNascimento
-                        ? formatarData(dataNascimento)
-                        : "-"}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <small>
-                      Sexo
-                    </small>
-
+                    <small>Sexo</small>
                     <strong>
                       {sexo === "M"
                         ? "Masculino"
@@ -1641,179 +1259,90 @@ function CadastroPessoa() {
                           : "-"}
                     </strong>
                   </div>
-
                   <div>
-                    <small>
-                      Nome da mãe
-                    </small>
-
-                    <strong>
-                      {nomeMae}
-                    </strong>
+                    <small>Nome da mãe</small>
+                    <strong>{nomeMae}</strong>
                   </div>
-
                   <div>
-                    <small>
-                      Nome do pai
-                    </small>
-
-                    <strong>
-                      {nomePai}
-                    </strong>
+                    <small>Nome do pai</small>
+                    <strong>{nomePai}</strong>
                   </div>
-
                 </div>
-
               </div>
 
               {/* TELEFONES */}
               <div className="cadastro-revisao-section">
-
                 <div className="cadastro-revisao-header">
-
                   <div>
-                    <span>
-                      CONTATOS
-                    </span>
-
-                    <h3>
-                      Telefones
-                    </h3>
+                    <span>CONTATOS</span>
+                    <h3>Telefones</h3>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(2)
-                    }
-                  >
+                  <button type="button" onClick={() => irParaEtapa(2)}>
                     Editar
                   </button>
-
                 </div>
 
                 {telefones.filter(
-                  (telefone) =>
-                    telefone.numero.trim() !== ""
+                  (telefone) => limparTelefone(telefone.numero)
                 ).length === 0 ? (
                   <p className="cadastro-revisao-vazio">
                     Nenhum telefone informado.
                   </p>
                 ) : (
                   <div className="cadastro-revisao-lista">
-
                     {telefones
                       .filter(
-                        (telefone) =>
-                          telefone.numero.trim() !== ""
+                        (telefone) => limparTelefone(telefone.numero)
                       )
-                      .map(
-                        (
-                          telefone,
-                          index
-                        ) => (
-                          <div
-                            key={index}
-                            className="cadastro-revisao-item"
-                          >
-
-                            <strong>
-                              {formatarTelefone(telefone.numero)}
-                            </strong>
-
-                            <span>
-                              {telefone.tipo}
-                            </span>
-
-                          </div>
-                        )
-                      )}
-
+                      .map((telefone, index) => (
+                        <div
+                          key={index}
+                          className="cadastro-revisao-item"
+                        >
+                          <strong>
+                            {formatarTelefone(telefone.numero)}
+                          </strong>
+                          <span>{telefone.tipo}</span>
+                        </div>
+                      ))}
                   </div>
                 )}
-
               </div>
 
               {/* ENDEREÇO */}
               <div className="cadastro-revisao-section">
-
                 <div className="cadastro-revisao-header">
-
                   <div>
-                    <span>
-                      LOCALIZAÇÃO
-                    </span>
-
-                    <h3>
-                      Endereço
-                    </h3>
+                    <span>LOCALIZAÇÃO</span>
+                    <h3>Endereço</h3>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(3)
-                    }
-                  >
+                  <button type="button" onClick={() => irParaEtapa(3)}>
                     Editar
                   </button>
-
                 </div>
 
                 <div className="cadastro-revisao-grid">
-
                   <div>
-                    <small>
-                      Logradouro
-                    </small>
-
-                    <strong>
-                      {logradouro}, {numero}
-                    </strong>
+                    <small>Logradouro</small>
+                    <strong>{logradouro}, {numero}</strong>
                   </div>
-
                   <div>
-                    <small>
-                      Bairro
-                    </small>
-
-                    <strong>
-                      {bairro}
-                    </strong>
+                    <small>Bairro</small>
+                    <strong>{bairro}</strong>
                   </div>
-
                   <div>
-                    <small>
-                      Cidade
-                    </small>
-
-                    <strong>
-                      {cidade}
-                    </strong>
+                    <small>Cidade</small>
+                    <strong>{cidade}</strong>
                   </div>
-
                   <div>
-                    <small>
-                      Estado
-                    </small>
-
-                    <strong>
-                      {estado}
-                    </strong>
+                    <small>Estado</small>
+                    <strong>{estado}</strong>
                   </div>
-
                   <div>
-                    <small>
-                      CEP
-                    </small>
-
-                    <strong>
-                      {formatarCEP(cep)}
-                    </strong>
+                    <small>CEP</small>
+                    <strong>{formatarCEP(cep)}</strong>
                   </div>
-
                 </div>
-
               </div>
 
               {/* REGISTROS DE DESAPARECIMENTO */}
@@ -1823,7 +1352,6 @@ function CadastroPessoa() {
                     <span>REGISTROS</span>
                     <h3>Registros de Desaparecimento</h3>
                   </div>
-
                   <button type="button" onClick={() => irParaEtapa(4)}>
                     Editar
                   </button>
@@ -1832,8 +1360,8 @@ function CadastroPessoa() {
                 {registrosDesaparecimento.filter(
                   (registro) =>
                     registro.data_desaparecimento ||
-                    registro.local_desaparecimento.trim() ||
-                    registro.descricao.trim()
+                    textoLimpo(registro.local_desaparecimento) ||
+                    textoLimpo(registro.descricao)
                 ).length === 0 ? (
                   <p className="cadastro-revisao-vazio">
                     Nenhum registro de desaparecimento informado.
@@ -1844,27 +1372,35 @@ function CadastroPessoa() {
                       .filter(
                         (registro) =>
                           registro.data_desaparecimento ||
-                          registro.local_desaparecimento.trim() ||
-                          registro.descricao.trim()
+                          textoLimpo(registro.local_desaparecimento) ||
+                          textoLimpo(registro.descricao)
                       )
                       .map((registro, index) => (
-                        <div key={index} className="cadastro-revisao-item">
+                        <div
+                          key={index}
+                          className="cadastro-revisao-item"
+                        >
                           <div>
                             <strong>Registro {index + 1}</strong>
-
                             <span>
                               Data:{" "}
                               {registro.data_desaparecimento
-                                ? formatarData(registro.data_desaparecimento)
+                                ? formatarData(
+                                    registro.data_desaparecimento
+                                  )
                                 : "Não informada"}
                             </span>
-
                             <span>
-                              Local: {registro.local_desaparecimento || "Não informado"}
+                              Local:{" "}
+                              {registro.local_desaparecimento ||
+                                "Não informado"}
                             </span>
-
                             <span>
-                              Descrição: {registro.descricao || "Não informada"}
+                              Descrição:{" "}
+                              {registro.descricao || "Não informada"}
+                            </span>
+                            <span>
+                              Status inicial: Desaparecido
                             </span>
                           </div>
                         </div>
@@ -1872,7 +1408,6 @@ function CadastroPessoa() {
                   </div>
                 )}
               </div>
-
             </section>
           )}
 
@@ -1884,9 +1419,7 @@ function CadastroPessoa() {
               onClick={voltarEtapa}
               disabled={carregando}
             >
-              {etapaAtual === 1
-                ? "Cancelar"
-                : "Voltar"}
+              {etapaAtual === 1 ? "Cancelar" : "Voltar"}
             </button>
 
             {etapaAtual < 5 ? (
@@ -1896,7 +1429,7 @@ function CadastroPessoa() {
                 onClick={avancarEtapa}
                 disabled={carregando}
               >
-                Continuar
+                {carregando ? "Verificando..." : "Continuar"}
               </button>
             ) : (
               <button
@@ -1904,9 +1437,7 @@ function CadastroPessoa() {
                 className="button-primary"
                 disabled={carregando}
               >
-                {carregando
-                  ? "Cadastrando..."
-                  : "Cadastrar pessoa"}
+                {carregando ? "Cadastrando..." : "Cadastrar pessoa"}
               </button>
             )}
           </div>
