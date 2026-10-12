@@ -223,7 +223,7 @@ function Pessoas() {
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          + Cadastrar pessoa
+          + Cadastrar pessoa desaparecida
         </button>
       </div>
 
