@@ -1,229 +1,240 @@
-/* ESTRUTURA PRINCIPAL */
+
+/* =========================================================
+   CADASTRO DE PESSOA
+   Compatível com o JSX atual
+   ========================================================= */
+
 .cadastro-pessoa-page {
+  --cadastro-primary: var(--cor-primaria, var(--primary-color, #2563eb));
+  --cadastro-primary-hover: var(--cor-primaria-hover, #1d4ed8);
+  --cadastro-text: var(--texto-principal, var(--text-primary, #1f2937));
+  --cadastro-muted: var(--texto-secundario, var(--text-secondary, #6b7280));
+  --cadastro-border: var(--borda, var(--border-color, #e5e7eb));
+  --cadastro-surface: var(--superficie, var(--surface-color, #ffffff));
+  --cadastro-subtle: var(--superficie-secundaria, #f8fafc);
+  --cadastro-danger: #dc2626;
+  --cadastro-radius: 12px;
+
   width: 100%;
   min-width: 0;
+  color: var(--cadastro-text);
   box-sizing: border-box;
 }
 
-/* CABEÇALHO */
+.cadastro-pessoa-page *,
+.cadastro-pessoa-page *::before,
+.cadastro-pessoa-page *::after {
+  box-sizing: border-box;
+}
+
+/* Cabeçalho */
+
 .cadastro-pessoa-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 24px;
 }
 
 .cadastro-pessoa-header h1 {
-  margin: 0 0 6px;
-  color: #1f2937;
-  font-size: 28px;
+  margin: 0 0 7px;
+  color: var(--cadastro-text);
+  font-size: clamp(23px, 2vw, 28px);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
 }
 
 .cadastro-pessoa-header p {
   margin: 0;
-  color: #6b7280;
+  color: var(--cadastro-muted);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* BOTÃO VOLTAR DO CABEÇALHO */
 .cadastro-voltar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  padding: 10px 16px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  min-height: 40px;
+  padding: 9px 16px;
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
   border-radius: 8px;
-  color: #374151;
-  font-size: 14px;
+  color: var(--cadastro-text);
+  font: inherit;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .cadastro-voltar:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-  transform: translateY(-1px);
+  background: var(--cadastro-subtle);
+  border-color: var(--cadastro-primary);
 }
 
-/* STEPPER */
+/* Etapas */
+
 .cadastro-stepper {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
   display: flex;
   align-items: flex-start;
+  width: 100%;
   margin-bottom: 24px;
-  padding: 18px 20px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  padding: 22px;
   overflow-x: auto;
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
+  border-radius: var(--cadastro-radius);
   scrollbar-width: thin;
 }
 
-/* CADA ETAPA DO STEPPER */
 .cadastro-step {
   display: flex;
   align-items: center;
-  flex: 1;
-  min-width: 130px;
+  flex: 1 0 0;
+  min-width: 115px;
 }
 
-/* BOTÃO DA ETAPA */
 .cadastro-step-button {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0;
-  margin: 0;
   background: transparent;
-  border: none;
-  color: #9ca3af;
-  cursor: default;
+  border: 0;
+  color: var(--cadastro-muted);
   text-align: left;
+  cursor: default;
 }
 
 .cadastro-step-button:not(:disabled) {
   cursor: pointer;
 }
 
-/* NÚMERO / ÍCONE DA ETAPA */
-.cadastro-step-numero {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #d1d5db;
-  border-radius: 50%;
-  background: #ffffff;
-  color: #9ca3af;
-  font-size: 13px;
-  font-weight: 700;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+.cadastro-step-button:disabled {
+  opacity: 1;
 }
 
-/* INFORMAÇÕES DA ETAPA */
+.cadastro-step-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cadastro-border);
+  border-radius: 50%;
+  background: var(--cadastro-surface);
+  color: var(--cadastro-muted);
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
 .cadastro-step-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 
 .cadastro-step-info strong {
-  color: #6b7280;
-  font-size: 13px;
+  color: var(--cadastro-muted);
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .cadastro-step-info small {
-  color: #9ca3af;
+  color: var(--cadastro-muted);
   font-size: 11px;
   white-space: nowrap;
 }
 
-/* ETAPA ATUAL */
 .cadastro-step-atual .cadastro-step-numero {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #ffffff;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+  background: var(--cadastro-primary);
+  border-color: var(--cadastro-primary);
+  color: #fff;
 }
 
 .cadastro-step-atual .cadastro-step-info strong {
-  color: #2563eb;
+  color: var(--cadastro-primary);
 }
 
-.cadastro-step-atual .cadastro-step-info small {
-  color: #6b7280;
-}
-
-/* ETAPA CONCLUÍDA */
 .cadastro-step-concluida .cadastro-step-numero {
-  background: #eff6ff;
-  border-color: #2563eb;
-  color: #2563eb;
+  background: var(--cadastro-primary);
+  border-color: var(--cadastro-primary);
+  color: #fff;
 }
 
 .cadastro-step-concluida .cadastro-step-info strong {
-  color: #374151;
+  color: var(--cadastro-text);
 }
 
-.cadastro-step-concluida .cadastro-step-info small {
-  color: #6b7280;
-}
-
-/* LINHA ENTRE AS ETAPAS */
 .cadastro-step-linha {
-  flex: 1;
+  flex: 1 0 16px;
   height: 1px;
-  margin: 0 14px;
-  background: #e5e7eb;
+  margin: 0 12px;
+  background: var(--cadastro-border);
 }
 
 .cadastro-step-concluida .cadastro-step-linha {
-  background: #2563eb;
+  background: var(--cadastro-primary);
 }
 
-/* CARD PRINCIPAL */
+/* Card principal */
+
 .cadastro-pessoa-card {
   width: 100%;
-  max-width: 800px;
-  box-sizing: border-box;
-  padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  max-width: 900px;
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
+  border-radius: var(--cadastro-radius);
+  box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
 }
 
-/* ETAPA */
+/* Etapa atual */
+
 .cadastro-etapa {
   width: 100%;
 }
 
-/* CABEÇALHO DA ETAPA */
 .cadastro-etapa-header {
-  margin-bottom: 28px;
+  margin-bottom: 26px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--cadastro-border);
 }
 
 .cadastro-etapa-numero-label {
   display: inline-block;
-  margin-bottom: 7px;
-  color: #2563eb;
+  margin-bottom: 8px;
+  color: var(--cadastro-primary);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.7px;
-  text-transform: uppercase;
 }
 
 .cadastro-etapa-header h2 {
-  margin: 0 0 6px;
-  color: #1f2937;
+  margin: 0 0 7px;
+  color: var(--cadastro-text);
   font-size: 20px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .cadastro-etapa-header p {
   margin: 0;
-  color: #6b7280;
+  color: var(--cadastro-muted);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* CAMPOS DO FORMULÁRIO */
+/* Campos */
+
 .cadastro-form-group {
   display: flex;
   flex-direction: column;
@@ -232,194 +243,202 @@
 }
 
 .cadastro-form-group label {
-  display: block;
-  margin-bottom: 7px;
-  color: #374151;
-  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--cadastro-text);
+  font-size: 13px;
   font-weight: 600;
 }
 
 .cadastro-form-group label span {
-  margin-left: 3px;
-  color: #dc2626;
+  margin-left: 4px;
+  color: var(--cadastro-danger);
 }
 
 .cadastro-form-group input,
 .cadastro-form-group select {
+  display: block;
   width: 100%;
-  max-width: 100%;
   min-width: 0;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  padding: 12px 14px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  min-height: 44px;
+  padding: 11px 13px;
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
   border-radius: 8px;
-  color: #1f2937;
+  color: var(--cadastro-text);
   font-family: inherit;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .cadastro-form-group input::placeholder {
-  color: #9ca3af;
+  color: var(--cadastro-muted);
+  opacity: 0.8;
 }
 
 .cadastro-form-group input:hover,
 .cadastro-form-group select:hover {
-  border-color: #9ca3af;
+  border-color: var(--cadastro-muted);
 }
 
 .cadastro-form-group input:focus,
 .cadastro-form-group select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+  border-color: var(--cadastro-primary);
+  box-shadow: 0 0 0 3px color-mix(
+    in srgb,
+    var(--cadastro-primary) 13%,
+    transparent
+  );
 }
 
 .cadastro-form-group input:disabled,
 .cadastro-form-group select:disabled {
-  background: #f9fafb;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
-/* LINHA DE CAMPOS */
 .cadastro-form-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
-/* MENSAGEM DE ERRO */
+/* Erros */
+
 .cadastro-error {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  padding: 12px 15px;
+  margin-bottom: 22px;
+  padding: 13px 15px;
   background: #fef2f2;
   border: 1px solid #fecaca;
   border-radius: 8px;
   color: #b91c1c;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .cadastro-campo-erro {
-  display: block;
   margin-top: 6px;
-  color: #dc2626;
+  color: var(--cadastro-danger);
   font-size: 12px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
-.campo-com-erro {
-  border-color: #dc2626 !important;
+.cadastro-form-group input.campo-com-erro,
+.cadastro-form-group select.campo-com-erro {
+  border-color: var(--cadastro-danger);
 }
 
-.campo-com-erro:focus {
-  border-color: #dc2626 !important;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10) !important;
+.cadastro-form-group input.campo-com-erro:focus {
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
 }
 
-/* SEÇÕES INTERNAS */
+/* Telefones e passagens */
+
 .cadastro-section {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* ITEM - TELEFONE / PASSAGEM */
 .cadastro-item {
+  min-width: 0;
   padding: 18px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--cadastro-subtle);
+  border: 1px solid var(--cadastro-border);
   border-radius: 10px;
 }
 
-/* CABEÇALHO DO ITEM */
+.cadastro-item .cadastro-form-row {
+  gap: 16px;
+}
+
 .cadastro-item-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
 .cadastro-item-header strong {
-  color: #374151;
-  font-size: 14px;
+  color: var(--cadastro-text);
+  font-size: 13px;
   font-weight: 700;
 }
 
-/* BOTÃO ADICIONAR */
-.cadastro-adicionar {
-  align-self: flex-start;
-  padding: 10px 15px;
-  background: #ffffff;
-  border: 1px solid #2563eb;
-  border-radius: 8px;
-  color: #2563eb;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
+/* Botões de adicionar e remover */
 
-.cadastro-adicionar:hover {
-  background: #eff6ff;
-  border-color: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-/* BOTÃO REMOVER */
+.cadastro-adicionar,
 .cadastro-remover {
-  padding: 6px 10px;
-  background: transparent;
-  border: 1px solid #fecaca;
-  border-radius: 6px;
-  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 9px 13px;
+  border-radius: 8px;
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.cadastro-adicionar {
+  align-self: flex-start;
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-primary);
+  color: var(--cadastro-primary);
+}
+
+.cadastro-adicionar:hover {
+  background: var(--cadastro-subtle);
+  border-color: var(--cadastro-primary-hover);
+  color: var(--cadastro-primary-hover);
+}
+
+.cadastro-remover {
+  background: transparent;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
 }
 
 .cadastro-remover:hover {
   background: #fef2f2;
-  border-color: #fca5a5;
+  border-color: #f87171;
 }
 
-/* ESTADO VAZIO */
+/* Estado vazio */
+
 .cadastro-vazio {
-  padding: 22px;
-  background: #f8fafc;
-  border: 1px dashed #d1d5db;
+  padding: 24px 18px;
+  background: var(--cadastro-subtle);
+  border: 1px dashed var(--cadastro-border);
   border-radius: 10px;
   text-align: center;
 }
 
 .cadastro-vazio strong {
   display: block;
-  margin-bottom: 5px;
-  color: #374151;
+  margin-bottom: 6px;
+  color: var(--cadastro-text);
   font-size: 14px;
 }
 
 .cadastro-vazio p {
   margin: 0;
-  color: #6b7280;
+  color: var(--cadastro-muted);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* REVISÃO */
+/* Revisão */
+
 .cadastro-revisao-section {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   padding: 20px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--cadastro-subtle);
+  border: 1px solid var(--cadastro-border);
   border-radius: 10px;
 }
 
@@ -427,80 +446,74 @@
   margin-bottom: 0;
 }
 
-/* CABEÇALHO DA REVISÃO */
 .cadastro-revisao-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 14px;
   margin-bottom: 18px;
-  padding-bottom: 13px;
-  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cadastro-border);
 }
 
 .cadastro-revisao-header span {
   display: block;
-  margin-bottom: 4px;
-  color: #2563eb;
+  margin-bottom: 5px;
+  color: var(--cadastro-primary);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.7px;
-  text-transform: uppercase;
 }
 
 .cadastro-revisao-header h3 {
   margin: 0;
-  color: #1f2937;
-  font-size: 16px;
+  color: var(--cadastro-text);
+  font-size: 15px;
   font-weight: 700;
 }
 
 .cadastro-revisao-header button {
   flex-shrink: 0;
-  padding: 6px 10px;
+  padding: 6px 8px;
   background: transparent;
-  border: none;
-  color: #2563eb;
+  border: 0;
+  color: var(--cadastro-primary);
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: color 0.2s ease;
 }
 
 .cadastro-revisao-header button:hover {
-  color: #1d4ed8;
+  color: var(--cadastro-primary-hover);
   text-decoration: underline;
 }
 
-/* GRID DA REVISÃO */
 .cadastro-revisao-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 25px;
+  gap: 20px 24px;
 }
 
-.cadastro-revisao-grid>div {
+.cadastro-revisao-grid > div {
   min-width: 0;
 }
 
 .cadastro-revisao-grid small {
   display: block;
-  margin-bottom: 4px;
-  color: #6b7280;
+  margin-bottom: 5px;
+  color: var(--cadastro-muted);
   font-size: 11px;
-  font-weight: 500;
 }
 
 .cadastro-revisao-grid strong {
   display: block;
-  color: #1f2937;
-  font-size: 14px;
+  color: var(--cadastro-text);
+  font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
 
-/* LISTA DE REVISÃO */
 .cadastro-revisao-lista {
   display: flex;
   flex-direction: column;
@@ -511,16 +524,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  padding: 11px 13px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
   border-radius: 8px;
 }
 
 .cadastro-revisao-item strong {
   min-width: 0;
-  color: #374151;
+  color: var(--cadastro-text);
   font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -528,85 +541,88 @@
 
 .cadastro-revisao-item span {
   flex-shrink: 0;
-  color: #6b7280;
+  color: var(--cadastro-muted);
   font-size: 12px;
 }
 
-/* REVISÃO VAZIA */
 .cadastro-revisao-vazio {
   margin: 0;
-  color: #6b7280;
+  color: var(--cadastro-muted);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* BOTÕES FINAIS */
+/* Ações do formulário */
+
 .cadastro-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #f1f5f9;
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--cadastro-border);
 }
 
-.button-secondary,
-.button-primary {
-  min-width: 120px;
-  padding: 11px 18px;
+.cadastro-actions .button-secondary,
+.cadastro-actions .button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 130px;
+  min-height: 42px;
+  padding: 10px 18px;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-/* BOTÃO SECUNDÁRIO */
-.button-secondary {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  color: #374151;
+.cadastro-actions .button-secondary {
+  background: var(--cadastro-surface);
+  border: 1px solid var(--cadastro-border);
+  color: var(--cadastro-text);
 }
 
-.button-secondary:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+.cadastro-actions .button-secondary:hover:not(:disabled) {
+  background: var(--cadastro-subtle);
+  border-color: var(--cadastro-muted);
 }
 
-/* BOTÃO PRINCIPAL */
-.button-primary {
-  background: #2563eb;
-  border: 1px solid #2563eb;
-  color: #ffffff;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+.cadastro-actions .button-primary {
+  background: var(--cadastro-primary);
+  border: 1px solid var(--cadastro-primary);
+  color: #fff;
 }
 
-.button-primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.22);
+.cadastro-actions .button-primary:hover:not(:disabled) {
+  background: var(--cadastro-primary-hover);
+  border-color: var(--cadastro-primary-hover);
 }
 
-/* BOTÕES DESABILITADOS */
-.button-primary:disabled,
-.button-secondary:disabled {
+.cadastro-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
-/* TABLET */
+/* Acessibilidade */
+
+.cadastro-pessoa-page button:focus-visible {
+  outline: 3px solid color-mix(
+    in srgb,
+    var(--cadastro-primary) 35%,
+    transparent
+  );
+  outline-offset: 3px;
+}
+
+/* Tablet */
+
 @media (max-width: 900px) {
   .cadastro-stepper {
-    padding: 16px;
-  }
-
-  .cadastro-step {
-    min-width: 115px;
+    padding: 18px;
   }
 
   .cadastro-step-info small {
@@ -618,39 +634,29 @@
   }
 }
 
-/* CELULAR */
+/* Celular */
+
 @media (max-width: 600px) {
-
-  .cadastro-pessoa-page {
-    width: 100%;
-  }
-
   .cadastro-pessoa-header {
-    flex-direction: column;
     align-items: stretch;
+    flex-direction: column;
     gap: 14px;
     margin-bottom: 18px;
   }
 
   .cadastro-pessoa-header h1 {
-    font-size: 24px;
-  }
-
-  .cadastro-pessoa-header p {
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 23px;
   }
 
   .cadastro-voltar {
     width: 100%;
-    padding: 12px;
   }
 
   .cadastro-stepper {
+    gap: 0;
     margin-bottom: 18px;
     padding: 14px;
     border-radius: 10px;
-    overflow-x: auto;
   }
 
   .cadastro-step {
@@ -659,31 +665,26 @@
   }
 
   .cadastro-step-button {
-    gap: 8px;
+    gap: 7px;
   }
 
   .cadastro-step-numero {
     width: 32px;
     height: 32px;
-    font-size: 12px;
   }
 
   .cadastro-step-info strong {
     font-size: 11px;
   }
 
-  .cadastro-step-info small {
-    display: none;
-  }
-
   .cadastro-step-linha {
-    flex: 0 0 28px;
+    flex: 0 0 22px;
     margin: 0 8px;
   }
 
   .cadastro-pessoa-card {
     padding: 18px;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
   .cadastro-etapa-header {
@@ -695,12 +696,9 @@
     font-size: 18px;
   }
 
-  .cadastro-etapa-header p {
-    font-size: 13px;
-  }
-
-  .cadastro-form-row {
-    grid-template-columns: 1fr;
+  .cadastro-form-row,
+  .cadastro-item .cadastro-form-row {
+    grid-template-columns: minmax(0, 1fr);
     gap: 0;
   }
 
@@ -708,65 +706,12 @@
     margin-bottom: 17px;
   }
 
-  .cadastro-form-group label {
-    font-size: 13px;
-  }
-
-  .cadastro-form-group input,
-  .cadastro-form-group select {
-    padding: 12px;
-    font-size: 14px;
-  }
-
   .cadastro-item {
-    padding: 15px;
-    border-radius: 9px;
-  }
-
-  .cadastro-form-group input[type="date"] {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-
-    /* Remove a estilização padrão do iOS/Safari */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    /* Força a mesma altura, borda e raio do restante dos campos */
-    min-height: 45px;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #1f2937;
-    padding: 12px 14px;
-
-    /* Garante o alinhamento do texto no Safari */
-    display: flex;
-    align-items: center;
-  }
-
-  /* Remove os espaçamentos internos ocultos que o Webkit injeta */
-  .cadastro-form-group input[type="date"]::-webkit-date-and-time-value {
-    text-align: left;
-    margin: 0;
-  }
-
-  .cadastro-item-header {
-    margin-bottom: 14px;
-  }
-
-  .cadastro-item-header strong {
-    font-size: 13px;
+    padding: 14px;
   }
 
   .cadastro-adicionar {
     width: 100%;
-    padding: 12px;
-  }
-
-  .cadastro-remover {
-    padding: 6px 9px;
-    font-size: 11px;
   }
 
   .cadastro-vazio {
@@ -775,44 +720,31 @@
 
   .cadastro-revisao-section {
     padding: 16px;
-    border-radius: 9px;
   }
 
   .cadastro-revisao-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .cadastro-revisao-header {
-    align-items: center;
-  }
-
-  .cadastro-revisao-header h3 {
-    font-size: 15px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
   }
 
   .cadastro-revisao-item {
     align-items: flex-start;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
   }
 
   .cadastro-actions {
-    flex-direction: column;
+    align-items: stretch;
+    flex-direction: column-reverse;
     gap: 10px;
-    margin-top: 20px;
-    padding-top: 18px;
   }
 
-  .button-secondary,
-  .button-primary {
+  .cadastro-actions .button-secondary,
+  .cadastro-actions .button-primary {
     width: 100%;
-    min-width: 0;
-    padding: 13px;
   }
 }
 
-/* CELULARES MENORES */
 @media (max-width: 380px) {
   .cadastro-pessoa-card {
     padding: 14px;
@@ -822,25 +754,16 @@
     padding: 12px;
   }
 
-  .cadastro-step-numero {
-    width: 30px;
-    height: 30px;
-  }
-
   .cadastro-step-info strong {
     font-size: 10px;
   }
 
   .cadastro-step-linha {
-    flex-basis: 20px;
+    flex-basis: 16px;
     margin: 0 6px;
   }
 
-  .cadastro-pessoa-header h1 {
-    font-size: 22px;
-  }
-
   .cadastro-revisao-section {
-    padding: 14px;
+    padding: 13px;
   }
 }

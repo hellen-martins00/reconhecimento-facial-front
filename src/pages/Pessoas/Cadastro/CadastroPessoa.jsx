@@ -27,7 +27,8 @@ function CadastroPessoa() {
     cidade: { min: 2, max: 100 },
     estado: 2,
     cep: 8,
-    crime: { min: 3, max: 150 },
+    localDesaparecimento: { min: 3, max: 200 },
+    descricaoDesaparecimento: { min: 3, max: 500 },
   };
 
   function textoLimpo(valor) {
@@ -122,8 +123,8 @@ function CadastroPessoa() {
   const [estado, setEstado] = useState("");
   const [cep, setCep] = useState("");
 
-  // PASSAGENS CRIMINAIS
-  const [passagens, setPassagens] = useState([]);
+  // REGISTROS DE DESAPARECIMENTO
+  const [registrosDesaparecimento, setRegistrosDesaparecimento] = useState([]);
 
   // CONTROLE
   const [erro, setErro] = useState("");
@@ -150,8 +151,8 @@ function CadastroPessoa() {
     },
     {
       numero: 4,
-      titulo: "Passagens",
-      descricao: "Antecedentes",
+      titulo: "Desaparecimento",
+      descricao: "Registros",
     },
     {
       numero: 5,
@@ -201,37 +202,36 @@ function CadastroPessoa() {
     );
   }
 
-  // PASSAGENS
-  function adicionarPassagem() {
+  // REGISTROS DE DESAPARECIMENTO
+  function adicionarRegistroDesaparecimento() {
     setErro("");
 
-    setPassagens((passagensAtuais) => [
-      ...passagensAtuais,
+    setRegistrosDesaparecimento((registrosAtuais) => [
+      ...registrosAtuais,
       {
-        crime: "",
-        data_ocorrencia: "",
+        data_desaparecimento: "",
+        local_desaparecimento: "",
+        descricao: "",
       },
     ]);
   }
 
-  function removerPassagem(index) {
+  function removerRegistroDesaparecimento(index) {
     setErro("");
 
-    setPassagens((passagensAtuais) =>
-      passagensAtuais.filter(
-        (_, passagemIndex) => passagemIndex !== index
-      )
+    setRegistrosDesaparecimento((registrosAtuais) =>
+      registrosAtuais.filter((_, registroIndex) => registroIndex !== index)
     );
   }
 
-  function alterarPassagem(index, campo, valor) {
+  function alterarRegistroDesaparecimento(index, campo, valor) {
     setErro("");
 
-    setPassagens((passagensAtuais) =>
-      passagensAtuais.map((passagem, passagemIndex) =>
-        passagemIndex === index
-          ? { ...passagem, [campo]: valor }
-          : passagem
+    setRegistrosDesaparecimento((registrosAtuais) =>
+      registrosAtuais.map((registro, registroIndex) =>
+        registroIndex === index
+          ? { ...registro, [campo]: valor }
+          : registro
       )
     );
   }
@@ -485,38 +485,54 @@ function CadastroPessoa() {
   }
 
   // VALIDAÇÃO DA ETAPA 4
-  function validarPassagens() {
-    for (const passagem of passagens) {
-      const crimeValor = textoLimpo(passagem.crime);
-      const dataValor = passagem.data_ocorrencia;
+  function validarRegistrosDesaparecimento() {
+    for (const registro of registrosDesaparecimento) {
+      const data = registro.data_desaparecimento;
+      const local = textoLimpo(registro.local_desaparecimento);
+      const descricao = textoLimpo(registro.descricao);
 
-      // Linha totalmente vazia é permitida: significa que não há passagem.
-      if (!crimeValor && !dataValor) {
+      // Registro totalmente vazio é permitido.
+      if (!data && !local && !descricao) {
         continue;
       }
 
-      if (!crimeValor) {
-        setErro("Informe o crime da passagem criminal.");
+      if (!data) {
+        setErro("Informe a data do desaparecimento.");
+        return false;
+      }
+
+      if (data > obterDataHoje()) {
+        setErro("A data do desaparecimento não pode ser futura.");
+        return false;
+      }
+
+      if (!local) {
+        setErro("Informe o local do desaparecimento.");
         return false;
       }
 
       if (
-        crimeValor.length < LIMITES.crime.min ||
-        crimeValor.length > LIMITES.crime.max
+        local.length < LIMITES.localDesaparecimento.min ||
+        local.length > LIMITES.localDesaparecimento.max
       ) {
         setErro(
-          `O crime deve ter entre ${LIMITES.crime.min} e ${LIMITES.crime.max} caracteres.`
+          `O local deve ter entre ${LIMITES.localDesaparecimento.min} e ${LIMITES.localDesaparecimento.max} caracteres.`
         );
         return false;
       }
 
-      if (!dataValor) {
-        setErro("Informe a data da ocorrência da passagem criminal.");
+      if (!descricao) {
+        setErro("Informe a descrição das circunstâncias do desaparecimento.");
         return false;
       }
 
-      if (dataValor > obterDataHoje()) {
-        setErro("A data da ocorrência não pode ser futura.");
+      if (
+        descricao.length < LIMITES.descricaoDesaparecimento.min ||
+        descricao.length > LIMITES.descricaoDesaparecimento.max
+      ) {
+        setErro(
+          `A descrição deve ter entre ${LIMITES.descricaoDesaparecimento.min} e ${LIMITES.descricaoDesaparecimento.max} caracteres.`
+        );
         return false;
       }
     }
@@ -585,9 +601,9 @@ function CadastroPessoa() {
 
     // ETAPA 4
     if (etapaAtual === 4) {
-      const passagensValidas = validarPassagens();
+      const registrosValidos = validarRegistrosDesaparecimento();
 
-      if (!passagensValidas) {
+      if (!registrosValidos) {
         return;
       }
 
@@ -645,7 +661,7 @@ function CadastroPessoa() {
       return;
     }
 
-    if (!validarPassagens()) {
+    if (!validarRegistrosDesaparecimento()) {
       setEtapaAtual(4);
       return;
     }
@@ -678,15 +694,18 @@ function CadastroPessoa() {
       cep: limparCEP(cep),
     };
 
-    const passagensValidas = passagens
-      .map((passagem) => ({
-        crime: textoLimpo(passagem.crime),
-        data_ocorrencia: passagem.data_ocorrencia,
-      }))
+    const registrosValidos = registrosDesaparecimento
       .filter(
-        (passagem) =>
-          passagem.crime && passagem.data_ocorrencia
-      );
+        (registro) =>
+          registro.data_desaparecimento &&
+          textoLimpo(registro.local_desaparecimento) &&
+          textoLimpo(registro.descricao)
+      )
+      .map((registro) => ({
+        data_desaparecimento: registro.data_desaparecimento,
+        local_desaparecimento: textoLimpo(registro.local_desaparecimento),
+        descricao: textoLimpo(registro.descricao),
+      }));
 
     try {
       // ATENÇÃO: como o backend possui endpoints separados, o cadastro
@@ -716,11 +735,10 @@ function CadastroPessoa() {
       });
 
       await Promise.all(
-        passagensValidas.map((passagem) =>
-          api.post("/passagens", {
+        registrosValidos.map((registro) =>
+          api.post("/desaparecimentos", {
             pessoa_id: pessoaCriada.id,
-            crime: passagem.crime,
-            data_ocorrencia: passagem.data_ocorrencia,
+            ...registro,
           })
         )
       );
@@ -964,11 +982,10 @@ function CadastroPessoa() {
 
                 <select
                   value={sexo}
-                  onChange={(event) =>
-                    setSexo(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => {
+                    setSexo(event.target.value);
+                    setErro("");
+                  }}
                 >
                   <option value="">
                     Selecione
@@ -1092,15 +1109,10 @@ function CadastroPessoa() {
                           </label>
 
                           <select
-                            value={
-                              telefone.tipo
-                            }
+                            value={telefone.tipo}
                             onChange={(event) =>
-                              alterarTelefone(
-                                index,
-                                "tipo",
-                                event.target.value
-                              )
+                              alterarTelefone(index, "tipo", event.target.value)
+
                             }
                           >
 
@@ -1425,136 +1437,111 @@ function CadastroPessoa() {
             </section>
           )}
 
-          {/* ETAPA 4 - PASSAGENS */}
+          {/* ETAPA 4 - REGISTROS DE DESAPARECIMENTO */}
           {etapaAtual === 4 && (
             <section className="cadastro-etapa">
-
               <div className="cadastro-etapa-header">
-
                 <div>
                   <span className="cadastro-etapa-numero-label">
                     ETAPA 4 DE 5
                   </span>
 
-                  <h2>
-                    Passagens criminais
-                  </h2>
+                  <h2>Registros de Desaparecimento</h2>
 
                   <p>
-                    Cadastre ocorrências relacionadas à pessoa.
+                    Registre informações sobre o desaparecimento da pessoa.
                   </p>
                 </div>
-
               </div>
 
               <div className="cadastro-section">
-
-                {passagens.length === 0 && (
+                {registrosDesaparecimento.length === 0 && (
                   <div className="cadastro-vazio">
-
-                    <strong>
-                      Nenhuma passagem cadastrada
-                    </strong>
+                    <strong>Nenhum registro de desaparecimento</strong>
 
                     <p>
-                      Caso a pessoa possua registros,
-                      adicione uma passagem abaixo.
+                      Caso exista um registro, adicione as informações abaixo.
                     </p>
-
                   </div>
                 )}
 
-                {passagens.map(
-                  (passagem, index) => (
-                    <div
-                      className="cadastro-item"
-                      key={index}
-                    >
+                {registrosDesaparecimento.map((registro, index) => (
+                  <div className="cadastro-item" key={index}>
+                    <div className="cadastro-item-header">
+                      <strong>Registro {index + 1}</strong>
 
-                      <div className="cadastro-item-header">
-
-                        <strong>
-                          Passagem {index + 1}
-                        </strong>
-
-                        <button
-                          type="button"
-                          className="cadastro-remover"
-                          onClick={() =>
-                            removerPassagem(
-                              index
-                            )
-                          }
-                        >
-                          Remover
-                        </button>
-
-                      </div>
-
-                      <div className="cadastro-form-row">
-
-                        <div className="cadastro-form-group">
-
-                          <label>
-                            Crime
-                          </label>
-
-                          <input
-                            type="text"
-                            value={passagem.crime}
-                            maxLength={150}
-                            onChange={(event) =>
-                              alterarPassagem(
-                                index,
-                                "crime",
-                                event.target.value
-                              )
-                            }
-                            placeholder="Informe o crime"
-                          />
-
-                        </div>
-
-                        <div className="cadastro-form-group">
-
-                          <label>
-                            Data da ocorrência
-                          </label>
-
-                          <input
-                            type="date"
-                            value={
-                              passagem.data_ocorrencia
-                            }
-                            onChange={(event) =>
-                              alterarPassagem(
-                                index,
-                                "data_ocorrencia",
-                                event.target.value
-                              )
-                            }
-                          />
-
-                        </div>
-
-                      </div>
-
+                      <button
+                        type="button"
+                        className="cadastro-remover"
+                        onClick={() => removerRegistroDesaparecimento(index)}
+                      >
+                        Remover
+                      </button>
                     </div>
-                  )
-                )}
+
+                    <div className="cadastro-form-group">
+                      <label>Data do desaparecimento</label>
+
+                      <input
+                        type="date"
+                        value={registro.data_desaparecimento}
+                        max={obterDataHoje()}
+                        onChange={(event) =>
+                          alterarRegistroDesaparecimento(
+                            index,
+                            "data_desaparecimento",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </div>
+
+                    <div className="cadastro-form-group">
+                      <label>Local do desaparecimento</label>
+
+                      <input
+                        type="text"
+                        value={registro.local_desaparecimento}
+                        maxLength={200}
+                        placeholder="Informe o local onde a pessoa foi vista pela última vez"
+                        onChange={(event) =>
+                          alterarRegistroDesaparecimento(
+                            index,
+                            "local_desaparecimento",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </div>
+
+                    <div className="cadastro-form-group">
+                      <label>Descrição das circunstâncias</label>
+
+                      <textarea
+                        value={registro.descricao}
+                        maxLength={500}
+                        rows={4}
+                        placeholder="Descreva as circunstâncias do desaparecimento"
+                        onChange={(event) =>
+                          alterarRegistroDesaparecimento(
+                            index,
+                            "descricao",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
 
                 <button
                   type="button"
                   className="cadastro-adicionar"
-                  onClick={
-                    adicionarPassagem
-                  }
+                  onClick={adicionarRegistroDesaparecimento}
                 >
-                  + Adicionar passagem
+                  + Adicionar registro
                 </button>
-
               </div>
-
             </section>
           )}
 
@@ -1829,74 +1816,61 @@ function CadastroPessoa() {
 
               </div>
 
-              {/* PASSAGENS */}
+              {/* REGISTROS DE DESAPARECIMENTO */}
               <div className="cadastro-revisao-section">
-
                 <div className="cadastro-revisao-header">
-
                   <div>
-                    <span>
-                      ANTECEDENTES
-                    </span>
-
-                    <h3>
-                      Passagens criminais
-                    </h3>
+                    <span>REGISTROS</span>
+                    <h3>Registros de Desaparecimento</h3>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(4)
-                    }
-                  >
+                  <button type="button" onClick={() => irParaEtapa(4)}>
                     Editar
                   </button>
-
                 </div>
 
-                {passagens.filter(
-                  (passagem) =>
-                    passagem.crime.trim() !== "" &&
-                    passagem.data_ocorrencia !== ""
+                {registrosDesaparecimento.filter(
+                  (registro) =>
+                    registro.data_desaparecimento ||
+                    registro.local_desaparecimento.trim() ||
+                    registro.descricao.trim()
                 ).length === 0 ? (
                   <p className="cadastro-revisao-vazio">
-                    Nenhuma passagem criminal informada.
+                    Nenhum registro de desaparecimento informado.
                   </p>
                 ) : (
                   <div className="cadastro-revisao-lista">
-
-                    {passagens
+                    {registrosDesaparecimento
                       .filter(
-                        (passagem) =>
-                          passagem.crime.trim() !== "" &&
-                          passagem.data_ocorrencia !== ""
+                        (registro) =>
+                          registro.data_desaparecimento ||
+                          registro.local_desaparecimento.trim() ||
+                          registro.descricao.trim()
                       )
-                      .map(
-                        (
-                          passagem,
-                          index
-                        ) => (
-                          <div
-                            key={index}
-                            className="cadastro-revisao-item"
-                          >
-
-                            <strong>
-                              {passagem.crime}
-                            </strong>
+                      .map((registro, index) => (
+                        <div key={index} className="cadastro-revisao-item">
+                          <div>
+                            <strong>Registro {index + 1}</strong>
 
                             <span>
-                              {formatarData(passagem.data_ocorrencia)}
+                              Data:{" "}
+                              {registro.data_desaparecimento
+                                ? formatarData(registro.data_desaparecimento)
+                                : "Não informada"}
                             </span>
 
-                          </div>
-                        )
-                      )}
+                            <span>
+                              Local: {registro.local_desaparecimento || "Não informado"}
+                            </span>
 
+                            <span>
+                              Descrição: {registro.descricao || "Não informada"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 )}
-
               </div>
 
             </section>
