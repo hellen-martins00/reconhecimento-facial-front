@@ -7,6 +7,7 @@ import {
   Users,
   ShieldCheck,
   ScanFace,
+  MapPin,
   LogOut,
   Menu,
   X,
@@ -122,6 +123,12 @@ function DashboardLayout({ children }) {
       active: location.pathname.startsWith("/pessoas"),
     },
     {
+      label: "Localizações",
+      path: "/localizacoes",
+      icon: MapPin,
+      active: location.pathname.startsWith("/localizacoes"),
+    },
+    {
       label: "Agentes de segurança",
       path: "/agentes",
       icon: ShieldCheck,
@@ -216,9 +223,8 @@ function DashboardLayout({ children }) {
               <button
                 key={item.path}
                 type="button"
-                className={`menu-item ${
-                  item.active ? "active" : ""
-                }`}
+                className={`menu-item ${item.active ? "active" : ""
+                  }`}
                 onClick={() => handleNavigate(item.path)}
                 aria-current={item.active ? "page" : undefined}
               >

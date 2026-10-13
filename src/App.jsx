@@ -20,6 +20,8 @@ import CadastroAgente from "./pages/Agentes/Cadastro/CadastroAgente";
 import DetalhesAgente from "./pages/Agentes/Detalhes/DetalhesAgente";
 import EditarAgente from "./pages/Agentes/Editar/EditarAgente";
 
+import Localizacoes from "./pages/Localizacoes/Localizacoes";
+
 function App() {
   return (
     <BrowserRouter>
@@ -139,6 +141,18 @@ function App() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Reconhecimento />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* LOCALIZAÇÕES */}
+        <Route
+          path="/localizacoes"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Localizacoes />
               </DashboardLayout>
             </ProtectedRoute>
           }
