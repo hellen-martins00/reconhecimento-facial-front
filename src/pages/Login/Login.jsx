@@ -257,10 +257,10 @@ function Login() {
 
         {/* CABEÇALHO */}
         <div className="login-header">
-          <h1>Reconhecimento Facial</h1>
+          <h1>Rede Colaborativa</h1>
 
           <p>
-            Entre para acessar o sistema
+            Cruzamento biométrico para identificação e localização de pessoas desaparecidas
           </p>
         </div>
 
