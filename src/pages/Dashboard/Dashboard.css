@@ -477,7 +477,7 @@
 
 /* ========================================
    ACESSOS RÁPIDOS
-======================================== */
+======================================== 
 
 .dashboard-quick-section {
   margin-bottom: 25px;
@@ -586,7 +586,7 @@
 .dashboard-quick-card:hover .quick-arrow {
   transform: translate(2px, -2px);
   color: #39d9ef;
-}
+}*/
 
 /* ========================================
    NOTA INFERIOR

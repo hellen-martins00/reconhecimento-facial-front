@@ -278,7 +278,7 @@ function Dashboard() {
         </button>
       </section>
 
-      {/* ACESSOS RÁPIDOS */}
+      {/* ACESSOS RÁPIDOS 
       <section className="dashboard-section dashboard-quick-section">
         <div className="dashboard-section-heading">
           <div>
@@ -356,7 +356,7 @@ function Dashboard() {
             <ArrowUpRight size={17} className="quick-arrow" />
           </button>
         </div>
-      </section>
+      </section>*/}
 
       <div className="dashboard-bottom-note">
         <ShieldCheck size={16} />
