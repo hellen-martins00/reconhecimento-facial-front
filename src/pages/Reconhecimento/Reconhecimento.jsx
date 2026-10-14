@@ -467,7 +467,7 @@ function Reconhecimento() {
                       className="button-primary"
                       onClick={iniciarCamera}
                     >
-                      <span className="reconhecimento-icone">📷</span>
+                      <span className="reconhecimento-icone"></span>
                       Abrir câmera
                     </button>
 
@@ -476,7 +476,7 @@ function Reconhecimento() {
                       className="reconhecimento-button-secondary"
                       onClick={abrirSeletorImagem}
                     >
-                      <span className="reconhecimento-icone">🖼️</span>
+                      <span className="reconhecimento-icone"></span>
                       Selecionar imagem
                     </button>
                   </div>
