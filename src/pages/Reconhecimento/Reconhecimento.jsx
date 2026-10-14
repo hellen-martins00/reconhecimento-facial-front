@@ -459,7 +459,7 @@ function Reconhecimento() {
                 />
               ) : (
                 <div className="reconhecimento-camera-placeholder">
-                  <span>Câmera desligada</span>
+                  <span>Pronto para iniciar a busca</span>
 
                   <div className="reconhecimento-opcoes-imagem">
                     <button
