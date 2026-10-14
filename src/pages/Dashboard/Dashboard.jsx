@@ -116,7 +116,7 @@ function Dashboard() {
       descricao: "Desaparecimentos ainda não encerrados",
       icone: FileSearch,
       cor: "blue",
-      destino: "/registros-desaparecimento",
+      destino: "/pessoas",
     },
     {
       titulo: "Registros biométricos",
@@ -132,7 +132,7 @@ function Dashboard() {
       descricao: "Localizações confirmadas",
       icone: MapPinCheck,
       cor: "green",
-      destino: "/registros-desaparecimento",
+      destino: "/localizacoes",
     },
   ];
 
@@ -142,14 +142,14 @@ function Dashboard() {
       <header className="dashboard-header">
         <div className="dashboard-heading">
           <span className="dashboard-eyebrow">
-            CENTRAL DE OPERAÇÕES
+            INDICADORES GERAIS
           </span>
 
-          <h1>Painel de controle</h1>
+          <h1>Visão geral do sistema</h1>
 
           <p>
-            Visão geral do sistema de reconhecimento facial
-            e identificação de pessoas.
+            Acompanhe os cadastros, os casos em aberto e os
+            registros de localização de pessoas desaparecidas.
           </p>
         </div>
 

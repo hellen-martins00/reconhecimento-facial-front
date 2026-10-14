@@ -272,7 +272,7 @@ function DashboardLayout({ children }) {
         <header className="dashboard-topbar">
           <div className="topbar-context">
             <span className="topbar-overline">
-              SISTEMA DE LOCALIZAÇÃO DE PESSOAS DESAPARECIDAS
+              REDE BIOMÉTRICA
             </span>
 
             <span className="topbar-page">
