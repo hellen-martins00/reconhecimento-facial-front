@@ -487,6 +487,91 @@
   outline-offset: 3px;
 }
 
+/* SITUAÇÃO DO DESAPARECIMENTO */
+.reconhecimento-desaparecimento {
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid var(--border-color, #263c53);
+  border-radius: 12px;
+  background: var(--card-background, #101f31);
+}
+
+.reconhecimento-desaparecimento-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.reconhecimento-desaparecimento-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.reconhecimento-desaparecimento-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #28627b;
+  border-radius: 10px;
+  color: #38d5e9;
+}
+
+.reconhecimento-desaparecimento-status {
+  margin-bottom: 14px;
+}
+
+.status-desaparecido,
+.status-localizado {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-desaparecido {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.status-localizado {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.reconhecimento-desaparecimento-detalhes p {
+  margin: 8px 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.reconhecimento-localizacao-aviso {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color, #263c53);
+}
+
+.reconhecimento-localizacao-aviso p {
+  margin: 0 0 14px;
+  color: var(--text-secondary, #a9bfd5);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.reconhecimento-localizacao-confirmada {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(34, 197, 94, 0.08);
+  color: #86efac;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 /* TABLET */
 
 @media (max-width: 768px) {

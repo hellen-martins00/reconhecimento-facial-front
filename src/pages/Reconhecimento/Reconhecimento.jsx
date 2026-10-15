@@ -26,6 +26,12 @@ function Reconhecimento() {
   const [fotosPessoa, setFotosPessoa] = useState([]);
   const [carregandoFotos, setCarregandoFotos] = useState(false);
 
+  const [registroDesaparecimento, setRegistroDesaparecimento] =
+    useState(null);
+
+  const [carregandoDesaparecimento, setCarregandoDesaparecimento] =
+    useState(false);
+
   const [reconhecendo, setReconhecendo] = useState(false);
   const [erro, setErro] = useState("");
 
@@ -130,6 +136,8 @@ function Reconhecimento() {
     limparUrlsFotos();
     setFotosPessoa([]);
     setResultado(null);
+    setRegistroDesaparecimento(null);
+    setCarregandoDesaparecimento(false);
   }
 
   // CAPTURAR FOTO PELA CÂMERA
@@ -350,21 +358,64 @@ function Reconhecimento() {
       setResultado(dados);
 
       if (dados.reconhecido && dados.pessoa?.id) {
-        await carregarFotosPessoa(
-          dados.pessoa.id,
-          dados.foto?.id
-        );
+        await Promise.all([
+          carregarFotosPessoa(
+            dados.pessoa.id,
+            dados.foto?.id
+          ),
+          carregarRegistroDesaparecimento(
+            dados.pessoa.id
+          ),
+        ]);
       }
     } catch (error) {
       console.error("Erro no reconhecimento:", error);
 
       setErro(
         error.response?.data?.detail ||
-          error.message ||
-          "Não foi possível realizar o reconhecimento facial."
+        error.message ||
+        "Não foi possível realizar o reconhecimento facial."
       );
     } finally {
       setReconhecendo(false);
+    }
+  }
+
+  // CARREGAR REGISTRO DE DESAPARECIMENTO DA PESSOA
+  async function carregarRegistroDesaparecimento(pessoaId) {
+    setCarregandoDesaparecimento(true);
+    setRegistroDesaparecimento(null);
+
+    try {
+      const resposta = await api.get(
+        `/desaparecimentos/pessoa/${pessoaId}`
+      );
+
+      const registros = Array.isArray(resposta.data)
+        ? resposta.data
+        : resposta.data
+          ? [resposta.data]
+          : [];
+
+      // Prioriza um caso que ainda esteja em aberto.
+      const registroEmAberto = registros.find(
+        (registro) =>
+          String(registro.status || "").toUpperCase() ===
+          "DESAPARECIDO"
+      );
+
+      setRegistroDesaparecimento(
+        registroEmAberto || registros[0] || null
+      );
+    } catch (error) {
+      console.error(
+        "Erro ao carregar registro de desaparecimento:",
+        error
+      );
+
+      setRegistroDesaparecimento(null);
+    } finally {
+      setCarregandoDesaparecimento(false);
     }
   }
 
@@ -377,6 +428,8 @@ function Reconhecimento() {
     setImagemCapturada(null);
     setResultado(null);
     setErro("");
+    setRegistroDesaparecimento(null);
+    setCarregandoDesaparecimento(false);
 
     iniciarCamera();
   }
@@ -588,6 +641,101 @@ function Reconhecimento() {
                     A correspondência precisa ser verificada
                     por um agente.
                   </p>
+                </div>
+
+                {/* SITUAÇÃO DO DESAPARECIMENTO */}
+                <div className="reconhecimento-desaparecimento">
+                  <div className="reconhecimento-desaparecimento-header">
+                    <h3>Situacão do desaparecimento</h3>
+                    <span className="reconhecimento-desaparecimento-icone">
+                      <i className="lucide-map-pin" />
+                    </span>
+                  </div>
+
+                  {carregandoDesaparecimento ? (
+                    <p>Consultando situação do caso...</p>
+                  ) : registroDesaparecimento ? (
+                    <>
+                      <div className="reconhecimento-desaparecimento-status">
+                        <span
+                          className={
+                            String(registroDesaparecimento.status || "")
+                              .toUpperCase() === "LOCALIZADO"
+                              ? "status-localizado"
+                              : "status-desaparecido"
+                          }
+                        >
+                          {registroDesaparecimento.status || "Não informado"}
+                        </span>
+                      </div>
+
+                      <div className="reconhecimento-desaparecimento-detalhes">
+                        <p>
+                          <strong>Data do desaparecimento:</strong>{" "}
+                          {registroDesaparecimento.data_desaparecimento
+                            ? new Date(
+                              `${registroDesaparecimento.data_desaparecimento}T00:00:00`
+                            ).toLocaleDateString("pt-BR")
+                            : "Não informada"}
+                        </p>
+
+                        <p>
+                          <strong>Local do desaparecimento:</strong>{" "}
+                          {registroDesaparecimento.local_desaparecimento ||
+                            "Não informado"}
+                        </p>
+
+                        {registroDesaparecimento.descricao && (
+                          <p>
+                            <strong>Descrição:</strong>{" "}
+                            {registroDesaparecimento.descricao}
+                          </p>
+                        )}
+                      </div>
+
+                      {String(registroDesaparecimento.status || "")
+                        .toUpperCase() === "DESAPARECIDO" && (
+                          <div className="reconhecimento-localizacao-aviso">
+                            <p>
+                              A pessoa possui um caso de desaparecimento em aberto.
+                              A correspondência facial precisa ser verificada antes
+                              de registrar uma localização.
+                            </p>
+
+                            <button
+                              type="button"
+                              className="reconhecimento-button-primary"
+                              onClick={() =>
+                                navigate("/localizacoes", {
+                                  state: {
+                                    pessoaId: resultado.pessoa.id,
+                                    pessoaNome: resultado.pessoa.nome,
+                                    registroDesaparecimentoId:
+                                      registroDesaparecimento.id,
+                                  },
+                                })
+                              }
+                            >
+                              Registrar localização
+                            </button>
+                          </div>
+                        )}
+
+                      {String(registroDesaparecimento.status || "")
+                        .toUpperCase() === "LOCALIZADO" && (
+                          <div className="reconhecimento-localizacao-confirmada">
+                            Esta pessoa já consta como localizada no sistema.
+                            Consulte os registros de localização para obter
+                            mais informações.
+                          </div>
+                        )}
+                    </>
+                  ) : (
+                    <p>
+                      Nenhum registro de desaparecimento foi encontrado
+                      para esta pessoa.
+                    </p>
+                  )}
                 </div>
 
                 <div className="reconhecimento-fotos">
