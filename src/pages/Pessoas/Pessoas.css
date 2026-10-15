@@ -2,20 +2,18 @@
    1. ESTRUTURA PRINCIPAL
 ======================================== */
 
-.pessoas-page {
+.pessoas-page,
+.pessoas-card {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
 }
 
 .pessoas-card {
-  width: 100%;
-  min-width: 0;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   overflow: visible;
-  box-sizing: border-box;
 }
 
 /* ========================================
@@ -103,8 +101,8 @@
   padding: 12px 14px;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
-  color: #166534;
   border-radius: 8px;
+  color: #166534;
   font-size: 13px;
 }
 
@@ -116,8 +114,8 @@
   height: 22px;
   flex-shrink: 0;
   background: #22c55e;
-  color: #ffffff;
   border-radius: 50%;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 700;
 }
@@ -163,7 +161,40 @@
 }
 
 /* ========================================
-   6. TABELA DESKTOP
+   6. CONTADOR DE REGISTROS
+======================================== */
+
+.pessoas-lista-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: -2px 0 14px;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pessoas-limpar-busca {
+  flex-shrink: 0;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  color: #93c5fd;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pessoas-limpar-busca:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* ========================================
+   7. TABELA DESKTOP
 ======================================== */
 
 .pessoas-table-container {
@@ -177,19 +208,21 @@
   border-collapse: collapse;
 }
 
-.pessoas-table th {
-  padding: 15px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: left;
-}
-
+.pessoas-table th,
 .pessoas-table td {
   padding: 15px;
   border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.pessoas-table th {
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pessoas-table td {
   color: #475569;
   font-size: 14px;
 }
@@ -198,13 +231,8 @@
   background: #f8fafc;
 }
 
-.pessoa-nome span {
-  color: #1e293b;
-  font-weight: 500;
-}
-
 /* ========================================
-   7. FOTOS E NOMES DESKTOP
+   8. FOTOS E NOMES DESKTOP
 ======================================== */
 
 .pessoa-nome {
@@ -214,12 +242,21 @@
   min-width: 0;
 }
 
-.pessoa-foto {
-  display: block;
+.pessoa-nome span {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.pessoa-foto,
+.pessoa-sem-foto {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
   border-radius: 6px;
+}
+
+.pessoa-foto {
+  display: block;
   object-fit: cover;
 }
 
@@ -227,18 +264,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
   background: #f1f1f1;
-  border-radius: 6px;
   color: #777777;
   font-size: 9px;
   text-align: center;
 }
 
 /* ========================================
-   8. LISTA MOBILE
+   9. LISTA E CARDS MOBILE
 ======================================== */
 
 .pessoas-mobile-list {
@@ -256,41 +289,13 @@
   overflow: visible;
 }
 
-/* ========================================
-   9. CABEÇALHO DO CARD MOBILE
-======================================== */
-
 /* Cabeçalho: foto, nome e menu */
+
 .pessoa-mobile-header {
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
-}
-
-.pessoa-mobile-resumo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 10px;
-}
-
-.pessoa-mobile-resumo > div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.pessoa-mobile-resumo > div > span {
-  color: #9ca3af;
-  font-size: 11px;
-}
-
-.pessoa-mobile-resumo > div > strong {
-  color: #374151;
-  font-size: 12px;
 }
 
 /* Foto da pessoa */
@@ -314,6 +319,8 @@
   text-align: center;
 }
 
+/* Nome e informações */
+
 .pessoa-mobile-nome {
   display: flex;
   flex: 1;
@@ -323,6 +330,7 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
 .pessoa-mobile-nome h3 {
   margin: 0;
   color: #1e293b;
@@ -334,6 +342,90 @@
 .pessoa-mobile-nome > span:not(.status-caso) {
   color: #64748b;
   font-size: 12px;
+}
+
+/* Resumo do desaparecimento */
+
+.pessoa-mobile-resumo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pessoa-mobile-resumo > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pessoa-mobile-resumo > div > span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.pessoa-mobile-resumo > div > strong {
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Botão de detalhes */
+
+.pessoa-mobile-detalhes-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: 12px 0 0;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pessoa-mobile-detalhes-button span {
+  font-size: 16px;
+}
+
+/* Informações detalhadas */
+
+.pessoa-mobile-detalhes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 12px;
+  padding-top: 16px;
+}
+
+.pessoa-mobile-campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pessoa-mobile-campo > span {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.pessoa-mobile-campo > strong {
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 /* ========================================
@@ -383,7 +475,10 @@
   z-index: 1000;
 }
 
-.pessoa-mobile-menu button {
+/* Menus mobile e desktop */
+
+.pessoa-mobile-menu button,
+.pessoa-menu button {
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -399,29 +494,37 @@
   cursor: pointer;
 }
 
-.pessoa-mobile-menu button:hover {
+.pessoa-mobile-menu button:hover,
+.pessoa-menu button:hover {
   background: #f3f4f6;
 }
 
-.pessoa-mobile-menu .pessoa-menu-excluir {
+.pessoa-mobile-menu .pessoa-menu-excluir,
+.pessoa-menu .pessoa-menu-excluir {
   color: #dc2626;
 }
 
-.pessoa-mobile-menu .pessoa-menu-excluir:hover {
+.pessoa-mobile-menu .pessoa-menu-excluir:hover,
+.pessoa-menu .pessoa-menu-excluir:hover {
   background: #fef2f2;
 }
 
 /* ========================================
-   12. STATUS DO DESAPARECIMENTO
+   11. STATUS DO DESAPARECIMENTO
 ======================================== */
 
 .status-caso {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
   max-width: 100%;
   padding: 5px 10px;
+  box-sizing: border-box;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  line-height: 1.4;
   white-space: nowrap;
 }
 
@@ -435,16 +538,24 @@
   color: #166534;
 }
 
+.status-sem-registro {
+  display: inline-block;
+  width: fit-content;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 /* ========================================
-   13. BOTÃO EXCLUIR
+   12. BOTÃO EXCLUIR
 ======================================== */
 
 .pessoa-excluir {
   padding: 8px 14px;
   background: #ffffff;
-  color: #dc2626;
   border: 1px solid #fecaca;
   border-radius: 6px;
+  color: #dc2626;
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -454,11 +565,7 @@
 }
 
 /* ========================================
-   14. MENU DE AÇÕES DESKTOP
-======================================== */
-
-/* ========================================
-   MENU DE AÇÕES DESKTOP
+   13. MENU DE AÇÕES DESKTOP
 ======================================== */
 
 .pessoas-actions {
@@ -513,165 +620,21 @@
   bottom: calc(100% + 4px);
 }
 
-.pessoa-menu button {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  cursor: pointer;
-}
-
-.pessoa-menu button:hover {
-  background: #f3f4f6;
-}
-
-.pessoa-menu .pessoa-menu-excluir {
-  color: #dc2626;
-}
-
-.pessoa-menu .pessoa-menu-excluir:hover {
-  background: #fef2f2;
-}
-
-/* STATUS DO CASO — DESKTOP E MOBILE */
-
-.status-caso {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  max-width: 100%;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  white-space: nowrap;
-  box-sizing: border-box;
-}
-
-.status-desaparecido {
-  background-color: #fef2f2;
-  color: #b91c1c;
-}
-
-.status-localizado {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.status-sem-registro {
-  display: inline-block;
-  width: fit-content;
-  color: #6b7280;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Resumo do desaparecimento */
-.pessoa-mobile-resumo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 14px;
-  padding: 12px 0;
-  border-top: 1px solid #e2e8f0;
-}
-
-.pessoa-mobile-resumo > div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-
-.pessoa-mobile-resumo > div > span {
-  color: #64748b;
-  font-size: 12px;
-}
-
-.pessoa-mobile-resumo > div > strong {
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Botão de detalhes */
-.pessoa-mobile-detalhes-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin: 0;
-  padding: 12px 0 0;
-  background: transparent;
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.pessoa-mobile-detalhes-button span {
-  font-size: 16px;
-}
-
-.pessoa-mobile-detalhes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 12px;
-  padding-top: 16px;
-}
-
-.pessoa-mobile-campo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  min-width: 0;
-}
-
-.pessoa-mobile-campo > span {
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.pessoa-mobile-campo > strong {
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
 /* ========================================
-   15. RESPONSIVIDADE PARA CELULARES
+   14. RESPONSIVIDADE PARA CELULARES
 ======================================== */
 
 @media (max-width: 768px) {
-  /* Página */
-
-  .pessoas-page {
+  .pessoas-page,
+  .pessoas-card {
     width: 100%;
     max-width: 100%;
   }
 
   .pessoas-card {
-    width: 100%;
-    max-width: 100%;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   .pessoas-table-container {
@@ -682,27 +645,14 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 0;
-  }
-
-  .pessoas-card {
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
+    padding: 12px;
   }
 
   .pessoa-mobile-card {
     padding: 14px;
   }
 
-  .pessoas-search {
-    margin-bottom: 16px;
-  }
-
-  /* CABEÇALHO DA PÁGINA */
-
   .pessoas-header {
-    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -710,9 +660,9 @@
   }
 
   .pessoas-header h1 {
+    margin-bottom: 6px;
     font-size: 24px;
     line-height: 1.25;
-    margin-bottom: 6px;
   }
 
   .pessoas-header p {
@@ -727,33 +677,15 @@
     font-size: 14px;
   }
 
-  /* Busca */
-
   .pessoas-search {
     margin-bottom: 16px;
     padding: 0 12px;
   }
 
-  /* Esconde a tabela no celular */
-
-  .pessoas-table-container {
-    display: none;
+  .pessoas-lista-info {
+    margin: 0 0 12px;
+    font-size: 13px;
   }
-
-  /* Exibe os cards */
-
-  .pessoas-mobile-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px;
-  }
-
-  .pessoa-mobile-card {
-    padding: 14px;
-  }
-
-  /* Ajuste para telas muito estreitas */
 
   .pessoa-mobile-nome h3 {
     font-size: 13px;
@@ -761,7 +693,7 @@
 }
 
 /* ========================================
-   16. CELULARES MUITO ESTREITOS
+   15. CELULARES MUITO ESTREITOS
 ======================================== */
 
 @media (max-width: 360px) {
@@ -779,9 +711,9 @@
 
   .pessoa-mobile-foto,
   .pessoa-mobile-sem-foto {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
+    width: 48px;
+    height: 60px;
+    flex-basis: 48px;
   }
 
   .pessoa-mobile-menu-container {
@@ -793,21 +725,14 @@
     height: 32px;
   }
 
-   .pessoa-mobile-header {
-    gap: 8px;
-  }
-
-  .pessoa-mobile-foto,
-  .pessoa-mobile-sem-foto {
-    width: 48px;
-    height: 60px;
-    flex-basis: 48px;
-  }
-
   .pessoa-mobile-detalhes {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ========================================
+   16. EXIBIÇÃO DESKTOP
+======================================== */
 
 @media (min-width: 769px) {
   .pessoas-table-container {

@@ -173,7 +173,7 @@ function Pessoas() {
         <div>
           <h1>Pessoas desaparecidas</h1>
           <p>
-            Consulte e gerencie os registros utilizados no processo de identificação facial.
+            Consulte os registros de desaparecimento.
           </p>
         </div>
 
@@ -182,7 +182,7 @@ function Pessoas() {
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          + Cadastrar pessoa desaparecida
+          +
         </button>
       </div>
 
@@ -195,6 +195,28 @@ function Pessoas() {
           onChange={(e) => setBusca(e.target.value)}
           aria-label="Buscar pessoa por nome ou CPF"
         />
+      </div>
+
+      {/* CONTADOR DE REGISTROS E FILTROS */}
+      <div className="pessoas-lista-info">
+        <span>
+          {carregando
+            ? "Carregando registros..."
+            : `${pessoasFiltradas.length} ${pessoasFiltradas.length === 1
+              ? "registro encontrado"
+              : "registros encontrados"
+            }`}
+        </span>
+
+        {busca.trim() !== "" && (
+          <button
+            type="button"
+            className="pessoas-limpar-busca"
+            onClick={() => setBusca("")}
+          >
+            Limpar busca
+          </button>
+        )}
       </div>
 
       {/* MENSAGEM DE ERRO */}
@@ -280,8 +302,8 @@ function Pessoas() {
                         {pessoa.registro_desaparecimento ? (
                           <span
                             className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                                ? "localizado"
-                                : "desaparecido"
+                              ? "localizado"
+                              : "desaparecido"
                               }`}
                           >
                             {pessoa.registro_desaparecimento.status === "LOCALIZADO"
@@ -430,8 +452,8 @@ function Pessoas() {
                         {status && (
                           <span
                             className={`status-caso ${status === "LOCALIZADO"
-                                ? "status-localizado"
-                                : "status-desaparecido"
+                              ? "status-localizado"
+                              : "status-desaparecido"
                               }`}
                           >
                             {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
@@ -558,8 +580,8 @@ function Pessoas() {
                           {registro ? (
                             <strong
                               className={`status-caso ${status === "LOCALIZADO"
-                                  ? "status-localizado"
-                                  : "status-desaparecido"
+                                ? "status-localizado"
+                                : "status-desaparecido"
                                 }`}
                             >
                               {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
