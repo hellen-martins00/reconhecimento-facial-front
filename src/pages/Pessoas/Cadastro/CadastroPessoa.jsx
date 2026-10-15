@@ -1,11 +1,8 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
-import {
-  formatarCPF,
-  limparCPF,
-} from "../../utils/formatarCPF";
+import api from "../../../services/api";
+import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
 import "./CadastroPessoa.css";
 
 const ETAPAS = [
