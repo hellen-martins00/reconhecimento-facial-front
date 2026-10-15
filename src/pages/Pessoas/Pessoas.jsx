@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../services/api";
-
 import "./Pessoas.css";
-
 import { formatarCPF } from "../../utils/formatarCPF";
 
 function Pessoas() {
@@ -19,6 +17,7 @@ function Pessoas() {
 
   const [menuAbrirParaCima, setMenuAbrirParaCima] = useState(false);
   const menuContainerRef = useRef(null);
+  const [detalhesAbertos, setDetalhesAbertos] = useState(null);
 
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
 
@@ -30,11 +29,10 @@ function Pessoas() {
     setErro("");
 
     try {
-      const [respostaPessoas, respostaDesaparecimentos] =
-        await Promise.all([
-          api.get("/pessoas"),
-          api.get("/desaparecimentos"),
-        ]);
+      const [respostaPessoas, respostaDesaparecimentos] = await Promise.all([
+        api.get("/pessoas"),
+        api.get("/desaparecimentos"),
+      ]);
 
       const registros = Array.isArray(respostaDesaparecimentos.data)
         ? respostaDesaparecimentos.data
@@ -44,9 +42,7 @@ function Pessoas() {
         const registrosDaPessoa = registros
           .filter((registro) => registro.pessoa_id === pessoa.id)
           .sort((a, b) =>
-            (b.data_desaparecimento || "").localeCompare(
-              a.data_desaparecimento || ""
-            )
+            (b.data_desaparecimento || "").localeCompare(a.data_desaparecimento || "")
           );
 
         return {
@@ -62,21 +58,16 @@ function Pessoas() {
           }
 
           try {
-            const respostaFoto = await api.get(
-              `/fotos/${pessoa.foto_id}/arquivo`,
-              { responseType: "blob" }
-            );
+            const respostaFoto = await api.get(`/fotos/${pessoa.foto_id}/arquivo`, {
+              responseType: "blob",
+            });
 
             return {
               ...pessoa,
               foto_url: URL.createObjectURL(respostaFoto.data),
             };
           } catch (error) {
-            console.error(
-              `Erro ao carregar foto da pessoa ${pessoa.id}:`,
-              error
-            );
-
+            console.error(`Erro ao carregar foto da pessoa ${pessoa.id}:`, error);
             return { ...pessoa, foto_url: null };
           }
         })
@@ -85,10 +76,8 @@ function Pessoas() {
       setPessoas(pessoasComFotos);
     } catch (error) {
       console.error(error);
-
       setErro(
-        error.response?.data?.detail ||
-        "Não foi possível carregar as pessoas e os registros."
+        error.response?.data?.detail || "Não foi possível carregar as pessoas e os registros."
       );
     } finally {
       setCarregando(false);
@@ -103,54 +92,35 @@ function Pessoas() {
       return;
     }
 
-    const confirmar = window.confirm(
-      `Confirma que ${pessoa.nome} foi localizada?`
-    );
-
+    const confirmar = window.confirm(`Confirma que ${pessoa.nome} foi localizada?`);
     if (!confirmar) return;
 
     try {
       setErro("");
       setSucesso("");
 
-      await api.put(`/desaparecimentos/${registro.id}`, {
-        status: "LOCALIZADO",
-      });
-
+      await api.put(`/desaparecimentos/${registro.id}`, { status: "LOCALIZADO" });
       await carregarPessoas();
 
-      setSucesso(
-        `O caso de ${pessoa.nome} foi atualizado para LOCALIZADO.`
-      );
+      setSucesso(`O caso de ${pessoa.nome} foi atualizado para LOCALIZADO.`);
     } catch (error) {
       console.error(error);
-
       setErro(
-        error.response?.data?.detail ||
-        "Não foi possível atualizar o status do caso."
+        error.response?.data?.detail || "Não foi possível atualizar o status do caso."
       );
     }
   }
 
   async function excluirPessoa(id, nome) {
-    const confirmar = window.confirm(
-      `Tem certeza que deseja excluir a pessoa "${nome}"?`
-    );
-
-    if (!confirmar) {
-      return;
-    }
+    const confirmar = window.confirm(`Tem certeza que deseja excluir a pessoa "${nome}"?`);
+    if (!confirmar) return;
 
     try {
       setErro("");
       setSucesso("");
 
       await api.delete(`/pessoas/${id}`);
-
-      setPessoas((pessoasAtuais) =>
-        pessoasAtuais.filter((pessoa) => pessoa.id !== id)
-      );
-
+      setPessoas((pessoasAtuais) => pessoasAtuais.filter((pessoa) => pessoa.id !== id));
       setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
 
       setTimeout(() => {
@@ -158,28 +128,20 @@ function Pessoas() {
       }, 4000);
     } catch (error) {
       console.error(error);
-
       setErro(
-        error.response?.data?.detail ||
-        "Não foi possível excluir a pessoa."
+        error.response?.data?.detail || "Não foi possível excluir a pessoa."
       );
     }
   }
 
   // MENSAGEM DE SUCESSO VINDO DO CADASTRO
   useEffect(() => {
-    if (!location.state?.sucesso) {
-      return;
-    }
+    if (!location.state?.sucesso) return;
 
     setSucesso(location.state.sucesso);
 
-    // Remove o state da URL/histórico
-    // para não exibir novamente ao atualizar a página
-    navigate(location.pathname, {
-      replace: true,
-      state: null,
-    });
+    // Remove o state da URL/histórico para não exibir novamente ao atualizar a página
+    navigate(location.pathname, { replace: true, state: null });
 
     const timer = setTimeout(() => {
       setSucesso("");
@@ -195,17 +157,13 @@ function Pessoas() {
 
   const pessoasFiltradas = pessoas.filter((pessoa) => {
     const termo = busca.trim().toLowerCase();
-
     if (!termo) return true;
 
     const nome = (pessoa.nome || "").toLowerCase();
     const cpf = (pessoa.cpf || "").replace(/\D/g, "");
     const buscaCpf = termo.replace(/\D/g, "");
 
-    return (
-      nome.includes(termo) ||
-      (buscaCpf !== "" && cpf.includes(buscaCpf))
-    );
+    return nome.includes(termo) || (buscaCpf !== "" && cpf.includes(buscaCpf));
   });
 
   return (
@@ -214,10 +172,8 @@ function Pessoas() {
       <div className="pessoas-header">
         <div>
           <h1>Pessoas desaparecidas</h1>
-
           <p>
-            Consulte e gerencie os registros utilizados no
-            processo de identificação facial.
+            Consulte e gerencie os registros utilizados no processo de identificação facial.
           </p>
         </div>
 
@@ -232,7 +188,6 @@ function Pessoas() {
 
       <div className="pessoas-search">
         <span aria-hidden="true">⌕</span>
-
         <input
           type="search"
           placeholder="Buscar por nome ou CPF..."
@@ -243,19 +198,12 @@ function Pessoas() {
       </div>
 
       {/* MENSAGEM DE ERRO */}
-      {erro && (
-        <div className="pessoas-error">
-          {erro}
-        </div>
-      )}
+      {erro && <div className="pessoas-error">{erro}</div>}
 
       {/* MENSAGEM DE SUCESSO */}
       {sucesso && (
         <div className="pessoas-success">
-          <span className="pessoas-success-icon">
-            ✓
-          </span>
-
+          <span className="pessoas-success-icon">✓</span>
           <span>{sucesso}</span>
         </div>
       )}
@@ -263,21 +211,15 @@ function Pessoas() {
       {/* CONTEÚDO PRINCIPAL */}
       <div className="pessoas-card">
         {carregando ? (
-          <div className="pessoas-loading">
-            Carregando pessoas...
-          </div>
+          <div className="pessoas-loading">Carregando pessoas...</div>
         ) : pessoas.length === 0 ? (
           <div className="pessoas-empty">
             <h2>Nenhuma pessoa cadastrada</h2>
-
-            <p>
-              Ainda não existem pessoas cadastradas no sistema.
-            </p>
+            <p>Ainda não existem pessoas cadastradas no sistema.</p>
           </div>
         ) : (
           <>
             {/* TABELA - DESKTOP */}
-
             <div className="pessoas-table-container">
               <table className="pessoas-table">
                 <thead>
@@ -305,25 +247,17 @@ function Pessoas() {
                               className="pessoa-foto"
                             />
                           ) : (
-                            <div className="pessoa-sem-foto">
-                              Sem foto
-                            </div>
+                            <div className="pessoa-sem-foto">Sem foto</div>
                           )}
-
                           <span>{pessoa.nome}</span>
                         </div>
                       </td>
 
-                      <td>
-                        {formatarCPF(pessoa.cpf)}
-                      </td>
+                      <td>{formatarCPF(pessoa.cpf)}</td>
 
                       <td>
                         {pessoa.data_nascimento
-                          ? pessoa.data_nascimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
+                          ? pessoa.data_nascimento.split("-").reverse().join("/")
                           : ""}
                       </td>
 
@@ -332,9 +266,9 @@ function Pessoas() {
                       <td>
                         {pessoa.registro_desaparecimento?.data_desaparecimento
                           ? pessoa.registro_desaparecimento.data_desaparecimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
+                              .split("-")
+                              .reverse()
+                              .join("/")
                           : "—"}
                       </td>
 
@@ -345,10 +279,11 @@ function Pessoas() {
                       <td>
                         {pessoa.registro_desaparecimento ? (
                           <span
-                            className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                              ? "localizado"
-                              : "desaparecido"
-                              }`}
+                            className={`status-caso status-${
+                              pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                                ? "localizado"
+                                : "desaparecido"
+                            }`}
                           >
                             {pessoa.registro_desaparecimento.status === "LOCALIZADO"
                               ? "Localizado"
@@ -358,7 +293,6 @@ function Pessoas() {
                           "Sem registro"
                         )}
                       </td>
-
 
                       <td className="pessoas-actions">
                         <div className="pessoa-menu-container">
@@ -376,13 +310,9 @@ function Pessoas() {
                               }
 
                               const botao = e.currentTarget;
-                              const containerTabela = botao.closest(
-                                ".pessoas-table-container"
-                              );
-
+                              const containerTabela = botao.closest(".pessoas-table-container");
                               const retanguloBotao = botao.getBoundingClientRect();
-                              const retanguloContainer =
-                                containerTabela?.getBoundingClientRect();
+                              const retanguloContainer = containerTabela?.getBoundingClientRect();
 
                               const espacoAbaixo = retanguloContainer
                                 ? retanguloContainer.bottom - retanguloBotao.bottom
@@ -392,7 +322,6 @@ function Pessoas() {
                                 ? retanguloBotao.top - retanguloContainer.top
                                 : retanguloBotao.top;
 
-                              // Abre para cima se não houver espaço suficiente abaixo.
                               setMenuAbrirParaCima(
                                 espacoAbaixo < 190 && espacoAcima > espacoAbaixo
                               );
@@ -406,8 +335,9 @@ function Pessoas() {
                           {menuAberto === pessoa.id && (
                             <div
                               ref={menuContainerRef}
-                              className={`pessoa-menu ${menuAbrirParaCima ? "pessoa-menu-acima" : ""
-                                }`}
+                              className={`pessoa-menu ${
+                                menuAbrirParaCima ? "pessoa-menu-acima" : ""
+                              }`}
                               onClick={(e) => e.stopPropagation()}
                             >
                               <button
@@ -443,18 +373,17 @@ function Pessoas() {
                                 </button>
                               )}
 
-                              {pessoa.registro_desaparecimento?.status ===
-                                "DESAPARECIDO" && (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setMenuAberto(null);
-                                      marcarComoLocalizada(pessoa);
-                                    }}
-                                  >
-                                    Marcar como localizada
-                                  </button>
-                                )}
+                              {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setMenuAberto(null);
+                                    marcarComoLocalizada(pessoa);
+                                  }}
+                                >
+                                  Marcar como localizada
+                                </button>
+                              )}
                             </div>
                           )}
                         </div>
@@ -466,13 +395,80 @@ function Pessoas() {
             </div>
 
             {/* CARDS - MOBILE */}
-
             <div className="pessoas-mobile-list">
               {pessoasFiltradas.map((pessoa) => (
-                <div
-                  className="pessoa-mobile-card"
-                  key={pessoa.id}
-                >
+                <div className="pessoa-mobile-card" key={pessoa.id}>
+                  {/* RESUMO DO DESAPARECIMENTO */}
+                  <div className="pessoa-mobile-resumo">
+                    <div>
+                      <span>Data do desaparecimento</span>
+                      <strong>
+                        {pessoa.registro_desaparecimento?.data_desaparecimento
+                          ? pessoa.registro_desaparecimento.data_desaparecimento
+                              .split("-")
+                              .reverse()
+                              .join("/")
+                          : "—"}
+                      </strong>
+                    </div>
+
+                    {pessoa.registro_desaparecimento ? (
+                      <span
+                        className={`status-caso ${
+                          pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                            ? "status-localizado"
+                            : "status-desaparecido"
+                        }`}
+                      >
+                        {pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                          ? "Localizado"
+                          : "Desaparecido"}
+                      </span>
+                    ) : (
+                      <span className="status-sem-registro">Sem registro</span>
+                    )}
+                  </div>
+
+                  {/* BOTÃO PARA EXPANDIR OS DETALHES */}
+                  <button
+                    type="button"
+                    className="pessoa-mobile-detalhes-button"
+                    aria-expanded={detalhesAbertos === pessoa.id}
+                    onClick={() =>
+                      setDetalhesAbertos(
+                        detalhesAbertos === pessoa.id ? null : pessoa.id
+                      )
+                    }
+                  >
+                    {detalhesAbertos === pessoa.id ? "Ocultar detalhes" : "Ver detalhes"}
+                    <span>{detalhesAbertos === pessoa.id ? "⌃" : "⌄"}</span>
+                  </button>
+
+                  {/* DETALHES EXPANSÍVEIS */}
+                  {detalhesAbertos === pessoa.id && (
+                    <div className="pessoa-mobile-info pessoa-mobile-detalhes">
+                      <div>
+                        <span>CPF</span>
+                        <strong>{formatarCPF(pessoa.cpf)}</strong>
+                      </div>
+
+                      <div>
+                        <span>Data de nascimento</span>
+                        <strong>
+                          {pessoa.data_nascimento
+                            ? pessoa.data_nascimento.split("-").reverse().join("/")
+                            : "—"}
+                        </strong>
+                      </div>
+
+                      <div>
+                        <span>Local do desaparecimento</span>
+                        <strong>
+                          {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
+                        </strong>
+                      </div>
+                    </div>
+                  )}
 
                   {/* TOPO */}
                   <div className="pessoa-mobile-header">
@@ -483,9 +479,7 @@ function Pessoas() {
                         className="pessoa-mobile-foto"
                       />
                     ) : (
-                      <div className="pessoa-mobile-sem-foto">
-                        Sem foto
-                      </div>
+                      <div className="pessoa-mobile-sem-foto">Sem foto</div>
                     )}
 
                     <div className="pessoa-mobile-nome">
@@ -498,9 +492,7 @@ function Pessoas() {
                         type="button"
                         className="pessoa-mobile-menu-button"
                         onClick={() =>
-                          setMenuAberto(
-                            menuAberto === pessoa.id ? null : pessoa.id
-                          )
+                          setMenuAberto(menuAberto === pessoa.id ? null : pessoa.id)
                         }
                         aria-label={`Ações para ${pessoa.nome}`}
                         aria-expanded={menuAberto === pessoa.id}
@@ -558,65 +550,6 @@ function Pessoas() {
                       )}
                     </div>
                   </div>
-
-                  {/* INFORMAÇÕES */}
-                  <div className="pessoa-mobile-info">
-                    <div>
-                      <span>CPF</span>
-                      <strong>{formatarCPF(pessoa.cpf)}</strong>
-                    </div>
-
-                    <div>
-                      <span>Data de nascimento</span>
-                      <strong>
-                        {pessoa.data_nascimento
-                          ? pessoa.data_nascimento.split("-").reverse().join("/")
-                          : "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>Data do desaparecimento</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.data_desaparecimento
-                          ? pessoa.registro_desaparecimento.data_desaparecimento
-                            .split("-")
-                            .reverse()
-                            .join("/")
-                          : "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>Local do desaparecimento</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>Status do caso</span>
-
-                      {pessoa.registro_desaparecimento ? (
-                        <strong
-                          className={`status-caso ${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                            ? "status-localizado"
-                            : "status-desaparecido"
-                            }`}
-                        >
-                          {pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                            ? "Localizado"
-                            : "Desaparecido"}
-                        </strong>
-                      ) : (
-                        <strong className="status-sem-registro">
-                          Sem registro
-                        </strong>
-                      )}
-                    </div>
-                  </div>
-
-
                 </div>
               ))}
             </div>
