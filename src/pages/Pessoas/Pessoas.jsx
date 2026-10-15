@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
@@ -16,6 +16,9 @@ function Pessoas() {
 
   const usuarioSalvo = localStorage.getItem("usuario");
   const usuarioLogado = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+  const [menuAbrirParaCima, setMenuAbrirParaCima] = useState(false);
+  const menuContainerRef = useRef(null);
 
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
 
@@ -360,20 +363,55 @@ function Pessoas() {
                       <td className="pessoas-actions">
                         <div className="pessoa-menu-container">
                           <button
+                            type="button"
                             className="pessoa-menu-button"
-                            onClick={() =>
-                              setMenuAberto(
-                                menuAberto === pessoa.id ? null : pessoa.id
-                              )
-                            }
                             aria-label={`Ações para ${pessoa.nome}`}
+                            aria-expanded={menuAberto === pessoa.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+
+                              if (menuAberto === pessoa.id) {
+                                setMenuAberto(null);
+                                return;
+                              }
+
+                              const botao = e.currentTarget;
+                              const containerTabela = botao.closest(
+                                ".pessoas-table-container"
+                              );
+
+                              const retanguloBotao = botao.getBoundingClientRect();
+                              const retanguloContainer =
+                                containerTabela?.getBoundingClientRect();
+
+                              const espacoAbaixo = retanguloContainer
+                                ? retanguloContainer.bottom - retanguloBotao.bottom
+                                : window.innerHeight - retanguloBotao.bottom;
+
+                              const espacoAcima = retanguloContainer
+                                ? retanguloBotao.top - retanguloContainer.top
+                                : retanguloBotao.top;
+
+                              // Abre para cima se não houver espaço suficiente abaixo.
+                              setMenuAbrirParaCima(
+                                espacoAbaixo < 190 && espacoAcima > espacoAbaixo
+                              );
+
+                              setMenuAberto(pessoa.id);
+                            }}
                           >
                             ⋮
                           </button>
 
                           {menuAberto === pessoa.id && (
-                            <div className="pessoa-menu">
+                            <div
+                              ref={menuContainerRef}
+                              className={`pessoa-menu ${menuAbrirParaCima ? "pessoa-menu-acima" : ""
+                                }`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <button
+                                type="button"
                                 onClick={() => {
                                   setMenuAberto(null);
                                   navigate(`/pessoas/${pessoa.id}`);
@@ -383,6 +421,7 @@ function Pessoas() {
                               </button>
 
                               <button
+                                type="button"
                                 onClick={() => {
                                   setMenuAberto(null);
                                   navigate(`/pessoas/${pessoa.id}/editar`);
@@ -395,9 +434,7 @@ function Pessoas() {
                                 <button
                                   type="button"
                                   className="pessoa-menu-excluir"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
+                                  onClick={() => {
                                     setMenuAberto(null);
                                     excluirPessoa(pessoa.id, pessoa.nome);
                                   }}
@@ -406,18 +443,18 @@ function Pessoas() {
                                 </button>
                               )}
 
-                              {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setMenuAberto(null);
-                                    marcarComoLocalizada(pessoa);
-                                  }}
-                                >
-                                  Marcar como localizada
-                                </button>
-                              )}
-
+                              {pessoa.registro_desaparecimento?.status ===
+                                "DESAPARECIDO" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setMenuAberto(null);
+                                      marcarComoLocalizada(pessoa);
+                                    }}
+                                  >
+                                    Marcar como localizada
+                                  </button>
+                                )}
                             </div>
                           )}
                         </div>
@@ -563,8 +600,8 @@ function Pessoas() {
                       {pessoa.registro_desaparecimento ? (
                         <strong
                           className={`status-caso ${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                              ? "status-localizado"
-                              : "status-desaparecido"
+                            ? "status-localizado"
+                            : "status-desaparecido"
                             }`}
                         >
                           {pessoa.registro_desaparecimento.status === "LOCALIZADO"

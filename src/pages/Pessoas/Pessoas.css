@@ -485,6 +485,10 @@
    14. MENU DE AÇÕES DESKTOP
 ======================================== */
 
+/* ========================================
+   MENU DE AÇÕES DESKTOP
+======================================== */
+
 .pessoas-actions {
   width: 60px;
   text-align: center;
@@ -517,27 +521,40 @@
 
 .pessoa-menu {
   position: absolute;
-  top: 38px;
+  top: calc(100% + 4px);
   right: 0;
-  min-width: 140px;
+  min-width: 160px;
+  max-width: 220px;
   padding: 5px;
+  box-sizing: border-box;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  z-index: 100;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  z-index: 1000;
+}
+
+/* Abre o menu para cima quando necessário */
+
+.pessoa-menu.pessoa-menu-acima {
+  top: auto;
+  bottom: calc(100% + 4px);
 }
 
 .pessoa-menu button {
   display: block;
   width: 100%;
-  padding: 9px 12px;
+  box-sizing: border-box;
+  padding: 10px 12px;
   background: transparent;
   border: none;
   border-radius: 6px;
   color: #374151;
   font-size: 13px;
+  line-height: 1.4;
   text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
