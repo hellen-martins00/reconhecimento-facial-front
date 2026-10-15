@@ -266,9 +266,9 @@ function Pessoas() {
                       <td>
                         {pessoa.registro_desaparecimento?.data_desaparecimento
                           ? pessoa.registro_desaparecimento.data_desaparecimento
-                              .split("-")
-                              .reverse()
-                              .join("/")
+                            .split("-")
+                            .reverse()
+                            .join("/")
                           : "—"}
                       </td>
 
@@ -279,11 +279,10 @@ function Pessoas() {
                       <td>
                         {pessoa.registro_desaparecimento ? (
                           <span
-                            className={`status-caso status-${
-                              pessoa.registro_desaparecimento.status === "LOCALIZADO"
+                            className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
                                 ? "localizado"
                                 : "desaparecido"
-                            }`}
+                              }`}
                           >
                             {pessoa.registro_desaparecimento.status === "LOCALIZADO"
                               ? "Localizado"
@@ -335,9 +334,8 @@ function Pessoas() {
                           {menuAberto === pessoa.id && (
                             <div
                               ref={menuContainerRef}
-                              className={`pessoa-menu ${
-                                menuAbrirParaCima ? "pessoa-menu-acima" : ""
-                              }`}
+                              className={`pessoa-menu ${menuAbrirParaCima ? "pessoa-menu-acima" : ""
+                                }`}
                               onClick={(e) => e.stopPropagation()}
                             >
                               <button
@@ -396,162 +394,187 @@ function Pessoas() {
 
             {/* CARDS - MOBILE */}
             <div className="pessoas-mobile-list">
-              {pessoasFiltradas.map((pessoa) => (
-                <div className="pessoa-mobile-card" key={pessoa.id}>
-                  {/* RESUMO DO DESAPARECIMENTO */}
-                  <div className="pessoa-mobile-resumo">
-                    <div>
-                      <span>Data do desaparecimento</span>
-                      <strong>
-                        {pessoa.registro_desaparecimento?.data_desaparecimento
-                          ? pessoa.registro_desaparecimento.data_desaparecimento
-                              .split("-")
-                              .reverse()
-                              .join("/")
-                          : "—"}
-                      </strong>
-                    </div>
+              {pessoasFiltradas.map((pessoa) => {
+                const detalhesExpandidos = detalhesAbertos === pessoa.id;
+                const registro = pessoa.registro_desaparecimento;
 
-                    {pessoa.registro_desaparecimento ? (
-                      <span
-                        className={`status-caso ${
-                          pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                            ? "status-localizado"
-                            : "status-desaparecido"
-                        }`}
-                      >
-                        {pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                          ? "Localizado"
-                          : "Desaparecido"}
-                      </span>
-                    ) : (
-                      <span className="status-sem-registro">Sem registro</span>
-                    )}
-                  </div>
+                const dataDesaparecimento = registro?.data_desaparecimento
+                  ? registro.data_desaparecimento.split("-").reverse().join("/")
+                  : "—";
 
-                  {/* BOTÃO PARA EXPANDIR OS DETALHES */}
-                  <button
-                    type="button"
-                    className="pessoa-mobile-detalhes-button"
-                    aria-expanded={detalhesAbertos === pessoa.id}
-                    onClick={() =>
-                      setDetalhesAbertos(
-                        detalhesAbertos === pessoa.id ? null : pessoa.id
-                      )
-                    }
-                  >
-                    {detalhesAbertos === pessoa.id ? "Ocultar detalhes" : "Ver detalhes"}
-                    <span>{detalhesAbertos === pessoa.id ? "⌃" : "⌄"}</span>
-                  </button>
+                const status = registro?.status;
 
-                  {/* DETALHES EXPANSÍVEIS */}
-                  {detalhesAbertos === pessoa.id && (
-                    <div className="pessoa-mobile-info pessoa-mobile-detalhes">
-                      <div>
-                        <span>CPF</span>
-                        <strong>{formatarCPF(pessoa.cpf)}</strong>
-                      </div>
-
-                      <div>
-                        <span>Data de nascimento</span>
-                        <strong>
-                          {pessoa.data_nascimento
-                            ? pessoa.data_nascimento.split("-").reverse().join("/")
-                            : "—"}
-                        </strong>
-                      </div>
-
-                      <div>
-                        <span>Local do desaparecimento</span>
-                        <strong>
-                          {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
-                        </strong>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TOPO */}
-                  <div className="pessoa-mobile-header">
-                    {pessoa.foto_url ? (
-                      <img
-                        src={pessoa.foto_url}
-                        alt={`Foto de ${pessoa.nome}`}
-                        className="pessoa-mobile-foto"
-                      />
-                    ) : (
-                      <div className="pessoa-mobile-sem-foto">Sem foto</div>
-                    )}
-
-                    <div className="pessoa-mobile-nome">
-                      <h3>{pessoa.nome}</h3>
-                      <span>{pessoa.sexo || "Não informado"}</span>
-                    </div>
-
-                    <div className="pessoa-mobile-menu-container">
-                      <button
-                        type="button"
-                        className="pessoa-mobile-menu-button"
-                        onClick={() =>
-                          setMenuAberto(menuAberto === pessoa.id ? null : pessoa.id)
-                        }
-                        aria-label={`Ações para ${pessoa.nome}`}
-                        aria-expanded={menuAberto === pessoa.id}
-                      >
-                        ⋮
-                      </button>
-
-                      {menuAberto === pessoa.id && (
-                        <div className="pessoa-mobile-menu">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setMenuAberto(null);
-                              navigate(`/pessoas/${pessoa.id}`);
-                            }}
-                          >
-                            Visualizar
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setMenuAberto(null);
-                              navigate(`/pessoas/${pessoa.id}/editar`);
-                            }}
-                          >
-                            Editar
-                          </button>
-
-                          {isAdmin && (
-                            <button
-                              type="button"
-                              className="pessoa-menu-excluir"
-                              onClick={() => {
-                                setMenuAberto(null);
-                                excluirPessoa(pessoa.id, pessoa.nome);
-                              }}
-                            >
-                              Excluir
-                            </button>
-                          )}
-
-                          {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setMenuAberto(null);
-                                marcarComoLocalizada(pessoa);
-                              }}
-                            >
-                              Marcar como localizada
-                            </button>
-                          )}
+                return (
+                  <article className="pessoa-mobile-card" key={pessoa.id}>
+                    {/* TOPO: FOTO, NOME, SEXO E MENU */}
+                    <div className="pessoa-mobile-header">
+                      {pessoa.foto_url ? (
+                        <img
+                          src={pessoa.foto_url}
+                          alt={`Foto de ${pessoa.nome}`}
+                          className="pessoa-mobile-foto"
+                        />
+                      ) : (
+                        <div className="pessoa-mobile-sem-foto">
+                          Sem foto
                         </div>
                       )}
+
+                      <div className="pessoa-mobile-nome">
+                        <h3>{pessoa.nome}</h3>
+
+                        <span>
+                          CPF: {formatarCPF(pessoa.cpf)}
+                        </span>
+
+                        {status && (
+                          <span
+                            className={`status-caso ${status === "LOCALIZADO"
+                                ? "status-localizado"
+                                : "status-desaparecido"
+                              }`}
+                          >
+                            {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* MENU DE AÇÕES */}
+                      <div className="pessoa-mobile-menu-container">
+                        <button
+                          type="button"
+                          className="pessoa-mobile-menu-button"
+                          onClick={() =>
+                            setMenuAberto(menuAberto === pessoa.id ? null : pessoa.id)
+                          }
+                          aria-label={`Ações para ${pessoa.nome}`}
+                          aria-expanded={menuAberto === pessoa.id}
+                        >
+                          ⋮
+                        </button>
+
+                        {menuAberto === pessoa.id && (
+                          <div className="pessoa-mobile-menu">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMenuAberto(null);
+                                navigate(`/pessoas/${pessoa.id}`);
+                              }}
+                            >
+                              Visualizar
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMenuAberto(null);
+                                navigate(`/pessoas/${pessoa.id}/editar`);
+                              }}
+                            >
+                              Editar
+                            </button>
+
+                            {isAdmin && (
+                              <button
+                                type="button"
+                                className="pessoa-menu-excluir"
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  excluirPessoa(pessoa.id, pessoa.nome);
+                                }}
+                              >
+                                Excluir
+                              </button>
+                            )}
+
+                            {status === "DESAPARECIDO" && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setMenuAberto(null);
+                                  marcarComoLocalizada(pessoa);
+                                }}
+                              >
+                                Marcar como localizada
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+
+                    {/* RESUMO */}
+                    <div className="pessoa-mobile-resumo">
+                      <div>
+                        <span>Desaparecimento</span>
+                        <strong>{dataDesaparecimento}</strong>
+                      </div>
+                    </div>
+
+                    {/* EXPANDIR DETALHES */}
+                    <button
+                      type="button"
+                      className="pessoa-mobile-detalhes-button"
+                      aria-expanded={detalhesExpandidos}
+                      onClick={() =>
+                        setDetalhesAbertos(detalhesExpandidos ? null : pessoa.id)
+                      }
+                    >
+                      {detalhesExpandidos ? "Ocultar detalhes" : "Ver detalhes"}
+
+                      <span aria-hidden="true">
+                        {detalhesExpandidos ? "⌃" : "⌄"}
+                      </span>
+                    </button>
+
+                    {/* DETALHES */}
+                    {detalhesExpandidos && (
+                      <div className="pessoa-mobile-detalhes">
+                        <div className="pessoa-mobile-campo">
+                          <span>Data de nascimento</span>
+                          <strong>
+                            {pessoa.data_nascimento
+                              ? pessoa.data_nascimento.split("-").reverse().join("/")
+                              : "—"}
+                          </strong>
+                        </div>
+
+                        <div className="pessoa-mobile-campo">
+                          <span>Sexo</span>
+                          <strong>{pessoa.sexo || "Não informado"}</strong>
+                        </div>
+
+                        <div className="pessoa-mobile-campo">
+                          <span>Local do desaparecimento</span>
+                          <strong>
+                            {registro?.local_desaparecimento || "—"}
+                          </strong>
+                        </div>
+
+                        <div className="pessoa-mobile-campo">
+                          <span>Status do caso</span>
+
+                          {registro ? (
+                            <strong
+                              className={`status-caso ${status === "LOCALIZADO"
+                                  ? "status-localizado"
+                                  : "status-desaparecido"
+                                }`}
+                            >
+                              {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
+                            </strong>
+                          ) : (
+                            <strong className="status-sem-registro">
+                              Sem registro
+                            </strong>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </>
         )}

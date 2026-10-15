@@ -242,24 +242,30 @@
 ======================================== */
 
 .pessoas-mobile-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 8px;
+  display: none;
 }
 
 .pessoa-mobile-card {
-  padding: 12px;
+  position: relative;
+  min-width: 0;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
+  box-sizing: border-box;
+  overflow: visible;
 }
 
 /* ========================================
    9. CABEÇALHO DO CARD MOBILE
 ======================================== */
 
+/* Cabeçalho: foto, nome e menu */
 .pessoa-mobile-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .pessoa-mobile-resumo {
@@ -291,35 +297,43 @@
 
 .pessoa-mobile-foto,
 .pessoa-mobile-sem-foto {
-  width: 44px;
-  height: 44px;
-  flex-basis: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 70px;
+  flex: 0 0 58px;
+  border-radius: 7px;
+  object-fit: cover;
 }
 
-/* Nome e sexo */
+.pessoa-mobile-sem-foto {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 10px;
+  text-align: center;
+}
 
 .pessoa-mobile-nome {
-  flex: 1 1 auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
   min-width: 0;
-  overflow: hidden;
+  overflow-wrap: anywhere;
 }
-
 .pessoa-mobile-nome h3 {
-  margin: 0 0 5px;
-  color: #1f2937;
+  margin: 0;
+  color: #1e293b;
   font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
-  white-space: normal;
-  overflow-wrap: anywhere;
 }
 
-.pessoa-mobile-nome span {
-  display: block;
-  color: #6b7280;
+.pessoa-mobile-nome > span:not(.status-caso) {
+  color: #64748b;
   font-size: 12px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
 }
 
 /* ========================================
@@ -563,44 +577,50 @@
   font-weight: 600;
 }
 
+/* Resumo do desaparecimento */
 .pessoa-mobile-resumo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding-top: 10px;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 0;
+  border-top: 1px solid #e2e8f0;
 }
 
 .pessoa-mobile-resumo > div {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   min-width: 0;
 }
 
 .pessoa-mobile-resumo > div > span {
-  color: #9ca3af;
-  font-size: 11px;
-}
-
-.pessoa-mobile-resumo > div > strong {
-  color: #374151;
+  color: #64748b;
   font-size: 12px;
 }
 
+.pessoa-mobile-resumo > div > strong {
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Botão de detalhes */
 .pessoa-mobile-detalhes-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
-  padding: 9px 0 0;
+  margin: 0;
+  padding: 12px 0 0;
   background: transparent;
   border: none;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid #e2e8f0;
   color: #2563eb;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  text-align: left;
   cursor: pointer;
 }
 
@@ -611,8 +631,30 @@
 .pessoa-mobile-detalhes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 10px;
-  padding-top: 14px;
+  gap: 16px 12px;
+  padding-top: 16px;
+}
+
+.pessoa-mobile-campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pessoa-mobile-campo > span {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.pessoa-mobile-campo > strong {
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 /* ========================================
@@ -630,6 +672,31 @@
   .pessoas-card {
     width: 100%;
     max-width: 100%;
+  }
+
+  .pessoas-table-container {
+    display: none;
+  }
+
+  .pessoas-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .pessoas-card {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .pessoa-mobile-card {
+    padding: 14px;
+  }
+
+  .pessoas-search {
+    margin-bottom: 16px;
   }
 
   /* CABEÇALHO DA PÁGINA */
@@ -725,12 +792,29 @@
     width: 32px;
     height: 32px;
   }
+
+   .pessoa-mobile-header {
+    gap: 8px;
+  }
+
+  .pessoa-mobile-foto,
+  .pessoa-mobile-sem-foto {
+    width: 48px;
+    height: 60px;
+    flex-basis: 48px;
+  }
+
+  .pessoa-mobile-detalhes {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (min-width: 769px) {
-  .pessoas-mobile-resumo,
-  .pessoa-mobile-detalhes-button,
-  .pessoa-mobile-detalhes {
+  .pessoas-table-container {
+    display: block;
+  }
+
+  .pessoas-mobile-list {
     display: none;
   }
 }
