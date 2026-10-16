@@ -173,15 +173,23 @@
 /* MENU DESKTOP */
 .agente-menu {
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: calc(100% + 4px);
   right: 0;
-  min-width: 150px;
+  min-width: 160px;
+  max-width: 220px;
   padding: 5px;
+  box-sizing: border-box;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
   z-index: 1000;
+}
+
+/* ABRIR PARA CIMA */
+.agente-menu.agente-menu-acima {
+  top: auto;
+  bottom: calc(100% + 4px);
 }
 
 .agente-menu button {

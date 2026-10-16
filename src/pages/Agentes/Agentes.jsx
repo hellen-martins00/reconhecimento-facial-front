@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,10 +12,10 @@ function Agentes() {
   const [erro, setErro] = useState("");
   const [excluindo, setExcluindo] = useState(null);
   const [menuAberto, setMenuAberto] = useState(null);
+  const [menuAbrirParaCima, setMenuAbrirParaCima] = useState(false);
 
   const navigate = useNavigate();
 
-  // Guardar referências das URLs geradas para garantir o cleanup no unmount
   const fotosUrlsRef = useRef([]);
 
   // USUÁRIO LOGADO
@@ -29,7 +30,7 @@ function Agentes() {
 
   const isAdmin = usuario?.perfil === "ADMIN";
 
-  // Revogar URLs das fotos
+  // REVOGAR URLs DAS FOTOS
   const revogarTodasFotos = useCallback(() => {
     fotosUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
     fotosUrlsRef.current = [];
@@ -43,7 +44,6 @@ function Agentes() {
     try {
       const resposta = await api.get("/agentes");
 
-      // Revoga fotos da busca anterior
       revogarTodasFotos();
 
       const novasUrls = [];
@@ -60,7 +60,6 @@ function Agentes() {
               }
             );
 
-            // AGENTE NÃO POSSUI FOTO
             if (respostaFoto.status === 204) {
               return {
                 ...agente,
@@ -68,11 +67,7 @@ function Agentes() {
               };
             }
 
-            // FOTO ENCONTRADA
-            const fotoUrl = URL.createObjectURL(
-              respostaFoto.data
-            );
-
+            const fotoUrl = URL.createObjectURL(respostaFoto.data);
             novasUrls.push(fotoUrl);
 
             return {
@@ -94,14 +89,13 @@ function Agentes() {
       );
 
       fotosUrlsRef.current = novasUrls;
-
       setAgentes(agentesComFotos);
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível carregar os agentes."
+          "Não foi possível carregar os agentes."
       );
     } finally {
       setCarregando(false);
@@ -116,6 +110,36 @@ function Agentes() {
       revogarTodasFotos();
     };
   }, [carregarAgentes, revogarTodasFotos]);
+
+  // ABRIR MENU CONFORME O ESPAÇO DISPONÍVEL
+  function alternarMenuDesktop(evento, agenteId) {
+    evento.stopPropagation();
+
+    if (menuAberto === agenteId) {
+      setMenuAberto(null);
+      return;
+    }
+
+    const botao = evento.currentTarget;
+    const containerTabela = botao.closest(".agentes-table-container");
+
+    const retanguloBotao = botao.getBoundingClientRect();
+    const retanguloContainer = containerTabela?.getBoundingClientRect();
+
+    const espacoAbaixo = retanguloContainer
+      ? retanguloContainer.bottom - retanguloBotao.bottom
+      : window.innerHeight - retanguloBotao.bottom;
+
+    const espacoAcima = retanguloContainer
+      ? retanguloBotao.top - retanguloContainer.top
+      : retanguloBotao.top;
+
+    setMenuAbrirParaCima(
+      espacoAbaixo < 150 && espacoAcima > espacoAbaixo
+    );
+
+    setMenuAberto(agenteId);
+  }
 
   // EXCLUIR AGENTE
   async function handleExcluir(agente) {
@@ -136,23 +160,20 @@ function Agentes() {
       if (agente.foto_url) {
         URL.revokeObjectURL(agente.foto_url);
 
-        fotosUrlsRef.current =
-          fotosUrlsRef.current.filter(
-            (url) => url !== agente.foto_url
-          );
+        fotosUrlsRef.current = fotosUrlsRef.current.filter(
+          (url) => url !== agente.foto_url
+        );
       }
 
       setAgentes((agentesAtuais) =>
-        agentesAtuais.filter(
-          (item) => item.id !== agente.id
-        )
+        agentesAtuais.filter((item) => item.id !== agente.id)
       );
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível excluir o agente."
+          "Não foi possível excluir o agente."
       );
     } finally {
       setExcluindo(null);
@@ -164,6 +185,53 @@ function Agentes() {
     if (!data) return "-";
 
     return new Date(data).toLocaleDateString("pt-BR");
+  }
+
+  // MENU DE AÇÕES REUTILIZADO
+  function renderizarAcoes(agente) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => {
+            setMenuAberto(null);
+            navigate(`/agentes/${agente.id}`);
+          }}
+          disabled={excluindo === agente.id}
+        >
+          Visualizar
+        </button>
+
+        {(isAdmin || String(usuario?.id) === String(agente.id)) && (
+          <button
+            type="button"
+            onClick={() => {
+              setMenuAberto(null);
+              navigate(`/agentes/${agente.id}/editar`);
+            }}
+            disabled={excluindo === agente.id}
+          >
+            Editar
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            type="button"
+            className="agente-menu-excluir"
+            onClick={(evento) => {
+              evento.preventDefault();
+              evento.stopPropagation();
+              setMenuAberto(null);
+              handleExcluir(agente);
+            }}
+            disabled={excluindo === agente.id}
+          >
+            {excluindo === agente.id ? "Excluindo..." : "Excluir"}
+          </button>
+        )}
+      </>
+    );
   }
 
   return (
@@ -187,28 +255,20 @@ function Agentes() {
       </div>
 
       {/* ERRO */}
-      {erro && (
-        <div className="agentes-error">
-          {erro}
-        </div>
-      )}
+      {erro && <div className="agentes-error">{erro}</div>}
 
       {/* CONTEÚDO */}
       <div className="agentes-card">
         {carregando ? (
-          <div className="agentes-loading">
-            Carregando agentes...
-          </div>
+          <div className="agentes-loading">Carregando agentes...</div>
         ) : agentes.length === 0 ? (
           <div className="agentes-empty">
             <h2>Nenhum agente cadastrado</h2>
-            <p>
-              Ainda não existem agentes cadastrados no sistema.
-            </p>
+            <p>Ainda não existem agentes cadastrados no sistema.</p>
           </div>
         ) : (
           <>
-            {/* TABELA - DESKTOP */}
+            {/* TABELA DESKTOP */}
             <div className="agentes-table-container">
               <table className="agentes-table">
                 <thead>
@@ -224,7 +284,6 @@ function Agentes() {
                 <tbody>
                   {agentes.map((agente) => (
                     <tr key={agente.id}>
-                      {/* NOME */}
                       <td>
                         <div className="agente-nome">
                           {agente.foto_url ? (
@@ -243,83 +302,34 @@ function Agentes() {
                         </div>
                       </td>
 
-                      {/* USUÁRIO */}
-                      <td>
-                        {agente.usuario}
-                      </td>
+                      <td>{agente.usuario}</td>
+                      <td>{agente.perfil}</td>
+                      <td>{formatarData(agente.created_at)}</td>
 
-                      {/* PERFIL */}
-                      <td>
-                        {agente.perfil}
-                      </td>
-
-                      {/* DATA */}
-                      <td>
-                        {formatarData(agente.created_at)}
-                      </td>
-
-                      {/* AÇÕES */}
                       <td className="agentes-actions">
                         <div className="agente-menu-container">
                           <button
                             type="button"
                             className="agente-menu-button"
-                            onClick={() =>
-                              setMenuAberto(
-                                menuAberto === agente.id ? null : agente.id
-                              )
-                            }
                             aria-label={`Ações para ${agente.nome}`}
+                            aria-expanded={menuAberto === agente.id}
+                            onClick={(evento) =>
+                              alternarMenuDesktop(evento, agente.id)
+                            }
                           >
                             ⋮
                           </button>
 
                           {menuAberto === agente.id && (
-                            <div className="agente-menu">
-                              {/* VISUALIZAR */}
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setMenuAberto(null);
-                                  navigate(`/agentes/${agente.id}`);
-                                }}
-                                disabled={excluindo === agente.id}
-                              >
-                                Visualizar
-                              </button>
-
-                              {/* EDITAR */}
-                              {(isAdmin || usuario?.id === agente.id) && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setMenuAberto(null);
-                                    navigate(`/agentes/${agente.id}/editar`);
-                                  }}
-                                  disabled={excluindo === agente.id}
-                                >
-                                  Editar
-                                </button>
-                              )}
-
-                              {/* EXCLUIR */}
-                              {isAdmin && (
-                                <button
-                                  type="button"
-                                  className="agente-menu-excluir"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    setMenuAberto(null);
-                                    handleExcluir(agente);
-                                  }}
-                                  disabled={excluindo === agente.id}
-                                >
-                                  {excluindo === agente.id
-                                    ? "Excluindo..."
-                                    : "Excluir"}
-                                </button>
-                              )}
+                            <div
+                              className={`agente-menu ${
+                                menuAbrirParaCima
+                                  ? "agente-menu-acima"
+                                  : ""
+                              }`}
+                              onClick={(evento) => evento.stopPropagation()}
+                            >
+                              {renderizarAcoes(agente)}
                             </div>
                           )}
                         </div>
@@ -330,14 +340,10 @@ function Agentes() {
               </table>
             </div>
 
-            {/* CARDS - MOBILE */}
+            {/* CARDS MOBILE */}
             <div className="agentes-mobile-list">
               {agentes.map((agente) => (
-                <div
-                  className="agente-mobile-card"
-                  key={agente.id}
-                >
-                  {/* TOPO */}
+                <div className="agente-mobile-card" key={agente.id}>
                   <div className="agente-mobile-header">
                     {agente.foto_url ? (
                       <img
@@ -352,76 +358,32 @@ function Agentes() {
                     )}
 
                     <div className="agente-mobile-nome">
-                      <h3>
-                        {agente.nome}
-                      </h3>
-
-                      <span>
-                        {agente.perfil}
-                      </span>
+                      <h3>{agente.nome}</h3>
+                      <span>{agente.perfil}</span>
                     </div>
 
-                    {/* MENU DE TRÊS PONTINHOS */}
                     <div className="agente-mobile-menu-container">
                       <button
                         type="button"
                         className="agente-mobile-menu-button"
-                        onClick={() =>
+                        aria-label={`Ações para ${agente.nome}`}
+                        aria-expanded={menuAberto === agente.id}
+                        onClick={(evento) => {
+                          evento.stopPropagation();
                           setMenuAberto(
                             menuAberto === agente.id ? null : agente.id
-                          )
-                        }
-                        aria-label={`Ações para ${agente.nome}`}
+                          );
+                        }}
                       >
                         ⋮
                       </button>
 
                       {menuAberto === agente.id && (
-                        <div className="agente-mobile-menu">
-                          {/* VISUALIZAR */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setMenuAberto(null);
-                              navigate(`/agentes/${agente.id}`);
-                            }}
-                            disabled={excluindo === agente.id}
-                          >
-                            Visualizar
-                          </button>
-
-                          {/* EDITAR */}
-                          {(isAdmin || usuario?.id === agente.id) && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setMenuAberto(null);
-                                navigate(`/agentes/${agente.id}/editar`);
-                              }}
-                              disabled={excluindo === agente.id}
-                            >
-                              Editar
-                            </button>
-                          )}
-
-                          {/* EXCLUIR */}
-                          {isAdmin && (
-                            <button
-                              type="button"
-                              className="agente-menu-excluir"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setMenuAberto(null);
-                                handleExcluir(agente);
-                              }}
-                              disabled={excluindo === agente.id}
-                            >
-                              {excluindo === agente.id
-                                ? "Excluindo..."
-                                : "Excluir"}
-                            </button>
-                          )}
+                        <div
+                          className="agente-mobile-menu"
+                          onClick={(evento) => evento.stopPropagation()}
+                        >
+                          {renderizarAcoes(agente)}
                         </div>
                       )}
                     </div>
@@ -431,23 +393,17 @@ function Agentes() {
                   <div className="agente-mobile-info">
                     <div>
                       <span>Usuário</span>
-                      <strong>
-                        {agente.usuario}
-                      </strong>
+                      <strong>{agente.usuario}</strong>
                     </div>
 
                     <div>
                       <span>Perfil</span>
-                      <strong>
-                        {agente.perfil}
-                      </strong>
+                      <strong>{agente.perfil}</strong>
                     </div>
 
                     <div>
                       <span>Data de cadastro</span>
-                      <strong>
-                        {formatarData(agente.created_at)}
-                      </strong>
+                      <strong>{formatarData(agente.created_at)}</strong>
                     </div>
                   </div>
                 </div>
