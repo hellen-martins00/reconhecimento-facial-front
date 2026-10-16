@@ -123,7 +123,7 @@ function Localizacoes() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
+        "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
       );
     } finally {
       setCarregando(false);
@@ -170,8 +170,8 @@ function Localizacoes() {
     return registro
       ? obterNomePessoa(registro)
       : `Registro ${String(
-          localizacao.registro_desaparecimento_id || ""
-        ).slice(0, 8)}`;
+        localizacao.registro_desaparecimento_id || ""
+      ).slice(0, 8)}`;
   };
 
   const handleSubmit = async (event) => {
@@ -268,6 +268,11 @@ function Localizacoes() {
       );
     });
 
+  const desaparecimentosEmAberto = desaparecimentos.filter(
+    (registro) =>
+      String(registro.status || "").toUpperCase() === "DESAPARECIDO"
+  );
+
   return (
     <div className="localizacoes-page">
       <header className="localizacoes-header">
@@ -361,7 +366,7 @@ function Localizacoes() {
             >
               <option value="">Selecione um registro</option>
 
-              {desaparecimentos.map((registro) => (
+              {desaparecimentosEmAberto.map((registro) => (
                 <option key={registro.id} value={registro.id}>
                   {obterNomePessoa(registro)}
                   {" — "}
@@ -372,9 +377,9 @@ function Localizacoes() {
               ))}
             </select>
 
-            {!carregando && desaparecimentos.length === 0 && (
+            {!carregando && desaparecimentosEmAberto.length === 0 && (
               <small>
-                Nenhum registro de desaparecimento foi encontrado.
+                Nenhum caso com situação de desaparecido está disponível para registrar avistamentos.
               </small>
             )}
           </div>
@@ -499,7 +504,7 @@ function Localizacoes() {
               disabled={
                 salvando ||
                 carregando ||
-                desaparecimentos.length === 0
+                desaparecimentosEmAberto.length === 0
               }
             >
               {salvando ? (
