@@ -354,16 +354,6 @@ function DetalhesPessoa() {
                       : pessoa.sexo || "Não informado"}
                 </strong>
               </div>
-
-              <div className="detalhes-field">
-                <span>Nome da mãe</span>
-                <strong>{pessoa.nome_mae || "Não informado"}</strong>
-              </div>
-
-              <div className="detalhes-field">
-                <span>Nome do pai</span>
-                <strong>{pessoa.nome_pai || "Não informado"}</strong>
-              </div>
             </div>
           </section>
         )}
