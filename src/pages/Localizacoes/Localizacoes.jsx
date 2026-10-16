@@ -1,5 +1,5 @@
-
 import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   MapPin,
   CalendarDays,
@@ -54,9 +54,7 @@ function formatarDataHora(dataHora) {
   const partes = data.split("T");
 
   const dataFormatada = formatarData(partes[0]);
-  const horario = partes[1]
-    ? partes[1].slice(0, 5)
-    : "";
+  const horario = partes[1] ? partes[1].slice(0, 5) : "";
 
   return horario
     ? `${dataFormatada} às ${horario}`
@@ -81,6 +79,11 @@ function obterLista(resposta) {
 }
 
 function Localizacoes() {
+  const location = useLocation();
+
+  const pessoaIdRecebida = location.state?.pessoaId;
+  const registroIdRecebido = location.state?.registroDesaparecimentoId;
+
   const [localizacoes, setLocalizacoes] = useState([]);
   const [pessoas, setPessoas] = useState([]);
   const [desaparecimentos, setDesaparecimentos] = useState([]);
@@ -92,6 +95,10 @@ function Localizacoes() {
   const [sucesso, setSucesso] = useState("");
   const [busca, setBusca] = useState("");
 
+  const [pessoaSelecionada, setPessoaSelecionada] = useState(null);
+  const [fotoSelecionada, setFotoSelecionada] = useState("");
+  const [carregandoFoto, setCarregandoFoto] = useState(false);
+
   const [formulario, setFormulario] = useState({
     registro_desaparecimento_id: "",
     local_informado: "",
@@ -99,6 +106,18 @@ function Localizacoes() {
     horario: obterHorarioAtual(),
     descricao: "",
   });
+
+  // Preenche o registro recebido da tela de reconhecimento facial.
+  useEffect(() => {
+    if (!pessoaIdRecebida && !registroIdRecebido) return;
+
+    setFormulario((anterior) => ({
+      ...anterior,
+      registro_desaparecimento_id: registroIdRecebido
+        ? String(registroIdRecebido)
+        : anterior.registro_desaparecimento_id,
+    }));
+  }, [pessoaIdRecebida, registroIdRecebido]);
 
   const carregarDados = useCallback(async () => {
     setCarregando(true);
@@ -123,7 +142,7 @@ function Localizacoes() {
 
       setErro(
         error.response?.data?.detail ||
-        "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
+          "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
       );
     } finally {
       setCarregando(false);
@@ -145,15 +164,21 @@ function Localizacoes() {
   };
 
   const obterPessoaDoRegistro = (registro) => {
+    if (!registro) return null;
+
     return pessoas.find(
-      (pessoa) => String(pessoa.id) === String(registro.pessoa_id)
-    );
+      (pessoa) =>
+        String(pessoa.id) === String(registro.pessoa_id)
+    ) || null;
   };
 
   const obterNomePessoa = (registro) => {
     const pessoa = obterPessoaDoRegistro(registro);
 
-    return pessoa?.nome || `Registro ${String(registro.id).slice(0, 8)}`;
+    return (
+      pessoa?.nome ||
+      `Registro ${String(registro?.id || "").slice(0, 8)}`
+    );
   };
 
   const obterRegistroDaLocalizacao = (localizacao) => {
@@ -170,9 +195,85 @@ function Localizacoes() {
     return registro
       ? obterNomePessoa(registro)
       : `Registro ${String(
-        localizacao.registro_desaparecimento_id || ""
-      ).slice(0, 8)}`;
+          localizacao.registro_desaparecimento_id || ""
+        ).slice(0, 8)}`;
   };
+
+  // Atualiza a pessoa exibida quando o registro é selecionado.
+  // Funciona tanto para seleção manual quanto para navegação pelo reconhecimento.
+  useEffect(() => {
+    const registroId = formulario.registro_desaparecimento_id;
+
+    if (!registroId || desaparecimentos.length === 0 || pessoas.length === 0) {
+      setPessoaSelecionada(null);
+      return;
+    }
+
+    const registro = desaparecimentos.find(
+      (item) => String(item.id) === String(registroId)
+    );
+
+    if (!registro) {
+      setPessoaSelecionada(null);
+      return;
+    }
+
+    const pessoa = obterPessoaDoRegistro(registro);
+
+    setPessoaSelecionada(pessoa);
+  }, [
+    formulario.registro_desaparecimento_id,
+    desaparecimentos,
+    pessoas,
+  ]);
+
+  // Busca a primeira foto cadastrada para a pessoa selecionada.
+  useEffect(() => {
+    let urlTemporaria = "";
+
+    const carregarFoto = async () => {
+      if (!pessoaSelecionada?.id) {
+        setFotoSelecionada("");
+        setCarregandoFoto(false);
+        return;
+      }
+
+      setCarregandoFoto(true);
+      setFotoSelecionada("");
+
+      try {
+        const resposta = await api.get(
+          `/fotos/pessoa/${pessoaSelecionada.id}`
+        );
+
+        const fotos = obterLista(resposta);
+
+        if (fotos.length === 0 || !fotos[0]?.id) {
+          return;
+        }
+
+        const respostaArquivo = await api.get(
+          `/fotos/${fotos[0].id}/arquivo`,
+          { responseType: "blob" }
+        );
+
+        urlTemporaria = URL.createObjectURL(respostaArquivo.data);
+        setFotoSelecionada(urlTemporaria);
+      } catch (error) {
+        console.error("Erro ao carregar foto da pessoa:", error);
+      } finally {
+        setCarregandoFoto(false);
+      }
+    };
+
+    carregarFoto();
+
+    return () => {
+      if (urlTemporaria) {
+        URL.revokeObjectURL(urlTemporaria);
+      }
+    };
+  }, [pessoaSelecionada?.id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -246,6 +347,19 @@ function Localizacoes() {
     }
   };
 
+  const limparFormulario = () => {
+    setFormulario({
+      registro_desaparecimento_id: "",
+      local_informado: "",
+      data: obterDataAtual(),
+      horario: obterHorarioAtual(),
+      descricao: "",
+    });
+
+    setErro("");
+    setSucesso("");
+  };
+
   const localizacoesFiltradas = localizacoes
     .filter((localizacao) => {
       const termo = busca.trim().toLowerCase();
@@ -256,10 +370,9 @@ function Localizacoes() {
       const local = localizacao.local_informado || "";
       const descricao = localizacao.descricao || "";
 
-      return [nome, local, descricao]
-        .some((valor) =>
-          String(valor).toLowerCase().includes(termo)
-        );
+      return [nome, local, descricao].some((valor) =>
+        String(valor).toLowerCase().includes(termo)
+      );
     })
     .sort((a, b) => {
       return (
@@ -325,9 +438,7 @@ function Localizacoes() {
 
         <div>
           <span>Total de avistamentos registrados</span>
-          <strong>
-            {carregando ? "—" : localizacoes.length}
-          </strong>
+          <strong>{carregando ? "—" : localizacoes.length}</strong>
         </div>
       </section>
 
@@ -345,6 +456,37 @@ function Localizacoes() {
             </p>
           </div>
         </div>
+
+        {pessoaSelecionada && (
+          <div className="localizacoes-pessoa-selecionada">
+            {carregandoFoto ? (
+              <div className="localizacoes-foto-placeholder">
+                <LoaderCircle
+                  size={22}
+                  className="localizacoes-girando"
+                />
+              </div>
+            ) : fotoSelecionada ? (
+              <img
+                src={fotoSelecionada}
+                alt={`Foto de ${pessoaSelecionada.nome}`}
+                className="localizacoes-foto-pessoa"
+              />
+            ) : (
+              <div className="localizacoes-foto-placeholder">
+                <UserRound size={28} />
+              </div>
+            )}
+
+            <div>
+              <span>Pessoa selecionada para localização</span>
+              <h3>{pessoaSelecionada.nome}</h3>
+              <p>
+                Confira a identificação antes de registrar o avistamento.
+              </p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="localizacoes-form">
           <div className="localizacoes-campo localizacoes-campo-largo">
@@ -379,7 +521,8 @@ function Localizacoes() {
 
             {!carregando && desaparecimentosEmAberto.length === 0 && (
               <small>
-                Nenhum caso com situação de desaparecido está disponível para registrar avistamentos.
+                Nenhum caso com situação de desaparecido está disponível
+                para registrar avistamentos.
               </small>
             )}
           </div>
@@ -472,27 +615,14 @@ function Localizacoes() {
               disabled={salvando}
             />
 
-            <small>
-              {formulario.descricao.length}/2000 caracteres
-            </small>
+            <small>{formulario.descricao.length}/2000 caracteres</small>
           </div>
 
           <div className="localizacoes-form-acoes">
             <button
               type="button"
               className="localizacoes-btn-secundario"
-              onClick={() => {
-                setFormulario({
-                  registro_desaparecimento_id: "",
-                  local_informado: "",
-                  data: obterDataAtual(),
-                  horario: obterHorarioAtual(),
-                  descricao: "",
-                });
-
-                setErro("");
-                setSucesso("");
-              }}
+              onClick={limparFormulario}
               disabled={salvando}
             >
               Limpar campos
@@ -615,7 +745,9 @@ function Localizacoes() {
 
                     <div className="localizacoes-item-pessoa">
                       <UserRound size={16} />
-                      <span>{obterNomeNaLocalizacao(localizacao)}</span>
+                      <span>
+                        {obterNomeNaLocalizacao(localizacao)}
+                      </span>
                     </div>
 
                     {registro && (

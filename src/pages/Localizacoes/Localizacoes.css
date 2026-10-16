@@ -571,6 +571,71 @@
   animation: localizacoes-rotacao 1s linear infinite;
 }
 
+.localizacoes-pessoa-selecionada {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #dbe3ee;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.localizacoes-foto-pessoa,
+.localizacoes-foto-placeholder {
+  width: 84px;
+  height: 84px;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.localizacoes-foto-pessoa {
+  object-fit: cover;
+  border: 1px solid #dbe3ee;
+}
+
+.localizacoes-foto-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9eef5;
+  color: #64748b;
+}
+
+.localizacoes-pessoa-selecionada span {
+  display: block;
+  margin-bottom: 4px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.localizacoes-pessoa-selecionada h3 {
+  margin: 0 0 6px;
+  color: #1e293b;
+  font-size: 18px;
+}
+
+.localizacoes-pessoa-selecionada p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .localizacoes-pessoa-selecionada {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .localizacoes-foto-pessoa,
+  .localizacoes-foto-placeholder {
+    width: 68px;
+    height: 68px;
+  }
+}
+
 @keyframes localizacoes-rotacao {
   to {
     transform: rotate(360deg);
