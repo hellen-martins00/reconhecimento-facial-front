@@ -142,7 +142,7 @@ function Localizacoes() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
+        "Não foi possível carregar os dados. Verifique sua conexão e tente novamente."
       );
     } finally {
       setCarregando(false);
@@ -195,8 +195,8 @@ function Localizacoes() {
     return registro
       ? obterNomePessoa(registro)
       : `Registro ${String(
-          localizacao.registro_desaparecimento_id || ""
-        ).slice(0, 8)}`;
+        localizacao.registro_desaparecimento_id || ""
+      ).slice(0, 8)}`;
   };
 
   // Atualiza a pessoa exibida quando o registro é selecionado.
@@ -721,6 +721,8 @@ function Localizacoes() {
             {localizacoesFiltradas.map((localizacao) => {
               const registro = obterRegistroDaLocalizacao(localizacao);
 
+              const status = String(registro?.status || "").toUpperCase();
+
               return (
                 <article
                   className="localizacoes-item"
@@ -732,22 +734,27 @@ function Localizacoes() {
 
                   <div className="localizacoes-item-conteudo">
                     <div className="localizacoes-item-topo">
-                      <h3>
-                        {localizacao.local_informado ||
-                          "Local não informado"}
-                      </h3>
+                      <div className="localizacoes-item-local">
+                        <h3>
+                          {localizacao.local_informado || "Local não informado"}
+                        </h3>
 
-                      <span className="localizacoes-data">
-                        <CalendarDays size={15} />
-                        {formatarDataHora(localizacao.data_hora)}
-                      </span>
-                    </div>
+                        <div className="localizacoes-item-pessoa">
+                          <UserRound size={16} />
 
-                    <div className="localizacoes-item-pessoa">
-                      <UserRound size={16} />
-                      <span>
-                        {obterNomeNaLocalizacao(localizacao)}
-                      </span>
+                          <span>
+                            {obterNomeNaLocalizacao(localizacao)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="localizacoes-data">
+                        <CalendarDays size={16} />
+
+                        <span>
+                          {formatarDataHora(localizacao.data_hora)}
+                        </span>
+                      </div>
                     </div>
 
                     {registro && (
@@ -756,7 +763,14 @@ function Localizacoes() {
                           Situação do caso:
                         </span>
 
-                        <span className="localizacoes-status">
+                        <span
+                          className={`localizacoes-status ${status === "LOCALIZADO"
+                              ? "localizacoes-status-localizado"
+                              : status === "DESAPARECIDO"
+                                ? "localizacoes-status-desaparecido"
+                                : ""
+                            }`}
+                        >
                           {normalizarStatus(registro.status)}
                         </span>
                       </div>
@@ -765,6 +779,7 @@ function Localizacoes() {
                     {localizacao.descricao && (
                       <div className="localizacoes-item-descricao">
                         <FileText size={16} />
+
                         <p>{localizacao.descricao}</p>
                       </div>
                     )}
