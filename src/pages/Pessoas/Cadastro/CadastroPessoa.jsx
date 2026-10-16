@@ -411,6 +411,7 @@ function CadastroPessoa() {
                 inputMode="numeric"
                 autoComplete="off"
                 placeholder="000.000.000-00"
+                maxLength={14}
                 value={cpf}
                 onChange={(event) =>
                   setCpf(formatarCPF(event.target.value))
