@@ -5,10 +5,6 @@ import api from "../../../services/api";
 
 import { formatarCPF, limparCPF, } from "../../../utils/formatarCPF";
 
-import { formatarCEP, limparCEP, } from "../../../utils/formatarCEP";
-
-import { formatarTelefone, limparTelefone, } from "../../../utils/formatarTelefone";
-
 import "./EditarPessoa.css";
 
 function EditarPessoa() {
@@ -23,18 +19,6 @@ function EditarPessoa() {
   const [cpf, setCpf] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [sexo, setSexo] = useState("");
-
-  // TELEFONES
-  const [telefones, setTelefones] = useState([]);
-
-  // ENDEREÇO
-  const [enderecoId, setEnderecoId] = useState(null);
-  const [logradouro, setLogradouro] = useState("");
-  const [numero, setNumero] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
-  const [cep, setCep] = useState("");
 
   // REGISTROS DE DESAPARECIMENTO
   const [registrosDesaparecimento, setRegistrosDesaparecimento] = useState([]);
@@ -70,21 +54,11 @@ function EditarPessoa() {
     },
     {
       numero: 2,
-      titulo: "Telefones",
-      descricao: "Contatos",
-    },
-    {
-      numero: 3,
-      titulo: "Endereço",
-      descricao: "Localização",
-    },
-    {
-      numero: 4,
       titulo: "Desaparecimentos",
       descricao: "Registros",
     },
     {
-      numero: 5,
+      numero: 3,
       titulo: "Revisão",
       descricao: "Confirmar",
     },
@@ -148,75 +122,6 @@ function EditarPessoa() {
       setCpf(pessoa.cpf || "");
       setDataNascimento(pessoa.data_nascimento || "");
       setSexo(pessoa.sexo || "");
-
-      // TELEFONES
-      try {
-        const respostaTelefones = await api.get(
-          `/telefones/pessoa/${id}`
-        );
-
-        setTelefones(
-          Array.isArray(respostaTelefones.data)
-            ? respostaTelefones.data.map((telefone) => ({
-              ...telefone,
-              novo: false,
-            }))
-            : []
-        );
-      } catch (error) {
-        console.error(
-          "Erro ao carregar telefones:",
-          error
-        );
-
-        setTelefones([]);
-      }
-
-      // ENDEREÇO
-      try {
-        const respostaEndereco = await api.get(
-          `/enderecos/pessoa/${id}`
-        );
-
-        const enderecos = Array.isArray(
-          respostaEndereco.data
-        )
-          ? respostaEndereco.data
-          : [];
-
-        if (enderecos.length > 0) {
-          const endereco = enderecos[0];
-
-          setEnderecoId(endereco.id || null);
-          setLogradouro(endereco.logradouro || "");
-          setNumero(endereco.numero || "");
-          setBairro(endereco.bairro || "");
-          setCidade(endereco.cidade || "");
-          setEstado(endereco.estado || "");
-          setCep(endereco.cep || "");
-        } else {
-          setEnderecoId(null);
-          setLogradouro("");
-          setNumero("");
-          setBairro("");
-          setCidade("");
-          setEstado("");
-          setCep("");
-        }
-      } catch (error) {
-        console.error(
-          "Erro ao carregar endereço:",
-          error
-        );
-
-        setEnderecoId(null);
-        setLogradouro("");
-        setNumero("");
-        setBairro("");
-        setCidade("");
-        setEstado("");
-        setCep("");
-      }
 
       // REGISTROS DE DESAPARECIMENTO
       try {
@@ -324,59 +229,6 @@ function EditarPessoa() {
     setFotoUrl(url);
   }
 
-  // TELEFONES
-  function adicionarTelefone() {
-    setTelefones([
-      ...telefones,
-      {
-        numero: "",
-        tipo: "PESSOAL",
-        novo: true,
-      },
-    ]);
-  }
-
-  function alterarTelefone(index, campo, valor) {
-    const novosTelefones = [...telefones];
-
-    novosTelefones[index] = {
-      ...novosTelefones[index],
-      [campo]: valor,
-    };
-
-    setTelefones(novosTelefones);
-  }
-
-  async function removerTelefone(index) {
-    const telefone = telefones[index];
-
-    if (telefone.id) {
-      try {
-        await api.delete(
-          `/telefones/${telefone.id}`
-        );
-      } catch (error) {
-        console.error(
-          "Erro ao remover telefone:",
-          error
-        );
-
-        setErro(
-          "Não foi possível remover o telefone."
-        );
-
-        return;
-      }
-    }
-
-    setTelefones(
-      telefones.filter(
-        (_, telefoneIndex) =>
-          telefoneIndex !== index
-      )
-    );
-  }
-
   // REGISTROS DE DESAPARECIMENTO
   function adicionarRegistroDesaparecimento() {
     setRegistrosDesaparecimento([
@@ -471,81 +323,6 @@ function EditarPessoa() {
     }
 
     if (etapa === 2) {
-      const telefoneInvalido = telefones.some(
-        (telefone) => {
-          if (
-            !telefone.numero ||
-            !telefone.numero.trim()
-          ) {
-            return false;
-          }
-
-          const numeros = limparTelefone(
-            telefone.numero
-          );
-
-          return (
-            numeros.length !== 10 &&
-            numeros.length !== 11
-          );
-        }
-      );
-
-      if (telefoneInvalido) {
-        setErro(
-          "Verifique os telefones informados. Eles devem possuir 10 ou 11 números."
-        );
-
-        return false;
-      }
-    }
-
-    if (etapa === 3) {
-      const enderecoPreenchido =
-        logradouro.trim() !== "" ||
-        numero.trim() !== "" ||
-        bairro.trim() !== "" ||
-        cidade.trim() !== "" ||
-        estado.trim() !== "" ||
-        cep.trim() !== "";
-
-      if (enderecoPreenchido) {
-        if (!logradouro.trim()) {
-          setErro("Informe o logradouro.");
-          return false;
-        }
-
-        if (!numero.trim()) {
-          setErro("Informe o número.");
-          return false;
-        }
-
-        if (!bairro.trim()) {
-          setErro("Informe o bairro.");
-          return false;
-        }
-
-        if (!cidade.trim()) {
-          setErro("Informe a cidade.");
-          return false;
-        }
-
-        if (!estado.trim()) {
-          setErro("Informe o estado.");
-          return false;
-        }
-
-        if (limparCEP(cep).length !== 8) {
-          setErro(
-            "Informe um CEP válido com 8 números."
-          );
-
-          return false;
-        }
-      }
-    }
-
-    if (etapa === 4) {
       const registroInvalido = registrosDesaparecimento.some(
         (registro) => {
           const data = registro.data_desaparecimento || "";
@@ -587,7 +364,7 @@ function EditarPessoa() {
     }
 
     setEtapaAtual((atual) =>
-      Math.min(atual + 1, 5)
+      Math.min(atual + 1, 3)
     );
 
     window.scrollTo({
@@ -627,8 +404,8 @@ function EditarPessoa() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!validarEtapa(4)) {
-      setEtapaAtual(4);
+    if (!validarEtapa(2)) {
+      setEtapaAtual(2);
       return;
     }
 
@@ -644,94 +421,6 @@ function EditarPessoa() {
         data_nascimento: dataNascimento,
         sexo,
       });
-
-      // TELEFONES
-      const telefonesValidos = telefones.filter(
-        (telefone) =>
-          telefone.numero &&
-          telefone.numero.trim() !== ""
-      );
-
-      const novosTelefones =
-        telefonesValidos.filter(
-          (telefone) => telefone.novo
-        );
-
-      await Promise.all(
-        novosTelefones.map((telefone) =>
-          api.post("/telefones", {
-            pessoa_id: id,
-            numero: limparTelefone(
-              telefone.numero
-            ),
-            tipo: telefone.tipo,
-          })
-        )
-      );
-
-      const telefonesExistentes =
-        telefonesValidos.filter(
-          (telefone) =>
-            telefone.id &&
-            !telefone.novo
-        );
-
-      await Promise.all(
-        telefonesExistentes.map((telefone) =>
-          api.put(
-            `/telefones/${telefone.id}`,
-            {
-              numero: limparTelefone(
-                telefone.numero
-              ),
-              tipo: telefone.tipo,
-            }
-          )
-        )
-      );
-
-      // ENDEREÇO
-      const enderecoPreenchido =
-        logradouro.trim() !== "" ||
-        numero.trim() !== "" ||
-        bairro.trim() !== "" ||
-        cidade.trim() !== "" ||
-        estado.trim() !== "" ||
-        cep.trim() !== "";
-
-      if (enderecoPreenchido) {
-        if (enderecoId) {
-          await api.put(
-            `/enderecos/${enderecoId}`,
-            {
-              logradouro,
-              numero,
-              bairro,
-              cidade,
-              estado,
-              cep: limparCEP(cep),
-            }
-          );
-        } else {
-          const respostaEndereco =
-            await api.post(
-              "/enderecos",
-              {
-                pessoa_id: id,
-                logradouro,
-                numero,
-                bairro,
-                cidade,
-                estado,
-                cep: limparCEP(cep),
-              }
-            );
-
-          setEnderecoId(
-            respostaEndereco.data.id
-          );
-        }
-      }
 
       // NOVOS REGISTROS DE DESAPARECIMENTO
       const novosRegistros = registrosDesaparecimento.filter(
@@ -1152,375 +841,13 @@ function EditarPessoa() {
             </section>
           )}
 
-          {/* ETAPA 2 */}
+          {/* ETAPA 02 - REGISTROS DE DESAPARECIMENTO */}
 
           {etapaAtual === 2 && (
             <section className="editar-etapa">
-
               <div className="editar-etapa-header">
                 <span className="editar-etapa-numero-label">
                   Etapa 02
-                </span>
-
-                <h2>Telefones</h2>
-
-                <p>
-                  Gerencie os telefones vinculados
-                  à pessoa.
-                </p>
-              </div>
-
-              <section className="editar-section">
-
-                <div className="editar-section-header">
-                  <div>
-                    <h3>
-                      Telefones cadastrados
-                    </h3>
-
-                    <p>
-                      Edite, remova ou adicione
-                      novos telefones.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="editar-adicionar"
-                    onClick={
-                      adicionarTelefone
-                    }
-                  >
-                    + Adicionar telefone
-                  </button>
-                </div>
-
-                <div className="editar-lista">
-
-                  {telefones.length === 0 ? (
-                    <div className="editar-vazio">
-                      <strong>
-                        Nenhum telefone cadastrado
-                      </strong>
-
-                      <p>
-                        Clique em "Adicionar telefone"
-                        para incluir um contato.
-                      </p>
-                    </div>
-                  ) : (
-                    telefones.map(
-                      (telefone, index) => (
-                        <div
-                          className="editar-item"
-                          key={
-                            telefone.id ||
-                            `novo-${index}`
-                          }
-                        >
-                          <div className="editar-item-header">
-                            <strong>
-                              Telefone {index + 1}
-                            </strong>
-
-                            <button
-                              type="button"
-                              className="editar-remover-mobile"
-                              onClick={() =>
-                                removerTelefone(
-                                  index
-                                )
-                              }
-                            >
-                              Remover
-                            </button>
-                          </div>
-
-                          <div className="editar-telefone-fields">
-
-                            <div className="editar-form-group">
-                              <label>
-                                Número
-                              </label>
-
-                              <input
-                                type="text"
-                                value={formatarTelefone(
-                                  telefone.numero
-                                )}
-                                onChange={(event) =>
-                                  alterarTelefone(
-                                    index,
-                                    "numero",
-                                    limparTelefone(
-                                      event.target.value
-                                    )
-                                  )
-                                }
-                                placeholder="(61) 99999-9999"
-                                inputMode="numeric"
-                                maxLength={15}
-                              />
-                            </div>
-
-                            <div className="editar-form-group">
-                              <label>
-                                Tipo
-                              </label>
-
-                              <select
-                                value={
-                                  telefone.tipo ||
-                                  "PESSOAL"
-                                }
-                                onChange={(event) =>
-                                  alterarTelefone(
-                                    index,
-                                    "tipo",
-                                    event.target.value
-                                  )
-                                }
-                              >
-                                <option value="PESSOAL">
-                                  Pessoal
-                                </option>
-
-                                <option value="RESIDENCIAL">
-                                  Residencial
-                                </option>
-                              </select>
-                            </div>
-
-                            <button
-                              type="button"
-                              className="editar-remover"
-                              onClick={() =>
-                                removerTelefone(
-                                  index
-                                )
-                              }
-                            >
-                              Remover
-                            </button>
-
-                          </div>
-                        </div>
-                      )
-                    )
-                  )}
-
-                </div>
-              </section>
-
-              <div className="editar-actions">
-
-                <button
-                  type="button"
-                  className="editar-button-secondary"
-                  onClick={etapaAnterior}
-                  disabled={salvando}
-                >
-                  ← Voltar
-                </button>
-
-                <button
-                  type="button"
-                  className="editar-button-primary"
-                  onClick={proximaEtapa}
-                  disabled={salvando}
-                >
-                  Próximo
-                  <span>→</span>
-                </button>
-
-              </div>
-
-            </section>
-          )}
-
-          {/* ETAPA 3 */}
-
-          {etapaAtual === 3 && (
-            <section className="editar-etapa">
-
-              <div className="editar-etapa-header">
-                <span className="editar-etapa-numero-label">
-                  Etapa 03
-                </span>
-
-                <h2>Endereço</h2>
-
-                <p>
-                  Atualize o endereço residencial
-                  vinculado à pessoa.
-                </p>
-              </div>
-
-              <section className="editar-section">
-
-                <div className="editar-form-group">
-                  <label htmlFor="logradouro">
-                    Logradouro
-                  </label>
-
-                  <input
-                    id="logradouro"
-                    type="text"
-                    value={logradouro}
-                    onChange={(event) =>
-                      setLogradouro(
-                        event.target.value
-                      )
-                    }
-                    placeholder="Digite o logradouro"
-                  />
-                </div>
-
-                <div className="editar-form-row">
-
-                  <div className="editar-form-group">
-                    <label htmlFor="numero">
-                      Número
-                    </label>
-
-                    <input
-                      id="numero"
-                      type="text"
-                      value={numero}
-                      onChange={(event) =>
-                        setNumero(
-                          event.target.value
-                        )
-                      }
-                      placeholder="Número"
-                    />
-                  </div>
-
-                  <div className="editar-form-group">
-                    <label htmlFor="bairro">
-                      Bairro
-                    </label>
-
-                    <input
-                      id="bairro"
-                      type="text"
-                      value={bairro}
-                      onChange={(event) =>
-                        setBairro(
-                          event.target.value
-                        )
-                      }
-                      placeholder="Digite o bairro"
-                    />
-                  </div>
-
-                </div>
-
-                <div className="editar-form-row">
-
-                  <div className="editar-form-group">
-                    <label htmlFor="cidade">
-                      Cidade
-                    </label>
-
-                    <input
-                      id="cidade"
-                      type="text"
-                      value={cidade}
-                      onChange={(event) =>
-                        setCidade(
-                          event.target.value
-                        )
-                      }
-                      placeholder="Digite a cidade"
-                    />
-                  </div>
-
-                  <div className="editar-form-group">
-                    <label htmlFor="estado">
-                      Estado
-                    </label>
-
-                    <input
-                      id="estado"
-                      type="text"
-                      value={estado}
-                      onChange={(event) =>
-                        setEstado(
-                          event.target.value
-                            .toUpperCase()
-                            .slice(0, 2)
-                        )
-                      }
-                      maxLength={2}
-                      placeholder="UF"
-                    />
-                  </div>
-
-                </div>
-
-                <div className="editar-form-group">
-                  <label htmlFor="cep">
-                    CEP
-                  </label>
-
-                  <input
-                    id="cep"
-                    type="text"
-                    value={formatarCEP(cep)}
-                    onChange={(event) =>
-                      setCep(
-                        limparCEP(
-                          event.target.value
-                        )
-                      )
-                    }
-                    maxLength={9}
-                    inputMode="numeric"
-                    placeholder="Digite o CEP"
-                  />
-
-                  <span className="editar-form-help">
-                    Informe o CEP no formato
-                    00000-000.
-                  </span>
-                </div>
-
-              </section>
-
-              <div className="editar-actions">
-
-                <button
-                  type="button"
-                  className="editar-button-secondary"
-                  onClick={etapaAnterior}
-                  disabled={salvando}
-                >
-                  ← Voltar
-                </button>
-
-                <button
-                  type="button"
-                  className="editar-button-primary"
-                  onClick={proximaEtapa}
-                  disabled={salvando}
-                >
-                  Próximo
-                  <span>→</span>
-                </button>
-
-              </div>
-
-            </section>
-          )}
-
-          {/* ETAPA 4 - REGISTROS DE DESAPARECIMENTO */}
-
-          {etapaAtual === 4 && (
-            <section className="editar-etapa">
-              <div className="editar-etapa-header">
-                <span className="editar-etapa-numero-label">
-                  Etapa 04
                 </span>
 
                 <h2>Registros de desaparecimento</h2>
@@ -1674,9 +1001,8 @@ function EditarPessoa() {
             </section>
           )}
 
-          {/* ETAPA 5 - REVISÃO */}
-
-          {etapaAtual === 5 && (
+          {/* ETAPA 03 - REVISÃO */}
+          {etapaAtual === 3 && (
             <section className="editar-etapa">
 
               <div className="editar-etapa-header">
@@ -1779,175 +1105,6 @@ function EditarPessoa() {
                 </div>
               </div>
 
-              {/* TELEFONES */}
-
-              <div className="editar-revisao-section">
-
-                <div className="editar-revisao-header">
-                  <div>
-                    <span>
-                      Contatos
-                    </span>
-
-                    <h3>
-                      Telefones
-                    </h3>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(2)
-                    }
-                    disabled={salvando}
-                  >
-                    Editar
-                  </button>
-                </div>
-
-                {telefones.filter(
-                  (telefone) =>
-                    telefone.numero
-                ).length > 0 ? (
-                  <div className="editar-revisao-lista">
-                    {telefones
-                      .filter(
-                        (telefone) =>
-                          telefone.numero
-                      )
-                      .map(
-                        (
-                          telefone,
-                          index
-                        ) => (
-                          <div
-                            className="editar-revisao-item"
-                            key={
-                              telefone.id ||
-                              `telefone-revisao-${index}`
-                            }
-                          >
-                            <strong>
-                              {formatarTelefone(
-                                telefone.numero
-                              )}
-                            </strong>
-
-                            <span>
-                              {telefone.tipo ===
-                                "RESIDENCIAL"
-                                ? "Residencial"
-                                : "Pessoal"}
-                            </span>
-                          </div>
-                        )
-                      )}
-                  </div>
-                ) : (
-                  <p className="editar-revisao-vazio">
-                    Nenhum telefone cadastrado.
-                  </p>
-                )}
-
-              </div>
-
-              {/* ENDEREÇO */}
-
-              <div className="editar-revisao-section">
-
-                <div className="editar-revisao-header">
-                  <div>
-                    <span>
-                      Localização
-                    </span>
-
-                    <h3>
-                      Endereço
-                    </h3>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      irParaEtapa(3)
-                    }
-                    disabled={salvando}
-                  >
-                    Editar
-                  </button>
-                </div>
-
-                {logradouro ||
-                  numero ||
-                  bairro ||
-                  cidade ||
-                  estado ||
-                  cep ? (
-                  <div className="editar-revisao-grid">
-
-                    <div className="editar-revisao-endereco-completo">
-                      <small>
-                        Endereço
-                      </small>
-
-                      <strong>
-                        {logradouro || "—"}
-                        {numero
-                          ? `, ${numero}`
-                          : ""}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <small>
-                        Bairro
-                      </small>
-
-                      <strong>
-                        {bairro || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <small>
-                        Cidade
-                      </small>
-
-                      <strong>
-                        {cidade || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <small>
-                        Estado
-                      </small>
-
-                      <strong>
-                        {estado || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <small>
-                        CEP
-                      </small>
-
-                      <strong>
-                        {formatarCEP(cep) ||
-                          "—"}
-                      </strong>
-                    </div>
-
-                  </div>
-                ) : (
-                  <p className="editar-revisao-vazio">
-                    Nenhum endereço cadastrado.
-                  </p>
-                )}
-
-              </div>
-
               {/* REGISTROS DE DESAPARECIMENTO */}
 
               <div className="editar-revisao-section editar-revisao-desaparecimento">
@@ -1960,7 +1117,7 @@ function EditarPessoa() {
 
                   <button
                     type="button"
-                    onClick={() => irParaEtapa(4)}
+                    onClick={() => irParaEtapa(2)}
                     disabled={salvando}
                   >
                     Editar
