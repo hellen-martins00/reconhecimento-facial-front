@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../services/api";
-import { formatarCPF, limparCPF } from "../../../utils/formatarCPF";
+import { formatarCPF, limparCPF, validarCPF } from "../../../utils/formatarCPF";
 import "./CadastroPessoa.css";
 
 const ETAPAS = [
@@ -112,8 +112,8 @@ function CadastroPessoa() {
       return false;
     }
 
-    if (cpfLimpo && !/^\d{11}$/.test(cpfLimpo)) {
-      setErro("Informe um CPF válido com 11 números ou deixe o campo vazio.");
+    if (cpfLimpo && !validarCPF(cpfLimpo)) {
+      setErro("Informe um CPF válido ou deixe o campo vazio.");
       return false;
     }
 
@@ -124,13 +124,9 @@ function CadastroPessoa() {
 
     if (cpfLimpo) {
       try {
-        await api.get(
-          `/pessoas/verificar-cpf/${cpfLimpo}`
-        );
+        await api.get(`/pessoas/verificar-cpf/${cpfLimpo}`);
       } catch (error) {
-        setErro(
-          obterMensagemErroApi(error)
-        );
+        setErro(obterMensagemErroApi(error));
         return false;
       }
     }

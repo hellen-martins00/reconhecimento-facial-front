@@ -16,3 +16,42 @@ export function formatarCPF(cpf) {
     "$1.$2.$3-$4"
   );
 }
+
+export function validarCPF(valor) {
+  const cpf = limparCPF(valor);
+
+  if (!/^\d{11}$/.test(cpf)) {
+    return false;
+  }
+
+  // Rejeita sequências com todos os dígitos iguais.
+  if (/^(\d)\1{10}$/.test(cpf)) {
+    return false;
+  }
+
+  // Calcula o primeiro dígito verificador.
+  let soma = 0;
+
+  for (let i = 0; i < 9; i++) {
+    soma += Number(cpf[i]) * (10 - i);
+  }
+
+  let resto = (soma * 10) % 11;
+  const primeiroDigito = resto === 10 ? 0 : resto;
+
+  if (primeiroDigito !== Number(cpf[9])) {
+    return false;
+  }
+
+  // Calcula o segundo dígito verificador.
+  soma = 0;
+
+  for (let i = 0; i < 10; i++) {
+    soma += Number(cpf[i]) * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  const segundoDigito = resto === 10 ? 0 : resto;
+
+  return segundoDigito === Number(cpf[10]);
+}
