@@ -23,8 +23,6 @@ function EditarPessoa() {
   const [cpf, setCpf] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [sexo, setSexo] = useState("");
-  const [nomeMae, setNomeMae] = useState("");
-  const [nomePai, setNomePai] = useState("");
 
   // TELEFONES
   const [telefones, setTelefones] = useState([]);
@@ -115,12 +113,6 @@ function EditarPessoa() {
 
             sexo:
               "Selecione o sexo.",
-
-            nome_mae:
-              "Informe o nome da mãe.",
-
-            nome_pai:
-              "Informe o nome do pai.",
           };
 
           return (
@@ -156,8 +148,6 @@ function EditarPessoa() {
       setCpf(pessoa.cpf || "");
       setDataNascimento(pessoa.data_nascimento || "");
       setSexo(pessoa.sexo || "");
-      setNomeMae(pessoa.nome_mae || "");
-      setNomePai(pessoa.nome_pai || "");
 
       // TELEFONES
       try {
@@ -478,26 +468,6 @@ function EditarPessoa() {
         setErro("Selecione o sexo.");
         return false;
       }
-
-      if (!nomeMae.trim()) {
-        setErro("Informe o nome da mãe.");
-        return false;
-      }
-
-      if (nomeMae.trim().length > 150) {
-        setErro("O nome da mãe deve ter no máximo 150 caracteres.");
-        return false;
-      }
-
-      if (!nomePai.trim()) {
-        setErro("Informe o nome do pai.");
-        return false;
-      }
-
-      if (nomePai.trim().length > 150) {
-        setErro("O nome do pai deve ter no máximo 150 caracteres.");
-        return false;
-      }
     }
 
     if (etapa === 2) {
@@ -673,8 +643,6 @@ function EditarPessoa() {
         cpf: limparCPF(cpf),
         data_nascimento: dataNascimento,
         sexo,
-        nome_mae: nomeMae,
-        nome_pai: nomePai,
       });
 
       // TELEFONES
@@ -1154,46 +1122,6 @@ function EditarPessoa() {
                   </select>
                 </div>
 
-              </div>
-
-              {/* MÃE */}
-
-              <div className="editar-form-group">
-                <label htmlFor="nomeMae">
-                  Nome da mãe <span>*</span>
-                </label>
-
-                <input
-                  id="nomeMae"
-                  type="text"
-                  value={nomeMae}
-                  onChange={(event) =>
-                    setNomeMae(
-                      event.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
-
-              {/* PAI */}
-
-              <div className="editar-form-group">
-                <label htmlFor="nomePai">
-                  Nome do pai <span>*</span>
-                </label>
-
-                <input
-                  id="nomePai"
-                  type="text"
-                  value={nomePai}
-                  onChange={(event) =>
-                    setNomePai(
-                      event.target.value
-                    )
-                  }
-                  required
-                />
               </div>
 
               {/* AÇÕES */}
@@ -1847,23 +1775,6 @@ function EditarPessoa() {
                             : "—"}
                       </strong>
                     </div>
-
-                    <div>
-                      <small>Nome da mãe</small>
-
-                      <strong>
-                        {nomeMae || "—"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <small>Nome do pai</small>
-
-                      <strong>
-                        {nomePai || "—"}
-                      </strong>
-                    </div>
-
                   </div>
                 </div>
               </div>
