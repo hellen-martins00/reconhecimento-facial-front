@@ -5,17 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   UserRound,
   Images,
-  Phone,
-  MapPin,
   ClipboardList,
 } from "lucide-react";
 
 import api from "../../../services/api";
 
 import { formatarCPF } from "../../../utils/formatarCPF";
-import { formatarTelefone } from "../../../utils/formatarTelefone";
 import { formatarData } from "../../../utils/formatarData";
-import { formatarCEP } from "../../../utils/formatarCEP";
 
 import "./DetalhesPessoa.css";
 
@@ -24,10 +20,7 @@ function DetalhesPessoa() {
   const navigate = useNavigate();
 
   const [pessoa, setPessoa] = useState(null);
-  const [telefones, setTelefones] = useState([]);
-  const [registrosDesaparecimento, setRegistrosDesaparecimento] =
-    useState([]);
-  const [endereco, setEndereco] = useState(null);
+  const [registrosDesaparecimento, setRegistrosDesaparecimento] = useState([]);
 
   const [fotos, setFotos] = useState([]);
   const [carregandoFotos, setCarregandoFotos] = useState(false);
@@ -112,40 +105,6 @@ function DetalhesPessoa() {
       // DADOS PESSOAIS
       const respostaPessoa = await api.get(`/pessoas/${id}`);
       setPessoa(respostaPessoa.data);
-
-      // TELEFONES
-      try {
-        const respostaTelefones = await api.get(
-          `/telefones/pessoa/${id}`
-        );
-
-        setTelefones(
-          Array.isArray(respostaTelefones.data)
-            ? respostaTelefones.data
-            : []
-        );
-      } catch (error) {
-        console.error("Erro ao carregar telefones:", error);
-        setTelefones([]);
-      }
-
-      // ENDEREÇO
-      try {
-        const respostaEndereco = await api.get(
-          `/enderecos/pessoa/${id}`
-        );
-
-        const enderecos = respostaEndereco.data;
-
-        setEndereco(
-          Array.isArray(enderecos) && enderecos.length > 0
-            ? enderecos[0]
-            : null
-        );
-      } catch (error) {
-        console.error("Erro ao carregar endereço:", error);
-        setEndereco(null);
-      }
 
       // REGISTROS DE DESAPARECIMENTO
       try {
@@ -338,30 +297,6 @@ function DetalhesPessoa() {
 
         <button
           className={
-            abaAtiva === "contatos"
-              ? "detalhes-tab ativa"
-              : "detalhes-tab"
-          }
-          onClick={() => setAbaAtiva("contatos")}
-        >
-          <Phone size={17} strokeWidth={2} />
-          Contatos
-        </button>
-
-        <button
-          className={
-            abaAtiva === "endereco"
-              ? "detalhes-tab ativa"
-              : "detalhes-tab"
-          }
-          onClick={() => setAbaAtiva("endereco")}
-        >
-          <MapPin size={17} strokeWidth={2} />
-          Endereço
-        </button>
-
-        <button
-          className={
             abaAtiva === "desaparecimentos"
               ? "detalhes-tab ativa"
               : "detalhes-tab detalhes-tab-desaparecimento"
@@ -474,105 +409,6 @@ function DetalhesPessoa() {
                     )}
                   </div>
                 ))}
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* CONTATOS */}
-        {abaAtiva === "contatos" && (
-          <section className="detalhes-card">
-            <div className="detalhes-section-header">
-              <div>
-                <h2>Contatos</h2>
-                <p>Telefones vinculados à pessoa.</p>
-              </div>
-            </div>
-
-            {telefones.length === 0 ? (
-              <div className="detalhes-vazio">
-                Nenhum telefone cadastrado.
-              </div>
-            ) : (
-              <div className="detalhes-lista">
-                {telefones.map((telefone) => (
-                  <div
-                    className="detalhes-lista-item"
-                    key={telefone.id}
-                  >
-                    <div>
-                      <span className="detalhes-item-label">
-                        Número
-                      </span>
-                      <strong>
-                        {formatarTelefone(telefone.numero)}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="detalhes-item-label">
-                        Tipo
-                      </span>
-                      <strong>
-                        {telefone.tipo === "PESSOAL"
-                          ? "Pessoal"
-                          : telefone.tipo === "RESIDENCIAL"
-                            ? "Residencial"
-                            : telefone.tipo || "Não informado"}
-                      </strong>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* ENDEREÇO */}
-        {abaAtiva === "endereco" && (
-          <section className="detalhes-card">
-            <div className="detalhes-section-header">
-              <div>
-                <h2>Endereço</h2>
-                <p>Endereço residencial vinculado à pessoa.</p>
-              </div>
-            </div>
-
-            {!endereco ? (
-              <div className="detalhes-vazio">
-                Nenhum endereço cadastrado.
-              </div>
-            ) : (
-              <div className="detalhes-grid">
-                <div className="detalhes-field">
-                  <span>Logradouro</span>
-                  <strong>{endereco.logradouro}</strong>
-                </div>
-
-                <div className="detalhes-field">
-                  <span>Número</span>
-                  <strong>{endereco.numero}</strong>
-                </div>
-
-                <div className="detalhes-field">
-                  <span>Bairro</span>
-                  <strong>{endereco.bairro}</strong>
-                </div>
-
-                <div className="detalhes-field">
-                  <span>Cidade</span>
-                  <strong>{endereco.cidade}</strong>
-                </div>
-
-                <div className="detalhes-field">
-                  <span>Estado</span>
-                  <strong>{endereco.estado}</strong>
-                </div>
-
-                <div className="detalhes-field">
-                  <span>CEP</span>
-                  <strong>{formatarCEP(endereco.cep)}</strong>
-                </div>
               </div>
             )}
           </section>
