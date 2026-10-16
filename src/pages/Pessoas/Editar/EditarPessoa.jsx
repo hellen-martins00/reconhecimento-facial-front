@@ -478,7 +478,7 @@ function EditarPessoa() {
       }
 
       // REDIRECIONAR
-      navigate(`/pessoas/${id}`);
+      navigate("/pessoas");
 
     } catch (error) {
       console.error(
