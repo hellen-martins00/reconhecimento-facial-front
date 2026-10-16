@@ -15,7 +15,10 @@ function ProtectedRoute({ children, perfisPermitidos = [] }) {
   const usuarioSalvo = localStorage.getItem("usuario");
 
   // Usuário não autenticado
-  if (!token) {
+  if (!token || !usuarioSalvo) {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("usuario");
+
     return <Navigate to="/login" replace />;
   }
 

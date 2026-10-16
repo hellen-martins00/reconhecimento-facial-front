@@ -12,6 +12,9 @@ function ProtectedAgentEditRoute({ children }) {
   } catch (error) {
     console.error("Erro ao recuperar usuário:", error);
 
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("usuario");
+
     return <Navigate to="/login" replace />;
   }
 
@@ -24,7 +27,7 @@ function ProtectedAgentEditRoute({ children }) {
   const isAdmin = usuario.perfil === "ADMIN";
 
   // AGENTE pode editar somente o próprio cadastro
-  const isProprioAgente = usuario.id === id;
+  const isProprioAgente = String(usuario.id) === id;
 
   // Se não for ADMIN nem o próprio agente
   if (!isAdmin && !isProprioAgente) {
