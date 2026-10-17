@@ -808,7 +808,7 @@ function EditarPessoa() {
                   type="button"
                   className="editar-button-secondary"
                   onClick={() =>
-                    navigate(`/pessoas/${id}`)
+                    navigate("/pessoas")
                   }
                   disabled={salvando}
                 >
