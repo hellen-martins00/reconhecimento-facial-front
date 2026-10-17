@@ -749,40 +749,30 @@ function EditarPessoa() {
 
               <div className="editar-form-row">
 
-                <div className="editar-form-row">
+                <div className="editar-form-group">
+                  <label htmlFor="dataNascimento">
+                    Data de nascimento
+                  </label>
 
-                  <div className="editar-form-group">
-                    <label htmlFor="dataNascimento">
-                      Data de nascimento
-                    </label>
+                  <input
+                    id="dataNascimento"
+                    type="date"
+                    value={dataNascimento}
+                    max={obterDataHoje()}
+                    className={
+                      erroDataNascimento ? "editar-input-erro" : ""
+                    }
+                    onChange={(event) => {
+                      setDataNascimento(event.target.value);
+                      setErroDataNascimento("");
+                    }}
+                  />
 
-                    <input
-                      id="dataNascimento"
-                      type="date"
-                      value={dataNascimento}
-                      max={obterDataHoje()}
-                      className={
-                        erroDataNascimento ? "editar-input-erro" : ""
-                      }
-                      onChange={(event) => {
-                        setDataNascimento(event.target.value);
-                        setErroDataNascimento("");
-                      }}
-                    />
-
-                    {erroDataNascimento && (
-                      <span className="editar-form-error">
-                        {erroDataNascimento}
-                      </span>
-                    )}
-
-                    {erroDataNascimento && (
-                      <span className="editar-form-error">
-                        {erroDataNascimento}
-                      </span>
-                    )}
-                  </div>
-
+                  {erroDataNascimento && (
+                    <span className="editar-form-error">
+                      {erroDataNascimento}
+                    </span>
+                  )}
                 </div>
 
                 <div className="editar-form-group">
