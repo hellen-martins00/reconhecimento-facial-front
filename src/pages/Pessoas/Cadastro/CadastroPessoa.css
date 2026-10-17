@@ -399,11 +399,18 @@
 
 .cadastro-adicionar {
   align-self: flex-start;
+  margin-top: 8px;
+  margin-bottom: 8px;
   background: var(--cadastro-surface);
   border: 1px solid var(--cadastro-primary);
   color: var(--cadastro-primary);
 }
 
+.cadastro-etapa > .cadastro-revisao-vazio {
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
 .cadastro-adicionar:hover {
   background: var(--cadastro-subtle);
   border-color: var(--cadastro-primary-hover);
