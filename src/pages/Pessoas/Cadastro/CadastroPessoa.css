@@ -631,6 +631,24 @@
   outline-offset: 3px;
 }
 
+/* CPF com largura proporcional ao conteúdo */
+.cadastro-pessoa-page .campo-cpf {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Mantém o input dentro da largura definida */
+.cadastro-pessoa-page .campo-cpf input {
+  width: 100%;
+}
+
+/* Em telas pequenas, ocupa toda a largura disponível */
+@media (max-width: 600px) {
+  .cadastro-pessoa-page .campo-cpf {
+    max-width: 100%;
+  }
+}
+
 /* Tablet */
 
 @media (max-width: 900px) {
