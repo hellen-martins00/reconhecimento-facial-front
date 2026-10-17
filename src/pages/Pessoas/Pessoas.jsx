@@ -172,9 +172,21 @@ function Pessoas() {
       <div className="pessoas-header">
         <div>
           <h1>Pessoas desaparecidas</h1>
-          <p>
-            Consulte os registros de desaparecimento.
-          </p>
+          <p>Consulte os registros de desaparecimento.</p>
+        </div>
+      </div>
+
+      {/* BUSCA E BOTÃO DE NOVA PESSOA */}
+      <div className="pessoas-filtros-acoes">
+        <div className="pessoas-search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            placeholder="Buscar por nome ou CPF..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            aria-label="Buscar pessoa por nome ou CPF"
+          />
         </div>
 
         <button
@@ -182,19 +194,9 @@ function Pessoas() {
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          + Nova pessoa
+          <span aria-hidden="true">+</span>
+          <span>Nova pessoa</span>
         </button>
-      </div>
-
-      <div className="pessoas-search">
-        <span aria-hidden="true">⌕</span>
-        <input
-          type="search"
-          placeholder="Buscar por nome ou CPF..."
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          aria-label="Buscar pessoa por nome ou CPF"
-        />
       </div>
 
       {/* CONTADOR DE REGISTROS E FILTROS */}
@@ -239,6 +241,11 @@ function Pessoas() {
             <h2>Nenhuma pessoa cadastrada</h2>
             <p>Ainda não existem pessoas cadastradas no sistema.</p>
           </div>
+        ) : pessoasFiltradas.length === 0 ? (
+          <div className="pessoas-empty">
+            <h2>Nenhum resultado encontrado</h2>
+            <p>Não encontramos pessoas com esse nome ou CPF.</p>
+          </div>
         ) : (
           <>
             {/* TABELA - DESKTOP */}
@@ -280,10 +287,10 @@ function Pessoas() {
                       <td>
                         {pessoa.data_nascimento
                           ? pessoa.data_nascimento.split("-").reverse().join("/")
-                          : ""}
+                          : "—"}
                       </td>
 
-                      <td>{pessoa.sexo}</td>
+                      <td>{pessoa.sexo || "—"}</td>
 
                       <td>
                         {pessoa.registro_desaparecimento?.data_desaparecimento
@@ -295,15 +302,16 @@ function Pessoas() {
                       </td>
 
                       <td>
-                        {pessoa.registro_desaparecimento?.local_desaparecimento || "—"}
+                        {pessoa.registro_desaparecimento?.local_desaparecimento ||
+                          "—"}
                       </td>
 
                       <td>
                         {pessoa.registro_desaparecimento ? (
                           <span
                             className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                              ? "localizado"
-                              : "desaparecido"
+                                ? "localizado"
+                                : "desaparecido"
                               }`}
                           >
                             {pessoa.registro_desaparecimento.status === "LOCALIZADO"
@@ -311,7 +319,7 @@ function Pessoas() {
                               : "Desaparecido"}
                           </span>
                         ) : (
-                          "Sem registro"
+                          <span className="status-sem-registro">Sem registro</span>
                         )}
                       </td>
 
@@ -331,9 +339,12 @@ function Pessoas() {
                               }
 
                               const botao = e.currentTarget;
-                              const containerTabela = botao.closest(".pessoas-table-container");
+                              const containerTabela = botao.closest(
+                                ".pessoas-table-container"
+                              );
                               const retanguloBotao = botao.getBoundingClientRect();
-                              const retanguloContainer = containerTabela?.getBoundingClientRect();
+                              const retanguloContainer =
+                                containerTabela?.getBoundingClientRect();
 
                               const espacoAbaixo = retanguloContainer
                                 ? retanguloContainer.bottom - retanguloBotao.bottom
@@ -344,7 +355,8 @@ function Pessoas() {
                                 : retanguloBotao.top;
 
                               setMenuAbrirParaCima(
-                                espacoAbaixo < 190 && espacoAcima > espacoAbaixo
+                                espacoAbaixo < 190 &&
+                                espacoAcima > espacoAbaixo
                               );
 
                               setMenuAberto(pessoa.id);
@@ -393,17 +405,18 @@ function Pessoas() {
                                 </button>
                               )}
 
-                              {pessoa.registro_desaparecimento?.status === "DESAPARECIDO" && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setMenuAberto(null);
-                                    marcarComoLocalizada(pessoa);
-                                  }}
-                                >
-                                  Marcar como localizada
-                                </button>
-                              )}
+                              {pessoa.registro_desaparecimento?.status ===
+                                "DESAPARECIDO" && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setMenuAberto(null);
+                                      marcarComoLocalizada(pessoa);
+                                    }}
+                                  >
+                                    Marcar como localizada
+                                  </button>
+                                )}
                             </div>
                           )}
                         </div>
@@ -437,26 +450,24 @@ function Pessoas() {
                           className="pessoa-mobile-foto"
                         />
                       ) : (
-                        <div className="pessoa-mobile-sem-foto">
-                          Sem foto
-                        </div>
+                        <div className="pessoa-mobile-sem-foto">Sem foto</div>
                       )}
 
                       <div className="pessoa-mobile-nome">
                         <h3>{pessoa.nome}</h3>
 
-                        <span>
-                          CPF: {formatarCPF(pessoa.cpf)}
-                        </span>
+                        <span>CPF: {formatarCPF(pessoa.cpf)}</span>
 
                         {status && (
                           <span
                             className={`status-caso ${status === "LOCALIZADO"
-                              ? "status-localizado"
-                              : "status-desaparecido"
+                                ? "status-localizado"
+                                : "status-desaparecido"
                               }`}
                           >
-                            {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
+                            {status === "LOCALIZADO"
+                              ? "Localizado"
+                              : "Desaparecido"}
                           </span>
                         )}
                       </div>
@@ -467,7 +478,9 @@ function Pessoas() {
                           type="button"
                           className="pessoa-mobile-menu-button"
                           onClick={() =>
-                            setMenuAberto(menuAberto === pessoa.id ? null : pessoa.id)
+                            setMenuAberto(
+                              menuAberto === pessoa.id ? null : pessoa.id
+                            )
                           }
                           aria-label={`Ações para ${pessoa.nome}`}
                           aria-expanded={menuAberto === pessoa.id}
@@ -540,10 +553,14 @@ function Pessoas() {
                       className="pessoa-mobile-detalhes-button"
                       aria-expanded={detalhesExpandidos}
                       onClick={() =>
-                        setDetalhesAbertos(detalhesExpandidos ? null : pessoa.id)
+                        setDetalhesAbertos(
+                          detalhesExpandidos ? null : pessoa.id
+                        )
                       }
                     >
-                      {detalhesExpandidos ? "Ocultar detalhes" : "Ver detalhes"}
+                      {detalhesExpandidos
+                        ? "Ocultar detalhes"
+                        : "Ver detalhes"}
 
                       <span aria-hidden="true">
                         {detalhesExpandidos ? "⌃" : "⌄"}
@@ -557,7 +574,10 @@ function Pessoas() {
                           <span>Data de nascimento</span>
                           <strong>
                             {pessoa.data_nascimento
-                              ? pessoa.data_nascimento.split("-").reverse().join("/")
+                              ? pessoa.data_nascimento
+                                .split("-")
+                                .reverse()
+                                .join("/")
                               : "—"}
                           </strong>
                         </div>
@@ -569,9 +589,7 @@ function Pessoas() {
 
                         <div className="pessoa-mobile-campo">
                           <span>Local do desaparecimento</span>
-                          <strong>
-                            {registro?.local_desaparecimento || "—"}
-                          </strong>
+                          <strong>{registro?.local_desaparecimento || "—"}</strong>
                         </div>
 
                         <div className="pessoa-mobile-campo">
@@ -580,11 +598,13 @@ function Pessoas() {
                           {registro ? (
                             <strong
                               className={`status-caso ${status === "LOCALIZADO"
-                                ? "status-localizado"
-                                : "status-desaparecido"
+                                  ? "status-localizado"
+                                  : "status-desaparecido"
                                 }`}
                             >
-                              {status === "LOCALIZADO" ? "Localizado" : "Desaparecido"}
+                              {status === "LOCALIZADO"
+                                ? "Localizado"
+                                : "Desaparecido"}
                             </strong>
                           ) : (
                             <strong className="status-sem-registro">

@@ -642,6 +642,63 @@
   bottom: calc(100% + 4px);
 }
 
+.pessoas-filtros-acoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.pessoas-filtros-acoes .pessoas-search {
+  flex: 1;
+  width: auto;
+  max-width: 650px;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.pessoas-new-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 16px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pessoas-new-button:hover {
+  background: #1d4ed8;
+}
+
+.pessoas-new-button span:first-child {
+  font-size: 20px;
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .pessoas-filtros-acoes {
+    gap: 8px;
+  }
+
+  .pessoas-filtros-acoes .pessoas-search {
+    flex: 1;
+  }
+
+  .pessoas-new-button {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+}
+
 /* ========================================
    14. RESPONSIVIDADE PARA CELULARES
 ======================================== */
