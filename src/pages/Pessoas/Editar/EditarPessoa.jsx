@@ -287,46 +287,49 @@ function EditarPessoa() {
         return false;
       }
 
+      if (nome.trim().length < 3) {
+        setErro("O nome deve ter pelo menos 3 caracteres.");
+        return false;
+      }
+
       if (nome.trim().length > 150) {
         setErro("O nome deve ter no máximo 150 caracteres.");
         return false;
       }
 
-      if (!cpf.trim()) {
-        setErro("Informe o CPF.");
-        return false;
+      // CPF opcional: validar somente se informado
+      if (cpf.trim()) {
+        const cpfLimpo = limparCPF(cpf);
+
+        if (cpfLimpo.length !== 11) {
+          setErro("Informe um CPF válido com 11 números.");
+          return false;
+        }
+
+        // Se o projeto já possui a função validarCPF,
+        // também pode usá-la aqui para validar os dígitos.
       }
 
-      const cpfLimpo = limparCPF(cpf);
-
-      if (cpfLimpo.length !== 11) {
-        setErro("Informe um CPF válido com 11 números.");
-        return false;
-      }
-
-      if (!dataNascimento) {
-        setErroDataNascimento("Informe a data de nascimento.");
-        return false;
-      }
-
-      if (dataNascimento > obterDataHoje()) {
-        setErroDataNascimento("A data de nascimento não pode ser futura.");
+      // Data de nascimento opcional
+      if (
+        dataNascimento &&
+        dataNascimento > obterDataHoje()
+      ) {
+        setErroDataNascimento(
+          "A data de nascimento não pode ser futura."
+        );
         return false;
       }
 
       setErroDataNascimento("");
-
-      if (!sexo) {
-        setErro("Selecione o sexo.");
-        return false;
-      }
     }
 
     if (etapa === 2) {
       const registroInvalido = registrosDesaparecimento.some(
         (registro) => {
           const data = registro.data_desaparecimento || "";
-          const local = registro.local_desaparecimento?.trim() || "";
+          const local =
+            registro.local_desaparecimento?.trim() || "";
           const descricao = registro.descricao?.trim() || "";
 
           const preenchido = data || local || descricao;
@@ -416,10 +419,10 @@ function EditarPessoa() {
       // ATUALIZAR PESSOA
 
       await api.put(`/pessoas/${id}`, {
-        nome,
-        cpf: limparCPF(cpf),
-        data_nascimento: dataNascimento,
-        sexo,
+        nome: nome.trim(),
+        cpf: limparCPF(cpf) || null,
+        data_nascimento: dataNascimento || null,
+        sexo: sexo || null,
       });
 
       // NOVOS REGISTROS DE DESAPARECIMENTO
@@ -716,25 +719,22 @@ function EditarPessoa() {
                   </div>
 
                   <div className="editar-form-group">
-                    <label htmlFor="cpf">
-                      CPF <span>*</span>
-                    </label>
+                    <label htmlFor="cpf">CPF</label>
 
                     <input
                       id="cpf"
                       type="text"
                       value={formatarCPF(cpf)}
                       onChange={(event) =>
-                        setCpf(
-                          limparCPF(
-                            event.target.value
-                          )
-                        )
+                        setCpf(limparCPF(event.target.value))
                       }
                       maxLength={14}
                       inputMode="numeric"
-                      required
                     />
+
+                    <span className="editar-form-help">
+                      Campo opcional. Se informado, o CPF será validado.
+                    </span>
 
                     <span className="editar-form-help">
                       Informe apenas os 11 números
@@ -753,7 +753,7 @@ function EditarPessoa() {
 
                   <div className="editar-form-group">
                     <label htmlFor="dataNascimento">
-                      Data de nascimento <span>*</span>
+                      Data de nascimento
                     </label>
 
                     <input
@@ -762,16 +762,19 @@ function EditarPessoa() {
                       value={dataNascimento}
                       max={obterDataHoje()}
                       className={
-                        erroDataNascimento
-                          ? "editar-input-erro"
-                          : ""
+                        erroDataNascimento ? "editar-input-erro" : ""
                       }
                       onChange={(event) => {
                         setDataNascimento(event.target.value);
                         setErroDataNascimento("");
                       }}
-                      required
                     />
+
+                    {erroDataNascimento && (
+                      <span className="editar-form-error">
+                        {erroDataNascimento}
+                      </span>
+                    )}
 
                     {erroDataNascimento && (
                       <span className="editar-form-error">
@@ -783,31 +786,16 @@ function EditarPessoa() {
                 </div>
 
                 <div className="editar-form-group">
-                  <label htmlFor="sexo">
-                    Sexo <span>*</span>
-                  </label>
+                  <label htmlFor="sexo">Sexo</label>
 
                   <select
                     id="sexo"
                     value={sexo}
-                    onChange={(event) =>
-                      setSexo(
-                        event.target.value
-                      )
-                    }
-                    required
+                    onChange={(event) => setSexo(event.target.value)}
                   >
-                    <option value="">
-                      Selecione
-                    </option>
-
-                    <option value="M">
-                      Masculino
-                    </option>
-
-                    <option value="F">
-                      Feminino
-                    </option>
+                    <option value="">Não informado</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
                   </select>
                 </div>
 
