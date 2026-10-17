@@ -402,7 +402,7 @@ function CadastroPessoa() {
               />
             </div>
 
-            <div className="cadastro-form-group">
+            <div className="cadastro-form-group campo-cpf">
               <label htmlFor="cpf">CPF</label>
               <input
                 id="cpf"
