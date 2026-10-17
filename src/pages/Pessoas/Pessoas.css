@@ -129,19 +129,20 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 48px;
+  max-width: 650px;
+  min-height: 44px;
   box-sizing: border-box;
   margin-bottom: 20px;
-  padding: 0 16px;
+  padding: 0 14px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  color: #6b7280;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #475569;
 }
 
 .pessoas-search span {
   flex-shrink: 0;
-  font-size: 23px;
+  font-size: 21px;
 }
 
 .pessoas-search input {
@@ -155,9 +156,13 @@
   font-size: 14px;
 }
 
+.pessoas-search input::placeholder {
+  color: #64748b;
+}
+
 .pessoas-search:focus-within {
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 /* ========================================
@@ -519,29 +524,34 @@
   justify-content: center;
   width: fit-content;
   max-width: 100%;
-  padding: 5px 10px;
+  padding: 6px 12px;
   box-sizing: border-box;
+  border: 1px solid transparent;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
 }
 
+/* caso ainda em aberto */
 .status-desaparecido {
-  background: #fef2f2;
+  background: #fee2e2;
+  border-color: #fecaca;
   color: #b91c1c;
 }
 
+/* pessoa localizada */
 .status-localizado {
   background: #dcfce7;
+  border-color: #bbf7d0;
   color: #166534;
 }
 
 .status-sem-registro {
   display: inline-block;
   width: fit-content;
-  color: #6b7280;
+  color: #64748b;
   font-size: 12px;
   font-weight: 600;
 }
