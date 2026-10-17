@@ -81,13 +81,13 @@
   display: flex;
   align-items: flex-start;
   width: 100%;
+  max-width: 1100px;
   margin-bottom: 18px;
   padding: 16px 20px;
   overflow-x: auto;
   background: var(--cadastro-surface);
   border: 1px solid var(--cadastro-border);
   border-radius: var(--cadastro-radius);
-  scrollbar-width: thin;
 }
 
 .cadastro-step {
@@ -647,6 +647,19 @@
 /* Mantém o input dentro da largura definida */
 .cadastro-pessoa-page .campo-cpf input {
   width: 100%;
+}
+
+.cadastro-stepper,
+.cadastro-pessoa-card {
+  width: 100%;
+  max-width: 1100px;
+}
+
+@media (max-width: 768px) {
+  .cadastro-stepper,
+  .cadastro-pessoa-card {
+    max-width: 100%;
+  }
 }
 
 /* Em telas pequenas, ocupa toda a largura disponível */
