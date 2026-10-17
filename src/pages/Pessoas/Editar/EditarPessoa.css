@@ -19,7 +19,7 @@
 
 .editar-header h1 {
   margin: 0 0 6px;
-  color: #1f2937;
+  color: #f3f7fc;
   font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
@@ -83,7 +83,7 @@
 /* STEPPER */
 .editar-stepper {
   width: 100%;
-  max-width: 100%;
+  max-width: 800px;
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
