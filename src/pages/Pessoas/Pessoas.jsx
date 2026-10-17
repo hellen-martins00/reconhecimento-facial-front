@@ -182,7 +182,7 @@ function Pessoas() {
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          +
+          + Nova pessoa
         </button>
       </div>
 
