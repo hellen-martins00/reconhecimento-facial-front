@@ -14,8 +14,7 @@
 
   width: 100%;
   min-width: 0;
-  margin: 0 auto;
-  padding: 20px 28px;
+  padding: 24px 28px;
   color: var(--cadastro-text);
   box-sizing: border-box;
 }
@@ -33,9 +32,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+
   width: 100%;
   max-width: 1100px;
-  margin-bottom: 18px;
+  margin: 0 auto 18px;
 }
 
 .cadastro-pessoa-header h1 {
@@ -84,7 +84,7 @@
   align-items: flex-start;
   width: 100%;
   max-width: 1100px;
-  margin-bottom: 18px;
+  margin: 0 auto 18px;
   padding: 16px 20px;
   overflow-x: auto;
   background: var(--cadastro-surface);
@@ -191,7 +191,9 @@
 .cadastro-pessoa-card {
   width: 100%;
   max-width: 1100px;
+  margin: 0 auto;
   padding: 24px 28px;
+
   background: var(--cadastro-surface);
   border: 1px solid var(--cadastro-border);
   border-radius: var(--cadastro-radius);
@@ -839,6 +841,34 @@
 
   .cadastro-stepper {
     padding: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cadastro-pessoa-page {
+    padding: 14px 12px;
+  }
+
+  .cadastro-pessoa-card {
+    padding: 16px;
+  }
+}
+
+/* Ajustes para telas menores */
+
+@media (max-width: 768px) {
+  .cadastro-pessoa-page {
+    padding: 18px 16px;
+  }
+
+  .cadastro-pessoa-header,
+  .cadastro-stepper,
+  .cadastro-pessoa-card {
+    max-width: 100%;
+  }
+
+  .cadastro-pessoa-card {
+    padding: 20px;
   }
 }
 
