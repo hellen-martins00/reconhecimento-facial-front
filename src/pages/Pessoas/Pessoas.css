@@ -41,7 +41,13 @@
 }
 
 .pessoas-new-button {
-  padding: 12px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 42px;
+  padding: 0 16px;
   background: #2563eb;
   border: none;
   border-radius: 8px;
@@ -49,10 +55,16 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .pessoas-new-button:hover {
   background: #1d4ed8;
+}
+
+.pessoas-new-button span:first-child {
+  font-size: 20px;
+  line-height: 1;
 }
 
 /* ========================================

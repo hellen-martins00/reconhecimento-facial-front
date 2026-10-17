@@ -182,7 +182,8 @@ function Pessoas() {
           className="pessoas-new-button"
           onClick={() => navigate("/pessoas/nova")}
         >
-          +
+          <span aria-hidden="true">+</span>
+          <span>Nova pessoa</span>
         </button>
       </div>
 
