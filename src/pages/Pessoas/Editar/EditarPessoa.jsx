@@ -822,7 +822,6 @@ function EditarPessoa() {
                   disabled={salvando}
                 >
                   Próximo
-                  <span>→</span>
                 </button>
               </div>
 
@@ -973,7 +972,7 @@ function EditarPessoa() {
                   onClick={etapaAnterior}
                   disabled={salvando}
                 >
-                  ← Voltar
+                  Voltar
                 </button>
 
                 <button
@@ -983,7 +982,6 @@ function EditarPessoa() {
                   disabled={salvando}
                 >
                   Revisar alterações
-                  <span>→</span>
                 </button>
               </div>
             </section>
@@ -1165,7 +1163,7 @@ function EditarPessoa() {
                   onClick={etapaAnterior}
                   disabled={salvando}
                 >
-                  ← Voltar
+                  Voltar
                 </button>
 
                 <button
