@@ -734,11 +734,6 @@ function Pessoas() {
                 />
                 <circle cx="12" cy="8" r="1" fill="currentColor" />
               </svg>
-
-              <p>
-                Essa ação pode ser irreversível. Verifique se selecionou
-                a pessoa correta antes de continuar.
-              </p>
             </div>
 
             <div className="confirmacao-acoes">
