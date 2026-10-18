@@ -713,29 +713,6 @@ function Pessoas() {
               </div>
             </div>
 
-            <div className="confirmacao-aviso">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                />
-                <path
-                  d="M12 11V16"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                />
-                <circle cx="12" cy="8" r="1" fill="currentColor" />
-              </svg>
-            </div>
-
             <div className="confirmacao-acoes">
               <button
                 type="button"

@@ -829,38 +829,6 @@
   font-size: 12px;
 }
 
-/* Aviso de exclusão */
-
-.confirmacao-aviso {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-
-  margin-bottom: 24px;
-  padding: 13px;
-
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  border-radius: 10px;
-}
-
-.confirmacao-aviso svg {
-  width: 19px;
-  height: 19px;
-  flex-shrink: 0;
-  margin-top: 1px;
-
-  color: #c2410c;
-}
-
-.confirmacao-aviso p {
-  margin: 0;
-
-  color: #9a3412;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
 /* Botões */
 
 .confirmacao-acoes {
@@ -1024,11 +992,6 @@
   }
 
   .confirmacao-pessoa {
-    padding: 12px;
-  }
-
-  .confirmacao-aviso {
-    margin-bottom: 20px;
     padding: 12px;
   }
 
