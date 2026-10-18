@@ -207,32 +207,21 @@ function CadastroPessoa() {
     }
   }
 
-  async function handleSubmitClick() {
-    if (etapaAtual !== 3 || carregando) {
-      return;
+  async function handleSubmit(event) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
     }
 
-    const evento = {
-      preventDefault() { },
-    };
-
-    await handleSubmit(evento);
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
     setErro("");
 
-    if (carregando) {
+    if (carregando || etapaAtual !== 3) {
       return;
     }
 
     const identificacaoValida = await validarIdentificacao();
 
     if (!identificacaoValida || !validarRegistros()) {
-      setEtapaAtual(
-        identificacaoValida ? 2 : 1
-      );
+      setEtapaAtual(identificacaoValida ? 2 : 1);
       return;
     }
 
@@ -376,14 +365,8 @@ function CadastroPessoa() {
       <form
         className="cadastro-pessoa-card"
         onSubmit={(event) => {
+          // Previne qualquer submissão automática do formulário via Enter/Navegador
           event.preventDefault();
-
-          // Só permite cadastrar quando estiver na etapa de revisão.
-          if (etapaAtual !== 3) {
-            return;
-          }
-
-          handleSubmit(event);
         }}
         noValidate
       >
@@ -730,7 +713,10 @@ function CadastroPessoa() {
               type="button"
               className="button-primary"
               disabled={carregando}
-              onClick={handleSubmitClick}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit(e);
+              }}
             >
               {carregando ? "Cadastrando..." : "Cadastrar pessoa"}
             </button>
