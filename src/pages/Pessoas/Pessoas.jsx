@@ -19,6 +19,9 @@ function Pessoas() {
   const menuContainerRef = useRef(null);
   const [detalhesAbertos, setDetalhesAbertos] = useState(null);
 
+  const [pessoaParaExcluir, setPessoaParaExcluir] = useState(null);
+  const [excluindo, setExcluindo] = useState(false);
+
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
 
   const navigate = useNavigate();
@@ -111,16 +114,37 @@ function Pessoas() {
     }
   }
 
-  async function excluirPessoa(id, nome) {
-    const confirmar = window.confirm(`Tem certeza que deseja excluir a pessoa "${nome}"?`);
-    if (!confirmar) return;
+  function solicitarExclusao(pessoa) {
+    setErro("");
+    setSucesso("");
+    setPessoaParaExcluir({
+      id: pessoa.id,
+      nome: pessoa.nome,
+    });
+  }
+
+  function cancelarExclusao() {
+    if (excluindo) return;
+    setPessoaParaExcluir(null);
+  }
+
+  async function excluirPessoa() {
+    if (!pessoaParaExcluir || excluindo) return;
+
+    const { id, nome } = pessoaParaExcluir;
 
     try {
+      setExcluindo(true);
       setErro("");
       setSucesso("");
 
       await api.delete(`/pessoas/${id}`);
-      setPessoas((pessoasAtuais) => pessoasAtuais.filter((pessoa) => pessoa.id !== id));
+
+      setPessoas((pessoasAtuais) =>
+        pessoasAtuais.filter((pessoa) => pessoa.id !== id)
+      );
+
+      setPessoaParaExcluir(null);
       setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
 
       setTimeout(() => {
@@ -128,9 +152,13 @@ function Pessoas() {
       }, 4000);
     } catch (error) {
       console.error(error);
+
       setErro(
-        error.response?.data?.detail || "Não foi possível excluir a pessoa."
+        error.response?.data?.detail ||
+        "Não foi possível excluir a pessoa."
       );
+    } finally {
+      setExcluindo(false);
     }
   }
 
@@ -310,8 +338,8 @@ function Pessoas() {
                         {pessoa.registro_desaparecimento ? (
                           <span
                             className={`status-caso status-${pessoa.registro_desaparecimento.status === "LOCALIZADO"
-                                ? "localizado"
-                                : "desaparecido"
+                              ? "localizado"
+                              : "desaparecido"
                               }`}
                           >
                             {pessoa.registro_desaparecimento.status === "LOCALIZADO"
@@ -398,7 +426,7 @@ function Pessoas() {
                                   className="pessoa-menu-excluir"
                                   onClick={() => {
                                     setMenuAberto(null);
-                                    excluirPessoa(pessoa.id, pessoa.nome);
+                                    solicitarExclusao(pessoa);
                                   }}
                                 >
                                   Excluir
@@ -461,8 +489,8 @@ function Pessoas() {
                         {status && (
                           <span
                             className={`status-caso ${status === "LOCALIZADO"
-                                ? "status-localizado"
-                                : "status-desaparecido"
+                              ? "status-localizado"
+                              : "status-desaparecido"
                               }`}
                           >
                             {status === "LOCALIZADO"
@@ -516,7 +544,7 @@ function Pessoas() {
                                 className="pessoa-menu-excluir"
                                 onClick={() => {
                                   setMenuAberto(null);
-                                  excluirPessoa(pessoa.id, pessoa.nome);
+                                  solicitarExclusao(pessoa);
                                 }}
                               >
                                 Excluir
@@ -598,8 +626,8 @@ function Pessoas() {
                           {registro ? (
                             <strong
                               className={`status-caso ${status === "LOCALIZADO"
-                                  ? "status-localizado"
-                                  : "status-desaparecido"
+                                ? "status-localizado"
+                                : "status-desaparecido"
                                 }`}
                             >
                               {status === "LOCALIZADO"
@@ -621,6 +649,142 @@ function Pessoas() {
           </>
         )}
       </div>
+
+      {pessoaParaExcluir && (
+        <div
+          className="confirmacao-overlay"
+          onMouseDown={(e) => {
+            if (
+              e.target === e.currentTarget &&
+              !excluindo
+            ) {
+              cancelarExclusao();
+            }
+          }}
+        >
+          <section
+            className="confirmacao-modal"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="confirmacao-titulo"
+            aria-describedby="confirmacao-descricao"
+          >
+            <div className="confirmacao-icone">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 3L22 20H2L12 3Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 9V13"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <circle cx="12" cy="16.5" r="1" fill="currentColor" />
+              </svg>
+            </div>
+
+            <h2 id="confirmacao-titulo">
+              Excluir pessoa?
+            </h2>
+
+            <p
+              id="confirmacao-descricao"
+              className="confirmacao-texto"
+            >
+              Tem certeza de que deseja excluir o cadastro de:
+            </p>
+
+            <div className="confirmacao-pessoa">
+              <span className="confirmacao-avatar" aria-hidden="true">
+                {pessoaParaExcluir.nome?.charAt(0)?.toUpperCase() || "P"}
+              </span>
+
+              <div className="confirmacao-dados">
+                <strong>{pessoaParaExcluir.nome}</strong>
+                <span>Cadastro de pessoa</span>
+              </div>
+            </div>
+
+            <div className="confirmacao-aviso">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
+                <path
+                  d="M12 11V16"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+                <circle cx="12" cy="8" r="1" fill="currentColor" />
+              </svg>
+
+              <p>
+                Essa ação pode ser irreversível. Verifique se selecionou
+                a pessoa correta antes de continuar.
+              </p>
+            </div>
+
+            <div className="confirmacao-acoes">
+              <button
+                type="button"
+                className="confirmacao-botao-cancelar"
+                onClick={cancelarExclusao}
+                disabled={excluindo}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="confirmacao-botao-excluir"
+                onClick={excluirPessoa}
+                disabled={excluindo}
+              >
+                {excluindo ? (
+                  <>
+                    <span className="confirmacao-spinner" />
+                    Excluindo...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M4 7H20M10 11V17M14 11V17M6 7L7 20H17L18 7M9 7V4H15V7"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Excluir pessoa
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
