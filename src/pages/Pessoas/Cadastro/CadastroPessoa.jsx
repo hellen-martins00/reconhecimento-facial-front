@@ -207,6 +207,18 @@ function CadastroPessoa() {
     }
   }
 
+  async function handleSubmitClick() {
+    if (etapaAtual !== 3 || carregando) {
+      return;
+    }
+
+    const evento = {
+      preventDefault() { },
+    };
+
+    await handleSubmit(evento);
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setErro("");
@@ -363,7 +375,16 @@ function CadastroPessoa() {
 
       <form
         className="cadastro-pessoa-card"
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          event.preventDefault();
+
+          // Só permite cadastrar quando estiver na etapa de revisão.
+          if (etapaAtual !== 3) {
+            return;
+          }
+
+          handleSubmit(event);
+        }}
         noValidate
       >
         {erro && (
@@ -706,13 +727,12 @@ function CadastroPessoa() {
             </button>
           ) : (
             <button
-              type="submit"
+              type="button"
               className="button-primary"
               disabled={carregando}
+              onClick={handleSubmitClick}
             >
-              {carregando
-                ? "Cadastrando..."
-                : "Cadastrar pessoa"}
+              {carregando ? "Cadastrando..." : "Cadastrar pessoa"}
             </button>
           )}
         </div>
