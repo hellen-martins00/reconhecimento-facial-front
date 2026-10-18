@@ -22,6 +22,9 @@ function Pessoas() {
   const [pessoaParaExcluir, setPessoaParaExcluir] = useState(null);
   const [excluindo, setExcluindo] = useState(false);
 
+  const [pessoaParaLocalizar, setPessoaParaLocalizar] = useState(null);
+  const [localizando, setLocalizando] = useState(false);
+
   const isAdmin = usuarioLogado?.perfil === "ADMIN";
 
   const navigate = useNavigate();
@@ -87,7 +90,7 @@ function Pessoas() {
     }
   }
 
-  async function marcarComoLocalizada(pessoa) {
+  function marcarComoLocalizada(pessoa) {
     const registro = pessoa.registro_desaparecimento;
 
     if (!registro) {
@@ -95,22 +98,64 @@ function Pessoas() {
       return;
     }
 
-    const confirmar = window.confirm(`Confirma que ${pessoa.nome} foi localizada?`);
-    if (!confirmar) return;
+    setErro("");
+    setSucesso("");
+
+    setPessoaParaLocalizar({
+      id: pessoa.id,
+      nome: pessoa.nome,
+      registroId: registro.id,
+    });
+  }
+
+  function cancelarLocalizacao() {
+    if (localizando) return;
+    setPessoaParaLocalizar(null);
+  }
+
+  async function confirmarLocalizacao() {
+    if (!pessoaParaLocalizar || localizando) return;
+
+    const { nome, registroId } = pessoaParaLocalizar;
 
     try {
+      setLocalizando(true);
       setErro("");
       setSucesso("");
 
-      await api.put(`/desaparecimentos/${registro.id}`, { status: "LOCALIZADO" });
-      await carregarPessoas();
+      await api.put(`/desaparecimentos/${registroId}`, {
+        status: "LOCALIZADO",
+      });
 
-      setSucesso(`O caso de ${pessoa.nome} foi atualizado para LOCALIZADO.`);
+      setPessoas((pessoasAtuais) =>
+        pessoasAtuais.map((pessoa) =>
+          pessoa.registro_desaparecimento?.id === registroId
+            ? {
+              ...pessoa,
+              registro_desaparecimento: {
+                ...pessoa.registro_desaparecimento,
+                status: "LOCALIZADO",
+              },
+            }
+            : pessoa
+        )
+      );
+
+      setPessoaParaLocalizar(null);
+      setSucesso(`O caso de ${nome} foi atualizado para LOCALIZADO.`);
+
+      setTimeout(() => {
+        setSucesso("");
+      }, 4000);
     } catch (error) {
       console.error(error);
+
       setErro(
-        error.response?.data?.detail || "Não foi possível atualizar o status do caso."
+        error.response?.data?.detail ||
+        "Não foi possível atualizar o status do caso."
       );
+    } finally {
+      setLocalizando(false);
     }
   }
 
@@ -750,6 +795,141 @@ function Pessoas() {
                       />
                     </svg>
                     Excluir pessoa
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMAÇÃO DE LOCALIZAÇÃO */}
+      {pessoaParaLocalizar && (
+        <div
+          className="localizacao-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget && !localizando) {
+              cancelarLocalizacao();
+            }
+          }}
+        >
+          <section
+            className="localizacao-modal"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="localizacao-titulo"
+            aria-describedby="localizacao-descricao"
+          >
+            <div className="localizacao-icone">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20 11.1C20 16.1 12 22 12 22S4 16.1 4 11.1a8 8 0 1 1 16 0Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="m9 11.5 2 2 4-4"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            <h2 id="localizacao-titulo">
+              Confirmar localização?
+            </h2>
+
+            <p
+              id="localizacao-descricao"
+              className="localizacao-texto"
+            >
+              Confirma que a pessoa abaixo foi localizada e deseja
+              atualizar o status do caso?
+            </p>
+
+            <div className="localizacao-pessoa">
+              <span className="localizacao-avatar" aria-hidden="true">
+                {pessoaParaLocalizar.nome?.charAt(0)?.toUpperCase() || "P"}
+              </span>
+
+              <div className="localizacao-dados">
+                <strong>{pessoaParaLocalizar.nome}</strong>
+                <span>Registro de desaparecimento</span>
+              </div>
+            </div>
+
+            <div className="localizacao-aviso">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
+                <path
+                  d="M12 11v5M12 8h.01"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <span>
+                O status do caso será alterado de
+                {" "}<strong>Desaparecido</strong> para
+                {" "}<strong>Localizado</strong>.
+              </span>
+            </div>
+
+            <div className="localizacao-acoes">
+              <button
+                type="button"
+                className="localizacao-botao-cancelar"
+                onClick={cancelarLocalizacao}
+                disabled={localizando}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="localizacao-botao-confirmar"
+                onClick={confirmarLocalizacao}
+                disabled={localizando}
+              >
+                {localizando ? (
+                  <>
+                    <span className="localizacao-spinner" />
+                    Atualizando...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="m5 12 4 4L19 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Confirmar localização
                   </>
                 )}
               </button>
