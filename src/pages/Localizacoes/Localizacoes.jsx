@@ -104,6 +104,8 @@ function Localizacoes() {
   const [formulario, setFormulario] = useState({
     registro_desaparecimento_id: "",
     local_informado: "",
+    latitude: null,
+    longitude: null,
     data: obterDataAtual(),
     horario: obterHorarioAtual(),
     descricao: "",
@@ -314,6 +316,8 @@ function Localizacoes() {
       registro_desaparecimento_id:
         formulario.registro_desaparecimento_id,
       local_informado: formulario.local_informado.trim(),
+      latitude: formulario.latitude,
+      longitude: formulario.longitude,
       data_hora: dataHora,
       descricao: formulario.descricao.trim() || null,
     };
@@ -329,6 +333,8 @@ function Localizacoes() {
       setFormulario({
         registro_desaparecimento_id: "",
         local_informado: "",
+        latitude: null,
+        longitude: null,
         data: obterDataAtual(),
         horario: obterHorarioAtual(),
         descricao: "",
@@ -355,6 +361,8 @@ function Localizacoes() {
     setFormulario({
       registro_desaparecimento_id: "",
       local_informado: "",
+      latitude: null,
+      longitude: null,
       data: obterDataAtual(),
       horario: obterHorarioAtual(),
       descricao: "",
@@ -408,11 +416,21 @@ function Localizacoes() {
     );
 
   const selecionarPontoNoMapa = (coordenadas) => {
-    setPontoSelecionado(coordenadas);
-    atualizarCampo(
-      "local_informado",
-      `Coordenadas: ${coordenadas[0].toFixed(6)}, ${coordenadas[1].toFixed(6)}`
-    );
+    const latitude = Number(coordenadas[0]);
+    const longitude = Number(coordenadas[1]);
+
+    setPontoSelecionado([latitude, longitude]);
+
+    setFormulario((anterior) => ({
+      ...anterior,
+      latitude,
+      longitude,
+      local_informado:
+        `Coordenadas: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
+    }));
+
+    setErro("");
+    setSucesso("");
   };
 
   return (
@@ -600,12 +618,18 @@ function Localizacoes() {
                 type="text"
                 placeholder="Ex.: Rodoviária de Brasília"
                 value={formulario.local_informado}
-                onChange={(event) =>
-                  atualizarCampo(
-                    "local_informado",
-                    event.target.value
-                  )
-                }
+                onChange={(event) => {
+                  setFormulario((anterior) => ({
+                    ...anterior,
+                    local_informado: event.target.value,
+                    latitude: null,
+                    longitude: null,
+                  }));
+
+                  setPontoSelecionado(null);
+                  setErro("");
+                  setSucesso("");
+                }}
                 maxLength={500}
                 required
                 disabled={salvando}
@@ -825,10 +849,10 @@ function Localizacoes() {
 
                         <span
                           className={`localizacoes-status ${status === "LOCALIZADO"
-                              ? "localizacoes-status-localizado"
-                              : status === "DESAPARECIDO"
-                                ? "localizacoes-status-desaparecido"
-                                : ""
+                            ? "localizacoes-status-localizado"
+                            : status === "DESAPARECIDO"
+                              ? "localizacoes-status-desaparecido"
+                              : ""
                             }`}
                         >
                           {normalizarStatus(registro.status)}
