@@ -708,6 +708,14 @@
   line-height: 1.5;
 }
 
+.localizacoes-item-coordenadas {
+  margin: -3px 0 10px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 700px) {
   .localizacoes-page {
     padding: 18px;

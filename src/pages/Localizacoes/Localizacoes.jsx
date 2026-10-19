@@ -79,6 +79,16 @@ function obterLista(resposta) {
   return [];
 }
 
+function obterTextoLocal(localizacao) {
+  const local = localizacao.local_informado || "";
+
+  if (local.startsWith("Coordenadas:")) {
+    return "Avistamento registrado por coordenadas";
+  }
+
+  return local || "Local não informado";
+}
+
 function Localizacoes() {
   const location = useLocation();
 
@@ -820,8 +830,17 @@ function Localizacoes() {
                     <div className="localizacoes-item-topo">
                       <div className="localizacoes-item-local">
                         <h3>
-                          {localizacao.local_informado || "Local não informado"}
+                          {obterTextoLocal(localizacao)}
                         </h3>
+
+                        {localizacao.latitude != null &&
+                          localizacao.longitude != null && (
+                            <p className="localizacoes-item-coordenadas">
+                              Latitude: {Number(localizacao.latitude).toFixed(6)}
+                              {" · "}
+                              Longitude: {Number(localizacao.longitude).toFixed(6)}
+                            </p>
+                          )}
 
                         <div className="localizacoes-item-pessoa">
                           <UserRound size={16} />
