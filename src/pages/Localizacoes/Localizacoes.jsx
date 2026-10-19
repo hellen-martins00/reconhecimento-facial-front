@@ -18,6 +18,7 @@ import {
 import api from "../../services/api";
 import localizacoesService from "../../services/localizacoesService";
 import "./Localizacoes.css";
+import MapaLocalizacoes from "../../components/MapaLocalizacoes/MapaLocalizacoes";
 
 function obterDataAtual() {
   const agora = new Date();
@@ -94,6 +95,7 @@ function Localizacoes() {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [busca, setBusca] = useState("");
+  const [pontoSelecionado, setPontoSelecionado] = useState(null);
 
   const [pessoaSelecionada, setPessoaSelecionada] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState("");
@@ -322,6 +324,7 @@ function Localizacoes() {
       await localizacoesService.cadastrar(dados);
 
       setSucesso("Avistamento registrado com sucesso!");
+      setPontoSelecionado(null);
 
       setFormulario({
         registro_desaparecimento_id: "",
@@ -348,6 +351,7 @@ function Localizacoes() {
   };
 
   const limparFormulario = () => {
+    setPontoSelecionado(null);
     setFormulario({
       registro_desaparecimento_id: "",
       local_informado: "",
@@ -385,6 +389,31 @@ function Localizacoes() {
     (registro) =>
       String(registro.status || "").toUpperCase() === "DESAPARECIDO"
   );
+
+  // Só exibe marcadores históricos quando a API já fornece latitude/longitude.
+  const marcadoresMapa = localizacoes
+    .filter((item) => item.latitude != null && item.longitude != null)
+    .map((item) => ({
+      id: item.id,
+      latitude: Number(item.latitude),
+      longitude: Number(item.longitude),
+      pessoa: obterNomeNaLocalizacao(item),
+      local: item.local_informado,
+      data: formatarDataHora(item.data_hora),
+    }))
+    .filter(
+      (item) =>
+        Number.isFinite(item.latitude) &&
+        Number.isFinite(item.longitude)
+    );
+
+  const selecionarPontoNoMapa = (coordenadas) => {
+    setPontoSelecionado(coordenadas);
+    atualizarCampo(
+      "local_informado",
+      `Coordenadas: ${coordenadas[0].toFixed(6)}, ${coordenadas[1].toFixed(6)}`
+    );
+  };
 
   return (
     <div className="localizacoes-page">
@@ -523,6 +552,37 @@ function Localizacoes() {
               <small>
                 Nenhum caso com situação de desaparecido está disponível
                 para registrar avistamentos.
+              </small>
+            )}
+          </div>
+
+          <div className="localizacoes-mapa-secao">
+            <div className="localizacoes-mapa-texto">
+              <h3>Selecione o ponto no mapa</h3>
+              <p>
+                Clique no mapa para preencher o campo com as coordenadas do
+                avistamento. Você também pode informar o nome do local manualmente.
+              </p>
+            </div>
+
+            <MapaLocalizacoes
+              marcadores={marcadoresMapa}
+              pontoSelecionado={pontoSelecionado}
+              aoSelecionarPonto={selecionarPontoNoMapa}
+            />
+
+            {pontoSelecionado && (
+              <p className="localizacoes-coordenadas-selecionadas">
+                <MapPin size={16} />
+                Coordenadas selecionadas: {pontoSelecionado[0].toFixed(6)},{" "}
+                {pontoSelecionado[1].toFixed(6)}
+              </p>
+            )}
+
+            {marcadoresMapa.length === 0 && (
+              <small className="localizacoes-mapa-observacao">
+                Os registros antigos não possuem coordenadas geográficas na resposta
+                da API, por isso ainda não aparecem como marcadores no mapa.
               </small>
             )}
           </div>

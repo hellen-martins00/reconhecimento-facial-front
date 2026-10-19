@@ -669,6 +669,59 @@
   animation: localizacoes-rotacao 1s linear infinite;
 }
 
+/* Mapa interativo */
+.localizacoes-mapa-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.localizacoes-mapa-texto h3 {
+  margin: 0 0 5px;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.localizacoes-mapa-texto p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.localizacoes-coordenadas-selecionadas {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.localizacoes-mapa-observacao {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .localizacoes-page {
+    padding: 18px;
+  }
+
+  .localizacoes-form-linha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .localizacoes-card {
+    padding: 18px;
+  }
+}
+
 @keyframes localizacoes-rotacao {
   to {
     transform: rotate(360deg);
