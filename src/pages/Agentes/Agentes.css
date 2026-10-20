@@ -2,12 +2,14 @@
 .agentes-page {
   width: 100%;
   min-width: 0;
+  color: #f1f5f9;
 }
 
 .agentes-card {
-  background: white;
+  background: #102136;
+  border: 1px solid #263d54;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   overflow: hidden;
 }
 
@@ -22,97 +24,150 @@
 
 .agentes-header h1 {
   margin: 0 0 6px;
-  color: #f3f7fc;
+  color: #f1f5f9;
   font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
 }
 
 .agentes-header p {
   margin: 0;
-  color: #6b7280;
+  color: #91a9c4;
   font-size: 14px;
+  line-height: 1.6;
 }
 
+/* BOTÃO NOVO AGENTE */
 .agentes-new-button {
-  padding: 10px 16px;
-  background: #2563eb;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 17px;
+  background: #22d3ee;
+  border: 1px solid #22d3ee;
   border-radius: 8px;
-  color: white;
+  color: #08202d;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .agentes-new-button:hover {
-  background: #1d4ed8;
+  background: #67e8f9;
+  border-color: #67e8f9;
+}
+
+.agentes-new-button:active {
+  transform: translateY(1px);
+}
+
+.agentes-new-button:focus-visible,
+.agente-menu-button:focus-visible,
+.agente-mobile-menu-button:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
 }
 
 /* ESTADOS */
 .agentes-loading,
 .agentes-empty {
   padding: 50px 20px;
+  background: #102136;
+  border: 1px solid #263d54;
+  border-radius: 12px;
+  color: #91a9c4;
   text-align: center;
 }
 
 .agentes-empty h2 {
-  margin-bottom: 8px;
-  color: #1f2937;
+  margin: 0 0 8px;
+  color: #f1f5f9;
   font-size: 18px;
 }
 
 .agentes-empty p {
   margin: 0;
-  color: #6b7280;
+  color: #91a9c4;
   font-size: 14px;
+  line-height: 1.6;
 }
 
 .agentes-error {
   margin-bottom: 20px;
   padding: 12px 15px;
-  background: #fee2e2;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
   border-radius: 8px;
-  color: #b91c1c;
+  color: #fca5a5;
   font-size: 14px;
+  line-height: 1.5;
 }
 
-/* TABELA DESKTOP */
+/* ========================================
+   TABELA DESKTOP
+======================================== */
+
 .agentes-table-container {
   width: 100%;
   overflow-x: auto;
+  scrollbar-color: #30465d #102136;
+  scrollbar-width: thin;
 }
 
 .agentes-table {
   width: 100%;
   border-collapse: collapse;
+  color: #c5d5e6;
 }
 
 .agentes-table th {
   padding: 15px;
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
-  color: #374151;
-  font-size: 13px;
+  background: #0d1b2c;
+  border-bottom: 1px solid #263d54;
+  color: #91a9c4;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
   text-align: left;
   white-space: nowrap;
 }
 
 .agentes-table td {
   padding: 15px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #4b5563;
+  border-bottom: 1px solid #20364b;
+  color: #c5d5e6;
   font-size: 14px;
+  vertical-align: middle;
+  transition: background 0.2s ease;
+}
+
+.agentes-table tbody tr {
+  transition: background 0.2s ease;
 }
 
 .agentes-table tbody tr:hover {
-  background: #f9fafb;
+  background: #142b40;
 }
 
-/* AGENTE */
+.agentes-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========================================
+   FOTO E IDENTIFICAÇÃO DO AGENTE
+======================================== */
+
 .agente-nome {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .agente-foto {
@@ -120,7 +175,8 @@
   width: 42px;
   height: 42px;
   min-width: 42px;
-  border-radius: 8px;
+  border: 1px solid #30465d;
+  border-radius: 9px;
   object-fit: cover;
 }
 
@@ -131,15 +187,18 @@
   width: 42px;
   height: 42px;
   min-width: 42px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  color: #64748b;
+  background: #173047;
+  border: 1px solid #30465d;
+  border-radius: 9px;
+  color: #91a9c4;
   font-size: 9px;
   text-align: center;
 }
 
-/* AÇÕES DESKTOP */
-/* AÇÕES DESKTOP */
+/* ========================================
+   AÇÕES DESKTOP
+======================================== */
+
 .agentes-actions {
   width: 60px;
   text-align: center;
@@ -157,17 +216,22 @@
   width: 34px;
   height: 34px;
   background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #4b5563;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #91a9c4;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .agente-menu-button:hover {
-  background: #f3f4f6;
-  color: #111827;
+  background: #173047;
+  border-color: #30465d;
+  color: #22d3ee;
 }
 
 /* MENU DESKTOP */
@@ -175,14 +239,14 @@
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  min-width: 160px;
+  min-width: 170px;
   max-width: 220px;
   padding: 5px;
   box-sizing: border-box;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  background: #102136;
+  border: 1px solid #30465d;
+  border-radius: 9px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
   z-index: 1000;
 }
 
@@ -195,51 +259,63 @@
 .agente-menu button {
   display: block;
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 12px;
   background: transparent;
   border: none;
   border-radius: 6px;
-  color: #374151;
+  color: #c5d5e6;
   font-size: 13px;
   text-align: left;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .agente-menu button:hover {
-  background: #f3f4f6;
+  background: #173047;
+  color: #f1f5f9;
 }
 
-.agente-menu button:disabled {
-  opacity: 0.6;
+.agente-menu button:disabled,
+.agente-mobile-menu button:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-.agente-menu .agente-menu-excluir {
-  color: #dc2626;
+.agente-menu .agente-menu-excluir,
+.agente-mobile-menu .agente-menu-excluir {
+  color: #f87171;
 }
 
-.agente-menu .agente-menu-excluir:hover {
-  background: #fef2f2;
+.agente-menu .agente-menu-excluir:hover,
+.agente-mobile-menu .agente-menu-excluir:hover {
+  background: rgba(248, 113, 113, 0.1);
+  color: #fca5a5;
 }
 
-/* MOBILE - ESCONDIDO NO DESKTOP */
+/* ========================================
+   LISTA MOBILE
+======================================== */
+
 .agentes-mobile-list {
   display: none;
 }
 
 /* TABLET */
 @media (max-width: 768px) {
-
   .agentes-header h1 {
     font-size: 24px;
   }
 
+  .agentes-table th,
+  .agentes-table td {
+    padding: 12px;
+  }
 }
 
 /* CELULAR */
 @media (max-width: 576px) {
-
-  /* CABEÇALHO */
   .agentes-header {
     flex-direction: column;
     align-items: stretch;
@@ -253,7 +329,7 @@
 
   .agentes-header p {
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .agentes-new-button {
@@ -264,6 +340,7 @@
   /* CARD PRINCIPAL */
   .agentes-card {
     background: transparent;
+    border: none;
     box-shadow: none;
     overflow: visible;
   }
@@ -283,25 +360,32 @@
   /* CARD DO AGENTE */
   .agente-mobile-card {
     padding: 18px;
-    background: white;
-    border: 1px solid #e5e7eb;
+    background: #102136;
+    border: 1px solid #263d54;
     border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.12);
+    transition: border-color 0.2s ease;
   }
 
-  /* TOPO */
+  .agente-mobile-card:hover {
+    border-color: #36536e;
+  }
+
+  /* TOPO DO CARD */
   .agente-mobile-header {
     display: flex;
     align-items: center;
     gap: 12px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #263d54;
   }
 
   .agente-mobile-foto {
     width: 54px;
     height: 54px;
     min-width: 54px;
+    background: #173047;
+    border: 1px solid #30465d;
     border-radius: 10px;
     object-fit: cover;
   }
@@ -313,30 +397,34 @@
     width: 54px;
     height: 54px;
     min-width: 54px;
+    background: #173047;
+    border: 1px solid #30465d;
     border-radius: 10px;
-    background: #f1f5f9;
-    color: #64748b;
+    color: #91a9c4;
     font-size: 10px;
     text-align: center;
   }
 
   .agente-mobile-nome {
     min-width: 0;
+    flex: 1;
   }
 
   .agente-mobile-nome h3 {
-    margin: 0 0 5px;
-    color: #1f2937;
+    margin: 0 0 7px;
+    color: #f1f5f9;
     font-size: 16px;
-    word-break: break-word;
+    font-weight: 600;
+    overflow-wrap: anywhere;
   }
 
   .agente-mobile-nome span {
     display: inline-block;
     padding: 4px 8px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.22);
     border-radius: 5px;
-    background: #eff6ff;
-    color: #2563eb;
+    color: #22d3ee;
     font-size: 11px;
     font-weight: 600;
   }
@@ -350,104 +438,121 @@
   .agente-mobile-info div {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 15px;
     padding: 12px 0;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #20364b;
+  }
+
+  .agente-mobile-info div:last-child {
+    border-bottom: none;
   }
 
   .agente-mobile-info span {
-    color: #6b7280;
+    color: #91a9c4;
     font-size: 12px;
   }
 
   .agente-mobile-info strong {
-    color: #374151;
+    color: #d8e5f3;
     font-size: 13px;
+    font-weight: 500;
     text-align: right;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .agente-mobile-actions button:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 
-  /* ESTADOS */
+  /* ESTADOS MOBILE */
   .agentes-loading,
   .agentes-empty {
     padding: 35px 20px;
-    background: white;
+    background: #102136;
+    border: 1px solid #263d54;
     border-radius: 12px;
   }
 
   /* MENU DE AÇÕES MOBILE */
-.agente-mobile-menu-container {
-  position: relative;
-  margin-left: auto;
-  flex-shrink: 0;
+  .agente-mobile-menu-container {
+    position: relative;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .agente-mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: #91a9c4;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .agente-mobile-menu-button:hover {
+    background: #173047;
+    border-color: #30465d;
+    color: #22d3ee;
+  }
+
+  .agente-mobile-menu {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    min-width: 160px;
+    max-width: min(220px, calc(100vw - 48px));
+    padding: 5px;
+    background: #102136;
+    border: 1px solid #30465d;
+    border-radius: 9px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+  }
+
+  .agente-mobile-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #c5d5e6;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .agente-mobile-menu button:hover {
+    background: #173047;
+    color: #f1f5f9;
+  }
 }
 
-.agente-mobile-menu-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
-  border-radius: 7px;
-  color: #4b5563;
-  font-size: 25px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.agente-mobile-menu-button:hover {
-  background: #f3f4f6;
-  color: #111827;
-}
-
-.agente-mobile-menu {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  min-width: 150px;
-  padding: 5px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  z-index: 1000;
-}
-
-.agente-mobile-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.agente-mobile-menu button:hover {
-  background: #f3f4f6;
-}
-
-.agente-mobile-menu button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.agente-mobile-menu .agente-menu-excluir {
-  color: #dc2626;
-}
-
-.agente-mobile-menu .agente-menu-excluir:hover {
-  background: #fef2f2;
-}
-
+/* ACESSIBILIDADE */
+@media (prefers-reduced-motion: reduce) {
+  .agentes-new-button,
+  .agentes-table tbody tr,
+  .agentes-table td,
+  .agente-menu-button,
+  .agente-menu button,
+  .agente-mobile-card,
+  .agente-mobile-menu-button,
+  .agente-mobile-menu button {
+    transition: none;
+  }
 }
