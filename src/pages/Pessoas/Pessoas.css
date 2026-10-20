@@ -36,8 +36,9 @@
 
 .pessoas-header p {
   margin: 0;
-  color: #6b7280;
+  color: #94a3b8;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 .pessoas-new-button {
@@ -222,26 +223,33 @@
 
 .pessoas-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .pessoas-table th,
 .pessoas-table td {
-  padding: 15px;
+  padding: 14px 12px;
   border-bottom: 1px solid #e2e8f0;
   text-align: left;
+  vertical-align: middle;
 }
 
 .pessoas-table th {
   background: #f8fafc;
   color: #334155;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .pessoas-table td {
   color: #475569;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.pessoas-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .pessoas-table tbody tr:hover {
@@ -356,7 +364,7 @@
   line-height: 1.4;
 }
 
-.pessoa-mobile-nome > span:not(.status-caso) {
+.pessoa-mobile-nome>span:not(.status-caso) {
   color: #64748b;
   font-size: 12px;
 }
@@ -373,19 +381,19 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.pessoa-mobile-resumo > div {
+.pessoa-mobile-resumo>div {
   display: flex;
   flex-direction: column;
   gap: 5px;
   min-width: 0;
 }
 
-.pessoa-mobile-resumo > div > span {
+.pessoa-mobile-resumo>div>span {
   color: #64748b;
   font-size: 12px;
 }
 
-.pessoa-mobile-resumo > div > strong {
+.pessoa-mobile-resumo>div>strong {
   color: #1e293b;
   font-size: 13px;
   font-weight: 600;
@@ -431,13 +439,13 @@
   min-width: 0;
 }
 
-.pessoa-mobile-campo > span {
+.pessoa-mobile-campo>span {
   color: #64748b;
   font-size: 12px;
   line-height: 1.4;
 }
 
-.pessoa-mobile-campo > strong {
+.pessoa-mobile-campo>strong {
   color: #1e293b;
   font-size: 13px;
   font-weight: 500;
@@ -1159,8 +1167,13 @@
 /* Animações */
 
 @keyframes localizacao-fundo {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes localizacao-entrada {
@@ -1168,6 +1181,7 @@
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1175,7 +1189,9 @@
 }
 
 @keyframes localizacao-girar {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsividade */
@@ -1219,6 +1235,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .localizacao-overlay,
   .localizacao-modal,
   .localizacao-spinner {
@@ -1316,6 +1333,7 @@
 /* Respeita a preferência por menos animações */
 
 @media (prefers-reduced-motion: reduce) {
+
   .confirmacao-overlay,
   .confirmacao-modal,
   .confirmacao-spinner {
@@ -1392,22 +1410,31 @@
     line-height: 1.45;
   }
 
-  .pessoas-new-button {
-    width: 40px;
-    height: 40px;
-    min-height: unset;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    font-size: 20px;
-    flex-shrink: 0;
+  /* Busca e botão de cadastro */
+  .pessoas-filtros-acoes {
+    align-items: stretch;
+    gap: 8px;
   }
 
-  .pessoas-search {
-    margin-bottom: 16px;
+  .pessoas-filtros-acoes .pessoas-search {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    margin-bottom: 0;
     padding: 0 12px;
+  }
+
+  .pessoas-filtros-acoes .pessoas-new-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    flex-shrink: 0;
   }
 
   .pessoas-lista-info {
@@ -1424,37 +1451,15 @@
    15. CELULARES MUITO ESTREITOS
 ======================================== */
 
-@media (max-width: 360px) {
-  .pessoas-mobile-list {
-    padding: 8px;
+@media (max-width: 380px) {
+  .pessoas-filtros-acoes .pessoas-new-button {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
   }
 
-  .pessoa-mobile-card {
-    padding: 10px;
-  }
-
-  .pessoa-mobile-header {
-    gap: 8px;
-  }
-
-  .pessoa-mobile-foto,
-  .pessoa-mobile-sem-foto {
-    width: 48px;
-    height: 60px;
-    flex-basis: 48px;
-  }
-
-  .pessoa-mobile-menu-container {
-    flex-basis: 32px;
-  }
-
-  .pessoa-mobile-menu-button {
-    width: 32px;
-    height: 32px;
-  }
-
-  .pessoa-mobile-detalhes {
-    grid-template-columns: minmax(0, 1fr);
+  .pessoas-filtros-acoes .pessoas-new-button span:last-child {
+    display: none;
   }
 }
 
