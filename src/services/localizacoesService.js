@@ -18,6 +18,10 @@ const localizacoesService = {
     );
     return response.data;
   },
+
+  async excluir(id) {
+    return api.delete(`/localizacoes/${id}`);
+  },
 };
 
 export default localizacoesService;

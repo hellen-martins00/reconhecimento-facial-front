@@ -716,6 +716,51 @@
   overflow-wrap: anywhere;
 }
 
+/* Ações de cada avistamento no histórico */
+
+.localizacoes-item-acoes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.localizacoes-btn-excluir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff;
+  color: #dc2626;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.localizacoes-btn-excluir:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+.localizacoes-btn-excluir:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .localizacoes-item-acoes {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 700px) {
   .localizacoes-page {
     padding: 18px;

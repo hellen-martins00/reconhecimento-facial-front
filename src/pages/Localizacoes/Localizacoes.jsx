@@ -13,6 +13,7 @@ import {
   AlertCircle,
   CheckCircle2,
   LoaderCircle,
+  Trash2,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -110,6 +111,8 @@ function Localizacoes() {
   const [pessoaSelecionada, setPessoaSelecionada] = useState(null);
   const [fotoSelecionada, setFotoSelecionada] = useState("");
   const [carregandoFoto, setCarregandoFoto] = useState(false);
+
+  const [excluindoId, setExcluindoId] = useState(null);
 
   const [formulario, setFormulario] = useState({
     registro_desaparecimento_id: "",
@@ -441,6 +444,39 @@ function Localizacoes() {
 
     setErro("");
     setSucesso("");
+  };
+
+  const handleExcluirLocalizacao = async (localizacao) => {
+    const confirmar = window.confirm(
+      `Deseja realmente excluir este avistamento?\n\n` +
+      `Local: ${obterTextoLocal(localizacao)}\n\n` +
+      `Esta ação não poderá ser desfeita.`
+    );
+
+    if (!confirmar) return;
+
+    setErro("");
+    setSucesso("");
+    setExcluindoId(localizacao.id);
+
+    try {
+      await localizacoesService.excluir(localizacao.id);
+
+      setLocalizacoes((anterior) =>
+        anterior.filter((item) => item.id !== localizacao.id)
+      );
+
+      setSucesso("Avistamento excluído com sucesso!");
+    } catch (error) {
+      console.error("Erro ao excluir avistamento:", error);
+
+      setErro(
+        error.response?.data?.detail ||
+        "Não foi possível excluir o avistamento. Tente novamente."
+      );
+    } finally {
+      setExcluindoId(null);
+    }
   };
 
   return (
@@ -851,12 +887,38 @@ function Localizacoes() {
                         </div>
                       </div>
 
-                      <div className="localizacoes-data">
-                        <CalendarDays size={16} />
+                      <div className="localizacoes-item-acoes">
+                        <div className="localizacoes-data">
+                          <CalendarDays size={16} />
 
-                        <span>
-                          {formatarDataHora(localizacao.data_hora)}
-                        </span>
+                          <span>
+                            {formatarDataHora(localizacao.data_hora)}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="localizacoes-btn-excluir"
+                          onClick={() => handleExcluirLocalizacao(localizacao)}
+                          disabled={excluindoId !== null}
+                          title="Excluir avistamento"
+                          aria-label={`Excluir avistamento em ${obterTextoLocal(localizacao)}`}
+                        >
+                          {excluindoId === localizacao.id ? (
+                            <LoaderCircle
+                              size={17}
+                              className="localizacoes-girando"
+                            />
+                          ) : (
+                            <Trash2 size={17} />
+                          )}
+
+                          <span>
+                            {excluindoId === localizacao.id
+                              ? "Excluindo..."
+                              : "Excluir"}
+                          </span>
+                        </button>
                       </div>
                     </div>
 
