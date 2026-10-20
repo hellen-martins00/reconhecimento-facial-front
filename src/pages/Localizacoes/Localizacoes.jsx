@@ -662,11 +662,12 @@ function Localizacoes() {
                 id="local_informado"
                 name="local_informado"
                 type="text"
+                className="localizacoes-input-bloqueado"
                 value={formulario.local_informado}
                 placeholder="Selecione um ponto no mapa"
-                disabled={salvando}
+                disabled
                 readOnly
-                maxLength={500}
+                maxLength={200}
                 required
               />
             </div>
