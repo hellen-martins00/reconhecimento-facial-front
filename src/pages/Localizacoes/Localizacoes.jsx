@@ -114,6 +114,8 @@ function Localizacoes() {
 
   const [excluindoId, setExcluindoId] = useState(null);
 
+  const [localizacaoParaExcluir, setLocalizacaoParaExcluir] = useState(null);
+
   const [formulario, setFormulario] = useState({
     registro_desaparecimento_id: "",
     local_informado: "",
@@ -446,14 +448,10 @@ function Localizacoes() {
     setSucesso("");
   };
 
-  const handleExcluirLocalizacao = async (localizacao) => {
-    const confirmar = window.confirm(
-      `Deseja realmente excluir este avistamento?\n\n` +
-      `Local: ${obterTextoLocal(localizacao)}\n\n` +
-      `Esta ação não poderá ser desfeita.`
-    );
+  const handleExcluirLocalizacao = async () => {
+    if (!localizacaoParaExcluir) return;
 
-    if (!confirmar) return;
+    const localizacao = localizacaoParaExcluir;
 
     setErro("");
     setSucesso("");
@@ -467,6 +465,7 @@ function Localizacoes() {
       );
 
       setSucesso("Avistamento excluído com sucesso!");
+      setLocalizacaoParaExcluir(null);
     } catch (error) {
       console.error("Erro ao excluir avistamento:", error);
 
@@ -624,8 +623,8 @@ function Localizacoes() {
             <div className="localizacoes-mapa-texto">
               <h3>Selecione o ponto no mapa</h3>
               <p>
-                Clique no mapa para preencher o campo com as coordenadas do
-                avistamento. Você também pode informar o nome do local manualmente.
+                Clique no mapa para selecionar o local do avistamento.
+                O campo será preenchido automaticamente com as coordenadas selecionadas.
               </p>
             </div>
 
@@ -661,24 +660,14 @@ function Localizacoes() {
 
               <input
                 id="local_informado"
+                name="local_informado"
                 type="text"
-                placeholder="Ex.: Rodoviária de Brasília"
                 value={formulario.local_informado}
-                onChange={(event) => {
-                  setFormulario((anterior) => ({
-                    ...anterior,
-                    local_informado: event.target.value,
-                    latitude: null,
-                    longitude: null,
-                  }));
-
-                  setPontoSelecionado(null);
-                  setErro("");
-                  setSucesso("");
-                }}
+                placeholder="Selecione um ponto no mapa"
+                disabled={salvando}
+                readOnly
                 maxLength={500}
                 required
-                disabled={salvando}
               />
             </div>
           </div>
@@ -899,7 +888,7 @@ function Localizacoes() {
                         <button
                           type="button"
                           className="localizacoes-btn-excluir"
-                          onClick={() => handleExcluirLocalizacao(localizacao)}
+                          onClick={() => setLocalizacaoParaExcluir(localizacao)}
                           disabled={excluindoId !== null}
                           title="Excluir avistamento"
                           aria-label={`Excluir avistamento em ${obterTextoLocal(localizacao)}`}
@@ -955,6 +944,81 @@ function Localizacoes() {
           </div>
         )}
       </section>
+
+      {localizacaoParaExcluir && (
+        <div
+          className="modal-exclusao-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !excluindoId) {
+              setLocalizacaoParaExcluir(null);
+            }
+          }}
+        >
+          <div
+            className="modal-exclusao"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-exclusao-titulo"
+          >
+            <div className="modal-exclusao-icone">
+              <Trash2 size={25} />
+            </div>
+
+            <h2 id="modal-exclusao-titulo">
+              Excluir avistamento?
+            </h2>
+
+            <p className="modal-exclusao-descricao">
+              Tem certeza de que deseja excluir este avistamento?
+              Essa ação não poderá ser desfeita.
+            </p>
+
+            <div className="modal-exclusao-local">
+              <MapPin size={18} />
+
+              <div>
+                <span>Local do avistamento</span>
+                <strong>
+                  {obterTextoLocal(localizacaoParaExcluir)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="modal-exclusao-acoes">
+              <button
+                type="button"
+                className="modal-exclusao-cancelar"
+                onClick={() => setLocalizacaoParaExcluir(null)}
+                disabled={excluindoId !== null}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="modal-exclusao-confirmar"
+                onClick={handleExcluirLocalizacao}
+                disabled={excluindoId !== null}
+              >
+                {excluindoId !== null ? (
+                  <>
+                    <LoaderCircle
+                      size={17}
+                      className="localizacoes-girando"
+                    />
+                    Excluindo...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={17} />
+                    Excluir avistamento
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
