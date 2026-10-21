@@ -1,10 +1,10 @@
 /* PÁGINA */
 .cadastro-agente-page {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-
-/* CABEÇALHO */
 .cadastro-agente-header {
   display: flex;
   align-items: center;
@@ -15,40 +15,42 @@
 
 .cadastro-agente-header h1 {
   margin: 0 0 6px;
-  color: #1f2937;
+  color: #f3f7fc;
   font-size: 28px;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .cadastro-agente-header p {
   margin: 0;
-  color: #6b7280;
+  color: #94a9c4;
   font-size: 14px;
+  line-height: 1.5;
 }
-
 
 /* BOTÃO VOLTAR */
 .cadastro-agente-voltar {
+  flex-shrink: 0;
   padding: 10px 16px;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: #13243a;
+  border: 1px solid #29415d;
   border-radius: 8px;
-  color: #374151;
+  color: #e5edf8;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .cadastro-agente-voltar:hover {
-  background: #f9fafb;
+  background: #1b304a;
+  border-color: #3b5878;
 }
 
 .cadastro-agente-voltar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-
 
 /* CARD PRINCIPAL */
 .cadastro-agente-card {
@@ -258,7 +260,6 @@
   cursor: not-allowed;
 }
 
-
 /* RESPONSIVIDADE */
 @media (max-width: 700px) {
 
@@ -279,7 +280,15 @@
   }
 
   .cadastro-agente-card {
-    padding: 20px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e5eaf1;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   }
 
   .cadastro-agente-form-grid {
@@ -308,5 +317,65 @@
   .cadastro-agente-actions .button-secondary,
   .cadastro-agente-actions .button-primary {
     width: 100%;
+  }
+
+  @media (max-width: 700px) {
+    .cadastro-agente-header {
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .cadastro-agente-header h1 {
+      font-size: 24px;
+    }
+
+    .cadastro-agente-card {
+      padding: 20px;
+    }
+
+    .cadastro-agente-form-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .cadastro-agente-form-group,
+    .cadastro-agente-foto-input {
+      min-width: 0;
+    }
+
+    .cadastro-agente-form-group input,
+    .cadastro-agente-foto-input input {
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .cadastro-agente-foto-area {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    .cadastro-agente-actions {
+      flex-direction: column-reverse;
+    }
+
+    .cadastro-agente-actions .button-secondary,
+    .cadastro-agente-actions .button-primary {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .cadastro-agente-card {
+      padding: 16px;
+    }
+
+    .cadastro-agente-header h1 {
+      font-size: 21px;
+    }
+
+    .cadastro-agente-voltar {
+      padding: 9px 11px;
+    }
   }
 }
