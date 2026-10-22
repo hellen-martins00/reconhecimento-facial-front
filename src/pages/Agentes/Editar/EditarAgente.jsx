@@ -128,7 +128,7 @@ function EditarAgente() {
 
         setErro(
           error.response?.data?.detail ||
-            "Não foi possível carregar os dados do agente."
+          "Não foi possível carregar os dados do agente."
         );
       } finally {
         if (ativo) {
@@ -427,29 +427,40 @@ function EditarAgente() {
   return (
     <div className="editar-agente-page">
 
-      {/* CABEÇALHO */}
+      {/* CONTEÚDO CENTRALIZADO */}
+      <div className="editar-agente-container">
 
-      <div className="editar-agente-header">
+        {/* CABEÇALHO */}
+        <div className="editar-agente-header">
+          <div>
+            <span className="editar-agente-eyebrow">
+              REDE BIOMÉTRICA
+            </span>
 
-        <div>
-          <h1>Editar agente</h1>
+            <h1>Editar agente</h1>
 
-          <p>
-            Atualize os dados cadastrais e a
-            identificação facial.
-          </p>
+            <p>
+              Atualize os dados cadastrais e a identificação facial.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="editar-agente-voltar"
+            onClick={() => navigate(`/agentes/${id}`)}
+            disabled={salvando}
+          >
+            ← Voltar
+          </button>
         </div>
 
-        <button
-          type="button"
-          className="editar-agente-voltar"
-          onClick={() =>
-            navigate(`/agentes/${id}`)
-          }
-          disabled={salvando}
-        >
-          Voltar
-        </button>
+        {/* CARD PRINCIPAL */}
+        <div className="editar-agente-card">
+
+          {/* MANTENHA AQUI O CONTEÚDO ATUAL DO CARD:
+        erro, form, identificação, campos e ações */}
+
+        </div>
 
       </div>
 
