@@ -454,11 +454,12 @@ function EditarAgente() {
           </button>
         </div>
 
-        {/* CARD PRINCIPAL */}
+        {/* ÚNICO CARD PRINCIPAL */}
         <div className="editar-agente-card">
 
-          {/* MANTENHA AQUI O CONTEÚDO ATUAL DO CARD:
-        erro, form, identificação, campos e ações */}
+          {/* MANTENHA AQUI TODO O CONTEÚDO ATUAL:
+        mensagem de erro, form, identificação,
+        campos e botões de ação */}
 
         </div>
 
