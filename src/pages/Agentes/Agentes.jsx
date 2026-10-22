@@ -10,9 +10,11 @@ function Agentes() {
   const [agentes, setAgentes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [excluindo, setExcluindo] = useState(null);
   const [menuAberto, setMenuAberto] = useState(null);
   const [menuAbrirParaCima, setMenuAbrirParaCima] = useState(false);
+
+  const [agenteParaExcluir, setAgenteParaExcluir] = useState(null);
+  const [excluindo, setExcluindo] = useState(null);
 
   const navigate = useNavigate();
 
@@ -95,7 +97,7 @@ function Agentes() {
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível carregar os agentes."
+        "Não foi possível carregar os agentes."
       );
     } finally {
       setCarregando(false);
@@ -142,14 +144,20 @@ function Agentes() {
   }
 
   // EXCLUIR AGENTE
-  async function handleExcluir(agente) {
-    if (!isAdmin) return;
+  function handleExcluir(agente) {
+    if (!isAdmin || excluindo !== null) return;
 
-    const confirmar = window.confirm(
-      `Tem certeza que deseja excluir o agente "${agente.nome}"?`
-    );
+    setMenuAberto(null);
+    setAgenteParaExcluir(agente);
+  }
 
-    if (!confirmar) return;
+  // CONFIRMAR EXCLUSÃO DO AGENTE
+  async function confirmarExclusao() {
+    if (!agenteParaExcluir || !isAdmin || excluindo !== null) {
+      return;
+    }
+
+    const agente = agenteParaExcluir;
 
     setErro("");
     setExcluindo(agente.id);
@@ -166,18 +174,29 @@ function Agentes() {
       }
 
       setAgentes((agentesAtuais) =>
-        agentesAtuais.filter((item) => item.id !== agente.id)
+        agentesAtuais.filter(
+          (item) => item.id !== agente.id
+        )
       );
+
+      setAgenteParaExcluir(null);
     } catch (error) {
       console.error(error);
 
       setErro(
         error.response?.data?.detail ||
-          "Não foi possível excluir o agente."
+        "Não foi possível excluir o agente."
       );
     } finally {
       setExcluindo(null);
     }
+  }
+
+  // CANCELAR EXCLUSÃO
+  function cancelarExclusao() {
+    if (excluindo !== null) return;
+
+    setAgenteParaExcluir(null);
   }
 
   // FORMATAR DATA
@@ -222,12 +241,11 @@ function Agentes() {
             onClick={(evento) => {
               evento.preventDefault();
               evento.stopPropagation();
-              setMenuAberto(null);
               handleExcluir(agente);
             }}
-            disabled={excluindo === agente.id}
+            disabled={excluindo !== null}
           >
-            {excluindo === agente.id ? "Excluindo..." : "Excluir"}
+            Excluir
           </button>
         )}
       </>
@@ -322,11 +340,10 @@ function Agentes() {
 
                           {menuAberto === agente.id && (
                             <div
-                              className={`agente-menu ${
-                                menuAbrirParaCima
-                                  ? "agente-menu-acima"
-                                  : ""
-                              }`}
+                              className={`agente-menu ${menuAbrirParaCima
+                                ? "agente-menu-acima"
+                                : ""
+                                }`}
                               onClick={(evento) => evento.stopPropagation()}
                             >
                               {renderizarAcoes(agente)}
@@ -412,6 +429,114 @@ function Agentes() {
           </>
         )}
       </div>
+
+      {agenteParaExcluir && (
+        <div
+          className="confirmacao-overlay"
+          onMouseDown={(e) => {
+            if (
+              e.target === e.currentTarget &&
+              !excluindo
+            ) {
+              cancelarExclusao();
+            }
+          }}
+        >
+          <section
+            className="confirmacao-modal"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="confirmacao-titulo"
+            aria-describedby="confirmacao-descricao"
+          >
+            <div className="confirmacao-icone">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 3L22 20H2L12 3Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 9V13"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <circle cx="12" cy="16.5" r="1" fill="currentColor" />
+              </svg>
+            </div>
+
+            <h2 id="confirmacao-titulo">
+              Excluir agente?
+            </h2>
+
+            <p
+              id="confirmacao-descricao"
+              className="confirmacao-texto"
+            >
+              Tem certeza de que deseja excluir o cadastro de agente:
+            </p>
+
+            <div className="confirmacao-agente">
+              <span className="confirmacao-avatar" aria-hidden="true">
+                {agenteParaExcluir.nome?.charAt(0)?.toUpperCase() || "A"}
+              </span>
+
+              <div className="confirmacao-dados">
+                <strong>{agenteParaExcluir.nome}</strong>
+                <span>Cadastro de agente</span>
+              </div>
+            </div>
+            
+            <div className="confirmacao-acoes">
+              <button
+                type="button"
+                className="confirmacao-botao-cancelar"
+                onClick={cancelarExclusao}
+                disabled={excluindo !== null}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="confirmacao-botao-excluir"
+                onClick={excluirPessoa}
+                disabled={excluindo}
+              >
+                {excluindo ? (
+                  <>
+                    <span className="confirmacao-spinner" />
+                    Excluindo...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M4 7H20M10 11V17M14 11V17M6 7L7 20H17L18 7M9 7V4H15V7"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Excluir agente
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

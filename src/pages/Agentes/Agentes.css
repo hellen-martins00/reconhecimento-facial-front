@@ -295,6 +295,247 @@
 }
 
 /* ========================================
+   17. MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
+======================================== */
+
+.confirmacao-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  background: rgba(3, 10, 22, 0.76);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  animation: confirmacao-fundo 0.2s ease-out;
+}
+
+.confirmacao-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.28),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+
+  animation: confirmacao-entrada 0.22s ease-out;
+}
+
+/* Ícone de alerta */
+
+.confirmacao-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 20px;
+
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 50%;
+
+  color: #dc2626;
+}
+
+.confirmacao-icone svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Título e descrição */
+
+.confirmacao-modal h2 {
+  margin: 0 0 10px;
+
+  color: #0f172a;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  letter-spacing: -0.4px;
+}
+
+.confirmacao-texto {
+  margin: 0 auto 20px;
+
+  max-width: 330px;
+
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Identificação do agente */
+
+.confirmacao-agente {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  min-width: 0;
+  margin-bottom: 18px;
+  padding: 15px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.confirmacao-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+
+  background: #e0eaff;
+  border: 1px solid #c7d7fe;
+  border-radius: 12px;
+
+  color: #2855b5;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.confirmacao-dados {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  min-width: 0;
+}
+
+.confirmacao-dados strong {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.confirmacao-dados span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* Botões */
+
+.confirmacao-acoes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirmacao-acoes button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 0 16px;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.confirmacao-acoes button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.confirmacao-acoes button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.confirmacao-acoes button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.confirmacao-botao-cancelar {
+  flex: 1;
+
+  background: #ffffff;
+  border-color: #cbd5e1 !important;
+
+  color: #334155;
+}
+
+.confirmacao-botao-cancelar:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8 !important;
+}
+
+.confirmacao-botao-excluir {
+  flex: 1;
+
+  background: #dc2626;
+  border-color: #dc2626 !important;
+
+  color: #ffffff;
+}
+
+.confirmacao-botao-excluir:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c !important;
+}
+
+.confirmacao-botao-excluir svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* Indicador de carregamento */
+
+.confirmacao-spinner {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+
+  animation: confirmacao-girar 0.7s linear infinite;
+}
+
+
+/* ========================================
    LISTA MOBILE
 ======================================== */
 
