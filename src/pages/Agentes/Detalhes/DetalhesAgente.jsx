@@ -193,42 +193,34 @@ function DetalhesAgente() {
 
     return (
         <div className="detalhes-agente-page">
-
-            {/* CABEÇALHO */}
-
             <div className="detalhes-agente-header">
-
                 <div>
-                    <h1>Agente</h1>
+                    <span className="detalhes-agente-label">
+                        REDE BIOMÉTRICA
+                    </span>
+
+                    <h1>Visualizar agente</h1>
 
                     <p>
-                        Visualização dos dados
-                        cadastrais
+                        Consulte os dados cadastrais do agente.
                     </p>
                 </div>
 
                 <button
                     type="button"
                     className="detalhes-agente-btn-voltar"
-                    onClick={() =>
-                        navigate("/agentes")
-                    }
+                    onClick={() => navigate("/agentes")}
                 >
-                    Voltar
+                    ← Voltar
                 </button>
-
             </div>
-
-            {/* CARD PRINCIPAL */}
 
             <div className="detalhes-agente-card">
 
                 {/* PERFIL */}
-
                 <section className="detalhes-agente-profile">
 
                     {/* FOTO */}
-
                     <div className="detalhes-agente-foto-wrapper">
 
                         {fotoUrl ? (
@@ -258,11 +250,9 @@ function DetalhesAgente() {
                                 )}
                             </div>
                         )}
-
                     </div>
 
                     {/* IDENTIDADE */}
-
                     <div className="detalhes-agente-identidade">
 
                         <span className="detalhes-agente-label">
@@ -279,14 +269,13 @@ function DetalhesAgente() {
                                 {agente.usuario}
                             </strong>
                         </p>
-
+                        
                         <span
-                            className={`detalhes-agente-perfil ${
-                                agente.perfil ===
-                                "ADMIN"
+                            className={`detalhes-agente-perfil ${agente.perfil ===
+                                    "ADMIN"
                                     ? "admin"
                                     : "agente"
-                            }`}
+                                }`}
                         >
                             {formatarPerfil(
                                 agente.perfil
