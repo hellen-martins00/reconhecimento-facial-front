@@ -695,7 +695,7 @@ function EditarAgente() {
               type="button"
               className="button-secondary"
               onClick={() =>
-                navigate(`/agentes/${id}`)
+                navigate("agentes")
               }
               disabled={salvando}
             >
