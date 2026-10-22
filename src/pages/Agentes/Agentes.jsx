@@ -436,7 +436,7 @@ function Agentes() {
           onMouseDown={(e) => {
             if (
               e.target === e.currentTarget &&
-              !excluindo
+              !excluindo === null
             ) {
               cancelarExclusao();
             }
@@ -506,8 +506,8 @@ function Agentes() {
               <button
                 type="button"
                 className="confirmacao-botao-excluir"
-                onClick={excluirPessoa}
-                disabled={excluindo}
+                onClick={confirmarExclusao}
+                disabled={excluindo !== null}
               >
                 {excluindo ? (
                   <>
