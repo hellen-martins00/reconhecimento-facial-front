@@ -427,41 +427,29 @@ function EditarAgente() {
   return (
     <div className="editar-agente-page">
 
-      {/* CONTEÚDO CENTRALIZADO */}
-      <div className="editar-agente-container">
+      {/* CABEÇALHO */}
 
-        {/* CABEÇALHO */}
-        <div className="editar-agente-header">
-          <div>
-            <span className="editar-agente-eyebrow">
-              REDE BIOMÉTRICA
-            </span>
+      <div className="editar-agente-header">
 
-            <h1>Editar agente</h1>
+        <div>
+          <h1>Editar agente</h1>
 
-            <p>
-              Atualize os dados cadastrais e a identificação facial.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className="editar-agente-voltar"
-            onClick={() => navigate(`/agentes/${id}`)}
-            disabled={salvando}
-          >
-            ← Voltar
-          </button>
+          <p>
+            Atualize os dados cadastrais e a
+            identificação facial.
+          </p>
         </div>
 
-        {/* ÚNICO CARD PRINCIPAL */}
-        <div className="editar-agente-card">
-
-          {/* MANTENHA AQUI TODO O CONTEÚDO ATUAL:
-        mensagem de erro, form, identificação,
-        campos e botões de ação */}
-
-        </div>
+        <button
+          type="button"
+          className="editar-agente-voltar"
+          onClick={() =>
+            navigate(`/agentes/${id}`)
+          }
+          disabled={salvando}
+        >
+          Voltar
+        </button>
 
       </div>
 
