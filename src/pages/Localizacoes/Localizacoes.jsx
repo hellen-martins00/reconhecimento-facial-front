@@ -138,6 +138,16 @@ function Localizacoes() {
     }));
   }, [pessoaIdRecebida, registroIdRecebido]);
 
+  useEffect(() => {
+    if (!sucesso) return;
+
+    const temporizador = setTimeout(() => {
+      setSucesso("");
+    }, 3000);
+
+    return () => clearTimeout(temporizador);
+  }, [sucesso]);
+
   const carregarDados = useCallback(async () => {
     setCarregando(true);
     setErro("");
