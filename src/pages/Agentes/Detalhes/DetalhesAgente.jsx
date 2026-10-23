@@ -226,7 +226,7 @@ function DetalhesAgente() {
                         {fotoUrl ? (
                             <img
                                 src={fotoUrl}
-                                alt={`Foto de ${agente.nome}`}
+                                alt={`${agente.nome}`}
                                 className="detalhes-agente-foto"
                             />
                         ) : (
