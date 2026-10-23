@@ -108,37 +108,51 @@
 
 /* SEM FOTO */
 
-.detalhes-agen.detalhes-agente-sem-foto {
-  width: 116px;
-  height: 116px;
-  flex-shrink: 0;
-  box-sizing: border-box;
+/* SEM FOTO */
 
+.detalhes-agente-sem-foto {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   gap: 8px;
 
-  background: #f9fafb;
-  border: 2px dashed #d1d5db;
-  border-radius: 50%;
+  width: 116px;
+  height: 116px;
+  box-sizing: border-box;
+  padding: 8px;
 
-  color: #9ca3af;
-  font-size: 12px;
+  background: #142b41;
+  border: 2px dashed #25cce7;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(37, 204, 231, 0.07);
+
+  color: #a9c2dc;
+  font-size: 11px;
+  font-weight: 600;
   text-align: center;
+}
+
+.detalhes-agente-sem-foto span {
   white-space: nowrap;
 }
 
 .detalhes-agente-btn-foto {
-  padding: 7px 10px;
+  max-width: 100%;
+  padding: 6px 8px;
   background: #20c6df;
   border: 1px solid #29cde7;
   border-radius: 6px;
   color: #062033;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.detalhes-agente-btn-foto:hover {
+  background: #62e4f3;
 }
 
 .detalhes-agente-btn-foto:hover {
