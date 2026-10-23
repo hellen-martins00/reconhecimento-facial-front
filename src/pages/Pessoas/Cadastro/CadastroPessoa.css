@@ -1,15 +1,19 @@
 
-/* CADASTRO DE PESSOA */
+/* ========================================
+   CADASTRO DE PESSOAS
+   Tema azul-marinho e ciano
+   ======================================== */
 
 .cadastro-pessoa-page {
-  --cadastro-primary: var(--cor-primaria, var(--primary-color, #2563eb));
-  --cadastro-primary-hover: var(--cor-primaria-hover, #1d4ed8);
-  --cadastro-text: var(--texto-principal, var(--text-primary, #1f2937));
-  --cadastro-muted: var(--texto-secundario, var(--text-secondary, #6b7280));
-  --cadastro-border: var(--borda, var(--border-color, #e5e7eb));
-  --cadastro-surface: var(--superficie, var(--surface-color, #ffffff));
-  --cadastro-subtle: var(--superficie-secundaria, #f8fafc);
-  --cadastro-danger: #dc2626;
+  --cadastro-primary: #27cce5;
+  --cadastro-primary-hover: #38d7ef;
+  --cadastro-text: #f3f8ff;
+  --cadastro-muted: #91aac6;
+  --cadastro-border: #263d57;
+  --cadastro-surface: #101f32;
+  --cadastro-subtle: #14263b;
+  --cadastro-input: #0b192a;
+  --cadastro-danger: #ff7b88;
   --cadastro-radius: 12px;
 
   width: 100%;
@@ -32,7 +36,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-
   width: 100%;
   max-width: 1100px;
   margin: 0 auto 18px;
@@ -40,7 +43,7 @@
 
 .cadastro-pessoa-header h1 {
   margin: 0 0 7px;
-  color: #f3f7fc;
+  color: #f3f8ff;
   font-size: clamp(23px, 2vw, 28px);
   font-weight: 700;
   line-height: 1.25;
@@ -61,7 +64,7 @@
   flex-shrink: 0;
   min-height: 40px;
   padding: 9px 16px;
-  background: var(--cadastro-surface);
+  background: var(--cadastro-subtle);
   border: 1px solid var(--cadastro-border);
   border-radius: 8px;
   color: var(--cadastro-text);
@@ -69,12 +72,13 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: 0.2s;
 }
 
 .cadastro-voltar:hover {
-  background: var(--cadastro-subtle);
+  background: #1a3049;
   border-color: var(--cadastro-primary);
+  color: var(--cadastro-primary);
 }
 
 /* Etapas */
@@ -128,11 +132,11 @@
   height: 36px;
   border: 1px solid var(--cadastro-border);
   border-radius: 50%;
-  background: var(--cadastro-surface);
+  background: var(--cadastro-input);
   color: var(--cadastro-muted);
   font-size: 13px;
   font-weight: 700;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: 0.2s;
 }
 
 .cadastro-step-info {
@@ -155,20 +159,15 @@
   white-space: nowrap;
 }
 
-.cadastro-step-atual .cadastro-step-numero {
+.cadastro-step-atual .cadastro-step-numero,
+.cadastro-step-concluida .cadastro-step-numero {
   background: var(--cadastro-primary);
   border-color: var(--cadastro-primary);
-  color: #fff;
+  color: #071725;
 }
 
 .cadastro-step-atual .cadastro-step-info strong {
   color: var(--cadastro-primary);
-}
-
-.cadastro-step-concluida .cadastro-step-numero {
-  background: var(--cadastro-primary);
-  border-color: var(--cadastro-primary);
-  color: #fff;
 }
 
 .cadastro-step-concluida .cadastro-step-info strong {
@@ -193,14 +192,13 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 28px;
-
   background: var(--cadastro-surface);
   border: 1px solid var(--cadastro-border);
   border-radius: var(--cadastro-radius);
-  box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
 }
 
-/* Etapa atual */
+/* Cabeçalho de cada etapa */
 
 .cadastro-etapa {
   width: 100%;
@@ -265,7 +263,7 @@
   min-width: 0;
   min-height: 44px;
   padding: 11px 13px;
-  background: var(--cadastro-surface);
+  background: var(--cadastro-input);
   border: 1px solid var(--cadastro-border);
   border-radius: 8px;
   color: var(--cadastro-text);
@@ -283,25 +281,21 @@
 
 .cadastro-form-group input::placeholder,
 .cadastro-form-group textarea::placeholder {
-  color: var(--cadastro-muted);
-  opacity: 0.8;
+  color: #7891ad;
+  opacity: 1;
 }
 
 .cadastro-form-group input:hover,
 .cadastro-form-group select:hover,
 .cadastro-form-group textarea:hover {
-  border-color: var(--cadastro-muted);
+  border-color: #476581;
 }
 
 .cadastro-form-group input:focus,
 .cadastro-form-group select:focus,
 .cadastro-form-group textarea:focus {
   border-color: var(--cadastro-primary);
-  box-shadow: 0 0 0 3px color-mix(
-    in srgb,
-    var(--cadastro-primary) 13%,
-    transparent
-  );
+  box-shadow: 0 0 0 3px rgb(39 204 229 / 13%);
 }
 
 .cadastro-form-group input:disabled,
@@ -320,7 +314,7 @@
 .cadastro-form-group input.campo-com-erro:focus,
 .cadastro-form-group select.campo-com-erro:focus,
 .cadastro-form-group textarea.campo-com-erro:focus {
-  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
+  box-shadow: 0 0 0 3px rgb(255 123 136 / 12%);
 }
 
 .cadastro-form-row {
@@ -334,22 +328,22 @@
 .cadastro-error {
   margin-bottom: 22px;
   padding: 13px 15px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: #321e2b;
+  border: 1px solid #713747;
   border-radius: 8px;
-  color: #b91c1c;
+  color: #ffb5bf;
   font-size: 13px;
   line-height: 1.6;
 }
 
 .cadastro-campo-erro {
   margin-top: 6px;
-  color: var(--cadastro-danger);
+  color: #91aac6;
   font-size: 12px;
   line-height: 1.5;
 }
 
-/* Telefones e passagens */
+/* Registros de desaparecimento */
 
 .cadastro-section {
   display: flex;
@@ -383,7 +377,7 @@
   font-weight: 700;
 }
 
-/* Botões de adicionar e remover */
+/* Adicionar e remover registros */
 
 .cadastro-adicionar,
 .cadastro-remover {
@@ -398,38 +392,34 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: 0.2s;
 }
 
 .cadastro-adicionar {
   align-self: flex-start;
   margin-top: 8px;
   margin-bottom: 8px;
-  background: var(--cadastro-surface);
+  background: transparent;
   border: 1px solid var(--cadastro-primary);
   color: var(--cadastro-primary);
 }
 
-.cadastro-etapa > .cadastro-revisao-vazio {
-  margin-top: 4px;
-  margin-bottom: 0;
-  line-height: 1.6;
-}
 .cadastro-adicionar:hover {
-  background: var(--cadastro-subtle);
+  background: rgb(39 204 229 / 10%);
   border-color: var(--cadastro-primary-hover);
   color: var(--cadastro-primary-hover);
 }
 
 .cadastro-remover {
   background: transparent;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
+  border: 1px solid #713747;
+  color: #ff9ba8;
 }
 
 .cadastro-remover:hover {
-  background: #fef2f2;
-  border-color: #f87171;
+  background: #321e2b;
+  border-color: #a84b60;
+  color: #ffc0c8;
 }
 
 /* Estado vazio */
@@ -456,7 +446,7 @@
   line-height: 1.6;
 }
 
-/* Revisão */
+/* Revisão dos dados */
 
 .cadastro-revisao-section {
   margin-bottom: 16px;
@@ -550,7 +540,7 @@
   justify-content: space-between;
   gap: 14px;
   padding: 12px 14px;
-  background: var(--cadastro-surface);
+  background: var(--cadastro-input);
   border: 1px solid var(--cadastro-border);
   border-radius: 8px;
 }
@@ -576,7 +566,7 @@
   line-height: 1.6;
 }
 
-/* Ações do formulário */
+/* Botões inferiores */
 
 .cadastro-actions {
   display: flex;
@@ -601,29 +591,30 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: 0.2s;
 }
 
 .cadastro-actions .button-secondary {
-  background: var(--cadastro-surface);
+  background: var(--cadastro-subtle);
   border: 1px solid var(--cadastro-border);
   color: var(--cadastro-text);
 }
 
 .cadastro-actions .button-secondary:hover:not(:disabled) {
-  background: var(--cadastro-subtle);
-  border-color: var(--cadastro-muted);
+  background: #1a3049;
+  border-color: #476581;
 }
 
 .cadastro-actions .button-primary {
   background: var(--cadastro-primary);
   border: 1px solid var(--cadastro-primary);
-  color: #fff;
+  color: #071725;
 }
 
 .cadastro-actions .button-primary:hover:not(:disabled) {
   background: var(--cadastro-primary-hover);
   border-color: var(--cadastro-primary-hover);
+  box-shadow: 0 0 14px rgb(39 204 229 / 12%);
 }
 
 .cadastro-actions button:disabled {
@@ -634,43 +625,19 @@
 /* Acessibilidade */
 
 .cadastro-pessoa-page button:focus-visible {
-  outline: 3px solid color-mix(
-    in srgb,
-    var(--cadastro-primary) 35%,
-    transparent
-  );
+  outline: 3px solid rgb(39 204 229 / 35%);
   outline-offset: 3px;
 }
 
-/* CPF com largura proporcional ao conteúdo */
+/* CPF */
+
 .cadastro-pessoa-page .campo-cpf {
   width: 100%;
   max-width: 320px;
 }
 
-/* Mantém o input dentro da largura definida */
 .cadastro-pessoa-page .campo-cpf input {
   width: 100%;
-}
-
-.cadastro-stepper,
-.cadastro-pessoa-card {
-  width: 100%;
-  max-width: 1100px;
-}
-
-@media (max-width: 768px) {
-  .cadastro-stepper,
-  .cadastro-pessoa-card {
-    max-width: 100%;
-  }
-}
-
-/* Em telas pequenas, ocupa toda a largura disponível */
-@media (max-width: 600px) {
-  .cadastro-pessoa-page .campo-cpf {
-    max-width: 100%;
-  }
 }
 
 /* Tablet */
@@ -683,15 +650,15 @@
   .cadastro-step-info small {
     display: none;
   }
-
-  .cadastro-pessoa-card {
-    max-width: 100%;
-  }
 }
 
 /* Celular */
 
 @media (max-width: 600px) {
+  .cadastro-pessoa-page {
+    padding: 14px 12px;
+  }
+
   .cadastro-pessoa-header {
     align-items: stretch;
     flex-direction: column;
@@ -738,7 +705,7 @@
   }
 
   .cadastro-pessoa-card {
-    padding: 18px;
+    padding: 16px;
     border-radius: 10px;
   }
 
@@ -759,6 +726,10 @@
 
   .cadastro-form-group {
     margin-bottom: 17px;
+  }
+
+  .cadastro-pessoa-page .campo-cpf {
+    max-width: 100%;
   }
 
   .cadastro-item {
@@ -820,64 +791,5 @@
 
   .cadastro-revisao-section {
     padding: 13px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .cadastro-pessoa-card {
-    max-width: 1100px;
-  }
-}
-
-@media (max-width: 768px) {
-  .cadastro-pessoa-page {
-    padding: 18px 16px;
-  }
-
-  .cadastro-pessoa-card {
-    max-width: 100%;
-    padding: 20px;
-  }
-
-  .cadastro-stepper {
-    padding: 14px;
-  }
-}
-
-@media (max-width: 600px) {
-  .cadastro-pessoa-page {
-    padding: 14px 12px;
-  }
-
-  .cadastro-pessoa-card {
-    padding: 16px;
-  }
-}
-
-/* Ajustes para telas menores */
-
-@media (max-width: 768px) {
-  .cadastro-pessoa-page {
-    padding: 18px 16px;
-  }
-
-  .cadastro-pessoa-header,
-  .cadastro-stepper,
-  .cadastro-pessoa-card {
-    max-width: 100%;
-  }
-
-  .cadastro-pessoa-card {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .cadastro-pessoa-page {
-    padding: 14px 12px;
-  }
-
-  .cadastro-pessoa-card {
-    padding: 16px;
   }
 }

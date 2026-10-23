@@ -1,14 +1,19 @@
 
-/* ESTRUTURA PRINCIPAL */
+/* ========================================
+   ESTRUTURA PRINCIPAL
+======================================== */
 .editar-pessoa-page {
   width: 100%;
   max-width: 1050px;
   min-width: 0;
   margin: 0 auto;
   box-sizing: border-box;
+  color: #f3f8ff;
 }
 
-/* CABEÇALHO */
+/* ========================================
+   CABEÇALHO
+======================================== */
 .editar-header {
   display: flex;
   align-items: flex-start;
@@ -21,7 +26,7 @@
 
 .editar-header h1 {
   margin: 0 0 6px;
-  color: #f3f7fc;
+  color: #f3f8ff;
   font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
@@ -30,54 +35,35 @@
 
 .editar-header p {
   margin: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 14px;
   line-height: 1.5;
-}
-
-.editar-input-erro {
-  border: 1px solid #dc2626 !important;
-  color: #dc2626;
-}
-
-.editar-input-erro:focus {
-  border-color: #dc2626 !important;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-}
-
-.editar-form-error {
-  display: block;
-  margin-top: 6px;
-  color: #dc2626;
-  font-size: 13px;
-  line-height: 1.4;
 }
 
 /* BOTÃO VOLTAR */
 .editar-voltar {
   flex-shrink: 0;
   padding: 10px 16px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: #14263b;
+  border: 1px solid #263d57;
   border-radius: 8px;
-  color: #374151;
+  color: #dce9f8;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
+  transition: background 0.2s ease, border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .editar-voltar:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+  background: #1b334d;
+  border-color: #38d7ef;
   transform: translateY(-1px);
 }
 
+/* FOCO ACESSÍVEL */
 .editar-voltar:focus-visible,
 .editar-foto-button:focus-visible,
 .editar-adicionar:focus-visible,
@@ -87,17 +73,19 @@
 .editar-button-primary:focus-visible,
 .editar-revisao-header button:focus-visible,
 .editar-step-button:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline: 3px solid rgba(56, 215, 239, 0.45);
   outline-offset: 3px;
 }
 
 .editar-voltar:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
 }
 
-/* STEPPER */
+/* ========================================
+   STEPPER
+======================================== */
 .editar-stepper {
   width: 100%;
   box-sizing: border-box;
@@ -105,15 +93,14 @@
   align-items: flex-start;
   margin-bottom: 24px;
   padding: 18px 20px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: #101f32;
+  border: 1px solid #263d57;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   overflow-x: auto;
   scrollbar-width: thin;
 }
 
-/* CADA ETAPA */
 .editar-step {
   display: flex;
   align-items: center;
@@ -121,7 +108,6 @@
   min-width: 130px;
 }
 
-/* BOTÃO DA ETAPA */
 .editar-step-button {
   display: flex;
   align-items: center;
@@ -130,7 +116,7 @@
   margin: 0;
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: #7891ad;
   cursor: default;
   text-align: left;
 }
@@ -139,7 +125,6 @@
   cursor: pointer;
 }
 
-/* NÚMERO DA ETAPA */
 .editar-step-numero {
   width: 34px;
   height: 34px;
@@ -147,19 +132,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #d1d5db;
+  border: 2px solid #38516d;
   border-radius: 50%;
-  background: #ffffff;
-  color: #9ca3af;
+  background: #0b192a;
+  color: #91aac6;
   font-size: 13px;
   font-weight: 700;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
+  transition: background 0.2s ease, border-color 0.2s ease,
     color 0.2s ease;
 }
 
-/* INFORMAÇÕES DA ETAPA */
 .editar-step-info {
   display: flex;
   flex-direction: column;
@@ -168,74 +150,74 @@
 }
 
 .editar-step-info strong {
-  color: #6b7280;
+  color: #91aac6;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .editar-step-info small {
-  color: #9ca3af;
+  color: #7189a5;
   font-size: 11px;
   white-space: nowrap;
 }
 
 /* ETAPA ATUAL */
 .editar-step-atual .editar-step-numero {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #ffffff;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  background: #27cce5;
+  border-color: #27cce5;
+  color: #071522;
+  box-shadow: 0 0 0 4px rgba(39, 204, 229, 0.12);
 }
 
 .editar-step-atual .editar-step-info strong {
-  color: #2563eb;
+  color: #38d7ef;
 }
 
 .editar-step-atual .editar-step-info small {
-  color: #6b7280;
+  color: #91aac6;
 }
 
 /* ETAPA CONCLUÍDA */
 .editar-step-concluida .editar-step-numero {
-  background: #eff6ff;
-  border-color: #2563eb;
-  color: #2563eb;
+  background: rgba(39, 204, 229, 0.12);
+  border-color: #27cce5;
+  color: #38d7ef;
 }
 
 .editar-step-concluida .editar-step-info strong {
-  color: #374151;
+  color: #dce9f8;
 }
 
 .editar-step-concluida .editar-step-info small {
-  color: #6b7280;
+  color: #91aac6;
 }
 
-/* LINHA DO STEPPER */
 .editar-step-linha {
   flex: 1;
   height: 1px;
   margin: 0 14px;
-  background: #e5e7eb;
+  background: #263d57;
 }
 
 .editar-step-concluida .editar-step-linha {
-  background: #2563eb;
+  background: #27cce5;
 }
 
-/* CARD PRINCIPAL */
+/* ========================================
+   CARD PRINCIPAL
+======================================== */
 .editar-pessoa-card {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
   padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: #101f32;
+  border: 1px solid #263d57;
   border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
 }
 
-/* ETAPA */
 .editar-etapa {
   width: 100%;
   min-width: 0;
@@ -245,13 +227,13 @@
 .editar-etapa-header {
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #263d57;
 }
 
 .editar-etapa-numero-label {
   display: inline-block;
   margin-bottom: 7px;
-  color: #2563eb;
+  color: #38d7ef;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.7px;
@@ -260,7 +242,7 @@
 
 .editar-etapa-header h2 {
   margin: 0 0 6px;
-  color: #1f2937;
+  color: #f3f8ff;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.3;
@@ -268,12 +250,14 @@
 
 .editar-etapa-header p {
   margin: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* IDENTIFICAÇÃO + FOTO */
+/* ========================================
+   IDENTIFICAÇÃO E FOTO
+======================================== */
 .editar-identificacao {
   display: grid;
   grid-template-columns: 170px minmax(0, 1fr);
@@ -286,7 +270,6 @@
   min-width: 0;
 }
 
-/* FOTO */
 .editar-foto-container {
   display: flex;
   flex-direction: column;
@@ -296,15 +279,15 @@
 
 .editar-foto,
 .editar-sem-foto {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 50%;
 }
 
 .editar-foto {
   display: block;
-  border: 1px solid #d1d5db;
+  border: 2px solid #27cce5;
   object-fit: cover;
 }
 
@@ -312,39 +295,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
-  border: 1px solid #d1d5db;
-  color: #6b7280;
-  font-size: 14px;
+  background: #142b41;
+  border: 2px dashed #27cce5;
+  color: #a9c2dc;
+  font-size: 13px;
   text-align: center;
 }
 
+/* BOTÃO ALTERAR FOTO */
 .editar-foto-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 9px 16px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: #14263b;
+  border: 1px solid #263d57;
   border-radius: 8px;
-  color: #374151;
+  color: #dce9f8;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
+  transition: background 0.2s ease, border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .editar-foto-button:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+  background: #1b334d;
+  border-color: #38d7ef;
   transform: translateY(-1px);
 }
 
-/* FORMULÁRIOS */
+/* ========================================
+   FORMULÁRIOS
+======================================== */
 .editar-form-group {
   display: flex;
   flex-direction: column;
@@ -355,71 +339,106 @@
 .editar-form-group label {
   display: block;
   margin-bottom: 7px;
-  color: #374151;
+  color: #dce9f8;
   font-size: 14px;
   font-weight: 600;
 }
 
 .editar-form-group label span {
   margin-left: 3px;
-  color: #dc2626;
+  color: #ff7d91;
 }
 
 .editar-form-group input,
-.editar-form-group select {
+.editar-form-group select,
+.editar-form-group textarea {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
   padding: 12px 14px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: #0b192a;
+  border: 1px solid #304963;
   border-radius: 8px;
-  color: #1f2937;
+  color: #f3f8ff;
   font-family: inherit;
   font-size: 14px;
   outline: none;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
     background 0.2s ease;
 }
 
-.editar-form-group input::placeholder {
-  color: #9ca3af;
+.editar-form-group input::placeholder,
+.editar-form-group textarea::placeholder {
+  color: #7189a5;
 }
 
 .editar-form-group input:hover,
-.editar-form-group select:hover {
-  border-color: #9ca3af;
+.editar-form-group select:hover,
+.editar-form-group textarea:hover {
+  border-color: #52708e;
 }
 
 .editar-form-group input:focus,
-.editar-form-group select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+.editar-form-group select:focus,
+.editar-form-group textarea:focus {
+  border-color: #27cce5;
+  box-shadow: 0 0 0 3px rgba(39, 204, 229, 0.12);
 }
 
 .editar-form-group input:disabled,
-.editar-form-group select:disabled {
-  background: #f9fafb;
+.editar-form-group select:disabled,
+.editar-form-group textarea:disabled {
+  background: #14263b;
   cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.editar-form-group select option {
+  background: #0b192a;
+  color: #f3f8ff;
+}
+
+.editar-form-group textarea {
+  resize: vertical;
+  line-height: 1.5;
 }
 
 .editar-form-help {
   margin-top: 5px;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 12px;
   line-height: 1.4;
 }
 
-/* LINHA DE CAMPOS */
+/* ERRO DE CAMPO */
+.editar-input-erro {
+  border: 1px solid #ff647c !important;
+  color: #f3f8ff;
+}
+
+.editar-input-erro:focus {
+  border-color: #ff647c !important;
+  box-shadow: 0 0 0 3px rgba(255, 100, 124, 0.12);
+}
+
+.editar-form-error {
+  display: block;
+  margin-top: 6px;
+  color: #ff8b9c;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* DATA E SEXO */
 .editar-form-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
-/* SEÇÕES */
+/* ========================================
+   REGISTROS DE DESAPARECIMENTO
+======================================== */
 .editar-section {
   width: 100%;
   min-width: 0;
@@ -435,59 +454,60 @@
 
 .editar-section-header h3 {
   margin: 0 0 5px;
-  color: #1f2937;
+  color: #f3f8ff;
   font-size: 17px;
   font-weight: 700;
 }
 
 .editar-section-header p {
   margin: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* BOTÃO ADICIONAR */
+/* ADICIONAR REGISTRO */
 .editar-adicionar {
   flex-shrink: 0;
   padding: 10px 15px;
-  background: #ffffff;
-  border: 1px solid #2563eb;
+  background: rgba(39, 204, 229, 0.08);
+  border: 1px solid #27cce5;
   border-radius: 8px;
-  color: #2563eb;
+  color: #38d7ef;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
+  transition: background 0.2s ease, border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .editar-adicionar:hover {
-  background: #eff6ff;
-  border-color: #1d4ed8;
+  background: rgba(39, 204, 229, 0.16);
+  border-color: #38d7ef;
   transform: translateY(-1px);
 }
 
-/* LISTAS */
+.editar-adicionar:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .editar-lista {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* ITEM */
 .editar-item {
   padding: 18px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: #0d1b2d;
+  border: 1px solid #263d57;
   border-radius: 10px;
 }
 
-/* CABEÇALHO DO ITEM */
 .editar-item-header {
   display: flex;
   align-items: center;
@@ -497,52 +517,55 @@
 }
 
 .editar-item-header strong {
-  color: #374151;
+  color: #f3f8ff;
   font-size: 14px;
   font-weight: 700;
 }
 
-/* CAMPOS DE TELEFONE */
-.editar-telefone-fields {
+.editar-desaparecimento-fields {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px auto;
-  align-items: end;
-  gap: 15px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
 }
 
-.editar-telefone-fields .editar-form-group {
-  margin-bottom: 0;
+.editar-desaparecimento-fields .editar-form-group {
+  margin-bottom: 16px;
 }
 
-/* REMOVER */
+/* REMOVER REGISTRO */
 .editar-remover {
   height: 44px;
   padding: 0 16px;
-  background: #ffffff;
-  border: 1px solid #fecaca;
+  background: rgba(255, 100, 124, 0.06);
+  border: 1px solid #714052;
   border-radius: 8px;
-  color: #dc2626;
+  color: #ff8b9c;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .editar-remover:hover {
-  background: #fef2f2;
-  border-color: #fca5a5;
+  background: rgba(255, 100, 124, 0.13);
+  border-color: #ff647c;
+}
+
+.editar-remover:disabled,
+.editar-remover-mobile:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .editar-remover-mobile {
   display: none;
   padding: 6px 9px;
   background: transparent;
-  border: none;
-  color: #dc2626;
+  border: 1px solid #714052;
+  border-radius: 6px;
+  color: #ff8b9c;
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
@@ -552,8 +575,8 @@
 /* ESTADO VAZIO */
 .editar-vazio {
   padding: 22px;
-  background: #f8fafc;
-  border: 1px dashed #d1d5db;
+  background: #0d1b2d;
+  border: 1px dashed #38516d;
   border-radius: 10px;
   text-align: center;
 }
@@ -561,47 +584,50 @@
 .editar-vazio strong {
   display: block;
   margin-bottom: 5px;
-  color: #374151;
+  color: #dce9f8;
   font-size: 14px;
 }
 
 .editar-vazio p {
   margin: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* MENSAGEM DE ERRO */
+/* ========================================
+   MENSAGENS DE ERRO E CARREGAMENTO
+======================================== */
 .editar-error {
   display: flex;
   align-items: flex-start;
   margin-bottom: 20px;
   padding: 12px 15px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: #321e2b;
+  border: 1px solid #714052;
   border-radius: 8px;
-  color: #b91c1c;
+  color: #ffb0bd;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* LOADING */
 .editar-loading {
   width: 100%;
   box-sizing: border-box;
   padding: 40px;
-  color: #6b7280;
+  color: #91aac6;
   text-align: center;
   font-size: 14px;
 }
 
-/* REVISÃO */
+/* ========================================
+   REVISÃO FINAL
+======================================== */
 .editar-revisao-section {
   margin-bottom: 18px;
   padding: 20px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: #0d1b2d;
+  border: 1px solid #263d57;
   border-radius: 10px;
 }
 
@@ -609,7 +635,6 @@
   margin-bottom: 0;
 }
 
-/* CABEÇALHO DA REVISÃO */
 .editar-revisao-header {
   display: flex;
   align-items: flex-start;
@@ -617,13 +642,13 @@
   gap: 15px;
   margin-bottom: 18px;
   padding-bottom: 13px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #263d57;
 }
 
 .editar-revisao-header span {
   display: block;
   margin-bottom: 4px;
-  color: #2563eb;
+  color: #38d7ef;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.7px;
@@ -632,7 +657,7 @@
 
 .editar-revisao-header h3 {
   margin: 0;
-  color: #1f2937;
+  color: #f3f8ff;
   font-size: 16px;
   font-weight: 700;
 }
@@ -642,7 +667,7 @@
   padding: 6px 10px;
   background: transparent;
   border: none;
-  color: #2563eb;
+  color: #38d7ef;
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
@@ -651,7 +676,7 @@
 }
 
 .editar-revisao-header button:hover {
-  color: #1d4ed8;
+  color: #8cecf8;
   text-decoration: underline;
 }
 
@@ -670,10 +695,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  color: #6b7280;
+  background: #142b41;
+  border: 1px solid #27cce5;
+  border-radius: 50%;
+  color: #a9c2dc;
   font-size: 11px;
   text-align: center;
 }
@@ -685,7 +710,6 @@
   object-fit: cover;
 }
 
-/* GRID DA REVISÃO */
 .editar-revisao-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -699,14 +723,14 @@
 .editar-revisao-grid small {
   display: block;
   margin-bottom: 4px;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 11px;
   font-weight: 500;
 }
 
 .editar-revisao-grid strong {
   display: block;
-  color: #1f2937;
+  color: #f3f8ff;
   font-size: 14px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -716,7 +740,7 @@
   grid-column: 1 / -1;
 }
 
-/* LISTA DA REVISÃO */
+/* LISTA DE REGISTROS NA REVISÃO */
 .editar-revisao-lista {
   display: flex;
   flex-direction: column;
@@ -727,16 +751,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 10px 15px;
   padding: 11px 13px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: #101f32;
+  border: 1px solid #263d57;
   border-radius: 8px;
 }
 
 .editar-revisao-item strong {
   min-width: 0;
-  color: #374151;
+  color: #dce9f8;
   font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -744,18 +769,29 @@
 
 .editar-revisao-item span {
   flex-shrink: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 12px;
+}
+
+.editar-revisao-item p {
+  flex-basis: 100%;
+  margin: 0;
+  color: #a9c2dc;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .editar-revisao-vazio {
   margin: 0;
-  color: #6b7280;
+  color: #91aac6;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* AÇÕES */
+/* ========================================
+   BOTÕES DE AÇÃO
+======================================== */
 .editar-actions {
   display: flex;
   align-items: center;
@@ -763,7 +799,7 @@
   gap: 10px;
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #263d57;
 }
 
 .editar-button-secondary,
@@ -775,38 +811,35 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* BOTÃO SECUNDÁRIO */
+/* SECUNDÁRIO */
 .editar-button-secondary {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  background: #14263b;
+  border: 1px solid #304963;
+  color: #dce9f8;
 }
 
 .editar-button-secondary:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+  background: #1b334d;
+  border-color: #52708e;
 }
 
-/* BOTÃO PRINCIPAL */
+/* PRINCIPAL */
 .editar-button-primary {
-  background: #2563eb;
-  border: 1px solid #2563eb;
-  color: #ffffff;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+  background: #27cce5;
+  border: 1px solid #27cce5;
+  color: #071522;
+  box-shadow: 0 4px 12px rgba(39, 204, 229, 0.12);
 }
 
 .editar-button-primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #38d7ef;
+  border-color: #38d7ef;
   transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.22);
+  box-shadow: 0 5px 14px rgba(39, 204, 229, 0.2);
 }
 
 .editar-button-primary span {
@@ -815,18 +848,19 @@
 
 .editar-button-primary:disabled,
 .editar-button-secondary:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* AÇÕES FINAIS */
 .editar-actions-final {
   margin-top: 25px;
 }
 
-/* TABLET */
+/* ========================================
+   TABLET
+======================================== */
 @media (max-width: 900px) {
   .editar-stepper {
     padding: 16px;
@@ -851,28 +885,20 @@
 
   .editar-foto,
   .editar-sem-foto {
-    width: 160px;
-    height: 160px;
-  }
-
-  .editar-telefone-fields {
-    grid-template-columns: minmax(0, 1fr) 160px;
-  }
-
-  .editar-remover {
-    grid-column: 1 / -1;
-    width: 100%;
+    width: 150px;
+    height: 150px;
   }
 }
 
-/* CELULAR */
+/* ========================================
+   CELULAR
+======================================== */
 @media (max-width: 600px) {
   .editar-pessoa-page {
     width: 100%;
     max-width: 100%;
   }
 
-  /* CABEÇALHO */
   .editar-header {
     flex-direction: column;
     align-items: stretch;
@@ -935,7 +961,6 @@
     border-radius: 12px;
   }
 
-  /* CABEÇALHO DA ETAPA */
   .editar-etapa-header {
     margin-bottom: 22px;
     padding-bottom: 17px;
@@ -949,7 +974,7 @@
     font-size: 13px;
   }
 
-  /* FOTO + IDENTIFICAÇÃO */
+  /* FOTO E IDENTIFICAÇÃO */
   .editar-identificacao {
     grid-template-columns: minmax(0, 1fr);
     gap: 18px;
@@ -961,8 +986,8 @@
 
   .editar-foto,
   .editar-sem-foto {
-    width: 170px;
-    height: 170px;
+    width: 145px;
+    height: 145px;
   }
 
   .editar-identificacao-campos {
@@ -984,12 +1009,29 @@
   }
 
   .editar-form-group input,
-  .editar-form-group select {
+  .editar-form-group select,
+  .editar-form-group textarea {
     padding: 12px;
     font-size: 14px;
   }
 
-  /* SEÇÕES */
+  .editar-form-group input[type="date"] {
+    width: 100%;
+    max-width: 100%;
+    min-height: 45px;
+    box-sizing: border-box;
+    padding: 12px;
+    color-scheme: dark;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .editar-form-group input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+  }
+
+  /* REGISTROS */
   .editar-section-header {
     flex-direction: column;
     align-items: stretch;
@@ -1000,13 +1042,11 @@
     font-size: 17px;
   }
 
-  /* ADICIONAR */
   .editar-adicionar {
     width: 100%;
     padding: 12px;
   }
 
-  /* ITENS */
   .editar-item {
     padding: 15px;
     border-radius: 9px;
@@ -1016,8 +1056,6 @@
     margin-bottom: 14px;
   }
 
-  /* TELEFONES E DESAPARECIMENTO */
-  .editar-telefone-fields,
   .editar-desaparecimento-fields {
     display: flex;
     flex-direction: column;
@@ -1025,13 +1063,11 @@
     gap: 0;
   }
 
-  .editar-telefone-fields .editar-form-group,
   .editar-desaparecimento-fields .editar-form-group {
     width: 100%;
     margin-bottom: 16px;
   }
 
-  /* REMOVER */
   .editar-remover {
     display: none;
   }
@@ -1042,7 +1078,6 @@
     justify-content: center;
   }
 
-  /* VAZIO */
   .editar-vazio {
     padding: 18px 14px;
   }
@@ -1083,7 +1118,7 @@
   .editar-revisao-item {
     align-items: flex-start;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
   }
 
   /* AÇÕES */
@@ -1099,26 +1134,6 @@
     width: 100%;
     min-width: 0;
     padding: 13px;
-  }
-
-  /* CAMPO DE DATA */
-  .editar-form-group input[type="date"] {
-    width: 100%;
-    max-width: 100%;
-    min-height: 45px;
-    box-sizing: border-box;
-    padding: 12px 14px;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #1f2937;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-
-  .editar-form-group input[type="date"]::-webkit-date-and-time-value {
-    text-align: left;
-    margin: 0;
   }
 }
 
@@ -1152,8 +1167,8 @@
 
   .editar-foto,
   .editar-sem-foto {
-    width: 155px;
-    height: 155px;
+    width: 135px;
+    height: 135px;
   }
 
   .editar-revisao-section {
@@ -1161,7 +1176,7 @@
   }
 }
 
-/* REDUZ ANIMAÇÕES PARA QUEM PREFERE MOVIMENTO REDUZIDO */
+/* MOVIMENTO REDUZIDO */
 @media (prefers-reduced-motion: reduce) {
   .editar-voltar,
   .editar-step-numero,
