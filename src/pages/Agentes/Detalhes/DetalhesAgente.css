@@ -151,6 +151,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex: 1;
   min-width: 0;
 }
 
@@ -406,7 +407,8 @@
   }
 
   .detalhes-agente-identidade h2 {
-    overflow-wrap: anywhere;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .detalhes-agente-actions {
