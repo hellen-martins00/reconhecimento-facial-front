@@ -9,15 +9,20 @@
   box-sizing: border-box;
 }
 
+.pessoas-page {
+  color: #f3f8ff;
+}
+
 .pessoas-card {
-  background: #ffffff;
+  background: #101f32;
+  border: 1px solid #263d57;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
   overflow: visible;
 }
 
 /* ========================================
-   2. CABEÇALHO E BOTÃO DE CRIAÇÃO
+   2. CABEÇALHO
 ======================================== */
 
 .pessoas-header {
@@ -30,112 +35,30 @@
 
 .pessoas-header h1 {
   margin: 0 0 6px;
-  color: #f3f7fc;
+  color: #f3f8ff;
   font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .pessoas-header p {
   margin: 0;
-  color: #94a3b8;
+  color: #91aac6;
   font-size: 14px;
   line-height: 1.5;
 }
 
-.pessoas-new-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-shrink: 0;
-  min-height: 42px;
-  padding: 0 16px;
-  background: #2563eb;
-  border: none;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.pessoas-new-button:hover {
-  background: #1d4ed8;
-}
-
-.pessoas-new-button span:first-child {
-  font-size: 20px;
-  line-height: 1;
-}
-
 /* ========================================
-   3. CARREGAMENTO, VAZIO E ERRO
+   3. BUSCA E AÇÕES
 ======================================== */
 
-.pessoas-loading,
-.pessoas-empty {
-  padding: 35px 20px;
-  text-align: center;
-}
-
-.pessoas-empty h2 {
-  margin-bottom: 8px;
-  color: #1f2937;
-  font-size: 18px;
-}
-
-.pessoas-empty p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 14px;
-}
-
-.pessoas-error {
-  margin-bottom: 20px;
-  padding: 12px 15px;
-  background: #fee2e2;
-  border-radius: 8px;
-  color: #b91c1c;
-  font-size: 14px;
-  overflow-wrap: anywhere;
-}
-
-/* ========================================
-   4. MENSAGEM DE SUCESSO
-======================================== */
-
-.pessoas-success {
+.pessoas-filtros-acoes {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
   width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 16px;
-  padding: 12px 14px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
-  color: #166534;
-  font-size: 13px;
+  margin-bottom: 20px;
 }
-
-.pessoas-success-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  background: #22c55e;
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* ========================================
-   5. CAMPO DE BUSCA
-======================================== */
 
 .pessoas-search {
   display: flex;
@@ -143,19 +66,29 @@
   gap: 10px;
   width: 100%;
   max-width: 650px;
+  min-width: 0;
   min-height: 44px;
   box-sizing: border-box;
-  margin-bottom: 20px;
   padding: 0 14px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: #0b192a;
+  border: 1px solid #263d57;
   border-radius: 8px;
-  color: #475569;
+  color: #91aac6;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.pessoas-search span {
+.pessoas-filtros-acoes .pessoas-search {
+  flex: 1;
+  width: auto;
+  max-width: 650px;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.pessoas-search > span {
   flex-shrink: 0;
-  font-size: 21px;
+  color: #91aac6;
+  font-size: 23px;
 }
 
 .pessoas-search input {
@@ -165,21 +98,67 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #1f2937;
+  color: #f3f8ff;
+  font-family: inherit;
   font-size: 14px;
 }
 
 .pessoas-search input::placeholder {
-  color: #64748b;
+  color: #7188a3;
+}
+
+.pessoas-search input::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 
 .pessoas-search:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #27cce5;
+  box-shadow: 0 0 0 3px rgba(39, 204, 229, 0.12);
+}
+
+/* Botão Nova pessoa */
+
+.pessoas-new-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 16px;
+  background: #27cce5;
+  border: 1px solid #27cce5;
+  border-radius: 8px;
+  color: #071725;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pessoas-new-button:hover {
+  background: #38d7ef;
+  border-color: #38d7ef;
+}
+
+.pessoas-new-button:active {
+  transform: scale(0.98);
+}
+
+.pessoas-new-button:focus-visible {
+  outline: 3px solid rgba(39, 204, 229, 0.4);
+  outline-offset: 3px;
+}
+
+.pessoas-new-button span:first-child {
+  font-size: 21px;
+  line-height: 1;
 }
 
 /* ========================================
-   6. CONTADOR DE REGISTROS
+   4. CONTADOR DE REGISTROS
 ======================================== */
 
 .pessoas-lista-info {
@@ -190,7 +169,7 @@
   width: 100%;
   box-sizing: border-box;
   margin: -2px 0 14px;
-  color: #cbd5e1;
+  color: #91aac6;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -200,15 +179,90 @@
   padding: 4px 0;
   background: transparent;
   border: none;
-  color: #93c5fd;
+  color: #38d7ef;
+  font-family: inherit;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .pessoas-limpar-busca:hover {
-  color: #ffffff;
+  color: #a1f1fc;
   text-decoration: underline;
+}
+
+/* ========================================
+   5. CARREGAMENTO E LISTA VAZIA
+======================================== */
+
+.pessoas-loading,
+.pessoas-empty {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.pessoas-loading {
+  color: #91aac6;
+  font-size: 14px;
+}
+
+.pessoas-empty h2 {
+  margin: 0 0 8px;
+  color: #f3f8ff;
+  font-size: 18px;
+}
+
+.pessoas-empty p {
+  margin: 0;
+  color: #91aac6;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ========================================
+   6. MENSAGENS DE ERRO E SUCESSO
+======================================== */
+
+.pessoas-error {
+  margin-bottom: 20px;
+  padding: 13px 15px;
+  background: #321e2b;
+  border: 1px solid #71394c;
+  border-radius: 8px;
+  color: #ffb4c1;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.pessoas-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: #102f2b;
+  border: 1px solid #216b5a;
+  border-radius: 8px;
+  color: #a5f3d0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pessoas-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background: #176b56;
+  border-radius: 50%;
+  color: #d1fae5;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 /* ========================================
@@ -216,9 +270,11 @@
 ======================================== */
 
 .pessoas-table-container {
+  position: relative;
   width: 100%;
   min-width: 0;
   overflow-x: auto;
+  border-radius: 12px;
 }
 
 .pessoas-table {
@@ -230,34 +286,36 @@
 .pessoas-table th,
 .pessoas-table td {
   padding: 14px 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #263d57;
   text-align: left;
   vertical-align: middle;
 }
 
 .pessoas-table th {
-  background: #f8fafc;
-  color: #334155;
+  background: #14263b;
+  color: #b8cbe0;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .pessoas-table td {
-  color: #475569;
+  background: #101f32;
+  color: #c6d5e5;
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .pessoas-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.pessoas-table tbody tr:hover {
-  background: #f8fafc;
+.pessoas-table tbody tr:hover td {
+  background: #14283e;
 }
 
 /* ========================================
-   8. FOTOS E NOMES DESKTOP
+   8. FOTO E NOME NA TABELA
 ======================================== */
 
 .pessoa-nome {
@@ -267,9 +325,10 @@
   min-width: 0;
 }
 
-.pessoa-nome span {
-  color: #1e293b;
-  font-weight: 500;
+.pessoa-nome > span {
+  color: #f3f8ff;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .pessoa-foto,
@@ -277,265 +336,28 @@
   width: 42px;
   height: 42px;
   flex-shrink: 0;
-  border-radius: 6px;
+  border: 1px solid #304963;
+  border-radius: 7px;
 }
 
 .pessoa-foto {
   display: block;
   object-fit: cover;
+  background: #0b192a;
 }
 
 .pessoa-sem-foto {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f1f1;
-  color: #777777;
+  background: #14263b;
+  color: #91aac6;
   font-size: 9px;
   text-align: center;
 }
 
 /* ========================================
-   9. LISTA E CARDS MOBILE
-======================================== */
-
-.pessoas-mobile-list {
-  display: none;
-}
-
-.pessoa-mobile-card {
-  position: relative;
-  min-width: 0;
-  padding: 14px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  box-sizing: border-box;
-  overflow: visible;
-}
-
-/* Cabeçalho: foto, nome e menu */
-
-.pessoa-mobile-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-/* Foto da pessoa */
-
-.pessoa-mobile-foto,
-.pessoa-mobile-sem-foto {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 58px;
-  height: 70px;
-  flex: 0 0 58px;
-  border-radius: 7px;
-  object-fit: cover;
-}
-
-.pessoa-mobile-sem-foto {
-  background: #f1f5f9;
-  color: #64748b;
-  font-size: 10px;
-  text-align: center;
-}
-
-/* Nome e informações */
-
-.pessoa-mobile-nome {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.pessoa-mobile-nome h3 {
-  margin: 0;
-  color: #1e293b;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.pessoa-mobile-nome>span:not(.status-caso) {
-  color: #64748b;
-  font-size: 12px;
-}
-
-/* Resumo do desaparecimento */
-
-.pessoa-mobile-resumo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 14px;
-  padding: 12px 0;
-  border-top: 1px solid #e2e8f0;
-}
-
-.pessoa-mobile-resumo>div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-
-.pessoa-mobile-resumo>div>span {
-  color: #64748b;
-  font-size: 12px;
-}
-
-.pessoa-mobile-resumo>div>strong {
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Botão de detalhes */
-
-.pessoa-mobile-detalhes-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin: 0;
-  padding: 12px 0 0;
-  background: transparent;
-  border: none;
-  border-top: 1px solid #e2e8f0;
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.pessoa-mobile-detalhes-button span {
-  font-size: 16px;
-}
-
-/* Informações detalhadas */
-
-.pessoa-mobile-detalhes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 12px;
-  padding-top: 16px;
-}
-
-.pessoa-mobile-campo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-  min-width: 0;
-}
-
-.pessoa-mobile-campo>span {
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.pessoa-mobile-campo>strong {
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-/* ========================================
-   10. MENU DE AÇÕES MOBILE
-======================================== */
-
-.pessoa-mobile-menu-container {
-  position: relative;
-  flex: 0 0 36px;
-  margin-left: auto;
-  align-self: flex-start;
-}
-
-.pessoa-mobile-menu-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 7px;
-  color: #4b5563;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.pessoa-mobile-menu-button:hover {
-  background: #f3f4f6;
-}
-
-.pessoa-mobile-menu {
-  position: absolute;
-  top: 38px;
-  right: 0;
-  width: max-content;
-  min-width: 150px;
-  max-width: calc(100vw - 80px);
-  box-sizing: border-box;
-  padding: 5px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  z-index: 1000;
-}
-
-/* Menus mobile e desktop */
-
-.pessoa-mobile-menu button,
-.pessoa-menu button {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #374151;
-  font-size: 13px;
-  text-align: left;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  cursor: pointer;
-}
-
-.pessoa-mobile-menu button:hover,
-.pessoa-menu button:hover {
-  background: #f3f4f6;
-}
-
-.pessoa-mobile-menu .pessoa-menu-excluir,
-.pessoa-menu .pessoa-menu-excluir {
-  color: #dc2626;
-}
-
-.pessoa-mobile-menu .pessoa-menu-excluir:hover,
-.pessoa-menu .pessoa-menu-excluir:hover {
-  background: #fef2f2;
-}
-
-/* ========================================
-   11. STATUS DO DESAPARECIMENTO
+   9. STATUS DO CASO
 ======================================== */
 
 .status-caso {
@@ -544,8 +366,8 @@
   justify-content: center;
   width: fit-content;
   max-width: 100%;
-  padding: 6px 12px;
   box-sizing: border-box;
+  padding: 5px 10px;
   border: 1px solid transparent;
   border-radius: 20px;
   font-size: 12px;
@@ -554,48 +376,34 @@
   white-space: nowrap;
 }
 
-/* caso ainda em aberto */
+/* Pessoa desaparecida */
+
 .status-desaparecido {
-  background: #fee2e2;
-  border-color: #fecaca;
-  color: #b91c1c;
+  background: #321e2b;
+  border-color: #71394c;
+  color: #ffb4c1;
 }
 
-/* pessoa localizada */
+/* Pessoa localizada */
+
 .status-localizado {
-  background: #dcfce7;
-  border-color: #bbf7d0;
-  color: #166534;
+  background: #12352f;
+  border-color: #216b5a;
+  color: #9de8cb;
 }
+
+/* Pessoa sem registro */
 
 .status-sem-registro {
   display: inline-block;
   width: fit-content;
-  color: #64748b;
+  color: #91aac6;
   font-size: 12px;
   font-weight: 600;
 }
 
 /* ========================================
-   12. BOTÃO EXCLUIR
-======================================== */
-
-.pessoa-excluir {
-  padding: 8px 14px;
-  background: #ffffff;
-  border: 1px solid #fecaca;
-  border-radius: 6px;
-  color: #dc2626;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.pessoa-excluir:hover {
-  background: #fef2f2;
-}
-
-/* ========================================
-   13. MENU DE AÇÕES DESKTOP
+   10. MENU DE AÇÕES DESKTOP
 ======================================== */
 
 .pessoas-actions {
@@ -608,350 +416,351 @@
   display: inline-block;
 }
 
-.pessoa-menu-button {
+.pessoa-menu-button,
+.pessoa-mobile-menu-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   background: transparent;
-  border: none;
-  border-radius: 6px;
-  color: #4b5563;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #a9bfd6;
+  font-family: inherit;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.pessoa-menu-button:hover {
-  background: #f3f4f6;
-  color: #111827;
+.pessoa-menu-button:hover,
+.pessoa-mobile-menu-button:hover {
+  background: #1b324a;
+  border-color: #304963;
+  color: #38d7ef;
+}
+
+.pessoa-menu-button:focus-visible,
+.pessoa-mobile-menu-button:focus-visible {
+  outline: 2px solid #27cce5;
+  outline-offset: 2px;
 }
 
 .pessoa-menu {
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  min-width: 160px;
-  max-width: 220px;
-  padding: 5px;
-  box-sizing: border-box;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
   z-index: 1000;
+  min-width: 175px;
+  max-width: 230px;
+  box-sizing: border-box;
+  padding: 5px;
+  background: #101f32;
+  border: 1px solid #304963;
+  border-radius: 9px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* Abre o menu para cima quando necessário */
+/* Menu que abre para cima */
 
 .pessoa-menu.pessoa-menu-acima {
   top: auto;
   bottom: calc(100% + 4px);
 }
 
-.pessoas-filtros-acoes {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* Itens dos menus desktop e mobile */
+
+.pessoa-menu button,
+.pessoa-mobile-menu button {
+  display: block;
   width: 100%;
-  margin-bottom: 20px;
-}
-
-.pessoas-filtros-acoes .pessoas-search {
-  flex: 1;
-  width: auto;
-  max-width: 650px;
-  min-width: 0;
-  margin-bottom: 0;
-}
-
-.pessoas-new-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-shrink: 0;
-  min-height: 44px;
-  padding: 0 16px;
-  background: #2563eb;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: transparent;
   border: none;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 6px;
+  color: #d4e2f0;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.pessoas-new-button:hover {
-  background: #1d4ed8;
+.pessoa-menu button:hover,
+.pessoa-mobile-menu button:hover {
+  background: #1b324a;
+  color: #38d7ef;
 }
 
-.pessoas-new-button span:first-child {
-  font-size: 20px;
-  line-height: 1;
+/* Ação de excluir */
+
+.pessoa-menu .pessoa-menu-excluir,
+.pessoa-mobile-menu .pessoa-menu-excluir {
+  color: #ff9eae;
+}
+
+.pessoa-menu .pessoa-menu-excluir:hover,
+.pessoa-mobile-menu .pessoa-menu-excluir:hover {
+  background: #321e2b;
+  color: #ffb4c1;
 }
 
 /* ========================================
-   17. MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
+   11. LISTA MOBILE
 ======================================== */
 
-.confirmacao-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+.pessoas-mobile-list {
+  display: none;
+}
 
+.pessoa-mobile-card {
+  position: relative;
+  min-width: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #101f32;
+  border: 1px solid #263d57;
+  border-radius: 11px;
+  overflow: visible;
+  transition: border-color 0.2s ease;
+}
+
+.pessoa-mobile-card:hover {
+  border-color: #385570;
+}
+
+/* Cabeçalho do card */
+
+.pessoa-mobile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Foto mobile */
+
+.pessoa-mobile-foto,
+.pessoa-mobile-sem-foto {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  padding: 20px;
-  box-sizing: border-box;
-
-  background: rgba(3, 10, 22, 0.76);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-
-  animation: confirmacao-fundo 0.2s ease-out;
-}
-
-.confirmacao-modal {
-  width: 100%;
-  max-width: 440px;
-  max-height: calc(100dvh - 40px);
-  overflow-y: auto;
-  box-sizing: border-box;
-
-  padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.28),
-    0 4px 12px rgba(0, 0, 0, 0.08);
-
-  animation: confirmacao-entrada 0.22s ease-out;
-}
-
-/* Ícone de alerta */
-
-.confirmacao-icone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   width: 58px;
-  height: 58px;
-  margin: 0 auto 20px;
-
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-  border-radius: 50%;
-
-  color: #dc2626;
+  height: 70px;
+  flex: 0 0 58px;
+  box-sizing: border-box;
+  border: 1px solid #304963;
+  border-radius: 7px;
+  object-fit: cover;
 }
 
-.confirmacao-icone svg {
-  width: 28px;
-  height: 28px;
+.pessoa-mobile-foto {
+  background: #0b192a;
 }
 
-/* Título e descrição */
-
-.confirmacao-modal h2 {
-  margin: 0 0 10px;
-
-  color: #0f172a;
-  font-size: 23px;
-  font-weight: 700;
-  line-height: 1.3;
-  text-align: center;
-  letter-spacing: -0.4px;
-}
-
-.confirmacao-texto {
-  margin: 0 auto 20px;
-
-  max-width: 330px;
-
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.6;
+.pessoa-mobile-sem-foto {
+  background: #14263b;
+  color: #91aac6;
+  font-size: 10px;
   text-align: center;
 }
 
-/* Identificação da pessoa */
+/* Nome, CPF e status */
 
-.confirmacao-pessoa {
+.pessoa-mobile-nome {
   display: flex;
-  align-items: center;
-  gap: 13px;
-
-  min-width: 0;
-  margin-bottom: 18px;
-  padding: 15px;
-
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-}
-
-.confirmacao-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-
-  background: #e0eaff;
-  border: 1px solid #c7d7fe;
-  border-radius: 12px;
-
-  color: #2855b5;
-  font-size: 19px;
-  font-weight: 700;
-}
-
-.confirmacao-dados {
-  display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 5px;
-
+  align-items: flex-start;
+  gap: 6px;
   min-width: 0;
-}
-
-.confirmacao-dados strong {
-  color: #1e293b;
-  font-size: 14px;
-  font-weight: 650;
-  line-height: 1.5;
-
+  padding-top: 2px;
   overflow-wrap: anywhere;
 }
 
-.confirmacao-dados span {
-  color: #64748b;
+.pessoa-mobile-nome h3 {
+  margin: 0;
+  color: #f3f8ff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.pessoa-mobile-nome > span:not(.status-caso) {
+  color: #91aac6;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.pessoa-mobile-nome .status-caso {
+  white-space: normal;
+}
+
+/* Menu mobile */
+
+.pessoa-mobile-menu-container {
+  position: relative;
+  flex: 0 0 36px;
+  margin-left: auto;
+}
+
+.pessoa-mobile-menu {
+  position: absolute;
+  top: 39px;
+  right: 0;
+  z-index: 1000;
+  width: max-content;
+  min-width: 175px;
+  max-width: calc(100vw - 70px);
+  box-sizing: border-box;
+  padding: 5px;
+  background: #101f32;
+  border: 1px solid #304963;
+  border-radius: 9px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Resumo */
+
+.pessoa-mobile-resumo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+  padding: 13px 0;
+  border-top: 1px solid #263d57;
+}
+
+.pessoa-mobile-resumo > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pessoa-mobile-resumo > div > span {
+  color: #91aac6;
   font-size: 12px;
 }
 
-/* Botões */
-
-.confirmacao-acoes {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.confirmacao-acoes button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  min-height: 44px;
-  padding: 0 16px;
-
-  border: 1px solid transparent;
-  border-radius: 9px;
-
-  font-family: inherit;
+.pessoa-mobile-resumo > div > strong {
+  color: #f3f8ff;
   font-size: 13px;
   font-weight: 600;
+}
 
+/* Botão de expandir detalhes */
+
+.pessoa-mobile-detalhes-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 0 0;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #263d57;
+  color: #38d7ef;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
   cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
 }
 
-.confirmacao-acoes button:focus-visible {
-  outline: 3px solid #93c5fd;
-  outline-offset: 3px;
+.pessoa-mobile-detalhes-button:hover {
+  color: #a1f1fc;
 }
 
-.confirmacao-acoes button:active:not(:disabled) {
-  transform: scale(0.98);
+.pessoa-mobile-detalhes-button:focus-visible {
+  outline: 2px solid #27cce5;
+  outline-offset: 4px;
 }
 
-.confirmacao-acoes button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+.pessoa-mobile-detalhes-button > span {
+  font-size: 17px;
 }
 
-.confirmacao-botao-cancelar {
-  flex: 1;
+/* Detalhes expandidos */
 
-  background: #ffffff;
-  border-color: #cbd5e1 !important;
-
-  color: #334155;
+.pessoa-mobile-detalhes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 12px;
+  padding-top: 16px;
 }
 
-.confirmacao-botao-cancelar:hover:not(:disabled) {
-  background: #f1f5f9;
-  border-color: #94a3b8 !important;
+.pessoa-mobile-campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
 }
 
-.confirmacao-botao-excluir {
-  flex: 1;
-
-  background: #dc2626;
-  border-color: #dc2626 !important;
-
-  color: #ffffff;
+.pessoa-mobile-campo > span {
+  color: #91aac6;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.confirmacao-botao-excluir:hover:not(:disabled) {
-  background: #b91c1c;
-  border-color: #b91c1c !important;
+.pessoa-mobile-campo > strong {
+  color: #e3edf8;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
-
-.confirmacao-botao-excluir svg {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-}
-
-/* Indicador de carregamento */
-
-.confirmacao-spinner {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-
-  animation: confirmacao-girar 0.7s linear infinite;
-}
-
 
 /* ========================================
-   MODAL DE CONFIRMAÇÃO DE LOCALIZAÇÃO
+   12. BOTÃO DE EXCLUSÃO AVULSO
 ======================================== */
 
+.pessoa-excluir {
+  padding: 8px 14px;
+  background: #321e2b;
+  border: 1px solid #71394c;
+  border-radius: 6px;
+  color: #ffb4c1;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pessoa-excluir:hover {
+  background: #482333;
+}
+
+/* ========================================
+   13. MODAL DE EXCLUSÃO
+======================================== */
+
+.confirmacao-overlay,
 .localizacao-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
-  background: rgba(3, 10, 22, 0.76);
+  background: rgba(3, 10, 22, 0.78);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  animation: localizacao-fundo 0.2s ease-out;
+  animation: modal-fundo 0.2s ease-out;
 }
 
+.confirmacao-modal,
 .localizacao-modal {
   width: 100%;
   max-width: 440px;
@@ -959,15 +768,16 @@
   overflow-y: auto;
   box-sizing: border-box;
   padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #101f32;
+  border: 1px solid #304963;
   border-radius: 18px;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
-  animation: localizacao-entrada 0.22s ease-out;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+  animation: modal-entrada 0.22s ease-out;
 }
 
-/* Ícone verde */
+/* Ícones dos modais */
 
+.confirmacao-icone,
 .localizacao-icone {
   display: flex;
   align-items: center;
@@ -975,22 +785,33 @@
   width: 58px;
   height: 58px;
   margin: 0 auto 20px;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
   border-radius: 50%;
-  color: #059669;
 }
 
+.confirmacao-icone {
+  background: #321e2b;
+  border: 1px solid #71394c;
+  color: #ff9eae;
+}
+
+.localizacao-icone {
+  background: #12352f;
+  border: 1px solid #216b5a;
+  color: #9de8cb;
+}
+
+.confirmacao-icone svg,
 .localizacao-icone svg {
-  width: 29px;
-  height: 29px;
+  width: 28px;
+  height: 28px;
 }
 
-/* Título e descrição */
+/* Títulos */
 
+.confirmacao-modal h2,
 .localizacao-modal h2 {
   margin: 0 0 10px;
-  color: #0f172a;
+  color: #f3f8ff;
   font-size: 23px;
   font-weight: 700;
   line-height: 1.3;
@@ -998,29 +819,32 @@
   letter-spacing: -0.4px;
 }
 
+.confirmacao-texto,
 .localizacao-texto {
   max-width: 340px;
   margin: 0 auto 20px;
-  color: #64748b;
+  color: #a4b8ce;
   font-size: 14px;
   line-height: 1.6;
   text-align: center;
 }
 
-/* Identificação da pessoa */
+/* Identificação da pessoa nos modais */
 
+.confirmacao-pessoa,
 .localizacao-pessoa {
   display: flex;
   align-items: center;
   gap: 13px;
   min-width: 0;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   padding: 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #0b192a;
+  border: 1px solid #263d57;
   border-radius: 12px;
 }
 
+.confirmacao-avatar,
 .localizacao-avatar {
   display: flex;
   align-items: center;
@@ -1028,14 +852,24 @@
   width: 44px;
   height: 44px;
   flex-shrink: 0;
-  background: #d1fae5;
-  border: 1px solid #a7f3d0;
   border-radius: 12px;
-  color: #047857;
   font-size: 19px;
   font-weight: 700;
 }
 
+.confirmacao-avatar {
+  background: #321e2b;
+  border: 1px solid #71394c;
+  color: #ffb4c1;
+}
+
+.localizacao-avatar {
+  background: #12352f;
+  border: 1px solid #216b5a;
+  color: #9de8cb;
+}
+
+.confirmacao-dados,
 .localizacao-dados {
   display: flex;
   flex-direction: column;
@@ -1043,48 +877,24 @@
   min-width: 0;
 }
 
+.confirmacao-dados strong,
 .localizacao-dados strong {
-  color: #1e293b;
+  color: #f3f8ff;
   font-size: 14px;
   font-weight: 650;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
+.confirmacao-dados span,
 .localizacao-dados span {
-  color: #64748b;
+  color: #91aac6;
   font-size: 12px;
 }
 
-/* Aviso sobre a alteração do status */
+/* Botões dos modais */
 
-.localizacao-aviso {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  margin-bottom: 22px;
-  padding: 12px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 9px;
-  color: #166534;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.localizacao-aviso svg {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.localizacao-aviso strong {
-  font-weight: 700;
-}
-
-/* Botões */
-
+.confirmacao-acoes,
 .localizacao-acoes {
   display: flex;
   align-items: center;
@@ -1092,6 +902,7 @@
   gap: 10px;
 }
 
+.confirmacao-acoes button,
 .localizacao-acoes button {
   display: inline-flex;
   align-items: center;
@@ -1104,56 +915,108 @@
   border-radius: 9px;
   font-family: inherit;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
+.confirmacao-acoes button:focus-visible,
 .localizacao-acoes button:focus-visible {
-  outline: 3px solid #6ee7b7;
+  outline: 3px solid rgba(39, 204, 229, 0.45);
   outline-offset: 3px;
 }
 
+.confirmacao-acoes button:active:not(:disabled),
 .localizacao-acoes button:active:not(:disabled) {
   transform: scale(0.98);
 }
 
+.confirmacao-acoes button:disabled,
 .localizacao-acoes button:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* Cancelar */
+
+.confirmacao-botao-cancelar,
 .localizacao-botao-cancelar {
   flex: 1;
-  background: #ffffff;
-  border-color: #cbd5e1 !important;
-  color: #334155;
+  background: #14263b;
+  border-color: #304963 !important;
+  color: #d4e2f0;
 }
 
+.confirmacao-botao-cancelar:hover:not(:disabled),
 .localizacao-botao-cancelar:hover:not(:disabled) {
-  background: #f1f5f9;
+  background: #1b324a;
 }
 
-.localizacao-botao-confirmar {
-  flex: 1.3;
-  background: #059669;
-  border-color: #059669 !important;
+/* Excluir */
+
+.confirmacao-botao-excluir {
+  flex: 1;
+  background: #a92e48;
+  border-color: #a92e48 !important;
   color: #ffffff;
 }
 
-.localizacao-botao-confirmar:hover:not(:disabled) {
-  background: #047857;
-  border-color: #047857 !important;
+.confirmacao-botao-excluir:hover:not(:disabled) {
+  background: #c23855;
+  border-color: #c23855 !important;
 }
 
+.confirmacao-botao-excluir svg,
 .localizacao-botao-confirmar svg {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
 }
 
-/* Carregamento */
+/* ========================================
+   14. MODAL DE LOCALIZAÇÃO
+======================================== */
 
+.localizacao-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 22px;
+  padding: 12px;
+  background: #12352f;
+  border: 1px solid #216b5a;
+  border-radius: 9px;
+  color: #a5f3d0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.localizacao-aviso svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.localizacao-aviso strong {
+  color: #d1fae5;
+  font-weight: 700;
+}
+
+.localizacao-botao-confirmar {
+  flex: 1.3;
+  background: #176b56;
+  border-color: #23866c !important;
+  color: #ffffff;
+}
+
+.localizacao-botao-confirmar:hover:not(:disabled) {
+  background: #21856a;
+}
+
+/* Indicadores de carregamento */
+
+.confirmacao-spinner,
 .localizacao-spinner {
   width: 15px;
   height: 15px;
@@ -1161,207 +1024,43 @@
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-top-color: #ffffff;
   border-radius: 50%;
-  animation: localizacao-girar 0.7s linear infinite;
-}
-
-/* Animações */
-
-@keyframes localizacao-fundo {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes localizacao-entrada {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes localizacao-girar {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Responsividade */
-
-@media (max-width: 480px) {
-  .localizacao-overlay {
-    padding: 16px;
-  }
-
-  .localizacao-modal {
-    max-width: 100%;
-    max-height: calc(100dvh - 32px);
-    padding: 24px 20px;
-    border-radius: 16px;
-  }
-
-  .localizacao-icone {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 17px;
-  }
-
-  .localizacao-modal h2 {
-    font-size: 21px;
-  }
-
-  .localizacao-texto {
-    font-size: 13px;
-  }
-
-  .localizacao-acoes {
-    flex-direction: column-reverse;
-    gap: 9px;
-  }
-
-  .localizacao-acoes button {
-    width: 100%;
-    min-height: 46px;
-    flex: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .localizacao-overlay,
-  .localizacao-modal,
-  .localizacao-spinner {
-    animation: none;
-  }
-
-  .localizacao-acoes button {
-    transition: none;
-  }
-}
-
-/* Animações */
-
-@keyframes confirmacao-fundo {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes confirmacao-entrada {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes confirmacao-girar {
-  to {
-    transform: rotate(360deg);
-  }
+  animation: modal-girar 0.7s linear infinite;
 }
 
 /* ========================================
-   18. RESPONSIVIDADE DO MODAL
+   15. ANIMAÇÕES
 ======================================== */
 
-@media (max-width: 480px) {
-  .confirmacao-overlay {
-    align-items: center;
-    padding: 16px;
+@keyframes modal-fundo {
+  from {
+    opacity: 0;
   }
 
-  .confirmacao-modal {
-    max-width: 100%;
-    max-height: calc(100dvh - 32px);
-
-    padding: 24px 20px;
-    border-radius: 16px;
-  }
-
-  .confirmacao-icone {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 17px;
-  }
-
-  .confirmacao-icone svg {
-    width: 25px;
-    height: 25px;
-  }
-
-  .confirmacao-modal h2 {
-    font-size: 21px;
-  }
-
-  .confirmacao-texto {
-    font-size: 13px;
-  }
-
-  .confirmacao-pessoa {
-    padding: 12px;
-  }
-
-  .confirmacao-acoes {
-    flex-direction: column-reverse;
-    gap: 9px;
-  }
-
-  .confirmacao-acoes button {
-    width: 100%;
-    min-height: 46px;
-    flex: auto;
+  to {
+    opacity: 1;
   }
 }
 
-/* Respeita a preferência por menos animações */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .confirmacao-overlay,
-  .confirmacao-modal,
-  .confirmacao-spinner {
-    animation: none;
+@keyframes modal-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
   }
 
-  .confirmacao-acoes button {
-    transition: none;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-@media (max-width: 480px) {
-  .pessoas-filtros-acoes {
-    gap: 8px;
-  }
-
-  .pessoas-filtros-acoes .pessoas-search {
-    flex: 1;
-  }
-
-  .pessoas-new-button {
-    min-height: 44px;
-    padding: 0 12px;
+@keyframes modal-girar {
+  to {
+    transform: rotate(360deg);
   }
 }
 
 /* ========================================
-   14. RESPONSIVIDADE PARA CELULARES
+   16. RESPONSIVIDADE TABLET E MOBILE
 ======================================== */
 
 @media (max-width: 768px) {
@@ -1373,8 +1072,51 @@
 
   .pessoas-card {
     background: transparent;
-    box-shadow: none;
+    border: none;
     border-radius: 0;
+    box-shadow: none;
+  }
+
+  .pessoas-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .pessoas-header h1 {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+
+  .pessoas-header p {
+    font-size: 13px;
+  }
+
+  .pessoas-filtros-acoes {
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .pessoas-filtros-acoes .pessoas-search {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 0 11px;
+  }
+
+  .pessoas-filtros-acoes .pessoas-new-button {
+    width: auto;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  .pessoas-lista-info {
+    margin-bottom: 12px;
+    font-size: 12px;
   }
 
   .pessoas-table-container {
@@ -1385,73 +1127,44 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 12px;
+    padding: 0;
   }
 
   .pessoa-mobile-card {
     padding: 14px;
   }
 
-  .pessoas-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
-  .pessoas-header h1 {
-    margin-bottom: 6px;
-    font-size: 24px;
-    line-height: 1.25;
-  }
-
-  .pessoas-header p {
-    font-size: 13px;
-    line-height: 1.45;
-  }
-
-  /* Busca e botão de cadastro */
-  .pessoas-filtros-acoes {
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .pessoas-filtros-acoes .pessoas-search {
-    flex: 1;
-    width: auto;
-    min-width: 0;
-    margin-bottom: 0;
-    padding: 0 12px;
-  }
-
-  .pessoas-filtros-acoes .pessoas-new-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    min-width: 44px;
-    height: 44px;
-    min-height: 44px;
-    padding: 0 12px;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-
-  .pessoas-lista-info {
-    margin: 0 0 12px;
-    font-size: 13px;
-  }
-
   .pessoa-mobile-nome h3 {
     font-size: 13px;
+  }
+
+  .pessoas-empty,
+  .pessoas-loading {
+    padding: 30px 16px;
+    background: #101f32;
+    border: 1px solid #263d57;
+    border-radius: 10px;
+  }
+
+  .confirmacao-modal,
+  .localizacao-modal {
+    padding: 26px 22px;
   }
 }
 
 /* ========================================
-   15. CELULARES MUITO ESTREITOS
+   17. CELULARES ESTREITOS
 ======================================== */
 
 @media (max-width: 380px) {
+  .pessoas-header h1 {
+    font-size: 21px;
+  }
+
+  .pessoas-filtros-acoes {
+    gap: 7px;
+  }
+
   .pessoas-filtros-acoes .pessoas-new-button {
     width: 44px;
     min-width: 44px;
@@ -1461,10 +1174,62 @@
   .pessoas-filtros-acoes .pessoas-new-button span:last-child {
     display: none;
   }
+
+  .pessoa-mobile-card {
+    padding: 12px;
+  }
+
+  .pessoa-mobile-foto,
+  .pessoa-mobile-sem-foto {
+    width: 50px;
+    height: 62px;
+    flex-basis: 50px;
+  }
+
+  .pessoa-mobile-detalhes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  .confirmacao-overlay,
+  .localizacao-overlay {
+    padding: 16px;
+  }
+
+  .confirmacao-modal,
+  .localizacao-modal {
+    max-height: calc(100dvh - 32px);
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  .confirmacao-modal h2,
+  .localizacao-modal h2 {
+    font-size: 21px;
+  }
 }
 
 /* ========================================
-   16. EXIBIÇÃO DESKTOP
+   18. AJUSTES PARA MODAIS EM TELAS PEQUENAS
+======================================== */
+
+@media (max-width: 480px) {
+  .confirmacao-acoes,
+  .localizacao-acoes {
+    flex-direction: column-reverse;
+    gap: 9px;
+  }
+
+  .confirmacao-acoes button,
+  .localizacao-acoes button {
+    width: 100%;
+    min-height: 46px;
+    flex: auto;
+  }
+}
+
+/* ========================================
+   19. EXIBIÇÃO DESKTOP
 ======================================== */
 
 @media (min-width: 769px) {
@@ -1474,5 +1239,29 @@
 
   .pessoas-mobile-list {
     display: none;
+  }
+}
+
+/* ========================================
+   20. ACESSIBILIDADE
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .confirmacao-overlay,
+  .confirmacao-modal,
+  .localizacao-overlay,
+  .localizacao-modal,
+  .confirmacao-spinner,
+  .localizacao-spinner {
+    animation: none;
+  }
+
+  .pessoas-new-button,
+  .pessoa-menu-button,
+  .pessoa-mobile-menu-button,
+  .pessoa-mobile-card,
+  .confirmacao-acoes button,
+  .localizacao-acoes button {
+    transition: none;
   }
 }
