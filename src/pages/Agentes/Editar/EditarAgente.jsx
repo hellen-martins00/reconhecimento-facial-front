@@ -77,9 +77,7 @@ function EditarAgente() {
         setUsuario(agente.usuario || "");
         setPerfil(agente.perfil || "");
 
-
         // CARREGAR FOTO FACIAL
-
 
         try {
           const respostaFoto = await api.get(
@@ -329,10 +327,7 @@ function EditarAgente() {
       <div className="editar-agente-page">
         <div className="editar-agente-loading">
           <div className="editar-agente-spinner" />
-
-          <span>
-            Carregando dados do agente...
-          </span>
+          <span>Carregando dados do agente...</span>
         </div>
       </div>
     );
@@ -343,36 +338,22 @@ function EditarAgente() {
   if (erro && !nome) {
     return (
       <div className="editar-agente-page">
-
         <div className="editar-agente-header">
-
           <div>
             <h1>Editar agente</h1>
-
-            <p>
-              Atualize os dados cadastrais.
-            </p>
+            <p>Atualize os dados cadastrais.</p>
           </div>
-
           <button
             type="button"
             className="editar-agente-voltar"
-            onClick={() =>
-              navigate("/agentes")
-            }
+            onClick={() => navigate("/agentes")}
           >
             Voltar
           </button>
-
         </div>
-
-        <div
-          className="editar-agente-error"
-          role="alert"
-        >
+        <div className="editar-agente-error" role="alert">
           {erro}
         </div>
-
       </div>
     );
   }
@@ -382,102 +363,66 @@ function EditarAgente() {
   if (!podeEditar) {
     return (
       <div className="editar-agente-page">
-
         <div className="editar-agente-header">
-
           <div>
             <h1>Acesso não permitido</h1>
-
-            <p>
-              Você não pode editar este agente.
-            </p>
+            <p>Você não pode editar este agente.</p>
           </div>
-
           <button
             type="button"
             className="editar-agente-voltar"
-            onClick={() =>
-              navigate(`/agentes/${id}`)
-            }
+            onClick={() => navigate(`/agentes/${id}`)}
           >
             Voltar
           </button>
-
         </div>
-
-        <div
-          className="editar-agente-error"
-          role="alert"
-        >
-          Você só pode editar seus próprios
-          dados.
+        <div className="editar-agente-error" role="alert">
+          Você só pode editar seus próprios dados.
         </div>
-
       </div>
     );
   }
 
-  // FOTO ATUAL A SER EXIBIDA
-
-  const fotoExibida =
-    novaFotoPreview || fotoUrl;
-
-  // TELA
+  const fotoExibida = novaFotoPreview || fotoUrl;
 
   return (
     <div className="editar-agente-page">
 
       {/* CABEÇALHO */}
-
       <div className="editar-agente-header">
-
         <div>
           <h1>Editar agente</h1>
-
-          <p>
-            Atualize os dados cadastrais e a
-            identificação facial.
-          </p>
+          <p>Atualize os dados cadastrais e a identificação facial.</p>
         </div>
 
         <button
           type="button"
           className="editar-agente-voltar"
-          onClick={() =>
-            navigate(`/agentes/${id}`)
-          }
+          onClick={() => navigate(`/agentes/${id}`)}
           disabled={salvando}
         >
           Voltar
         </button>
-
       </div>
 
       {/* CARD PRINCIPAL */}
-
       <div className="editar-agente-card">
 
         {erro && (
-          <div
-            className="editar-agente-error"
-            role="alert"
-          >
+          <div className="editar-agente-error" role="alert">
             {erro}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
 
-          {/* IDENTIDADE DO AGENTE */}
-
+          {/* SEÇÃO DA FOTO / BIOMETRIA (Foco limpo apenas na imagem) */}
           <section className="editar-agente-identity">
-
             <div className="editar-agente-avatar">
-
               {fotoExibida ? (
                 <img
                   src={fotoExibida}
-                  alt={`Foto de ${nome}`}
+                  alt="Foto do agente"
                   onError={() => {
                     setFotoUrl(null);
                     setNovaFotoPreview(null);
@@ -485,42 +430,23 @@ function EditarAgente() {
                   }}
                 />
               ) : (
-                <span>
-                  Sem foto
-                </span>
+                <span>Sem foto</span>
               )}
-
             </div>
 
             <div className="editar-agente-identity-info">
-
               <span className="editar-agente-section-label">
-                IDENTIFICAÇÃO DO AGENTE
+                FOTO / CADASTRO FACIAL
               </span>
-
-              <h2>
-                {nome || "Agente"}
-              </h2>
-
-              <p>
-                {usuario || "Usuário não informado"}
-              </p>
-
-              {perfil && (
-                <span className="editar-agente-profile">
-                  {perfil}
-                </span>
-              )}
+              <h2>Identificação Biométrica</h2>
+              <p>Gerencie a foto utilizada para o reconhecimento facial do agente.</p>
 
               <div className="editar-agente-photo-actions">
-
                 <label
                   htmlFor="foto"
                   className="editar-agente-photo-button"
                 >
-                  {fotoExibida
-                    ? "Alterar foto"
-                    : "Cadastrar foto"}
+                  {fotoExibida ? "Alterar foto" : "Cadastrar foto"}
                 </label>
 
                 <input
@@ -542,161 +468,103 @@ function EditarAgente() {
                     Cancelar nova foto
                   </button>
                 )}
-
               </div>
 
               <span className="editar-agente-help">
-                JPG ou PNG.
+                Formatos aceitos: JPG ou PNG.
               </span>
 
               {novaFoto && (
                 <span className="editar-agente-selected-file">
-                  Nova foto selecionada:{" "}
-                  {novaFoto.name}
+                  Nova foto selecionada: {novaFoto.name}
                 </span>
               )}
-
             </div>
-
           </section>
 
           {/* DADOS DE ACESSO */}
-
           <section className="editar-agente-section">
-
             <div className="editar-agente-section-header">
-
               <span className="editar-agente-section-label">
                 DADOS DO AGENTE
               </span>
-
-              <h2>
-                Informações de acesso
-              </h2>
-
-              <p>
-                Atualize as informações utilizadas
-                para acessar o sistema.
-              </p>
-
+              <h2>Informações de acesso</h2>
+              <p>Atualize as informações utilizadas para acessar o sistema.</p>
             </div>
 
             <div className="editar-agente-form-grid">
 
               {/* NOME */}
-
               <div className="editar-agente-form-group editar-agente-full">
-
-                <label htmlFor="nome">
-                  Nome
-                </label>
-
+                <label htmlFor="nome">Nome</label>
                 <input
                   id="nome"
                   type="text"
                   value={nome}
-                  onChange={(event) =>
-                    setNome(event.target.value)
-                  }
+                  onChange={(event) => setNome(event.target.value)}
                   minLength={3}
                   maxLength={150}
                   required
                   disabled={salvando}
                 />
-
               </div>
 
               {/* USUÁRIO */}
-
               <div className="editar-agente-form-group">
-
-                <label htmlFor="usuario">
-                  Usuário
-                </label>
-
+                <label htmlFor="usuario">Usuário</label>
                 <input
                   id="usuario"
                   type="text"
                   value={usuario}
-                  onChange={(event) =>
-                    setUsuario(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => setUsuario(event.target.value)}
                   minLength={3}
                   maxLength={100}
                   required
                   disabled={salvando}
                 />
-
               </div>
 
               {/* PERFIL */}
-
               <div className="editar-agente-form-group">
-
-                <label htmlFor="perfil">
-                  Perfil
-                </label>
-
+                <label htmlFor="perfil">Perfil</label>
                 <input
                   id="perfil"
                   type="text"
                   value={perfil}
                   disabled
                 />
-
                 <span className="editar-agente-help">
-                  O perfil não pode ser alterado
-                  nesta tela.
+                  O perfil não pode ser alterado nesta tela.
                 </span>
-
               </div>
 
               {/* SENHA */}
-
               <div className="editar-agente-form-group editar-agente-full">
-
-                <label htmlFor="senha">
-                  Nova senha
-                </label>
-
+                <label htmlFor="senha">Nova senha</label>
                 <input
                   id="senha"
                   type="password"
                   value={senha}
-                  onChange={(event) =>
-                    setSenha(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => setSenha(event.target.value)}
                   minLength={6}
                   maxLength={100}
                   placeholder="Digite apenas se quiser alterar"
                   disabled={salvando}
                 />
-
                 <span className="editar-agente-help">
-                  Deixe em branco para manter a
-                  senha atual.
+                  Deixe em branco para manter a senha atual.
                 </span>
-
               </div>
 
             </div>
-
           </section>
 
           {/* AÇÕES */}
-
           <div className="editar-agente-actions">
-
             <button
               type="button"
               className="button-secondary"
-              onClick={() =>
-                navigate("/agentes")
-              }
+              onClick={() => navigate(`/agentes/${id}`)}
               disabled={salvando}
             >
               Cancelar
@@ -707,15 +575,11 @@ function EditarAgente() {
               className="button-primary"
               disabled={salvando}
             >
-              {salvando
-                ? "Salvando..."
-                : "Salvar alterações"}
+              {salvando ? "Salvando..." : "Salvar alterações"}
             </button>
-
           </div>
 
         </form>
-
       </div>
     </div>
   );
