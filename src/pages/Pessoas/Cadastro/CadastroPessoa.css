@@ -316,18 +316,6 @@
   box-shadow: 0 0 0 3px rgb(255 123 136 / 12%);
 }
 
-.cadastro-form-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  width: 100%;
-  min-width: 0;
-}
-
-.cadastro-form-row .cadastro-form-group {
-  min-width: 0;
-}
-
 /* Força o input de data a assumir o mesmo padrão visual escuro dos demais inputs */
 .cadastro-form-group input[type="date"] {
   display: block;
@@ -344,16 +332,6 @@
   box-sizing: border-box;
 }
 
-.cadastro-form-row .cadastro-form-group {
-  min-width: 0; /* Permite que o conteúdo encolha corretamente */
-}
-
-/* Garante que o input de data respeite o tamanho do container pai no Safari/Mobile */
-.cadastro-form-row input[type="date"] {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
 
 /* Erros */
 
@@ -389,10 +367,6 @@
   background: var(--cadastro-subtle);
   border: 1px solid var(--cadastro-border);
   border-radius: 10px;
-}
-
-.cadastro-item .cadastro-form-row {
-  gap: 16px;
 }
 
 .cadastro-item-header {
@@ -981,6 +955,36 @@
   outline-color: rgba(8, 145, 178, 0.4);
 }
 
+/* Força o container e o input a respeitarem rigidamente o limite do card */
+.cadastro-form-row.cadastro-form-row-data-sexo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cadastro-form-row.cadastro-form-row-data-sexo .cadastro-form-group {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.cadastro-form-row.cadastro-form-row-data-sexo input[type="date"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Em telas de celular (onde o layout empilha ou fica apertado), garantimos largura 100% segura */
+@media (max-width: 600px) {
+  .cadastro-form-row.cadastro-form-row-data-sexo {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Tablet */
 
 @media (max-width: 900px) {
@@ -1059,12 +1063,6 @@
     font-size: 18px;
   }
 
-  .cadastro-form-row,
-  .cadastro-item .cadastro-form-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
   .cadastro-form-group {
     margin-bottom: 17px;
   }
@@ -1132,13 +1130,6 @@
 
   .cadastro-revisao-section {
     padding: 13px;
-  }
-}
-
-/* Faz com que em telas estreitas (como celulares) os campos fiquem um abaixo do outro com largura 100% igual */
-@media (max-width: 600px) {
-  .cadastro-form-row {
-    grid-template-columns: 1fr;
   }
 }
 

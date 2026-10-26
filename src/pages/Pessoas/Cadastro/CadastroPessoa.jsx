@@ -426,7 +426,7 @@ function CadastroPessoa() {
               </small>
             </div>
 
-            <div className="cadastro-form-row">
+            <div className="cadastro-form-row cadastro-form-row-data-sexo">
               <div className="cadastro-form-group">
                 <label htmlFor="dataNascimento">
                   Data de nascimento
@@ -442,7 +442,6 @@ function CadastroPessoa() {
                   }
                 />
               </div>
-
 
               <div className="cadastro-form-group">
                 <label htmlFor="sexo">Sexo</label>
