@@ -320,6 +320,19 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  width: 100%; /* Garante que ocupa a largura total disponível */
+  min-width: 0; /* Impede que itens filhos estourem o grid */
+}
+
+.cadastro-form-row .cadastro-form-group {
+  min-width: 0; /* Permite que o conteúdo encolha corretamente */
+}
+
+/* Garante que o input de data respeite o tamanho do container pai no Safari/Mobile */
+.cadastro-form-row input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Erros */
@@ -946,56 +959,6 @@
 
 .dashboard-layout[data-theme="light"] .cadastro-pessoa-page button:focus-visible {
   outline-color: rgba(8, 145, 178, 0.4);
-}
-
-/* ========================================
-   CORREÇÃO DE LARGURA — SAFARI / IPHONE
-======================================== */
-
-.cadastro-pessoa-page .cadastro-form-row {
-  width: 100%;
-  min-width: 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.cadastro-pessoa-page .cadastro-form-row>.cadastro-form-group {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.cadastro-pessoa-page .cadastro-form-group input,
-.cadastro-pessoa-page .cadastro-form-group select,
-.cadastro-pessoa-page .cadastro-form-group textarea {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Ajuste específico para campos de data no iPhone */
-.cadastro-pessoa-page .cadastro-form-group input[type="date"] {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  min-inline-size: 0;
-  box-sizing: border-box;
-  margin: 0;
-}
-
-/* Celulares */
-@media (max-width: 600px) {
-  .cadastro-pessoa-page .cadastro-form-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .cadastro-pessoa-page .cadastro-form-row>.cadastro-form-group,
-  .cadastro-pessoa-page .cadastro-form-row input[type="date"] {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-  }
 }
 
 /* Tablet */
