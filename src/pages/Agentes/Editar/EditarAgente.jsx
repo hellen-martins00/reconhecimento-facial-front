@@ -564,7 +564,7 @@ function EditarAgente() {
             <button
               type="button"
               className="button-secondary"
-              onClick={() => navigate(`/agentes/${id}`)}
+              onClick={() => navigate("/agentes")}
               disabled={salvando}
             >
               Cancelar

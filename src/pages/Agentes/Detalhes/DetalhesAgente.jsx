@@ -71,12 +71,41 @@ function DetalhesAgente() {
 
                     if (!isMounted) return;
 
-                    objectUrl = URL.createObjectURL(
-                        respostaFoto.data
-                    );
+                    const tipoConteudo =
+                        respostaFoto.headers["content-type"] || "";
 
+                    if (
+                        respostaFoto.data.size === 0 ||
+                        !tipoConteudo.startsWith("image/")
+                    ) {
+                        console.error(
+                            "A API não retornou um arquivo de imagem válido.",
+                            {
+                                tipoConteudo,
+                                tamanho: respostaFoto.data.size,
+                                resposta: respostaFoto.data,
+                            }
+                        );
+
+                        setFotoUrl(null);
+                        return;
+                    }
+
+                    objectUrl = URL.createObjectURL(respostaFoto.data);
                     setFotoUrl(objectUrl);
+
                 } catch (errorFoto) {
+                    if (!isMounted) return;
+
+                    setFotoUrl(null);
+
+                    if (errorFoto.response?.status !== 404) {
+                        console.error(
+                            "Erro ao carregar foto do agente:",
+                            errorFoto
+                        );
+                    }
+
                     if (!isMounted) return;
 
                     setFotoUrl(null);
@@ -226,8 +255,12 @@ function DetalhesAgente() {
                         {fotoUrl ? (
                             <img
                                 src={fotoUrl}
-                                alt={`${agente.nome}`}
+                                alt={`Foto de ${agente.nome}`}
                                 className="detalhes-agente-foto"
+                                onError={() => {
+                                    console.error("Não foi possível exibir a foto do agente.");
+                                    setFotoUrl(null);
+                                }}
                             />
                         ) : (
                             <div className="detalhes-agente-sem-foto">
@@ -269,12 +302,12 @@ function DetalhesAgente() {
                                 {agente.usuario}
                             </strong>
                         </p>
-                        
+
                         <span
                             className={`detalhes-agente-perfil ${agente.perfil ===
-                                    "ADMIN"
-                                    ? "admin"
-                                    : "agente"
+                                "ADMIN"
+                                ? "admin"
+                                : "agente"
                                 }`}
                         >
                             {formatarPerfil(

@@ -143,10 +143,6 @@ function Pessoas() {
 
       setPessoaParaLocalizar(null);
       setSucesso(`O caso de ${nome} foi atualizado para LOCALIZADO.`);
-
-      setTimeout(() => {
-        setSucesso("");
-      }, 4000);
     } catch (error) {
       console.error(error);
 
@@ -192,9 +188,6 @@ function Pessoas() {
       setPessoaParaExcluir(null);
       setSucesso(`Pessoa "${nome}" excluída com sucesso.`);
 
-      setTimeout(() => {
-        setSucesso("");
-      }, 4000);
     } catch (error) {
       console.error(error);
 
@@ -207,21 +200,42 @@ function Pessoas() {
     }
   }
 
-  // MENSAGEM DE SUCESSO VINDO DO CADASTRO
+  // MENSAGENS VINDAS DO CADASTRO
   useEffect(() => {
-    if (!location.state?.sucesso) return;
+    const sucessoNavegacao = location.state?.sucesso;
+    const erroNavegacao = location.state?.erro;
 
-    setSucesso(location.state.sucesso);
+    if (!sucessoNavegacao && !erroNavegacao) {
+      return;
+    }
 
-    // Remove o state da URL/histórico para não exibir novamente ao atualizar a página
-    navigate(location.pathname, { replace: true, state: null });
+    if (sucessoNavegacao) {
+      setSucesso(sucessoNavegacao);
+    }
 
-    const timer = setTimeout(() => {
+    if (erroNavegacao) {
+      setErro(erroNavegacao);
+    }
+
+    // Limpa o estado da navegação sem cancelar o temporizador
+    navigate(location.pathname, {
+      replace: true,
+      state: null,
+    });
+  }, [location.state, location.pathname, navigate]);
+
+  // FAZ A MENSAGEM DE SUCESSO SUMIR APÓS 3 SEGUNDOS
+  useEffect(() => {
+    if (!sucesso) {
+      return;
+    }
+
+    const temporizador = setTimeout(() => {
       setSucesso("");
-    }, 4000);
+    }, 3000);
 
-    return () => clearTimeout(timer);
-  }, [location, navigate]);
+    return () => clearTimeout(temporizador);
+  }, [sucesso]);
 
   // CARREGAR PESSOAS
   useEffect(() => {

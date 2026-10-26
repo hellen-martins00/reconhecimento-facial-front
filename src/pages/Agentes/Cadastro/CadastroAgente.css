@@ -242,11 +242,13 @@
 
 /* AÇÕES */
 
+/* AÇÕES */
 .cadastro-agente-actions {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 12px;
+  column-gap: 20px;
+  row-gap: 12px;
   margin-top: 0;
 }
 
