@@ -656,6 +656,347 @@
   outline-offset: 3px;
 }
 
+
+/* ========================================
+   MODO CLARO — DETALHES DA PESSOA
+======================================== */
+
+/* Página principal */
+
+.dashboard-layout[data-theme="light"] .detalhes-pessoa-page {
+  color: #172033;
+}
+
+/* ========================================
+   IDENTIFICAÇÃO DA PESSOA
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-identificacao {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-identificacao-foto {
+  background: #f1f5f9;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-sem-foto {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-identificacao-label {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-identificacao-info h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-identificacao-cpf {
+  color: #475569;
+}
+
+/* ========================================
+   INDICADORES
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-indicador {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+  color: #475569;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-indicador strong {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-indicador-desaparecimento {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #9f1239;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-indicador-desaparecimento strong {
+  color: #be123c;
+}
+
+/* ========================================
+   ALERTA DE DESAPARECIMENTO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-alerta {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #9f1239;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-alerta-icon {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  color: #be123c;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-alerta strong {
+  color: #9f1239;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-alerta p {
+  color: #9f1239;
+}
+
+/* ========================================
+   ABAS
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-tabs {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab:hover {
+  background: #f1f5f9;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab.ativa {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #087e9b;
+  box-shadow: none;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab-contador {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab.ativa .detalhes-tab-contador {
+  background: #cffafe;
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab-alerta {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-tab-desaparecimento:hover {
+  color: #be123c;
+}
+
+/* Barra de rolagem das abas em telas menores */
+
+.dashboard-layout[data-theme="light"] .detalhes-tabs::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+/* ========================================
+   CONTEÚDO E CARTÕES
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-section-header h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-section-header p {
+  color: #64748b;
+}
+
+/* ========================================
+   DADOS PESSOAIS
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-field {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-field span {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-field strong {
+  color: #172033;
+}
+
+/* ========================================
+   GALERIA DE FOTOS
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-foto-item {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-foto-item.principal {
+  border-color: #0891b2;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-foto-badge {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #a5f3fc;
+  color: #087e9b;
+}
+
+/* ========================================
+   LISTAS E REGISTROS AUXILIARES
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-lista-item {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-item-label {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-lista-item strong {
+  color: #172033;
+}
+
+/* ========================================
+   ESTADO VAZIO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-vazio {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+/* ========================================
+   REGISTROS DE DESAPARECIMENTO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimentos-card.alerta {
+  border-color: #fecdd3;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-item {
+  background: #fff8f9;
+  border-color: #fecdd3;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-icon {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  color: #be123c;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-cabecalho strong {
+  color: #9f1239;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-cabecalho span {
+  color: #9f5267;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-info {
+  border-color: #fecdd3;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-info span {
+  color: #9f5267;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-info strong {
+  color: #4c2432;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-desaparecimento-descricao p {
+  color: #653344;
+}
+
+/* ========================================
+   BOTÕES DE AÇÃO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-actions {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-actions .button-secondary {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-actions .button-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-actions .button-primary {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-actions .button-primary:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+  box-shadow: 0 0 12px rgba(8, 145, 178, 0.12);
+}
+
+/* ========================================
+   CARREGAMENTO E ERRO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-loading {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+/* ========================================
+   CABEÇALHO E BOTÃO VOLTAR
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-header p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-voltar {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .detalhes-voltar:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+/* ========================================
+   FOCO ACESSÍVEL NO MODO CLARO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .detalhes-pessoa-page button:focus-visible {
+  outline-color: rgba(8, 145, 178, 0.5);
+}
+
 /* ========================================
    RESPONSIVIDADE
 ======================================== */

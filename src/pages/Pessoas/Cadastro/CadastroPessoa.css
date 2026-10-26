@@ -640,6 +640,315 @@
   width: 100%;
 }
 
+
+/* ========================================
+   MODO CLARO — CADASTRO DE PESSOAS
+======================================== */
+
+.dashboard-layout[data-theme="light"] .cadastro-pessoa-page {
+  --cadastro-primary: #0891b2;
+  --cadastro-primary-hover: #0e7490;
+  --cadastro-text: #172033;
+  --cadastro-muted: #64748b;
+  --cadastro-border: #dbe4ef;
+  --cadastro-surface: #ffffff;
+  --cadastro-subtle: #f8fafc;
+  --cadastro-input: #ffffff;
+  --cadastro-danger: #dc2626;
+
+  color: var(--cadastro-text);
+}
+
+/* Cabeçalho */
+
+.dashboard-layout[data-theme="light"] .cadastro-pessoa-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-pessoa-header p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-voltar {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-voltar:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+/* Etapas do cadastro */
+
+.dashboard-layout[data-theme="light"] .cadastro-stepper {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-numero {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-info strong,
+.dashboard-layout[data-theme="light"] .cadastro-step-info small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-atual .cadastro-step-info strong {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-concluida .cadastro-step-info strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-atual .cadastro-step-numero,
+.dashboard-layout[data-theme="light"] .cadastro-step-concluida .cadastro-step-numero {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-linha {
+  background: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-step-concluida .cadastro-step-linha {
+  background: #0891b2;
+}
+
+/* Cartão principal e cabeçalho das etapas */
+
+.dashboard-layout[data-theme="light"] .cadastro-pessoa-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-etapa-header {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-etapa-numero-label {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-etapa-header h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-etapa-header p {
+  color: #64748b;
+}
+
+/* Formulários */
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group label {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group label span {
+  color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input::placeholder,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input:hover,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select:hover,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea:hover {
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input:focus,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select:focus,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea:focus {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input:disabled,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select:disabled,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input.campo-com-erro,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select.campo-com-erro,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea.campo-com-erro {
+  border-color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-form-group input.campo-com-erro:focus,
+.dashboard-layout[data-theme="light"] .cadastro-form-group select.campo-com-erro:focus,
+.dashboard-layout[data-theme="light"] .cadastro-form-group textarea.campo-com-erro:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-campo-erro {
+  color: #b91c1c;
+}
+
+/* Mensagem de erro */
+
+.dashboard-layout[data-theme="light"] .cadastro-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+/* Seções de desaparecimento */
+
+.dashboard-layout[data-theme="light"] .cadastro-item {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-item-header strong {
+  color: #172033;
+}
+
+/* Botões de adicionar e remover */
+
+.dashboard-layout[data-theme="light"] .cadastro-adicionar {
+  background: #ffffff;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-adicionar:hover {
+  background: #ecfeff;
+  border-color: #0e7490;
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-remover {
+  background: #ffffff;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-remover:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+/* Estado vazio */
+
+.dashboard-layout[data-theme="light"] .cadastro-vazio {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-vazio strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-vazio p {
+  color: #64748b;
+}
+
+/* Revisão dos dados */
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-section {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-header {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-header span {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-header h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-header button {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-header button:hover {
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-grid small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-grid strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-item {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-item strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-revisao-item span,
+.dashboard-layout[data-theme="light"] .cadastro-revisao-vazio {
+  color: #64748b;
+}
+
+/* Botões inferiores */
+
+.dashboard-layout[data-theme="light"] .cadastro-actions {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-actions .button-secondary {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-actions .button-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-actions .button-primary {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .cadastro-actions .button-primary:hover:not(:disabled) {
+  background: #0e7490;
+  border-color: #0e7490;
+  box-shadow: 0 0 14px rgba(8, 145, 178, 0.12);
+}
+
+/* Foco acessível */
+
+.dashboard-layout[data-theme="light"] .cadastro-pessoa-page button:focus-visible {
+  outline-color: rgba(8, 145, 178, 0.4);
+}
+
 /* Tablet */
 
 @media (max-width: 900px) {

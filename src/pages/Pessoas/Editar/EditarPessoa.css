@@ -858,6 +858,390 @@
   margin-top: 25px;
 }
 
+
+/* ========================================
+   MODO CLARO — EDITAR PESSOA
+======================================== */
+
+.dashboard-layout[data-theme="light"] .editar-pessoa-page {
+  color: #172033;
+}
+
+/* Cabeçalho */
+
+.dashboard-layout[data-theme="light"] .editar-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-header p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-voltar,
+.dashboard-layout[data-theme="light"] .editar-foto-button {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-voltar:hover,
+.dashboard-layout[data-theme="light"] .editar-foto-button:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+/* Foco acessível */
+
+.dashboard-layout[data-theme="light"] .editar-voltar:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-foto-button:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-adicionar:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-remover:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-remover-mobile:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-button-secondary:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-button-primary:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-revisao-header button:focus-visible,
+.dashboard-layout[data-theme="light"] .editar-step-button:focus-visible {
+  outline-color: rgba(8, 145, 178, 0.45);
+}
+
+/* Etapas */
+
+.dashboard-layout[data-theme="light"] .editar-stepper {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-button {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-numero {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-info strong,
+.dashboard-layout[data-theme="light"] .editar-step-info small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-atual .editar-step-numero {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.1);
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-atual .editar-step-info strong {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-atual .editar-step-info small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-concluida .editar-step-numero {
+  background: #cffafe;
+  border-color: #0891b2;
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-concluida .editar-step-info strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-concluida .editar-step-info small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-linha {
+  background: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .editar-step-concluida .editar-step-linha {
+  background: #0891b2;
+}
+
+/* Cartão principal */
+
+.dashboard-layout[data-theme="light"] .editar-pessoa-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+}
+
+/* Cabeçalho de cada etapa */
+
+.dashboard-layout[data-theme="light"] .editar-etapa-header {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .editar-etapa-numero-label {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-etapa-header h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-etapa-header p {
+  color: #64748b;
+}
+
+/* Fotografia */
+
+.dashboard-layout[data-theme="light"] .editar-foto {
+  border-color: #0891b2;
+}
+
+.dashboard-layout[data-theme="light"] .editar-sem-foto {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #64748b;
+}
+
+/* Campos do formulário */
+
+.dashboard-layout[data-theme="light"] .editar-form-group label {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group label span {
+  color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group input,
+.dashboard-layout[data-theme="light"] .editar-form-group select,
+.dashboard-layout[data-theme="light"] .editar-form-group textarea {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group input::placeholder,
+.dashboard-layout[data-theme="light"] .editar-form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group input:hover,
+.dashboard-layout[data-theme="light"] .editar-form-group select:hover,
+.dashboard-layout[data-theme="light"] .editar-form-group textarea:hover {
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group input:focus,
+.dashboard-layout[data-theme="light"] .editar-form-group select:focus,
+.dashboard-layout[data-theme="light"] .editar-form-group textarea:focus {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group input:disabled,
+.dashboard-layout[data-theme="light"] .editar-form-group select:disabled,
+.dashboard-layout[data-theme="light"] .editar-form-group textarea:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-group select option {
+  background: #ffffff;
+  color: #172033;
+}
+
+/* Campos com erro */
+
+.dashboard-layout[data-theme="light"] .editar-input-erro {
+  border-color: #dc2626 !important;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-input-erro:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-error {
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .editar-form-help {
+  color: #64748b;
+}
+
+/* Registros de desaparecimento */
+
+.dashboard-layout[data-theme="light"] .editar-section-header h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-section-header p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-adicionar {
+  background: #ffffff;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-adicionar:hover {
+  background: #ecfeff;
+  border-color: #0e7490;
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .editar-item {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .editar-item-header strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-remover,
+.dashboard-layout[data-theme="light"] .editar-remover-mobile {
+  background: #ffffff;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .editar-remover:hover,
+.dashboard-layout[data-theme="light"] .editar-remover-mobile:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+/* Estado vazio */
+
+.dashboard-layout[data-theme="light"] .editar-vazio {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.dashboard-layout[data-theme="light"] .editar-vazio strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-vazio p {
+  color: #64748b;
+}
+
+/* Mensagens de erro e carregamento */
+
+.dashboard-layout[data-theme="light"] .editar-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .editar-loading {
+  color: #64748b;
+}
+
+/* Revisão final */
+
+.dashboard-layout[data-theme="light"] .editar-revisao-section {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-header {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-header span {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-header h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-header button {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-header button:hover {
+  color: #155e75;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-foto {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-grid small {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-grid strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-item {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-item strong {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-item span,
+.dashboard-layout[data-theme="light"] .editar-revisao-vazio {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-revisao-item p {
+  color: #475569;
+}
+
+/* Botões inferiores */
+
+.dashboard-layout[data-theme="light"] .editar-actions {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .editar-button-secondary {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-button-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-button-primary {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+}
+
+.dashboard-layout[data-theme="light"] .editar-button-primary:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+  box-shadow: 0 5px 14px rgba(8, 145, 178, 0.16);
+}
+
+/* Campos de data em dispositivos móveis */
+
+@media (max-width: 600px) {
+  .dashboard-layout[data-theme="light"] .editar-form-group input[type="date"] {
+    color-scheme: light;
+    background: #ffffff;
+    color: #172033;
+  }
+}
+
 /* ========================================
    TABLET
 ======================================== */
