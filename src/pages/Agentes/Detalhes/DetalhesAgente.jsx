@@ -74,19 +74,12 @@ function DetalhesAgente() {
                     const tipoConteudo =
                         respostaFoto.headers["content-type"] || "";
 
-                    if (
-                        respostaFoto.data.size === 0 ||
-                        !tipoConteudo.startsWith("image/")
-                    ) {
-                        console.error(
-                            "A API não retornou um arquivo de imagem válido.",
-                            {
-                                tipoConteudo,
-                                tamanho: respostaFoto.data.size,
-                                resposta: respostaFoto.data,
-                            }
-                        );
+                    const imagemValida =
+                        respostaFoto.status !== 204 &&
+                        respostaFoto.data.size > 0 &&
+                        tipoConteudo.startsWith("image/");
 
+                    if (!imagemValida) {
                         setFotoUrl(null);
                         return;
                     }
@@ -102,7 +95,8 @@ function DetalhesAgente() {
                     if (errorFoto.response?.status !== 404) {
                         console.error(
                             "Erro ao carregar foto do agente:",
-                            errorFoto
+                            errorFoto.response?.status,
+                            errorFoto.response?.data || errorFoto.message
                         );
                     }
 
@@ -267,20 +261,6 @@ function DetalhesAgente() {
                                 <span>
                                     Sem foto
                                 </span>
-
-                                {/*{podeEditar && (
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            navigate(
-                                                `/agentes/${agente.id}/editar`
-                                            )
-                                        }
-                                        className="detalhes-agente-btn-foto"
-                                    >
-                                        Adicionar foto
-                                    </button>
-                                )}*/}
                             </div>
                         )}
                     </div>
