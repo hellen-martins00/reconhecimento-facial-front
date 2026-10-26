@@ -268,7 +268,7 @@ function DetalhesAgente() {
                                     Sem foto
                                 </span>
 
-                                {podeEditar && (
+                                {/*{podeEditar && (
                                     <button
                                         type="button"
                                         onClick={() =>
@@ -280,7 +280,7 @@ function DetalhesAgente() {
                                     >
                                         Adicionar foto
                                     </button>
-                                )}
+                                )}*/}
                             </div>
                         )}
                     </div>
