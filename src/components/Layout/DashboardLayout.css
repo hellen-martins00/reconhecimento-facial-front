@@ -748,17 +748,105 @@
   }
 }
 
+
 /* ========================================
-   ACESSIBILIDADE
+   BOTÃO DE ALTERNÂNCIA DE TEMA
 ======================================== */
 
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  border: 1px solid var(--layout-border);
+  border-radius: 10px;
+
+  background: var(--layout-panel);
+  color: var(--layout-accent);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--layout-panel-hover);
+  border-color: var(--layout-accent);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 2px solid var(--layout-accent);
+  outline-offset: 3px;
+}
+
+/* ========================================
+   PALETA DO MODO CLARO
+======================================== */
+
+.dashboard-layout[data-theme="light"] {
+  --layout-bg: #f3f6fb;
+  --layout-sidebar: #ffffff;
+  --layout-panel: #ffffff;
+  --layout-panel-hover: #f1f5f9;
+  --layout-border: #dbe4ef;
+
+  --layout-text: #172033;
+  --layout-muted: #52657a;
+  --layout-subtle: #718096;
+
+  --layout-accent: #0891b2;
+  --layout-accent-hover: #0e7490;
+  --layout-accent-bg: rgba(8, 145, 178, 0.09);
+
+  --layout-success: #059669;
+  --layout-danger: #dc2626;
+}
+
+/* Cabeçalho claro */
+
+.dashboard-layout[data-theme="light"] .dashboard-topbar {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+/* Avatar do menu lateral */
+
+.dashboard-layout[data-theme="light"] .sidebar-avatar {
+  background: #eaf1f8;
+  border-color: #cbd5e1;
+}
+
+/* Versão no rodapé do menu */
+
+.dashboard-layout[data-theme="light"] .sidebar-version {
+  color: #718096;
+}
+
+/* Botão de tema */
+
+.dashboard-layout[data-theme="light"] .theme-toggle-btn {
+  background: #ffffff;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.dashboard-layout[data-theme="light"] .theme-toggle-btn:hover {
+  background: #f1f5f9;
+  color: #0e7490;
+  border-color: #0891b2;
+}
+
+/* Acessibilidade */
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+  .theme-toggle-btn {
+    transition: none;
   }
 }

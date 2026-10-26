@@ -13,6 +13,8 @@ import {
   X,
   Bell,
   ChevronRight,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -24,6 +26,10 @@ function DashboardLayout({ children }) {
 
   const [menuAberto, setMenuAberto] = useState(false);
   const [fotoAgente, setFotoAgente] = useState(null);
+
+  const [tema, setTema] = useState(() => {
+    return localStorage.getItem("tema-rede-biometrica") || "dark";
+  });
 
   const usuarioSalvo = localStorage.getItem("usuario");
 
@@ -37,8 +43,13 @@ function DashboardLayout({ children }) {
   }
 
   useEffect(() => {
+    localStorage.setItem("tema-rede-biometrica", tema);
+  }, [tema]);
+
+  useEffect(() => {
     let urlFoto;
     let cancelado = false;
+
 
     async function carregarFotoAgente() {
       if (!usuario?.id) {
@@ -106,8 +117,11 @@ function DashboardLayout({ children }) {
     navigate("/login", { replace: true });
   }
 
-  const inicial =
-    usuario?.nome?.trim()?.charAt(0)?.toUpperCase() || "U";
+  const inicial = usuario?.nome?.trim()?.charAt(0)?.toUpperCase() || "U";
+
+  const IconeTema = tema === "dark" ? Sun : Moon;
+
+  const descricaoTema = tema === "dark" ? "Ativar modo claro" : "Ativar modo noturno";
 
   const menuItems = [
     {
@@ -143,7 +157,7 @@ function DashboardLayout({ children }) {
   ];
 
   return (
-    <div className="dashboard-layout">
+    <div className="dashboard-layout" data-theme={tema}>
       {menuAberto && (
         <button
           type="button"
@@ -282,30 +296,25 @@ function DashboardLayout({ children }) {
           </div>
 
           <div className="topbar-actions">
+            <button
+              type="button"
+              className="theme-toggle-btn"
+              onClick={() =>
+                setTema((temaAtual) =>
+                  temaAtual === "dark" ? "light" : "dark"
+                )
+              }
+              aria-label={descricaoTema}
+              title={descricaoTema}
+            >
+              <IconeTema size={19} strokeWidth={1.8} />
+            </button>
+
             <span className="topbar-status">
               <span className="status-dot" />
               Sistema disponível
             </span>
 
-            <div className="topbar-divider" />
-
-            <div className="topbar-user">
-              <div className="topbar-user-info">
-                <strong>{usuario?.nome || "Usuário"}</strong>
-                <span>{usuario?.perfil || "Acesso autorizado"}</span>
-              </div>
-
-              <div className="topbar-avatar">
-                {fotoAgente ? (
-                  <img
-                    src={fotoAgente}
-                    alt=""
-                  />
-                ) : (
-                  inicial
-                )}
-              </div>
-            </div>
           </div>
         </header>
 
