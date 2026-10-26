@@ -1243,6 +1243,345 @@
 }
 
 /* ========================================
+   MODO CLARO — TELA DE PESSOAS
+======================================== */
+
+/* Página e cartão principal */
+
+.dashboard-layout[data-theme="light"] .pessoas-page {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-card {
+  background: #ffffff;
+  border: 1px solid #dbe4ef;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* Título e descrição */
+
+.dashboard-layout[data-theme="light"] .pessoas-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-header p {
+  color: #64748b;
+}
+
+/* Campo de pesquisa */
+
+.dashboard-layout[data-theme="light"] .pessoas-search {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-search > span {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-search input {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-search input::placeholder {
+  color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-search:focus-within {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+/* Contador */
+
+.dashboard-layout[data-theme="light"] .pessoas-lista-info {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-limpar-busca {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-limpar-busca:hover {
+  color: #155e75;
+}
+
+/* Tabela */
+
+.dashboard-layout[data-theme="light"] .pessoas-table th {
+  background: #eef4f9;
+  color: #334155;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-table td {
+  background: #ffffff;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-table tbody tr:hover td {
+  background: #f5f9fc;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-nome > span {
+  color: #172033;
+}
+
+/* Fotos e indicador de ausência de foto */
+
+.dashboard-layout[data-theme="light"] .pessoa-foto,
+.dashboard-layout[data-theme="light"] .pessoa-sem-foto,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-foto,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-sem-foto {
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-foto,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-foto {
+  background: #f1f5f9;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-sem-foto,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-sem-foto {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Situação do caso */
+
+.dashboard-layout[data-theme="light"] .status-desaparecido {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.dashboard-layout[data-theme="light"] .status-localizado {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.dashboard-layout[data-theme="light"] .status-sem-registro {
+  color: #64748b;
+}
+
+/* Botões de ações */
+
+.dashboard-layout[data-theme="light"] .pessoa-menu-button,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu-button {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-menu-button:hover,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu-button:hover {
+  background: #f1f5f9;
+  border-color: #dbe4ef;
+  color: #087e9b;
+}
+
+/* Menu de ações */
+
+.dashboard-layout[data-theme="light"] .pessoa-menu,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-menu button,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu button {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-menu button:hover,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu button:hover {
+  background: #f1f5f9;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-menu .pessoa-menu-excluir,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu .pessoa-menu-excluir {
+  color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-menu .pessoa-menu-excluir:hover,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-menu .pessoa-menu-excluir:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Cards da versão mobile */
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-card:hover {
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-nome h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-nome > span:not(.status-caso),
+.dashboard-layout[data-theme="light"] .pessoa-mobile-resumo > div > span,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-campo > span {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-resumo {
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-resumo > div > strong,
+.dashboard-layout[data-theme="light"] .pessoa-mobile-campo > strong {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-detalhes-button {
+  border-color: #e2e8f0;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoa-mobile-detalhes-button:hover {
+  color: #155e75;
+}
+
+/* Mensagens de erro e sucesso */
+
+.dashboard-layout[data-theme="light"] .pessoas-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-success-icon {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+/* Carregamento e lista vazia */
+
+.dashboard-layout[data-theme="light"] .pessoas-loading {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-empty h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .pessoas-empty p {
+  color: #64748b;
+}
+
+/* ========================================
+   MODAIS NO MODO CLARO
+======================================== */
+
+.dashboard-layout[data-theme="light"] .confirmacao-modal,
+.dashboard-layout[data-theme="light"] .localizacao-modal {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-modal h2,
+.dashboard-layout[data-theme="light"] .localizacao-modal h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-texto,
+.dashboard-layout[data-theme="light"] .localizacao-texto {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-pessoa,
+.dashboard-layout[data-theme="light"] .localizacao-pessoa {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-dados strong,
+.dashboard-layout[data-theme="light"] .localizacao-dados strong {
+  color: #1e293b;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-dados span,
+.dashboard-layout[data-theme="light"] .localizacao-dados span {
+  color: #64748b;
+}
+
+/* Ícones e avatares dos modais */
+
+.dashboard-layout[data-theme="light"] .confirmacao-icone {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-avatar {
+  background: #ffe4e6;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.dashboard-layout[data-theme="light"] .localizacao-icone {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #059669;
+}
+
+.dashboard-layout[data-theme="light"] .localizacao-avatar {
+  background: #d1fae5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+/* Botões de cancelar */
+
+.dashboard-layout[data-theme="light"] .confirmacao-botao-cancelar,
+.dashboard-layout[data-theme="light"] .localizacao-botao-cancelar {
+  background: #ffffff;
+  border-color: #cbd5e1 !important;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-botao-cancelar:hover:not(:disabled),
+.dashboard-layout[data-theme="light"] .localizacao-botao-cancelar:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+/* Aviso do modal de localização */
+
+.dashboard-layout[data-theme="light"] .localizacao-aviso {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* Botão de confirmação da localização */
+
+.dashboard-layout[data-theme="light"] .localizacao-botao-confirmar {
+  background: #059669;
+  border-color: #059669 !important;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .localizacao-botao-confirmar:hover:not(:disabled) {
+  background: #047857;
+}
+
+/* ========================================
    20. ACESSIBILIDADE
 ======================================== */
 
