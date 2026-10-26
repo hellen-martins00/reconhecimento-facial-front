@@ -433,6 +433,256 @@
   cursor: not-allowed;
 }
 
+/* ========================================
+   MODO CLARO — EDIÇÃO DO AGENTE
+======================================== */
+
+/* ESTRUTURA PRINCIPAL */
+
+.dashboard-layout[data-theme="light"] .editar-agente-page {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-container {
+  color: #172033;
+}
+
+/* CABEÇALHO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-eyebrow {
+  color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-header p {
+  color: #52657a;
+}
+
+/* BOTÃO VOLTAR */
+
+.dashboard-layout[data-theme="light"] .editar-agente-voltar {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-voltar:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-voltar:focus-visible {
+  outline: 2px solid #0891b2;
+  outline-offset: 3px;
+}
+
+/* CARD PRINCIPAL */
+
+.dashboard-layout[data-theme="light"] .editar-agente-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+}
+
+/* IDENTIFICAÇÃO DO AGENTE */
+
+.dashboard-layout[data-theme="light"] .editar-agente-identity {
+  border-bottom-color: #e2e8f0;
+}
+
+/* FOTO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-avatar {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  box-shadow: 0 0 0 5px rgba(8, 145, 178, 0.08);
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-avatar span {
+  color: #64748b;
+}
+
+/* INFORMAÇÕES DA IDENTIDADE */
+
+.dashboard-layout[data-theme="light"] .editar-agente-section-label {
+  color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-identity-info h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-identity-info p {
+  color: #64748b;
+}
+
+/* PERFIL */
+
+.dashboard-layout[data-theme="light"] .editar-agente-profile {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
+/* AÇÕES DA FOTO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-photo-button {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-photo-button:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-remove-photo {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-remove-photo:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-selected-file {
+  color: #0e7490;
+}
+
+/* SEÇÕES DE DADOS */
+
+.dashboard-layout[data-theme="light"] .editar-agente-section {
+  border-bottom-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-section-header h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-section-header p {
+  color: #64748b;
+}
+
+/* FORMULÁRIO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-form-group label {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-form-group input {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-form-group input::placeholder {
+  color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-form-group input:focus {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-form-group input:disabled {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-help {
+  color: #64748b;
+}
+
+/* MENSAGEM DE ERRO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* CARREGAMENTO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-loading {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-spinner {
+  border-color: #dbe4ef;
+  border-top-color: #0891b2;
+}
+
+/* BOTÕES DO FORMULÁRIO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-secondary {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-primary {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-primary:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+}
+
+/* ESTADO DESABILITADO */
+
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-primary:disabled,
+.dashboard-layout[data-theme="light"] .editar-agente-actions .button-secondary:disabled,
+.dashboard-layout[data-theme="light"] .editar-agente-photo-button:disabled,
+.dashboard-layout[data-theme="light"] .editar-agente-remove-photo:disabled,
+.dashboard-layout[data-theme="light"] .editar-agente-voltar:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* FOCO ACESSÍVEL */
+
+.dashboard-layout[data-theme="light"] .editar-agente-page button:focus-visible {
+  outline: 2px solid #0891b2;
+  outline-offset: 3px;
+}
+
+/* AJUSTES PARA CELULAR */
+
+@media (max-width: 480px) {
+  .dashboard-layout[data-theme="light"] .editar-agente-card {
+    background: #ffffff;
+  }
+
+  .dashboard-layout[data-theme="light"] .editar-agente-identity-info h2 {
+    color: #172033;
+  }
+
+  .dashboard-layout[data-theme="light"] .editar-agente-form-group input {
+    background: #ffffff;
+    color: #172033;
+  }
+
+  .dashboard-layout[data-theme="light"] .editar-agente-form-group input:disabled {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+}
+
 /* RESPONSIVIDADE */
 
 /* TABLETS */

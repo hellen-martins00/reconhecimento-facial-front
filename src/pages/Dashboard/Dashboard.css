@@ -476,119 +476,6 @@
 }
 
 /* ========================================
-   ACESSOS RÁPIDOS
-======================================== 
-
-.dashboard-quick-section {
-  margin-bottom: 25px;
-}
-
-.dashboard-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.dashboard-quick-card {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-width: 0;
-  padding: 17px;
-  border: 1px solid #20354b;
-  border-radius: 10px;
-  background: #101f32;
-  color: inherit;
-  font-family: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.dashboard-quick-card:hover {
-  transform: translateY(-2px);
-  border-color: #31516b;
-  background: #14273d;
-}
-
-.dashboard-quick-card:focus-visible {
-  outline: 2px solid #39d9ef;
-  outline-offset: 3px;
-}
-
-.quick-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-}
-
-.quick-icon-cyan {
-  border-color: rgba(57, 217, 239, 0.2);
-  background: rgba(57, 217, 239, 0.1);
-  color: #39d9ef;
-}
-
-.quick-icon-blue {
-  border-color: rgba(97, 168, 255, 0.2);
-  background: rgba(97, 168, 255, 0.1);
-  color: #61a8ff;
-}
-
-.quick-icon-purple {
-  border-color: rgba(182, 154, 255, 0.2);
-  background: rgba(182, 154, 255, 0.1);
-  color: #b69aff;
-}
-
-.quick-icon-green {
-  border-color: rgba(72, 217, 161, 0.2);
-  background: rgba(72, 217, 161, 0.1);
-  color: #48d9a1;
-}
-
-.quick-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-
-.quick-text strong {
-  color: #e7f0fb;
-  font-size: 11px;
-  font-weight: 650;
-  line-height: 1.5;
-}
-
-.quick-text small {
-  color: #8097af;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.quick-arrow {
-  flex-shrink: 0;
-  color: #647f99;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.dashboard-quick-card:hover .quick-arrow {
-  transform: translate(2px, -2px);
-  color: #39d9ef;
-}*/
-
-/* ========================================
    NOTA INFERIOR
 ======================================== */
 
@@ -607,6 +494,248 @@
   flex-shrink: 0;
   margin-top: 1px;
   color: #39b9cd;
+}
+
+
+/* ========================================
+   MODO CLARO — PAINEL PRINCIPAL
+======================================== */
+
+.dashboard-layout[data-theme="light"] .dashboard-page {
+  color: #172033;
+}
+
+/* Cabeçalho */
+
+.dashboard-layout[data-theme="light"] .dashboard-eyebrow {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-header p {
+  color: #64748b;
+}
+
+/* Botão atualizar */
+
+.dashboard-layout[data-theme="light"] .dashboard-refresh {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-refresh:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #0891b2;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-refresh:focus-visible,
+.dashboard-layout[data-theme="light"] .dashboard-error button:focus-visible {
+  outline-color: #0891b2;
+}
+
+/* Títulos das seções */
+
+.dashboard-layout[data-theme="light"] .dashboard-section-heading h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-section-heading p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-live-label {
+  color: #64748b;
+}
+
+/* Mensagem de erro */
+
+.dashboard-layout[data-theme="light"] .dashboard-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-error button {
+  background: #ffffff;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-error button:hover {
+  background: #fff1f2;
+}
+
+/* ========================================
+   CARDS DE INDICADORES
+======================================== */
+
+.dashboard-layout[data-theme="light"] .dashboard-card {
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #f8fafc 100%
+  );
+  border-color: #dbe4ef;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card:hover {
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #f1f7fb 100%
+  );
+  border-color: var(--card-accent);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-title {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-value {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-description {
+  color: #718096;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-arrow {
+  color: #718096;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card:hover .dashboard-card-arrow {
+  color: var(--card-accent);
+}
+
+/* Ícones dos indicadores */
+
+.dashboard-layout[data-theme="light"] .dashboard-card-cyan {
+  --card-accent: #0891b2;
+  --card-border: rgba(8, 145, 178, 0.3);
+  --card-icon-bg: rgba(8, 145, 178, 0.09);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-blue {
+  --card-accent: #2563eb;
+  --card-border: rgba(37, 99, 235, 0.25);
+  --card-icon-bg: rgba(37, 99, 235, 0.08);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-purple {
+  --card-accent: #7c3aed;
+  --card-border: rgba(124, 58, 237, 0.25);
+  --card-icon-bg: rgba(124, 58, 237, 0.08);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-card-green {
+  --card-accent: #059669;
+  --card-border: rgba(5, 150, 105, 0.25);
+  --card-icon-bg: rgba(5, 150, 105, 0.08);
+}
+
+/* ========================================
+   DESTAQUE DE RECONHECIMENTO FACIAL
+======================================== */
+
+.dashboard-layout[data-theme="light"] .dashboard-recognition {
+  background: linear-gradient(
+    110deg,
+    #ecfeff 0%,
+    #f0f9ff 55%,
+    #f8fafc 100%
+  );
+  border-color: #a5f3fc;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-decoration {
+  border-color: rgba(8, 145, 178, 0.1);
+}
+
+.dashboard-layout[data-theme="light"] .recognition-icon {
+  background: #cffafe;
+  border-color: #a5f3fc;
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-eyebrow {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-text h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-text > p {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-disclaimer {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-disclaimer svg {
+  color: #087e9b;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-button {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .recognition-button:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+  box-shadow: 0 5px 18px rgba(8, 145, 178, 0.15);
+}
+
+.dashboard-layout[data-theme="light"] .recognition-button:focus-visible {
+  outline-color: #0891b2;
+}
+
+/* ========================================
+   NOTA INFERIOR
+======================================== */
+
+.dashboard-layout[data-theme="light"] .dashboard-bottom-note {
+  border-color: #dbe4ef;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-bottom-note svg {
+  color: #087e9b;
+}
+
+/* ========================================
+   CARDS DE ATALHOS
+   Caso estejam presentes nesta tela
+======================================== */
+
+.dashboard-layout[data-theme="light"] .dashboard-quick-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  color: #172033;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-quick-card:hover {
+  background: #f8fafc;
+  border-color: #0891b2;
+}
+
+.dashboard-layout[data-theme="light"] .quick-arrow {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .dashboard-quick-card:hover .quick-arrow {
+  color: #087e9b;
 }
 
 /* ========================================

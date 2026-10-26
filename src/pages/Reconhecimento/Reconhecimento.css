@@ -574,6 +574,299 @@
   line-height: 1.6;
 }
 
+/* ========================================
+   MODO CLARO — BUSCA BIOMÉTRICA
+======================================== */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-page {
+  color: #172033;
+
+  --rec-bg: #f3f6fb;
+  --rec-surface: #ffffff;
+  --rec-surface-light: #f1f5f9;
+  --rec-border: #dbe4ef;
+  --rec-text: #172033;
+  --rec-muted: #52657a;
+  --rec-cyan: #0891b2;
+  --rec-blue: #2870ed;
+}
+
+/* CABEÇALHO */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-header p {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-voltar {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-voltar:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+}
+
+/* CARTÃO PRINCIPAL */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-color: #dbe4ef;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+/* MENSAGEM DE ERRO */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* CÂMERA */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-video-container {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-video-container:has(.reconhecimento-video) {
+  border-color: rgba(8, 145, 178, 0.6);
+  box-shadow: 0 0 0 1px rgba(8, 145, 178, 0.12);
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-camera-placeholder {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-camera-placeholder > span:first-child {
+  color: #334155;
+}
+
+/* BOTÕES SECUNDÁRIOS */
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-card .button-secondary,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-button-secondary {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-card .button-secondary:hover,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-button-secondary:hover {
+  background: #f1f5f9;
+  border-color: #0891b2;
+}
+
+/* PRÉ-VISUALIZAÇÃO */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-preview h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-preview-image {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+/* RESULTADO DA BUSCA */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-resultado {
+  color: #172033;
+}
+
+/* POSSÍVEL CORRESPONDÊNCIA */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-sucesso {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  border-left-color: #16a34a;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-sucesso h2 {
+  color: #166534;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-sucesso p {
+  color: #166534;
+}
+
+/* DADOS DA PESSOA */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-pessoa {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-pessoa h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-pessoa p {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-pessoa strong {
+  color: #334155;
+}
+
+/* AVISO SOBRE O RESULTADO */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-aviso {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+/* NENHUMA CORRESPONDÊNCIA */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-nao-encontrado {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left-color: #d97706;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-nao-encontrado h2 {
+  color: #92400e;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-nao-encontrado p {
+  color: #78350f;
+}
+
+/* FOTOS CADASTRADAS */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-fotos {
+  background: #ffffff;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-fotos h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-foto-item {
+  background: #f8fafc;
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-foto-item.correspondente {
+  background: #ecfeff;
+  border-color: #0891b2;
+  box-shadow: 0 0 0 2px rgba(8, 145, 178, 0.1);
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-foto-image-container {
+  background: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .reconhecimento-foto-badge {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-fotos-loading,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-fotos-vazia {
+  color: #64748b;
+}
+
+/* SITUAÇÃO DO DESAPARECIMENTO */
+
+.dashboard-layout[data-theme="light"] .reconhecimento-desaparecimento {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-desaparecimento-header h3 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-desaparecimento-icone {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
+/* STATUS DO DESAPARECIMENTO */
+
+.dashboard-layout[data-theme="light"] .status-desaparecido {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.dashboard-layout[data-theme="light"] .status-localizado {
+  color: #166534;
+  background: #dcfce7;
+}
+
+/* DETALHES DO DESAPARECIMENTO */
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-desaparecimento-detalhes p {
+  color: #475569;
+}
+
+/* AVISO DE LOCALIZAÇÃO */
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-localizacao-aviso {
+  border-top-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-localizacao-aviso p {
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-localizacao-confirmada {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+/* FOCO ACESSÍVEL */
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-page button:focus-visible {
+  outline-color: #0891b2;
+}
+
+/* GARANTIR CONTRASTE DOS BOTÕES DESABILITADOS */
+
+.dashboard-layout[data-theme="light"]
+.reconhecimento-card .button-primary:disabled,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-card .button-secondary:disabled,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-button-primary:disabled,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-button-secondary:disabled,
+.dashboard-layout[data-theme="light"]
+.reconhecimento-voltar:disabled {
+  opacity: 0.55;
+}
+
 /* TABLET */
 
 @media (max-width: 768px) {

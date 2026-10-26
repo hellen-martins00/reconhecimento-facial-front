@@ -543,6 +543,288 @@
   display: none;
 }
 
+/* ========================================
+   MODO CLARO — AGENTES
+======================================== */
+
+/* ESTRUTURA PRINCIPAL */
+
+.dashboard-layout[data-theme="light"] .agentes-page {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-card {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+/* CABEÇALHO */
+
+.dashboard-layout[data-theme="light"] .agentes-header h1 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-header p {
+  color: #52657a;
+}
+
+/* BOTÃO NOVO AGENTE */
+
+.dashboard-layout[data-theme="light"] .agentes-new-button {
+  background: #0891b2;
+  border-color: #0891b2;
+  color: #ffffff;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-new-button:hover {
+  background: #0e7490;
+  border-color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-new-button:focus-visible,
+.dashboard-layout[data-theme="light"] .agente-menu-button:focus-visible,
+.dashboard-layout[data-theme="light"] .agente-mobile-menu-button:focus-visible {
+  outline-color: #0891b2;
+}
+
+/* ESTADOS */
+
+.dashboard-layout[data-theme="light"] .agentes-loading,
+.dashboard-layout[data-theme="light"] .agentes-empty {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-empty h2 {
+  color: #172033;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-empty p {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* TABELA DESKTOP */
+
+.dashboard-layout[data-theme="light"] .agentes-table-container {
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-table {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-table th {
+  background: #f1f5f9;
+  border-bottom-color: #dbe4ef;
+  color: #52657a;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-table td {
+  border-bottom-color: #e5eaf1;
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .agentes-table tbody tr:hover {
+  background: #f1f8fc;
+}
+
+/* FOTO E IDENTIFICAÇÃO */
+
+.dashboard-layout[data-theme="light"] .agente-foto {
+  border-color: #dbe4ef;
+}
+
+.dashboard-layout[data-theme="light"] .agente-sem-foto {
+  background: #f1f5f9;
+  border-color: #dbe4ef;
+  color: #64748b;
+}
+
+/* MENU DE AÇÕES DESKTOP */
+
+.dashboard-layout[data-theme="light"] .agente-menu-button {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu-button:hover {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu {
+  background: #ffffff;
+  border-color: #dbe4ef;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu button {
+  color: #334155;
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu button:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu .agente-menu-excluir,
+.dashboard-layout[data-theme="light"] .agente-mobile-menu .agente-menu-excluir {
+  color: #dc2626;
+}
+
+.dashboard-layout[data-theme="light"] .agente-menu .agente-menu-excluir:hover,
+.dashboard-layout[data-theme="light"] .agente-mobile-menu .agente-menu-excluir:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* ========================================
+   MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
+======================================== */
+
+/* O modal já utiliza uma superfície clara.
+   Estes estilos garantem consistência com o tema. */
+
+.dashboard-layout[data-theme="light"] .confirmacao-modal {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow:
+    0 24px 70px rgba(15, 23, 42, 0.18),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-modal h2 {
+  color: #0f172a;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-texto {
+  color: #64748b;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-agente {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-avatar {
+  background: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-dados strong {
+  color: #1e293b;
+}
+
+.dashboard-layout[data-theme="light"] .confirmacao-dados span {
+  color: #64748b;
+}
+
+/* ========================================
+   LISTA MOBILE
+======================================== */
+
+@media (max-width: 576px) {
+  /* Card principal mantém o fundo da página */
+  .dashboard-layout[data-theme="light"] .agentes-card {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  /* Card individual de cada agente */
+  .dashboard-layout[data-theme="light"] .agente-mobile-card {
+    background: #ffffff;
+    border-color: #dbe4ef;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-card:hover {
+    border-color: #b6c7d9;
+  }
+
+  /* Cabeçalho do card */
+  .dashboard-layout[data-theme="light"] .agente-mobile-header {
+    border-bottom-color: #e5eaf1;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-foto {
+    background: #f1f5f9;
+    border-color: #dbe4ef;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-sem-foto {
+    background: #f1f5f9;
+    border-color: #dbe4ef;
+    color: #64748b;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-nome h3 {
+    color: #172033;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-nome span {
+    background: #ecfeff;
+    border-color: #a5f3fc;
+    color: #0e7490;
+  }
+
+  /* Informações do agente */
+  .dashboard-layout[data-theme="light"] .agente-mobile-info div {
+    border-bottom-color: #e5eaf1;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-info span {
+    color: #64748b;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-info strong {
+    color: #334155;
+  }
+
+  /* Estados da lista mobile */
+  .dashboard-layout[data-theme="light"] .agentes-loading,
+  .dashboard-layout[data-theme="light"] .agentes-empty {
+    background: #ffffff;
+    border-color: #dbe4ef;
+  }
+
+  /* Botão do menu mobile */
+  .dashboard-layout[data-theme="light"] .agente-mobile-menu-button {
+    color: #64748b;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-menu-button:hover {
+    background: #ecfeff;
+    border-color: #a5f3fc;
+    color: #0e7490;
+  }
+
+  /* Menu de ações mobile */
+  .dashboard-layout[data-theme="light"] .agente-mobile-menu {
+    background: #ffffff;
+    border-color: #dbe4ef;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-menu button {
+    color: #334155;
+  }
+
+  .dashboard-layout[data-theme="light"] .agente-mobile-menu button:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+  }
+}
+
 /* TABLET */
 @media (max-width: 768px) {
   .agentes-header h1 {
