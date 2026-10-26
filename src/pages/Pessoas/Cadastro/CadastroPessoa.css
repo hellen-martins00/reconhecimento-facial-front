@@ -976,6 +976,7 @@
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+  border-radius: 8px;
 }
 
 /* Em telas de celular (onde o layout empilha ou fica apertado), garantimos largura 100% segura */
