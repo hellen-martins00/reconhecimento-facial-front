@@ -319,9 +319,29 @@
 .cadastro-form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-  width: 100%; /* Garante que ocupa a largura total disponível */
-  min-width: 0; /* Impede que itens filhos estourem o grid */
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cadastro-form-row .cadastro-form-group {
+  min-width: 0;
+}
+
+/* Força o input de data a assumir o mesmo padrão visual escuro dos demais inputs */
+.cadastro-form-group input[type="date"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 13px;
+  background: var(--cadastro-input);
+  border: 1px solid var(--cadastro-border);
+  border-radius: 8px;
+  color: var(--cadastro-text);
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .cadastro-form-row .cadastro-form-group {
@@ -1114,3 +1134,11 @@
     padding: 13px;
   }
 }
+
+/* Faz com que em telas estreitas (como celulares) os campos fiquem um abaixo do outro com largura 100% igual */
+@media (max-width: 600px) {
+  .cadastro-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
