@@ -440,6 +440,7 @@ function CadastroPessoa() {
                     setDataNascimento(event.target.value)
                   }
                 />
+              </div>
 
               <div className="cadastro-form-group">
                 <label htmlFor="sexo">Sexo</label>
@@ -454,7 +455,7 @@ function CadastroPessoa() {
                   <option value="M">Masculino</option>
                 </select>
               </div>
-            </div>
+            
           </section>
         )}
 
