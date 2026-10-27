@@ -119,20 +119,20 @@ function Dashboard() {
       destino: "/pessoas",
     },
     {
-      titulo: "Registros biométricos",
-      valor: totalFaces,
-      descricao: "Imagens cadastradas para comparação",
-      icone: Camera,
+      titulo: "Reconhecimentos realizados",
+      valor: totalReconhecimentos,
+      descricao: "Buscas biométricas realizadas",
+      icone: ScanFace,
       cor: "purple",
-      destino: "/pessoas",
+      destino: "/reconhecimento",
     },
     {
       titulo: "Pessoas localizadas",
       valor: pessoasLocalizadas,
-      descricao: "Localizações confirmadas",
+      descricao: "Casos com status localizado",
       icone: MapPinCheck,
       cor: "green",
-      destino: "/localizacoes",
+      destino: "/pessoas",
     },
   ];
 
