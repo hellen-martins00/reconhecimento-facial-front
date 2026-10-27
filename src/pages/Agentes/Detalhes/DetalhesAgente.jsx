@@ -234,7 +234,7 @@ function DetalhesAgente() {
                     className="detalhes-agente-btn-voltar"
                     onClick={() => navigate("/agentes")}
                 >
-                    ← Voltar
+                    Voltar
                 </button>
             </div>
 
