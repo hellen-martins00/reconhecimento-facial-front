@@ -117,14 +117,6 @@ function CadastroAgente() {
               Apenas administradores podem cadastrar novos agentes.
             </p>
           </div>
-
-          <button
-            type="button"
-            className="cadastro-agente-voltar"
-            onClick={() => navigate("/agentes")}
-          >
-            Voltar
-          </button>
         </div>
       </div>
     );

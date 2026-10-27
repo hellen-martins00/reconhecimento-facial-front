@@ -228,14 +228,6 @@ function DetalhesAgente() {
                         Consulte os dados cadastrais do agente.
                     </p>
                 </div>
-
-                <button
-                    type="button"
-                    className="detalhes-agente-btn-voltar"
-                    onClick={() => navigate("/agentes")}
-                >
-                    Voltar
-                </button>
             </div>
 
             <div className="detalhes-agente-card">

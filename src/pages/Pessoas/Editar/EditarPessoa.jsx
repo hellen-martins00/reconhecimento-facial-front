@@ -561,17 +561,6 @@ function EditarPessoa() {
             Atualize os dados cadastrais da pessoa.
           </p>
         </div>
-
-        <button
-          type="button"
-          className="editar-voltar"
-          onClick={() =>
-            navigate(`/pessoas/${id}`)
-          }
-          disabled={salvando}
-        >
-          Voltar
-        </button>
       </div>
 
       {/* STEPPER */}

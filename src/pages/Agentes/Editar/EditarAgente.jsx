@@ -342,14 +342,7 @@ function EditarAgente() {
           <div>
             <h1>Editar agente</h1>
             <p>Atualize os dados cadastrais.</p>
-          </div>
-          <button
-            type="button"
-            className="editar-agente-voltar"
-            onClick={() => navigate("/agentes")}
-          >
-            Voltar
-          </button>
+          </div>  
         </div>
         <div className="editar-agente-error" role="alert">
           {erro}
