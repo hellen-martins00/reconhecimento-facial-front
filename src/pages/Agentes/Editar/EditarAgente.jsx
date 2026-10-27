@@ -342,7 +342,7 @@ function EditarAgente() {
           <div>
             <h1>Editar agente</h1>
             <p>Atualize os dados cadastrais.</p>
-          </div>  
+          </div>
         </div>
         <div className="editar-agente-error" role="alert">
           {erro}
@@ -361,13 +361,6 @@ function EditarAgente() {
             <h1>Acesso não permitido</h1>
             <p>Você não pode editar este agente.</p>
           </div>
-          <button
-            type="button"
-            className="editar-agente-voltar"
-            onClick={() => navigate(`/agentes/${id}`)}
-          >
-            Voltar
-          </button>
         </div>
         <div className="editar-agente-error" role="alert">
           Você só pode editar seus próprios dados.
@@ -387,15 +380,6 @@ function EditarAgente() {
           <h1>Editar agente</h1>
           <p>Atualize os dados cadastrais e a identificação facial.</p>
         </div>
-
-        <button
-          type="button"
-          className="editar-agente-voltar"
-          onClick={() => navigate(`/agentes/${id}`)}
-          disabled={salvando}
-        >
-          Voltar
-        </button>
       </div>
 
       {/* CARD PRINCIPAL */}
@@ -409,7 +393,7 @@ function EditarAgente() {
 
         <form onSubmit={handleSubmit}>
 
-          {/* SEÇÃO DA FOTO / BIOMETRIA (Foco limpo apenas na imagem) */}
+          {/* SEÇÃO DA FOTO / BIOMETRIA */}
           <section className="editar-agente-identity">
             <div className="editar-agente-avatar">
               {fotoExibida ? (
@@ -552,7 +536,7 @@ function EditarAgente() {
             </div>
           </section>
 
-          {/* AÇÕES */}
+          {/* AÇÕES (Cancelar e Salvar) */}
           <div className="editar-agente-actions">
             <button
               type="button"
