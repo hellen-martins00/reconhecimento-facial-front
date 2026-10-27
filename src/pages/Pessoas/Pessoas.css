@@ -1581,6 +1581,34 @@
   background: #047857;
 }
 
+/* CARTÃO DA PESSOA — MODAL DE EXCLUSÃO
+   Fundo claro também no modo escuro */
+
+.confirmacao-pessoa {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+/* Avatar com a inicial */
+
+.confirmacao-avatar {
+  background: #e0eaff;
+  border: 1px solid #c7d7fe;
+  color: #2855b5;
+}
+
+/* Nome da pessoa */
+
+.confirmacao-dados strong {
+  color: #1e293b;
+}
+
+/* Descrição do cadastro */
+
+.confirmacao-dados span {
+  color: #64748b;
+}
+
 /* ========================================
    20. ACESSIBILIDADE
 ======================================== */
